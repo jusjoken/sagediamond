@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.commons.codec.digest.DigestUtils;
+
 
 /**
  *
@@ -259,26 +259,26 @@ public class FanartCaching {
         return null;
     }
 
-    public static String GetImageFromMetaImage(String image) {
-        String id = "";
-        // parse a unique id from the sage meta image object
-        Matcher m = MetaImage.matcher(String.valueOf(image));
-        if (m.find()) {
-            id = m.group(1);
-            System.out.println("Using ImageId: " + id + " for Image: " + image);
-        } else {
-            m = MetaImage.matcher(String.valueOf(image));
-            if (m.find()) {
-                id = "MF-" + m.group(1);
-                System.out.println("Using ImageId: " + id + " for Image: " + image);
-            } else {
-                System.out.println("Creating Image Hash from toString() for Image: " + image);
-                id = DigestUtils.md5Hex(String.valueOf(image));
-            }
-        }
-
-        return id;
-    }
+//    public static String GetImageFromMetaImage(String image) {
+//        String id = "";
+//        // parse a unique id from the sage meta image object
+//        Matcher m = MetaImage.matcher(String.valueOf(image));
+//        if (m.find()) {
+//            id = m.group(1);
+//            System.out.println("Using ImageId: " + id + " for Image: " + image);
+//        } else {
+//            m = MetaImage.matcher(String.valueOf(image));
+//            if (m.find()) {
+//                id = "MF-" + m.group(1);
+//                System.out.println("Using ImageId: " + id + " for Image: " + image);
+//            } else {
+//                System.out.println("Creating Image Hash from toString() for Image: " + image);
+//                id = DigestUtils.md5Hex(String.valueOf(image));
+//            }
+//        }
+//
+//        return id;
+//    }
 
     public static Object[] toArray(Object Arr) /*
      * returns an Object Array of a passed in Vector, Array, List

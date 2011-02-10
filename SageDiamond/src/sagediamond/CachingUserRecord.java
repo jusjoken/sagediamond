@@ -10,7 +10,7 @@ package sagediamond;
  */
 public class CachingUserRecord {
 
-    private static String SName = "SageDiamondTeam";
+    private static String SName = sagex.api.Global.IsClient()?"SageDiamondTeam"+sagex.api.Global.GetUIContextName():"SageDiamondTeam";
 
     public static void main(String[] args) {
 
