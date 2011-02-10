@@ -17,6 +17,8 @@ public class MetadataCalls {
 
 //    static private final Logger LOG = Logger.getLogger(MetadataCalls.class);
     public static String PlayonDirectory = sagex.api.Configuration.GetServerProperty("PlayonPlayback/ImportDirectory", "/SageOnlineServicesEXEs\\UPnPBrowser\\PlayOn") + "\\TV\\";
+    public static String HuluFile = "Quicktime[H.264/50Kbps 480x368@24fps]";
+    public static String NetflixFile = "Quicktime[H.264/50Kbps 480x368@25fps]";
 
     public static Integer GetSeasonNumber(Object MediaObject) {
         String SN = sagex.api.MediaFileAPI.GetMediaFileMetadata(MediaObject, "SeasonNumber");
@@ -93,8 +95,21 @@ public class MetadataCalls {
 
     public static boolean IsPlayonFile(Object MediaObject) {
 //    System.out.println("Checking for playon type="+sagex.api.MediaFileAPI.GetParentDirectory(MediaObject)+"for value"+PlayonDirectory);
+        int type = GetPlayonFileType(MediaObject);
+        return type == 1 || type == 2;
 
-        return sagex.api.MediaFileAPI.GetParentDirectory(MediaObject).toString().contains(PlayonDirectory);
+    }
+
+    public static int GetPlayonFileType(Object MediaObject) {
+        String Type = sagex.api.MediaFileAPI.GetMediaFileFormatDescription(MediaObject);
+        if (Type.equals(HuluFile)) {
+            return 1;
+        }
+        if (Type.equals(NetflixFile)) {
+            return 2;
+        } else {
+            return 3;
+        }
 
     }
 
