@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -18,12 +19,30 @@ public class util {
 
         public static Object CheckSeasonSize(Map<String,Object> Files){
     LinkedHashMap<String,Object> WithBlanks=new LinkedHashMap<String,Object>();
-    WithBlanks.put("b1", null);
-    WithBlanks.put("b2",null);
+    WithBlanks.put("blankelement1", null);
+    WithBlanks.put("blankelement2",null);
     WithBlanks.putAll(Files);
-    WithBlanks.put("b3",null);
-    WithBlanks.put("b4",null);
+    WithBlanks.put("blankelement3",null);
+    WithBlanks.put("blankelement4",null);
+
+
     return WithBlanks;
+
+    }
+
+    public static Object CheckSimpleSize(Object[] Files){
+    if(!Files.toString().contains("blankelement")){
+
+    List<Object> WithBlanks=new ArrayList<Object>();
+    WithBlanks.add("blankelement1");
+    WithBlanks.add("blankelement2");
+    for (Object curr:Files){
+    WithBlanks.add(curr);}
+    WithBlanks.add("blankelement3");
+    WithBlanks.add("blankelement4");
+    return WithBlanks;}
+    return Files;
+
 
     }
 
