@@ -24,13 +24,13 @@ public class FanartCaching {
     public static String CacheLocation = sagex.api.Configuration.GetProperty("JOrton/Fanart/CacheLocation", "cache/DiamondImages/");
 //      public static String CacheLocation = "CacheTest/Diamond/";
     public static final String Sep = java.io.File.separator;
-    public static String BackdropName = sagex.api.Configuration.GetProperty("JOrton/Fanart/BackgroundName", "Backdrop.jpg");
-    public static String PosterName = sagex.api.Configuration.GetProperty("JOrton/Fanart/PosterName", "Poster.jpg");
+    public static String BackdropName = sagex.api.Configuration.GetServerProperty("JOrton/Fanart/BackgroundName", "Backdrop.jpg");
+    public static String PosterName = sagex.api.Configuration.GetServerProperty("JOrton/Fanart/PosterName", "Poster.jpg");
     public static String PosterSize = sagex.api.Configuration.GetProperty("JOrton/Fanart/PosterSize", "300x200");
     public static String BannerSize = sagex.api.Configuration.GetProperty("JOrton/Fanart/BannerSize", "300x200");
     public static String BackgroundSize = sagex.api.Configuration.GetProperty("JOrton/Fanart/BackgroundSize", "1920x1080");
-    public static Boolean CheckPosterFolderFirst = Boolean.parseBoolean(sagex.api.Configuration.GetProperty("JOrton/Fanart/CheckPosterFolderFirst", "false"));
-    public static Boolean CheckBackgroundFolderFirst = Boolean.parseBoolean(sagex.api.Configuration.GetProperty("JOrton/Fanart/CheckBackgroundFolderFirst", "false"));
+    public static Boolean CheckPosterFolderFirst = Boolean.parseBoolean(sagex.api.Configuration.GetServerProperty("JOrton/Fanart/CheckPosterFolderFirst", "false"));
+    public static Boolean CheckBackgroundFolderFirst = Boolean.parseBoolean(sagex.api.Configuration.GetServerProperty("JOrton/Fanart/CheckBackgroundFolderFirst", "false"));
 
     public static int[] GetBackgroundSize() {
         String[] s = BackgroundSize.split("x");
@@ -67,11 +67,11 @@ public class FanartCaching {
     }
 
     public static String[] GetAllBackgroundNames() {
-        return sagex.api.Configuration.GetProperty("JOrton/Fanart/BackgroundNames", "Background.png;Background.jpg;Fanart.jpg;Fanart.png;Backdrop.jpg;Backdrop.png").split(";");
+        return sagex.api.Configuration.GetServerProperty("JOrton/Fanart/BackgroundNames", "background.png;background.jpg;fanart.jpg;fanart.png;backdrop.jpg;backdrop.png").split(";");
     }
 
     public static String[] GetAllPosterNames() {
-        return sagex.api.Configuration.GetProperty("JOrton/Fanart/PosterNames", "Poster.png;Poster.jpg;Folder.jpg;Folder.png;Cover.jpg;Cover.png").split(";");
+        return sagex.api.Configuration.GetServerProperty("JOrton/Fanart/PosterNames", "poster.png;poster.jpg;folder.jpg;folder.png;cover.jpg;cover.png").split(";");
     }
 
     public static void main(String[] args) {
