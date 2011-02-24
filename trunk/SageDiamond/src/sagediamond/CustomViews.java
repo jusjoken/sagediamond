@@ -4,6 +4,8 @@
  */
 package sagediamond;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author SBANTA
@@ -87,5 +89,37 @@ public class CustomViews {
 
     }
 
+    public static ArrayList<String> AllViewsInOrder(){
+    String[] AllViews= (String[]) GetCustomViews();
+    ArrayList AllViewsOrder=new ArrayList<String>();
+    for (String curr:AllViews){
+    AllViewsOrder.add(curr);}
+
+    return AllViewsOrder;}
+
+    public static ArrayList<String> SetElementLocation(ArrayList<String> Views,String Element,int Location){
+    Views.remove(Element);
+    Views.add(Location, Element);
+    return Views;
+    }
+
+    public static void SetArrayAsProperty(ArrayList<String> Views){
+    sagex.api.Configuration.SetProperty(PropName,"");
+    for(String element:Views){
+    String View=GetViewName(element);
+    String Type=GetViewType(element);
+    SaveView(View,Type);}
+     }
+
+
+    public static void main(String[] args){
+    ArrayList<String> test=new ArrayList<String>();
+    test.add("1");
+    test.add("2");
+    test.add("3");
+    SetElementLocation(test,"3",0);
+    for(String curr:test){
+    System.out.println(curr);}
+    }
 
 }
