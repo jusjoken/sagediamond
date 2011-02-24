@@ -5,6 +5,7 @@
 
 package sagediamond;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -23,6 +24,17 @@ public class util {
     WithBlanks.put("blankelement2",null);
     WithBlanks.putAll(Files);
     WithBlanks.put("blankelement3",null);
+    WithBlanks.put("blankelement4",null);
+
+
+    return WithBlanks;
+
+    }
+
+    public static Object CheckCategorySize(Map<String,Object> Files){
+    LinkedHashMap<String,Object> WithBlanks=new LinkedHashMap<String,Object>();
+    WithBlanks.put("blankelement1", null);
+    WithBlanks.putAll(Files);
     WithBlanks.put("blankelement4",null);
 
 

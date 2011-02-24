@@ -81,6 +81,25 @@ public class FanartCaching {
         }
     }
 
+        public static Object RegenerateCachedFanart(Object MediaFile,Boolean series,String Type){
+    boolean MT = MetadataCalls.IsMediaTypeTV(MediaFile);
+     String id = MetadataCalls.GetMediaTitle(MediaFile);
+     if (Type.equalsIgnoreCase("episode")) {
+            id = sagex.api.ShowAPI.GetShowEpisode(MediaFile);
+        }
+        String storeid = MetadataCalls.GetMediaTitle(MediaFile);
+        id = MT && !Type.equalsIgnoreCase("episode") ? sagex.phoenix.fanart.FanartUtil.createSafeTitle(id) + "_season" + MetadataCalls.GetSeasonNumberPad(MediaFile) : sagex.phoenix.fanart.FanartUtil.createSafeTitle(id);
+        String CT = MT ? "TV" : "Movies";
+        String FT = Type.equalsIgnoreCase("Background") ? "" : Type.equalsIgnoreCase("episode") ? "thumb_" : series ? "series_" : MT ? "season_" : "";
+
+        if (CachingUserRecord.HasStoredLocation(id, FT + Type.toLowerCase())) {
+        String Location = CachingUserRecord.GetStoredLocation(id, FT + Type.toLowerCase());
+        sagex.api.Utility.UnloadImage(Location);
+        CachingUserRecord.deleteStoredLocation(FT, Type, Location);
+        }
+        return GetCachedFanart(MediaFile,series,Type);
+    }
+
     public static Object GetCachedFanart(Object MediaFile, Boolean series, String Type) {
         boolean MT = MetadataCalls.IsMediaTypeTV(MediaFile);
         String id = MetadataCalls.GetMediaTitle(MediaFile);

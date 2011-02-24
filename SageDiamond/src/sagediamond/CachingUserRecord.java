@@ -56,4 +56,11 @@ public class CachingUserRecord {
         sagex.api.UserRecordAPI.SetUserRecordData(Record, Type, Location);
 
     }
+
+    public static void deleteStoredLocation(String ID,String Type,String Location){
+    sagex.api.UserRecordAPI.AddUserRecord(SName, ID);
+    Object Record = sagex.api.UserRecordAPI.GetUserRecord(SName, ID);
+    sagex.api.UserRecordAPI.DeleteUserRecord(Record);
+
+    }
 }
