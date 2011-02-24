@@ -98,9 +98,7 @@ public class MetadataCalls {
 
     public static boolean IsPlayonFile(Object MediaObject) {
 //    System.out.println("Checking for playon type="+sagex.api.MediaFileAPI.GetParentDirectory(MediaObject)+"for value"+PlayonDirectory);
-        int type = GetPlayonFileType(MediaObject);
-        return type == 1 || type == 2;
-
+   return sagex.api.MediaFileAPI.GetParentDirectory(MediaObject).toString().contains(PlayonDirectory);
     }
 
     public static int GetPlayonFileType(Object MediaObject) {
@@ -193,8 +191,7 @@ public class MetadataCalls {
 
     public static boolean IsImportedTV(Object MediaObject) {
 
-        String Type = sagex.api.MediaFileAPI.GetMediaFileMetadata(MediaObject, "MediaType");
-        if (Type.contains("TV") && !sagex.api.MediaFileAPI.IsTVFile(MediaObject)) {
+         if (IsMediaTypeTV(MediaObject) && !sagex.api.MediaFileAPI.IsTVFile(MediaObject)) {
             return true;
         } else {
             return false;
