@@ -81,6 +81,8 @@ public class FanartCaching {
         }
     }
 
+
+
         public static Object RegenerateCachedFanart(Object MediaFile,Boolean series,String Type){
     boolean MT = MetadataCalls.IsMediaTypeTV(MediaFile);
      String id = MetadataCalls.GetMediaTitle(MediaFile);

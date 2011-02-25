@@ -14,20 +14,7 @@ public class CachingUserRecord {
 
     public static void main(String[] args) {
 
-        Object[] test = sagex.api.UserRecordAPI.GetAllUserRecords(SName);
-        for (Object curr : test) {
-            System.out.println(curr.toString());
-
-            String[] currecorders = sagex.api.UserRecordAPI.GetUserRecordNames(curr);
-            for (String cr : currecorders) {
-                System.out.println("Curr=" + cr);
-                System.out.println("Value=" + sagex.api.UserRecordAPI.GetUserRecordData(curr, cr));
-            }
-        }
-
-
-
-    }
+      }
 
     public static void DeleteStoredLocations() {
         sagex.api.UserRecordAPI.DeleteAllUserRecords(SName);
