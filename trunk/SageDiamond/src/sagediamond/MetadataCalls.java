@@ -207,8 +207,16 @@ public class MetadataCalls {
 
     }
 
+
+
+
     public static String GetShowCategory(Object MediaObject) {
         String Cat = sagex.api.ShowAPI.GetShowCategory(MediaObject);
+        if(Cat.startsWith("Movie")&&Cat.contains("/")){
+
+        Cat=Cat.substring(Cat.indexOf("/"));
+        }
+
         if (Cat.equals("")) {
             return "unkown";
         }
