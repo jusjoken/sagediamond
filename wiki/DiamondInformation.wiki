@@ -1,0 +1,54 @@
+#summary One-sentence summary of this page.
+
+= Introduction =
+
+Check here for whats available in Diamond abd how to use various functions.
+
+= Details =
+
+== Getting Started ==
+ 
+  * available as a "UI Mod" plugin under SageTV version 7+ called "Diamond for Default Sagetv STV"
+  * to get the most out of this plugin you will need some form of metadata/Fanart solution such as Phoenix Core Services with BMT
+  * check the Detailed Setup, Diamond Fanart menu to ensure the Phoenix Fanart Directory is set to something valid for your extender/client to reach
+  * select a Diamond theme from among the large selection available under Detailed Setup, Advanced, "select the user interface theme".
+ 
+== TV/Recordings Views ==
+  * select TV - Recordings - All Recordings (or one of the other default SageTV recording views
+  * Diamond Options - select Options and then Diamond Options - from here change - BG Fanart - Count/Watched Format - Show Series Banner - Show Season Banner - Show Seasons View - Season Popup.
+  * Use Diamond Play Options - if enabled this will display a menu to ply Next, Newest, All from Next or All - Info View Options 
+  * Use Diamond Info View - custom right hand info panel with poster view and metadata details
+  * Standard Info plus - Metadata In Info List - Show Larger Thumbnails - Fanart Thumbnails
+  * Simplified View - 
+  * Filters - select from the following filter options - Manual Recordings - Favorites - non Manual Recording or Favorite - archived Recordings - First Runs - HDTV Recordings - Watched Recordings - Recordings marked Don't Like - Recorded movies - Imported TV from PlayOn - Imported TV - Categories filtered in: (select this option to pick which categories to include).
+  * Episode View Options - while on the episode view select Options and then Diamond Options - from here change - BG Fanart - Hide Title when grouped by Title - Show Season/Episode Number - Season/Episode format - Season/Episode Separator - Season/Episode location - Show Minimal Recording Icons - Show Original Airing Date.
+  * NOTE: most options affect ALL Recordings/TV views (not saved per view). Filters are per View.
+ 
+==Movies/Videos Views==
+  * Cover Flow - movie poster driven view centered on the screen for quick selection. Use the Options menu to set the Sort - Folder Filters - Filters - Background Fanart - Enter = Play.
+  * Wall View - a wall of Movie Posters to select from. Use the Options menu to set the Sort - Folder Filters - Filters - Background Fanart - Enter = Play and optionally show the Diamond Info panel with the Wall.
+  * List Flow - list based Movie view with a vertical scrolling poster view and Movie details on the right. Use the Options menu to set the Sort - Folder Filters - Filters - Background Fanart - Enter = Play - Right Side display (Blank, Ratings, Year)
+  * Categories - this is a Genre type view with Categories on the left and a Wall type view on the right. Use the Options menu to ........
+ 
+==Movies/Videos Views - General Options (applies to Cover, Wall and List Views)==
+  * Folder Filters - Add New Include Filter - Add New Exclude Filter or remove/change existing Folder filters.
+  * Filter - Include Watched - Include DVD - Include BluRay - Include Videos - Include Recordings - Include Unscraped Content - Include Playon Content - Categories filtered in: (select this option to pick which categories to include).
+  * NOTE: options are saved per diamond movie view (including the custom views you create)
+ 
+==Main Menu Mods==
+  * Widgets - go to Options from the Main Menu, into Diamond Options, then into Widget Options. From here you can turn on/off combinations of the available Main Menu Widgets - Weather - Forecast - Current Recordings - Upcoming Recordings - Recording Space.
+  * Default Videos Menu - customize the default Videos view - go to Options from the Main Menu, into Diamond Options, ensure "Replace Video with Diamond Movies" is Off, then select from the various options to Show or Hide - Diamond Categories - Diamond Wall View - Diamond Flow View - Diamond List Flow.
+  * Custom Movie Menu - replace the default Videos menu with the Diamond "Movies" menu - go to Options from the Main Menu, into Diamond Options, and set "Replace Video with Diamond Movies" to On. Then select "custom Views Setup" to create your own Diamond Views.  From here you can "Add New View" (set the type and name it), edit views you previously created, change the order of the custom views (place focus on a view name and press the RIGHT arrow for options to move the view) or "Edit Default Views to Show" so you can keep access to the Sage Default STV Video views - Titles - DVD/BD - Folders - CATEGORY - Playlists - VideoConversions.
+ 
+==Fanart Options==
+  * Phoenix Fanart - check the Detailed Setup, Diamond Fanart menu to ensure the Phoenix Fanart Directory is set to something valid for your extender/client to reach and that Phoenix Fanart Enabled is set to "On".
+  * Folder level Fanart - if you use Folder Level Posters or Backgrounds set those options in Detailed Setup, Diamond Fanart and select the type of fanart you use.
+  * Cache - to delete the cache so it will rebuild select Detailed Setup, Diamond Fanart and select Delete All Cached Fanart.
+  * Single TV/Recording/Movie Fanart delete - in any Diamond view press the Delete key on any item and a menu option including Delete Fanart will be offered.
+  * Background Fanart - this feature can be turned on/off on the various Diamond Movie/TV Views on the Diamond Options menus
+  * Series Fanart options - see the TV/Recordings View section
+ 
+ 
+==Troubleshooting==
+  * Reset Diamond Settings -  to their default by going to the Options menu from the Main Menu, select Diamond Options, then select "Clear All Diamond Settings"
+ 
