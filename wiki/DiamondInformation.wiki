@@ -1,16 +1,15 @@
-#summary One-sentence summary of this page.
-
 = Introduction =
 
-Check here for whats available in Diamond abd how to use various functions.
+Check here for whats available in Diamond and how to use various functions.
 
 = Details =
 
 == Getting Started ==
  
   * available as a "UI Mod" plugin under SageTV version 7+ called "Diamond for Default Sagetv STV"
-  * to get the most out of this plugin you will need some form of metadata/Fanart solution such as Phoenix Core Services with BMT
-  * check the Detailed Setup, Diamond Fanart menu to ensure the Phoenix Fanart Directory is set to something valid for your extender/client to reach
+  * to get the most out of this plugin you will need some form of metadata/Fanart solution such as...
+    * Phoenix Core Services with BMT
+    * other provides that store folder level fanart (posters and backgrounds). See fanart below.
   * select a Diamond theme from among the large selection available under Detailed Setup, Advanced, "select the user interface theme".
  
 == TV/Recordings Views ==
@@ -43,12 +42,12 @@ Check here for whats available in Diamond abd how to use various functions.
 ==Fanart Options==
   * Phoenix Fanart - check the Detailed Setup, Diamond Fanart menu to ensure the Phoenix Fanart Directory is set to something valid for your extender/client to reach and that Phoenix Fanart Enabled is set to "On".
   * Folder level Fanart - if you use Folder Level Posters or Backgrounds set those options in Detailed Setup, Diamond Fanart and select the type of fanart you use.
-  * Cache - to delete the cache so it will rebuild select Detailed Setup, Diamond Fanart and select Delete All Cached Fanart.
+  * Cache - to delete the cache so it will rebuild - select Detailed Setup, Diamond Fanart and select Delete All Cached Fanart.
   * Single TV/Recording/Movie Fanart delete - in any Diamond view press the Delete key on any item and a menu option including Delete Fanart will be offered.
   * Background Fanart - this feature can be turned on/off on the various Diamond Movie/TV Views on the Diamond Options menus
   * Series Fanart options - see the TV/Recordings View section
  
  
 ==Troubleshooting==
-  * Reset Diamond Settings -  to their default by going to the Options menu from the Main Menu, select Diamond Options, then select "Clear All Diamond Settings"
+  * Reset Diamond Settings -  to their default by going to the Options menu from the Main Menu, select Diamond Options, then select "Clear All Diamond Settings". Note: this will also delete the current local Fanart Cache.
  
