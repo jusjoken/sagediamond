@@ -7,6 +7,7 @@ package sagediamond;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,6 +76,32 @@ public class util {
 
 
         return files;
+        }
+
+
+
+        public static LinkedHashMap<String,Integer> GetLetterLocations(Object[] MediaFiles){
+        String CurrentLocation="845948921";
+        Boolean ScrapTitle=Boolean.parseBoolean(sagex.api.Configuration.GetProperty("ui/ignore_the_when_sorting","false"));
+        LinkedHashMap<String,Integer> Values=new LinkedHashMap<String,Integer>();
+        String Title="";
+        int i=0;
+
+        for(Object curr:MediaFiles){
+         
+        if(ScrapTitle){
+        Title=MetadataCalls.GetSortTitle(curr);}
+        else{
+        Title=MetadataCalls.GetMediaTitle(curr);}
+        if(!Title.startsWith(CurrentLocation)){
+
+            CurrentLocation=Title.substring(0,1);
+         Values.put(CurrentLocation.toLowerCase(),i);}
+        i++;
+
+
+        }
+        return Values;
         }
 
 }

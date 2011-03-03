@@ -18,8 +18,8 @@ public class FolderExclusion {
 
     public static void main(String[] args) {
 //    File 3232=new File("C:\\TVFiles\\TestPath\\TV\\Battlestar Galactica (2003)&&true");
-        String test = "C:\\TVFiles\\TestPath\\TV\\Battlestar Galactica (2003)&&true";
-        test.replaceAll("\\", "who");
+        String test = "C:\\TestMovies\\Blurays";
+       
     }
 
     public static Map GetAllFolderRestrictions(String ViewName) {
@@ -47,13 +47,15 @@ public class FolderExclusion {
             for (Object currs : Restrictions) {
                 Boolean Include = filters.get(currs);
                 if (Include && path.contains(currs.toString()) && !returnarray.contains(curr)) {
-
+//                    System.out.println("Include Filter Movie added="+path+";Current Restriction="+currs.toString());
                     returnarray.add(curr);
                 }
-                if (!Include && path.contains(currs.toString()) && returnarray.contains(curr)) {
+                else if (!Include && path.contains(currs.toString()) && returnarray.contains(curr)) {
+//                 System.out.println("Exlude Filter Movie Removed="+path+";Current Restriction="+currs.toString());
                     returnarray.remove(curr);
-                } else if (!NeedAdder) {
+                } else if (!NeedAdder&&!(!Include && path.contains(currs.toString()))) {
                     if (!returnarray.contains(curr)) {
+//                     System.out.println("Movie added as end result="+path+";Current Restriction="+currs.toString());
                         returnarray.add(curr);
                     }
                 }
