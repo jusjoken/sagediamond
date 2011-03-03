@@ -1,6 +1,6 @@
 = Introduction =
 
-Check here for whats available in Diamond and how to use various functions.
+Check here for basic information about what's available in Diamond and how to use various functions.
 
 = Details =
 
