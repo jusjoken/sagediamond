@@ -2,24 +2,7 @@
 
 Check here for basic information about what's available in Diamond and how to use various functions.
 
-<wiki:toc max_depth="2" />
-
-[#Getting_Started]
-
-[#TV/Recordings_Views]
-
-[#Movies/Videos_Views]
-
-[#Movies/Videos_Views_-_General_Options]
-
-[#Main_Menu_Mods]
-
-[#Fanart_Options]
-
-[#TV_Guide]
-
-[#Troubleshooting]
-
+<wiki:toc max_depth="3" />
 
 = Details =
 
@@ -48,8 +31,8 @@ Check here for basic information about what's available in Diamond and how to us
   * List Flow - list based Movie view with a vertical scrolling poster view and Movie details on the right. Use the Options menu to set the Sort - Folder Filters - Filters - Background Fanart - Enter = Play - Right Side display (Blank, Ratings, Year)
   * Categories - this is a Genre type view with Categories on the left and a Wall type view on the right. Use the Options menu to ........
  
-==Movies/Videos Views - General Options==
-_(applies to Cover, Wall and List Views)_
+  ===Movies/Videos Views - General Options===
+  _(applies to Cover, Wall and List Views)_
   * Folder Filters - Add New Include Filter - Add New Exclude Filter or remove/change existing Folder filters.
   * Filter - Include Watched - Include DVD - Include BluRay - Include Videos - Include Recordings - Include Unscraped Content - Include Playon Content - Categories filtered in: (select this option to pick which categories to include).
   * NOTE: options are saved per diamond movie view (including the custom views you create)
