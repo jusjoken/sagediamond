@@ -38,6 +38,7 @@ Check here for basic information about what's available in Diamond and how to us
   * Widgets - go to Options from the Main Menu, into Diamond Options, then into Widget Options. From here you can turn on/off combinations of the available Main Menu Widgets - Weather - Forecast - Current Recordings - Upcoming Recordings - Recording Space.
   * Default Videos Menu - customize the default Videos view - go to Options from the Main Menu, into Diamond Options, ensure "Replace Video with Diamond Movies" is Off, then select from the various options to Show or Hide - Diamond Categories - Diamond Wall View - Diamond Flow View - Diamond List Flow.
   * Custom Movie Menu - replace the default Videos menu with the Diamond "Movies" menu - go to Options from the Main Menu, into Diamond Options, and set "Replace Video with Diamond Movies" to On. Then select "custom Views Setup" to create your own Diamond Views.  From here you can "Add New View" (set the type and name it), edit views you previously created, change the order of the custom views (place focus on a view name and press the RIGHT arrow for options to move the view) or "Edit Default Views to Show" so you can keep access to the Sage Default STV Video views - Titles - DVD/BD - Folders - CATEGORY - Playlists - VideoConversions.
+  * Main Menu Customization - XXXXXXXXXXXXXX
  
 ==Fanart Options==
   * Phoenix Fanart - check the Detailed Setup, Diamond Fanart menu to ensure the Phoenix Fanart Directory is set to something valid for your extender/client to reach and that Phoenix Fanart Enabled is set to "On".
@@ -47,7 +48,9 @@ Check here for basic information about what's available in Diamond and how to us
   * Background Fanart - this feature can be turned on/off on the various Diamond Movie/TV Views on the Diamond Options menus
   * Series Fanart options - see the TV/Recordings View section
  
- 
+== TV Guide ==
+  * Background Fanart - the option is available on the Diamond Options menu but has NOT been implemented with release 3.0
+  
 ==Troubleshooting==
-  * Reset Diamond Settings -  to their default by going to the Options menu from the Main Menu, select Diamond Options, then select "Clear All Diamond Settings". Note: this will also delete the current local Fanart Cache.
+  * Reset Diamond Settings -  to their default by going to the Options menu from the Main Menu, select Diamond Options, then select "Clear All Diamond Settings". Note: this will delete the current local Fanart Cache and all custom views.
  
