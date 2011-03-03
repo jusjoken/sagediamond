@@ -5,7 +5,8 @@ Check here for basic information about what's available in Diamond and how to us
 = Details =
 
 == Getting Started ==
-[ftp://ftp.babgvant.com|pluckyhd@ftp.babgvant.com/pluckyhd/Recordings-TV-View-DiamondOptions.jpg]
+
+[http://ftp.babgvant.com/pluckyhd/Recordings-TV-View-DiamondOptions.jpg]
  
   * available as a "UI Mod" plugin under SageTV version 7+ called "Diamond for Default Sagetv STV"
   * to get the most out of this plugin you will need some form of metadata/Fanart solution such as...
