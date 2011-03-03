@@ -2,7 +2,7 @@
 
 Check here for basic information about what's available in Diamond and how to use various functions.
 
-[Getting_Started]
+[#Getting_Started]
 
 = Details =
 
