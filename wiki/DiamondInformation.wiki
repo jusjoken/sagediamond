@@ -2,6 +2,8 @@
 
 Check here for basic information about what's available in Diamond and how to use various functions.
 
+<wiki:toc max_depth="2" />
+
 [#Getting_Started]
 
 [#TV/Recordings_Views]
