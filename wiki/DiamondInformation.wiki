@@ -3,13 +3,21 @@
 Check here for basic information about what's available in Diamond and how to use various functions.
 
 [#Getting_Started]
+
 [#TV/Recordings_Views]
+
 [#Movies/Videos_Views]
+
 [#Movies/Videos_Views_-_General_Options_(applies_to_Cover,_Wall_and_List_Views)]
+
 [#Main_Menu_Mods]
+
 [#Fanart_Options]
+
 [#TV_Guide]
+
 [#Troubleshooting]
+
 
 = Details =
 
