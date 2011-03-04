@@ -213,7 +213,6 @@ Check here for basic information about what's available in Diamond and how to us
 == TV Guide ==
   * Background Fanart
     * the option is available on the Diamond Options menu
-    * _this feature has NOT been implemented with release 3.0_
   
 ==Troubleshooting==
   * Reset Diamond Settings
