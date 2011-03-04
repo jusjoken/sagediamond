@@ -53,7 +53,7 @@ Check here for basic information about what's available in Diamond and how to us
 	    * Watched Recordings 
 	    * Recordings marked Don't Like 
 	    * Recorded movies 
-	    * Imported TV from "PlayOn"
+	    * Imported TV from `PlayOn`
 	    * Imported TV 
 	    * Categories filtered in: (select this option to pick which categories to include).
   * Episode View Options - while on the episode view select Options and then Diamond Options - from here change....
@@ -61,7 +61,7 @@ Check here for basic information about what's available in Diamond and how to us
       * BG Fanart - on - off
       * Hide Title when grouped by Title - on - off
       * Show Season/Episode Number - on - off
-      * Season/Episode Format - "S1E01" - "S01E01" - "E01" - "1x01" - "1" - Row Number - None
+      * Season/Episode Format - `S1E01` - `S01E01` - `E01` - `1x01` - `1` - Row Number - None
       * Season/Episode Separator - "-" - "::" - "." - ")" - "|" - None
       * Season/Episode Location - Before Title - After Title - Above Markers (only works if Minimal Recording Icons = on)
       * Show Minimal Recording Icons - on - off
@@ -120,7 +120,7 @@ Check here for basic information about what's available in Diamond and how to us
       * Sort
         * Oldest/Newest Added First
         * Title A to Z or Z to A
-          * ScrubTitle - removes The, A etc - on - off
+          * `ScrubTitle` - removes The, A etc - on - off
         * Release Year 1900 to Present or Present to 1900
       * Background Fanart 
     * _ABC Scrollbar not available in this view_
@@ -138,14 +138,14 @@ Check here for basic information about what's available in Diamond and how to us
       * Include Videos 
       * Include Recordings 
       * Include Unscraped Content 
-      * Include "PlayOn" Content 
+      * Include `PlayOn` Content 
       * Categories filtered in: (select this option to pick which categories to include)
 
   * applies to all Movie Views
     * Sort
       * Oldest/Newest Added First
       * Title A to Z or Z to A
-        * ScrubTitle - removes The, A etc - on - off
+        * `ScrubTitle` - removes The, A etc - on - off
       * Release Year 1900 to Present or Present to 1900
 
   * *Note:* options are saved per diamond movie view (including the custom views you create)
