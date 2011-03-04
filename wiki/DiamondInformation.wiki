@@ -34,8 +34,8 @@ Check here for basic information about what's available in Diamond and how to us
 	      * BG Fanart - on - off
 	      * Show Series Banner - on - off
 	      * Show Season Banner - on - off
-	      * Fanart Thumbnails - affects the default info list - on - off
-	      * Show Larger Thumbnails - affects the default info list - on - off
+	      * Fanart Thumbnails - affects the default info list and episode view - on - off
+	      * Show Larger Thumbnails - affects the default info list and episode view - on - off
 	    * Count/Watched Format - (www/rrr) - (rrr) - Recordings:rrr - Recordings:rrr Watched:www - Blank
 	    * Show Seasons View - on - off
 	    * Use Diamond Info View - custom right hand info panel with poster view and metadata details - on - off
@@ -73,8 +73,8 @@ Check here for basic information about what's available in Diamond and how to us
 	    * Fanart Options
 	      * BG Fanart - on - off
 	      * Show Poster - on - off
-	      * Fanart Thumbnails - affects the default info list _does not apply to simplified view_
-	      * Show Larger Thumbnails - affects the default info list _does not apply to simplified view_
+	      * Fanart Thumbnails - affects the episode view - on - off
+	      * Show Larger Thumbnails - affects the episode view - on - off
 	    * Show Seasons View - on - off
 	    * Show Diamond Play Options - if enabled this will display a menu to play Next, Newest, All from Next or All - on - off
 	    * Metadata In Info List _does not apply to simplified view_
