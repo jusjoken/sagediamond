@@ -13,10 +13,22 @@ Check here for basic information about what's available in Diamond and how to us
     * Phoenix Core Services with BMT
     * other provider that store folder level fanart (posters and backgrounds). See fanart below.
   * select a Diamond theme from among the large selection available under Detailed Setup, Advanced, "select the user interface theme".
+  * if you are a previous Diamond 2.0 or greater user you may want to clear all the previous settings - look here [#Troubleshooting]
+
+== Diamond Themes ==
+
+||Diamond ||Diamond All Clear||Diamond Blue Too||
+||Diamond Blues||Diamond Boxwee||Diamond Boxwee EP||
+||Diamond Green||Diamond Green Too||Diamond MC||
+||Diamond MC No Fanart BG||Diamond Orange||Diamond Purple||
+||Diamond Red||Diamond Serenity Blue||Diamond Serenity Now||
+||Diamond Simplified||Diamond Tabs||Diamond Winter||
+||Diamond Winter Red||  ||  ||
+
  
 == TV/Recordings Views ==
   * select TV - Recordings - All Recordings (or one of the other default SageTV recording views
-  * Diamond Options - select Options and then Diamond Options - from here change - BG Fanart - Count/Watched Format - Show Series Banner - Show Season Banner - Show Seasons View - Season Popup.
+  * Diamond Options - select Options and then Diamond Options - from here change - Fanart Options - Count/Watched Format - Show Seasons View - Season Popup.
   * Use Diamond Play Options - if enabled this will display a menu to ply Next, Newest, All from Next or All - Info View Options 
   * Use Diamond Info View - custom right hand info panel with poster view and metadata details
   * Standard Info plus - Metadata In Info List - Show Larger Thumbnails - Fanart Thumbnails
