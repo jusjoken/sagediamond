@@ -73,9 +73,9 @@ public class MetadataCalls {
         if (Title.equals("") || Title.equals(null)) {
             Title = sagex.api.MediaFileAPI.GetMediaTitle(MediaObject);
         }
-//         if (Title.equals("") || Title.equals(null)) {
-//        Title = sagex.api.AiringAPI.GetAiringTitle(MediaObject);
-//         }
+         if (Title.equals("") || Title.equals(null)) {
+        Title = sagex.api.AiringAPI.GetAiringTitle(MediaObject);
+         }
         if (Title.equals("") || Title.equals(null)) {
             return "Unknown";
         }
@@ -183,8 +183,9 @@ public class MetadataCalls {
     public static boolean IsMediaTypeTV(Object MediaObject) {
         String Type = sagex.api.MediaFileAPI.GetMediaFileMetadata(MediaObject, "MediaType");
         if (Type.contains("TV") || sagex.api.MediaFileAPI.IsTVFile(MediaObject)) {
-            return true;
+                        return true;
         } else {
+
             return false;
         }
     }
@@ -218,7 +219,7 @@ public class MetadataCalls {
         }
 
         if (Cat.equals("")) {
-            return "unkown";
+            return "unknown";
         }
         if (Cat.contains("and")) {
             return Cat.substring(0, Cat.indexOf("and") - 1);

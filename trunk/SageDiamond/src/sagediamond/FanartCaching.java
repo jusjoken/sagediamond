@@ -109,7 +109,7 @@ public class FanartCaching {
             id = sagex.api.ShowAPI.GetShowEpisode(MediaFile);
         }
         String storeid = MetadataCalls.GetMediaTitle(MediaFile);
-        id = MT && !Type.equalsIgnoreCase("episode") ? sagex.phoenix.fanart.FanartUtil.createSafeTitle(id) + "_season" + MetadataCalls.GetSeasonNumberPad(MediaFile) : sagex.phoenix.fanart.FanartUtil.createSafeTitle(id);
+        id = MT &&!Type.equalsIgnoreCase("Background")&& !Type.equalsIgnoreCase("episode") ? sagex.phoenix.fanart.FanartUtil.createSafeTitle(id) + "_season" + MetadataCalls.GetSeasonNumberPad(MediaFile) : sagex.phoenix.fanart.FanartUtil.createSafeTitle(id);
         String CT = MT ? "TV" : "Movies";
         String FT = Type.equalsIgnoreCase("Background") ? "" : Type.equalsIgnoreCase("episode") ? "thumb_" : series ? "series_" : MT ? "season_" : "";
 
