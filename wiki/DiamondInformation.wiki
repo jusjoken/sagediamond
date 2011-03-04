@@ -53,7 +53,7 @@ Check here for basic information about what's available in Diamond and how to us
 	    * Watched Recordings 
 	    * Recordings marked Don't Like 
 	    * Recorded movies 
-	    * Imported TV from PlayOn 
+	    * Imported TV from "PlayOn"
 	    * Imported TV 
 	    * Categories filtered in: (select this option to pick which categories to include).
   * Episode View Options - while on the episode view select Options and then Diamond Options - from here change....
@@ -61,7 +61,7 @@ Check here for basic information about what's available in Diamond and how to us
       * BG Fanart - on - off
       * Hide Title when grouped by Title - on - off
       * Show Season/Episode Number - on - off
-      * Season/Episode Format - S1E01 - S01E01 - E01 - 1x01 - 1 - Row Number - None
+      * Season/Episode Format - "S1E01" - "S01E01" - "E01" - "1x01" - "1" - Row Number - None
       * Season/Episode Separator - "-" - "::" - "." - ")" - "|" - None
       * Season/Episode Location - Before Title - After Title - Above Markers (only works if Minimal Recording Icons = on)
       * Show Minimal Recording Icons - on - off
@@ -73,48 +73,152 @@ Check here for basic information about what's available in Diamond and how to us
 	    * Fanart Options
 	      * BG Fanart - on - off
 	      * Show Poster - on - off
-	      * Fanart Thumbnails - affects the default info list *** does not apply to simplified view
-	      * Show Larger Thumbnails - affects the default info list *** does not apply to simplified view
+	      * Fanart Thumbnails - affects the default info list _does not apply to simplified view_
+	      * Show Larger Thumbnails - affects the default info list _does not apply to simplified view_
 	    * Show Seasons View - on - off
 	    * Show Diamond Play Options - if enabled this will display a menu to play Next, Newest, All from Next or All - on - off
-	    * Metadata In Info List  *** does not apply to simplified view
+	    * Metadata In Info List _does not apply to simplified view_
 	    * Season Popup - display the Season List in a popup menu - on - off
             * Show Title on Right - on - off
             * Show Title on Right - on - off
             * Show Description - on - off
             * Switch to Standard View
 
-  * NOTE: most options affect ALL Recordings/TV views (not saved per view). Filters are per View.
+  * *Note:* most options affect ALL Recordings/TV views (not saved per view). Filters are per View.
  
 ==Movies/Videos Views==
-  * Cover Flow - movie poster driven view centered on the screen for quick selection. Use the Options menu to set the Sort - Folder Filters - Filters - Background Fanart - Enter = Play.
-  * Wall View - a wall of Movie Posters to select from. Use the Options menu to set the Sort - Folder Filters - Filters - Background Fanart - Enter = Play and optionally show the Diamond Info panel with the Wall.
-  * List Flow - list based Movie view with a vertical scrolling poster view and Movie details on the right. Use the Options menu to set the Sort - Folder Filters - Filters - Background Fanart - Enter = Play - Right Side display (Blank, Ratings, Year)
+  * Cover Flow - movie poster driven view centered on the screen for quick selection. 
+    * Use the Options menu to set the following....
+      * Sort - see [#General_Options] below
+      * Folder Filters - see [#General_Options] below
+      * Filters - see [#General_Options] below
+      * Background Fanart
+      * Enter = Play.
+    * Press "down" in this view to get the ABC Scrollbar to Jump to the first movie starting with a selected letter.
+  * Wall View - a wall of Movie Posters to select from. 
+    * Use the Options menu to set the following....
+      * Sort - see [#General_Options] below
+      * Folder Filters - see [#General_Options] below
+      * Filters - see [#General_Options] below
+      * Background Fanart 
+      * Enter = Play
+      * Show Info Box - optionally show the Diamond Info panel on the right with the Wall view
+    * Press "down" while on the bottom row of posters to get the ABC Scrollbar to Jump to the first movie starting with a selected letter.
+  * List Flow - list based Movie view with a vertical scrolling poster view and Movie details on the right.
+    * Use the Options menu to set the following....
+      * Sort - see [#General_Options] below
+      * Folder Filters - see [#General_Options] below
+      * Filters - see [#General_Options] below 
+      * Background Fanart 
+      * Enter = Play
+      * Right Side - what to display on the right side of the title in the movie list - Blank - Ratings - Year
+    * Press "right" in this view to get the ABC Scrollbar to Jump to the first movie starting with a selected letter.
   * Categories - this is a Genre type view with Categories on the left and a Wall type view on the right. Use the Options menu to ........
+    * Use the Options menu to set the following....
+      * Delay Movies - system will wait a moment to display the Movie Posters to improve the speed of the Categories vertical list - on - off
+      * Enter = Play
+      * Sort
+        * Oldest/Newest Added First
+        * Title A to Z or Z to A
+          * ScribTitle - removes The, A etc - on - off
+        * Release Year 1900 to Present or Present to 1900
+      * Background Fanart 
+    * _ABC Scrollbar not available in this view_
  
-  ===Movies/Videos Views - General Options===
-  _(applies to Cover, Wall and List Views)_
-  * Folder Filters - Add New Include Filter - Add New Exclude Filter or remove/change existing Folder filters.
-  * Filter - Include Watched - Include DVD - Include BluRay - Include Videos - Include Recordings - Include Unscraped Content - Include Playon Content - Categories filtered in: (select this option to pick which categories to include).
-  * NOTE: options are saved per diamond movie view (including the custom views you create)
+  ===General Options===
+  * applies to Cover, Wall and List Views
+    * Folder Filters - here you can include or exclude specified Movie Folders
+      * Add New Include Filter
+      * Add New Exclude Filter
+      * remove/change existing Folder filters
+    * Filter 
+      * Include Watched
+      * Include DVD 
+      * Include BluRay 
+      * Include Videos 
+      * Include Recordings 
+      * Include Unscraped Content 
+      * Include "PlayOn" Content 
+      * Categories filtered in: (select this option to pick which categories to include)
+
+  * applies to all Movie Views
+    * Sort
+      * Oldest/Newest Added First
+      * Title A to Z or Z to A
+        * ScribTitle - removes The, A etc - on - off
+      * Release Year 1900 to Present or Present to 1900
+
+  * *Note:* options are saved per diamond movie view (including the custom views you create)
  
 ==Main Menu Mods==
-  * Widgets - go to Options from the Main Menu, into Diamond Options, then into Widget Options. From here you can turn on/off combinations of the available Main Menu Widgets - Weather - Forecast - Current Recordings - Upcoming Recordings - Recording Space.
-  * Default Videos Menu - customize the default Videos view - go to Options from the Main Menu, into Diamond Options, ensure "Replace Video with Diamond Movies" is Off, then select from the various options to Show or Hide - Diamond Categories - Diamond Wall View - Diamond Flow View - Diamond List Flow.
-  * Custom Movie Menu - replace the default Videos menu with the Diamond "Movies" menu - go to Options from the Main Menu, into Diamond Options, and set "Replace Video with Diamond Movies" to On. Then select "custom Views Setup" to create your own Diamond Views.  From here you can "Add New View" (set the type and name it), edit views you previously created, change the order of the custom views (place focus on a view name and press the RIGHT arrow for options to move the view) or "Edit Default Views to Show" so you can keep access to the Sage Default STV Video views - Titles - DVD/BD - Folders - CATEGORY - Playlists - VideoConversions.
-  * Main Menu Customization - XXXXXXXXXXXXXX
+  * Widgets 
+    * go to Options from the Main Menu - Diamond Options - Main Menu Widget Options
+    * from here you can turn on/off combinations of the available Main Menu Widgets
+      * Weather Widget - Off - Basic - Extended - Forecast 
+      * Recent Recording Widget - on - off 
+      * Upcoming Recording Widget - on - off 
+      * Recording Space Widget - on - off
+  * Default Videos Menu 
+    * customize the default Videos view
+      * go to Options from the Main Menu - Diamond Options - make sure "Replace Video with Diamond Movies" is Off
+      * select from the various options to Show or Hide - these will show above the standard items (titles, DVD etc)
+        * Diamond Categories 
+        * Diamond Wall View 
+        * Diamond Flow View 
+        * Diamond List Flow.
+  * Custom Movie Menu 
+    * replace the default Videos menu with the Diamond "Movies" menu 
+      * go to Options from the Main Menu - Diamond Options - make sure "Replace Video with Diamond Movies" is On
+      * select "custom Views Setup" to create your own Diamond Views. From here you can....
+        * "Add New View" (set the type and name it)
+        * edit views you previously created
+        * change the order of the custom views
+          * place focus on a view name and press the RIGHT arrow for options to move the view
+        * "Edit Default Views to Show"
+          * you can keep access to the Sage Default STV Video views 
+            * Titles 
+            * DVD/BD 
+            * Folders 
+            * CATEGORY 
+            * Playlists 
+            * VideoConversions
+  * Hide Main Menu Items
+    * go to Options from the Main Menu - Diamond Options - Hide Main Menu Items
+      * TV Menu - on - off
+      * Show Video/Movies - on - off
+      * Show Music - on - off
+      * Show Photos - on - off
+      * Show Search - on - off
+      * Show Online - on - off
+      * Show Setup - on - off
+      * Show Exit - on - off
  
 ==Fanart Options==
-  * Phoenix Fanart - check the Detailed Setup, Diamond Fanart menu to ensure the Phoenix Fanart Directory is set to something valid for your extender/client to reach and that Phoenix Fanart Enabled is set to "On".
-  * Folder level Fanart - if you use Folder Level Posters or Backgrounds set those options in Detailed Setup, Diamond Fanart and select the type of fanart you use.
-  * Cache - to delete the cache so it will rebuild - select Detailed Setup, Diamond Fanart and select Delete All Cached Fanart.
-  * Single TV/Recording/Movie Fanart delete - in any Diamond view press the Delete key on any item and a menu option including Delete Fanart will be offered.
-  * Background Fanart - this feature can be turned on/off on the various Diamond Movie/TV Views on the Diamond Options menus
-  * Series Fanart options - see the TV/Recordings View section
+  * Folder level Fanart
+    * if you use Folder Level Posters or Backgrounds set those options in Detailed Setup - Diamond Fanart
+    * select the type of fanart you use
+  * Phoenix Fanart
+    * check Detailed Setup - Diamond Fanart to ensure the Phoenix Fanart Directory is set to something valid for your extender/client to reach
+    * check that Phoenix Fanart Enabled is set to "On".
+  * Cache
+    * to delete the cache so it will rebuild
+    * select Detailed Setup - Diamond Fanart and select Delete All Cached Fanart
+    * answer Yes to the prompt
+  * Single TV/Recording/Movie Fanart delete
+    * in any Diamond view press the Delete key on any item and a menu option including Delete Fanart will be offered
+  * Background Fanart
+    * this feature can be turned on/off on the various Diamond Movie/TV Views on the Diamond Options menus
+  * Series Fanart options 
+    * see the [#TV/Recordings_Views] section
  
 == TV Guide ==
-  * Background Fanart - the option is available on the Diamond Options menu but has NOT been implemented with release 3.0
+  * Background Fanart
+    * the option is available on the Diamond Options menu
+    * _this feature has NOT been implemented with release 3.0_
   
 ==Troubleshooting==
-  * Reset Diamond Settings -  to their default by going to the Options menu from the Main Menu, select Diamond Options, then select "Clear All Diamond Settings". Note: this will delete the current local Fanart Cache and all custom views.
+  * Reset Diamond Settings
+    * go to the Options menu from the Main Menu - Diamond Options
+    * select "Clear All Diamond Settings"
+    * *Note:* this will delete the current local Fanart Cache and all custom views
  
