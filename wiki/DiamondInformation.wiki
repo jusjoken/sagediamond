@@ -17,15 +17,15 @@ Check here for basic information about what's available in Diamond and how to us
 
 == Diamond Themes ==
 
-||Diamond ||Diamond All Clear||Diamond Blue Too||
-||Diamond Blues||Diamond Boxwee||Diamond Boxwee EP||
-||Diamond Green||Diamond Green Too||Diamond MC||
-||Diamond MC No Fanart BG||Diamond Orange||Diamond Purple||
-||Diamond Red||Diamond Serenity Blue||Diamond Serenity Now||
-||Diamond Simplified||Diamond Tabs||Diamond Winter||
-||Diamond Winter Red||  ||  ||
+||Diamond 	     ||Diamond Green Too	||Diamond Serenity Now||
+||Diamond All Clear  ||Diamond MC		||Diamond Simplified  ||
+||Diamond Blue Too   ||Diamond MC No Fanart BG	||Diamond Tabs	      ||
+||Diamond Blues	     ||Diamond Orange		||Diamond Winter      ||
+||Diamond Boxwee     ||Diamond Purple		||Diamond Winter Red  ||
+||Diamond Boxwee EP  ||Diamond Red		||		      ||
+||Diamond Green	     ||Diamond Serenity Blue	||		      ||
 
- 
+
 == TV/Recordings Views ==
   * select TV - Recordings - All Recordings (or one of the other default SageTV recording views
   * Diamond Options - select Options and then Diamond Options - from here change - Fanart Options - Count/Watched Format - Show Seasons View - Season Popup.
