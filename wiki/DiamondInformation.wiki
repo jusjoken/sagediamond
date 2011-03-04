@@ -17,14 +17,13 @@ Check here for basic information about what's available in Diamond and how to us
 
 == Diamond Themes ==
 
-||Diamond 	     ||Diamond Green Too	||Diamond Serenity Now||
-||Diamond All Clear  ||Diamond MC		||Diamond Simplified  ||
-||Diamond Blue Too   ||Diamond MC No Fanart BG	||Diamond Tabs	      ||
-||Diamond Blues	     ||Diamond Orange		||Diamond Winter      ||
-||Diamond Boxwee     ||Diamond Purple		||Diamond Winter Red  ||
-||Diamond Boxwee EP  ||Diamond Red		||		      ||
-||Diamond Green	     ||Diamond Serenity Blue	||		      ||
-
+||Diamond 	     	  ||Diamond MC		      ||Diamond Simplified  ||
+||Diamond All Clear  	  ||Diamond MC No Fanart BG   ||Diamond Tabs	    ||
+||Diamond Blue Too   	  ||Diamond Orange	      ||Diamond Winter      ||
+||Diamond Boxwee     	  ||Diamond Purple	      ||Diamond Winter Red  ||
+||Diamond Boxwee EP  	  ||Diamond Red		      ||		    ||
+||Diamond Green	     	  ||Diamond Serenity Blue     ||	            ||
+||Diamond Green Too	  ||Diamond Serenity Now      ||	            ||
 
 == TV/Recordings Views ==
 === Standard Diamond TV/Recordings View===
