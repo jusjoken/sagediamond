@@ -181,7 +181,7 @@ Check here for basic information about what's available in Diamond and how to us
             * Folders 
             * CATEGORY 
             * Playlists 
-            * VideoConversions
+            * `VideoConversions`
   * Hide Main Menu Items
     * go to Options from the Main Menu - Diamond Options - Hide Main Menu Items
       * TV Menu - on - off
