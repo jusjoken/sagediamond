@@ -27,14 +27,63 @@ Check here for basic information about what's available in Diamond and how to us
 
 
 == TV/Recordings Views ==
-  * select TV - Recordings - All Recordings (or one of the other default SageTV recording views
-  * Diamond Options - select Options and then Diamond Options - from here change - Fanart Options - Count/Watched Format - Show Seasons View - Season Popup.
-  * Use Diamond Play Options - if enabled this will display a menu to ply Next, Newest, All from Next or All - Info View Options 
-  * Use Diamond Info View - custom right hand info panel with poster view and metadata details
-  * Standard Info plus - Metadata In Info List - Show Larger Thumbnails - Fanart Thumbnails
-  * Simplified View - 
-  * Filters - select from the following filter options - Manual Recordings - Favorites - non Manual Recording or Favorite - archived Recordings - First Runs - HDTV Recordings - Watched Recordings - Recordings marked Don't Like - Recorded movies - Imported TV from PlayOn - Imported TV - Categories filtered in: (select this option to pick which categories to include).
-  * Episode View Options - while on the episode view select Options and then Diamond Options - from here change - BG Fanart - Hide Title when grouped by Title - Show Season/Episode Number - Season/Episode format - Season/Episode Separator - Season/Episode location - Show Minimal Recording Icons - Show Original Airing Date.
+=== Standard Diamond TV/Recordings View===
+  * select TV - Recordings - All Recordings (or one of the other default SageTV recording views)
+	  * Diamond Options - select Options and then Diamond Options - from here change...
+	    * Fanart Options
+	      * BG Fanart - on - off
+	      * Show Series Banner - on - off
+	      * Show Season Banner - on - off
+	      * Fanart Thumbnails - affects the default info list - on - off
+	      * Show Larger Thumbnails - affects the default info list - on - off
+	    * Count/Watched Format - (www/rrr) - (rrr) - Recordings:rrr - Recordings:rrr Watched:www - Blank
+	    * Show Seasons View - on - off
+	    * Use Diamond Info View - custom right hand info panel with poster view and metadata details - on - off
+	    * Use Diamond Play Options - if enabled this will display a menu to play Next, Newest, All from Next or All - on - off
+	    * Metadata In Info List - if enabled then the default Info List will include Metadata
+	    * Season Popup - display the Season List in a popup menu - on - off
+	    * Switch to Simplified View - a Series Banner driven clean approach to TV/Recordings
+	  * Filters - select from the following filter options....
+	    * Manual Recordings
+	    * Favorites
+	    * non Manual Recording or Favorite 
+	    * archived Recordings 
+	    * First Runs 
+	    * HDTV Recordings 
+	    * Watched Recordings 
+	    * Recordings marked Don't Like 
+	    * Recorded movies 
+	    * Imported TV from PlayOn 
+	    * Imported TV 
+	    * Categories filtered in: (select this option to pick which categories to include).
+  * Episode View Options - while on the episode view select Options and then Diamond Options - from here change....
+    * Diamond Options - select Options and then Diamond Options - from here change...
+      * BG Fanart - on - off
+      * Hide Title when grouped by Title - on - off
+      * Show Season/Episode Number - on - off
+      * Season/Episode Format - S1E01 - S01E01 - E01 - 1x01 - 1 - Row Number - None
+      * Season/Episode Separator - "-" - "::" - "." - ")" - "|" - None
+      * Season/Episode Location - Before Title - After Title - Above Markers (only works if Minimal Recording Icons = on)
+      * Show Minimal Recording Icons - on - off
+        * Show Original Airing Date - only available if Minimal Recording Icons = on and S/E Location is not above Markers
+    * Sort - look here to set the sort to various options including Season/Episode and Original Air Date
+=== Simplified View===
+  * a Series Banner driven clean approach to TV/Recordings
+    * Diamond Options - select Options and then Diamond Options - from here change...
+	    * Fanart Options
+	      * BG Fanart - on - off
+	      * Show Poster - on - off
+	      * Fanart Thumbnails - affects the default info list *** does not apply to simplified view
+	      * Show Larger Thumbnails - affects the default info list *** does not apply to simplified view
+	    * Show Seasons View - on - off
+	    * Show Diamond Play Options - if enabled this will display a menu to play Next, Newest, All from Next or All - on - off
+	    * Metadata In Info List  *** does not apply to simplified view
+	    * Season Popup - display the Season List in a popup menu - on - off
+            * Show Title on Right - on - off
+            * Show Title on Right - on - off
+            * Show Description - on - off
+            * Switch to Standard View
+
   * NOTE: most options affect ALL Recordings/TV views (not saved per view). Filters are per View.
  
 ==Movies/Videos Views==
