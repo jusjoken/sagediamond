@@ -1,0 +1,13 @@
+#summary FAQ for Diamond
+
+= FAQ =
+
+Look here first to see if your question has already been answered.
+
+==Q. Where has my Imported TV gone==
+===A. It's now under TV - Recordings - All Recordings etc...===
+In TV you still have the default Sagetv options to create new Recording Views. There are 4 by default (All Recordings, Current Recordings, Archived Recordings, and Recorded Movies) 
+
+From the main menu go to TV/Recordings/All Recordings and select. Then hit escape (or option button) and then go to Menu Options, change the "Number of Views" to 5. Go all the way back out to the main menu and the go to the new TV/Recordings/"Recording View 5" and select. Hit escape (or option button) then go back to Menu Options, you will now see an option to rename the "recording view 5" go ahead and rename it "Imported TV". Exit back to the new "Imported TV" view. Go into options again and this time select "Filtering" and then change the Imported TV option to be "Only Imported TV", you should now have all "Imported TV" showing in your own custom TV view that uses the Banners or Simplified Banner view.
+
+Or if you don't use one of the others you can rename it and just adjust the filters to only show the Imported TV.
