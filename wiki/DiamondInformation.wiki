@@ -44,7 +44,7 @@ http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-small.jpg
 	    * Count/Watched Format - (www/rrr) - (rrr) - Recordings:rrr - Recordings:rrr Watched:www - Blank
 	    * Show Seasons View - on - off
 	    * Use Diamond Info View - custom right hand info panel with poster view and metadata details - on - off
-	    [http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-DiamondInfo-off.jpg http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-DiamondInfo-off-ppc.jpg] _Off     . _ [http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-DiamondInfo.jpg http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-DiamondInfo-ppc.jpg] _On_
+	    ||[http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-DiamondInfo-off.jpg http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-DiamondInfo-off-ppc.jpg] _Off_|| ||[http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-DiamondInfo.jpg http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-DiamondInfo-ppc.jpg] _On_||
 	    * Use Diamond Play Options - if enabled this will display a menu to play Next, Newest, All from Next or All - on - off
 	    * Metadata In Info List - if enabled then the default Info List will include Metadata
 	    * Season Popup - display the Season List in a popup menu - on - off
