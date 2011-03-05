@@ -178,6 +178,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
       * Upcoming Recording Widget - on - off 
       * Recording Space Widget - on - off
   * Default Videos Menu 
+  [http://dl.dropbox.com/u/7826058/Diamond/MainMenuVideosCustom.jpg http://dl.dropbox.com/u/7826058/Diamond/MainMenuVideosCustom-ppc.jpg] _click to view_
     * customize the default Videos view
       * go to Options from the Main Menu - Diamond Options - make sure "Replace Video with Diamond Movies" is Off
       * select from the various options to Show or Hide - these will show above the standard items (titles, DVD etc)
@@ -189,6 +190,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
     * replace the default Videos menu with the Diamond "Movies" menu 
       * go to Options from the Main Menu - Diamond Options - make sure "Replace Video with Diamond Movies" is On
       * select "custom Views Setup" to create your own Diamond Views. From here you can....
+      ||[http://dl.dropbox.com/u/7826058/Diamond/MainMenuCustomMovieViews.jpg http://dl.dropbox.com/u/7826058/Diamond/MainMenuCustomMovieViews-ppc.jpg] _Customize_||[http://dl.dropbox.com/u/7826058/Diamond/MainMenuCustomMovieViewsAdd.jpg http://dl.dropbox.com/u/7826058/Diamond/MainMenuCustomMovieViewsAdd-ppc.jpg] _Add New_|| _click to view_ ||
         * "Add New View" (set the type and name it)
         * edit views you previously created
         * change the order of the custom views
