@@ -78,6 +78,7 @@ http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-small.jpg
     * Sort - look here to set the sort to various options including Season/Episode and Original Air Date
       [http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-EpisodeSort.jpg http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-EpisodeSort-ppc.jpg] _click to view_
 === Simplified View===
+  [http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-SimplifiedView.jpg http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-SimplifiedView-small.jpg] _click to view_
   * a Series Banner driven clean approach to TV/Recordings
     * Diamond Options - select Options and then Diamond Options - from here change...
 	    * Fanart Options
