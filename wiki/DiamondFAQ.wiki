@@ -5,7 +5,7 @@
 Look here first to see if your question has already been answered.
 <wiki:toc max_depth="3" />
 
-==Q. Where has my Imported TV gone==
+==Q. Where has my Imported TV gone?==
 ===A. It's now under TV - Recordings - All Recordings etc...===
   In TV you still have the default Sagetv options to create new Recording Views. There are 4 by default (All Recordings, Current Recordings, Archived Recordings, and Recorded Movies) 
 
@@ -15,17 +15,24 @@ Look here first to see if your question has already been answered.
 
   [http://code.google.com/p/sagediamond/wiki/DiamondInformation#TV/Recordings_Views Wiki info here]
 
-==Q. Where is the TV Main Menu Item==
+==Q. Where is the TV Main Menu Item?==
 ===A. Make sure you are using the SageTV 7.1.x Beta or...===
   * make sure the TV menu item is turned on in Diamond Options - [http://code.google.com/p/sagediamond/wiki/DiamondInformation#Main_Menu_Mods Wiki]
   * make sure you are running SageTV 7.1.x beta or above
   * make sure you have all other Menu Mod type plugins disabled or uninstalled
   * try a quick restart of SageTV (server, client etc)
 
-==Q. Where are my Recorded Movies==
+==Q. Where are my Recorded Movies?==
 ===A. You have some choices... check here....===
   If you are using Diamond v3 it filters recorded movies out of recordings and into the Movies/Video views by default as the TV views do not lend well to displaying Movie information but you have options....
   * Use Videos and then one of the 'Diamond' views such as Wall, Flow, List Flow, or Categories [http://code.google.com/p/sagediamond/wiki/DiamondInformation#General_Options Wiki]
   * Switch to the Diamond 'Movie'view and then create a custom Wall, Flow, or List Flow View [http://code.google.com/p/sagediamond/wiki/DiamondInformation#Main_Menu_Mods Wiki]
   * Show Recorded Movies in the TV/Recording Views
     * look at the Filters in the Options panel of the Recorded Movies View (or other Recording Views).  Make sure that Recorded Movies is filtered to be included. [http://code.google.com/p/sagediamond/wiki/DiamondInformation#Standard_Diamond_TV/Recordings_View Wiki]
+    
+==Q. I am missing some Movies or Videos.  How do I get them to show?==
+===A. Check the setting for "unscraped" content===
+  * From one of the Diamond Movie views go into Options and select Filters
+  * Make sure "Include Unscraped Content" is set to "On"
+  * This will include content where metadata does not exist from sources like BMT. For example: mymovies or home videos.
+  
