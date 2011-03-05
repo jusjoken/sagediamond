@@ -126,7 +126,7 @@ http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-small.jpg
       * Sort
         * Oldest/Newest Added First
         * Title A to Z or Z to A
-          * `ScrubTitle` - removes The, A etc - on - off
+          * !ScrubTitle - removes The, A etc - on - off
         * Release Year 1900 to Present or Present to 1900
       * Background Fanart 
     * _ABC Scrollbar not available in this view_
