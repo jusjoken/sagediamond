@@ -108,7 +108,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
       * Enter = Play.
     * Press "down" in this view to get the ABC Scrollbar to Jump to the first movie starting with a selected letter.
   * Wall View - a wall of Movie Posters to select from. 
-    ||[http://dl.dropbox.com/u/7826058/Diamond/MovieWallView-InfoOff.jpg http://dl.dropbox.com/u/7826058/Diamond/MovieWallView-InfoOff-ppc.jpg] _Off_||[http://dl.dropbox.com/u/7826058/Diamond/MovieWallView-InfoOn.jpg http://dl.dropbox.com/u/7826058/Diamond/MovieWallView-InfoOn-ppc.jpg] _On_|| _click to view_ ||
+  ||[http://dl.dropbox.com/u/7826058/Diamond/MovieWallView-InfoOff.jpg http://dl.dropbox.com/u/7826058/Diamond/MovieWallView-InfoOff-ppc.jpg] _Off_||[http://dl.dropbox.com/u/7826058/Diamond/MovieWallView-InfoOn.jpg http://dl.dropbox.com/u/7826058/Diamond/MovieWallView-InfoOn-ppc.jpg] _On_|| _click to view_ ||
     * Use the Options menu to set the following....
       * Sort - see [#General_Options] below
       * Folder Filters - see [#General_Options] below
