@@ -205,6 +205,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
             * Playlists 
             * !VideoConversions
   * Hide Main Menu Items
+  [http://dl.dropbox.com/u/7826058/Diamond/MainMenuShowHideMenuItems.jpg http://dl.dropbox.com/u/7826058/Diamond/MainMenuShowHideMenuItems-ppc.jpg] _click to view_
     * go to Options from the Main Menu - Diamond Options - Hide Main Menu Items
       * TV Menu - on - off
       * Show Video/Movies - on - off
@@ -217,6 +218,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
  
 ==Fanart Options==
   * Folder level Fanart
+  [http://dl.dropbox.com/u/7826058/Diamond/DetailedSetupFolderFanart.jpg http://dl.dropbox.com/u/7826058/Diamond/DetailedSetupFolderFanart-ppc.jpg] _click to view_
     * if you use Folder Level Posters or Backgrounds set those options in Detailed Setup - Diamond Fanart
     * select the type of fanart you use
   * Phoenix Fanart
@@ -227,6 +229,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
     * select Detailed Setup - Diamond Fanart and select Delete All Cached Fanart
     * answer Yes to the prompt
   * Single TV/Recording/Movie Fanart delete
+  [http://dl.dropbox.com/u/7826058/Diamond/FanartDeleteSingleItem.jpg http://dl.dropbox.com/u/7826058/Diamond/FanartDeleteSingleItem-ppc.jpg] _click to view_
     * in any Diamond view press the Delete key on any item and a menu option including Delete Fanart will be offered
   * Background Fanart
     * this feature can be turned on/off on the various Diamond Movie/TV Views on the Diamond Options menus
@@ -235,10 +238,12 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
  
 == TV Guide ==
   * Background Fanart
+  [http://dl.dropbox.com/u/7826058/Diamond/TVGuideFanart.jpg http://dl.dropbox.com/u/7826058/Diamond/TVGuideFanart-ppc.jpg] _click to view_
     * the option is available on the Diamond Options menu
   
 ==Troubleshooting==
   * Reset Diamond Settings
+  [http://dl.dropbox.com/u/7826058/Diamond/ResetDiamond.jpg http://dl.dropbox.com/u/7826058/Diamond/ResetDiamond-ppc.jpg] _click to view_
     * go to the Options menu from the Main Menu - Diamond Options
     * select "Clear All Diamond Settings"
     * *Note:* this will delete the current local Fanart Cache and all custom views
