@@ -14,3 +14,6 @@ Look here first to see if your question has already been answered.
   Or if you don't use one of the others you can rename it and just adjust the filters to only show the Imported TV.
 
   Wiki info here - http://code.google.com/p/sagediamond/wiki/DiamondInformation#TV/Recordings_Views
+
+==Q. Where is the TV Main Menu Item==
+===A. Make sure you are using the SageTV 7.1.x Beta===
