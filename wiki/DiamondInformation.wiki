@@ -47,6 +47,7 @@ http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-small.jpg
 	    * Switch to Simplified View - a Series Banner driven clean approach to TV/Recordings
 	  * Filters - select from the following filter options....
     http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-Filters-thumbs.jpg
+    [#Recordings/TV_Filters]
 	    * Manual Recordings
 	    * Favorites
 	    * non Manual Recording or Favorite 
