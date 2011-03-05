@@ -7,7 +7,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
 
 <wiki:toc max_depth="3" />
 
-http://dl.dropbox.com/u/7826058/Diamond/DiamondMainMenu1-small.jpg
+[http://dl.dropbox.com/u/7826058/Diamond/DiamondMainMenu1.jpg http://dl.dropbox.com/u/7826058/Diamond/DiamondMainMenu1-small.jpg] _click to view_
 
 = Details =
 
@@ -31,7 +31,7 @@ http://dl.dropbox.com/u/7826058/Diamond/DiamondMainMenu1-small.jpg
 ||Diamond Green Too	  ||Diamond Serenity Now      ||	            ||
 
 == TV/Recordings Views ==
-http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-small.jpg
+[http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View.jpg http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-small.jpg] _click to view_
 === Standard Diamond TV/Recordings View===
   * select TV - Recordings - All Recordings (or one of the other default SageTV recording views)
 	  * Diamond Options - select Options and then Diamond Options - from here change...
