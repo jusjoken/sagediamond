@@ -20,3 +20,4 @@ Look here first to see if your question has already been answered.
   * make sure the TV menu item is turned on in Diamond Options - [http://code.google.com/p/sagediamond/wiki/DiamondInformation#Main_Menu_Mods Wiki]
   * make sure you are running SageTV 7.1.x beta or above
   * make sure you have all other Menu Mod type plugins disabled or uninstalled
+  * try a quick restart of SageTV (server, client etc)
