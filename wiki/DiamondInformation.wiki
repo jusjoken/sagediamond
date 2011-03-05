@@ -106,16 +106,18 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
       * Filters - see [#General_Options] below
       * Background Fanart
       * Enter = Play.
-    * Press "down" in this view to get the ABC Scrollbar to Jump to the first movie starting with a selected letter.
+    * Press "down" in this view to get the [http://dl.dropbox.com/u/7826058/Diamond/ABCScrollBar.jpg ABC Scrollbar] to Jump to the first movie starting with a selected letter.
+    [http://dl.dropbox.com/u/7826058/Diamond/ABCScrollBar.jpg http://dl.dropbox.com/u/7826058/Diamond/ABCScrollBar-ppc.jpg] _click to view_
+    
   * Wall View - a wall of Movie Posters to select from. 
-  ||[http://dl.dropbox.com/u/7826058/Diamond/MovieWallView-InfoOff.jpg http://dl.dropbox.com/u/7826058/Diamond/MovieWallView-InfoOff-ppc.jpg] _Off_||[http://dl.dropbox.com/u/7826058/Diamond/MovieWallView-InfoOn.jpg http://dl.dropbox.com/u/7826058/Diamond/MovieWallView-InfoOn-ppc.jpg] _On_|| _click to view_ ||
+  ||[http://dl.dropbox.com/u/7826058/Diamond/MovieWallView-InfoOff.jpg http://dl.dropbox.com/u/7826058/Diamond/MovieWallView-InfoOff-ppc.jpg] _No Info_||[http://dl.dropbox.com/u/7826058/Diamond/MovieWallView-InfoOn.jpg http://dl.dropbox.com/u/7826058/Diamond/MovieWallView-InfoOn-ppc.jpg] _Show Info_|| _click to view_ ||
     * Use the Options menu to set the following....
       * Sort - see [#General_Options] below
       * Folder Filters - see [#General_Options] below
       * Filters - see [#General_Options] below
       * Enter = Play
       * Show Info Box - optionally show the Diamond Info panel on the right with the Wall view
-    * Press "down" while on the bottom row of posters to get the ABC Scrollbar to Jump to the first movie starting with a selected letter.
+    * Press "down" while on the bottom row of posters to get the [http://dl.dropbox.com/u/7826058/Diamond/ABCScrollBar.jpg ABC Scrollbar] to Jump to the first movie starting with a selected letter.
   * List Flow - list based Movie view with a vertical scrolling poster view and Movie details on the right.
   [http://dl.dropbox.com/u/7826058/Diamond/MovieListFlowView.jpg http://dl.dropbox.com/u/7826058/Diamond/MovieListFlowView-ppc.jpg] _click to view_
     * Use the Options menu to set the following....
@@ -125,8 +127,9 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
       * Background Fanart 
       * Enter = Play
       * Right Side - what to display on the right side of the title in the movie list - Blank - Ratings - Year
-    * Press "right" in this view to get the ABC Scrollbar to Jump to the first movie starting with a selected letter.
+    * Press "right" in this view to get the [http://dl.dropbox.com/u/7826058/Diamond/ABCScrollBar.jpg ABC Scrollbar] to Jump to the first movie starting with a selected letter.
   * Categories - this is a Genre type view with Categories on the left and a Wall type view on the right. Use the Options menu to ........
+  [http://dl.dropbox.com/u/7826058/Diamond/MovieCategories.jpg http://dl.dropbox.com/u/7826058/Diamond/MovieCategories-ppc.jpg] _click to view_
     * Use the Options menu to set the following....
       * Delay Movies - system will wait a moment to display the Movie Posters to improve the speed of the Categories vertical list - on - off
       * Enter = Play
