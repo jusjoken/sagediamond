@@ -99,6 +99,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
  
 ==Movies/Videos Views==
   * Cover Flow - movie poster driven view centered on the screen for quick selection. 
+  [http://dl.dropbox.com/u/7826058/Diamond/MovieCoverFlowView.jpg http://dl.dropbox.com/u/7826058/Diamond/MovieCoverFlowView-ppc.jpg] _click to view_
     * Use the Options menu to set the following....
       * Sort - see [#General_Options] below
       * Folder Filters - see [#General_Options] below
@@ -107,15 +108,16 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
       * Enter = Play.
     * Press "down" in this view to get the ABC Scrollbar to Jump to the first movie starting with a selected letter.
   * Wall View - a wall of Movie Posters to select from. 
+    ||[http://dl.dropbox.com/u/7826058/Diamond/MovieWallView-InfoOff.jpg http://dl.dropbox.com/u/7826058/Diamond/MovieWallView-InfoOff-ppc.jpg] _Off_||[http://dl.dropbox.com/u/7826058/Diamond/MovieWallView-InfoOn.jpg http://dl.dropbox.com/u/7826058/Diamond/MovieWallView-InfoOn-ppc.jpg] _On_|| _click to view_ ||
     * Use the Options menu to set the following....
       * Sort - see [#General_Options] below
       * Folder Filters - see [#General_Options] below
       * Filters - see [#General_Options] below
-      * Background Fanart 
       * Enter = Play
       * Show Info Box - optionally show the Diamond Info panel on the right with the Wall view
     * Press "down" while on the bottom row of posters to get the ABC Scrollbar to Jump to the first movie starting with a selected letter.
   * List Flow - list based Movie view with a vertical scrolling poster view and Movie details on the right.
+  [http://dl.dropbox.com/u/7826058/Diamond/MovieListFlowView.jpg http://dl.dropbox.com/u/7826058/Diamond/MovieListFlowView-ppc.jpg] _click to view_
     * Use the Options menu to set the following....
       * Sort - see [#General_Options] below
       * Folder Filters - see [#General_Options] below
