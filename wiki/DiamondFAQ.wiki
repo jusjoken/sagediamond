@@ -25,6 +25,7 @@ Look here first to see if your question has already been answered.
 ==Q. Where are my Recorded Movies==
 ===A. You have some choices... check here....===
   If you are using Diamond v3 it filters recorded movies out of recordings and into the Movies/Video views by default as the TV views do not lend well to displaying Movie information.
-  * Use Movies/Video views [http://code.google.com/p/sagediamond/wiki/DiamondInformation#General_Options Wiki]
+  * Use Videos and then one of the 'Diamond' views such as Wall, Flow, List Flow, or Categories [http://code.google.com/p/sagediamond/wiki/DiamondInformation#General_Options Wiki]
+  * Switch to the Diamond 'Movie'view and then create a custom Wall, Flow, or List Flow View [http://code.google.com/p/sagediamond/wiki/DiamondInformation#Main_Menu_Mods Wiki]
   * Show Recorded Movies in the TV/Recording Views
     * look at the Filters in the Options panel of the Recorded Movies View (or other Recording Views).  Make sure that Recorded Movies is filtered to be included. [http://code.google.com/p/sagediamond/wiki/DiamondInformation#Standard_Diamond_TV/Recordings_View Wiki]
