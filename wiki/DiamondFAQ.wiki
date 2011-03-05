@@ -35,4 +35,6 @@ Look here first to see if your question has already been answered.
   * From one of the Diamond Movie views go into Options and select Filters
   * Make sure "Include Unscraped Content" is set to "On"
   * This will include content where metadata does not exist from sources like BMT. For example: mymovies or home videos.
+  * *Note:* This will only affect the current diamond Movie view.
+  
   
