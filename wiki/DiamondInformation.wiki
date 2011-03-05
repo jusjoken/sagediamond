@@ -47,8 +47,9 @@ http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-small.jpg
 	    ||[http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-DiamondInfo-off.jpg http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-DiamondInfo-off-ppc.jpg] _Off_||[http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-DiamondInfo.jpg http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-DiamondInfo-ppc.jpg] _On_|| _click to view_ ||
 	    * Use Diamond Play Options - if enabled this will display a menu to play Next, Newest, All from Next or All - on - off
       [http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-DiamondPlayOption.jpg http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-DiamondPlayOption-ppc.jpg] _click to view_
-	    * Metadata In Info List - if enabled then the default Info List will include Metadata
+	    * Metadata In Info List - if enabled then the default Info List will include Metadata (see Diamond Info View _Off_ image)
 	    * Season Popup - display the Season List in a popup menu - on - off
+      [http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-SeasonPopup.jpg http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-SeasonPopup-ppc.jpg] _click to view_
 	    * Switch to Simplified View - a Series Banner driven clean approach to TV/Recordings
 	  * Filters - select from the following filter options....
     [http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-Filters.jpg http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-Filters-ppc.jpg] _click to view_
