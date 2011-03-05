@@ -16,4 +16,5 @@ Look here first to see if your question has already been answered.
   Wiki info here - http://code.google.com/p/sagediamond/wiki/DiamondInformation#TV/Recordings_Views
 
 ==Q. Where is the TV Main Menu Item==
-===A. Make sure you are using the SageTV 7.1.x Beta===
+===A. Make sure you are using the SageTV 7.1.x Beta or...===
+  * make sure you have all other Menu Mod type plugins disabled or uninstalled
