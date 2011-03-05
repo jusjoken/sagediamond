@@ -65,8 +65,8 @@ http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-small.jpg
 	    * Imported TV from !PlayOn
 	    * Imported TV 
 	    * Categories filtered in: (select this option to pick which categories to include).
-  * Episode View Options - while on the episode view select Options and then Diamond Options - from here change....
-    * Diamond Options - select Options and then Diamond Options - from here change...
+  * Episode View Options - while on the episode view select Options
+    * Select Diamond Options - from here change...
       * BG Fanart - on - off
       * Hide Title when grouped by Title - on - off
       * Show Season/Episode Number - on - off
@@ -74,8 +74,9 @@ http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-small.jpg
       * Season/Episode Separator - "-" - "::" - "." - ")" - "|" - None
       * Season/Episode Location - Before Title - After Title - Above Markers (only works if Minimal Recording Icons = on)
       * Show Minimal Recording Icons - on - off
-        * Show Original Airing Date - only available if Minimal Recording Icons = on and S/E Location is not above Markers
+      * Show Original Airing Date - only available if Minimal Recording Icons = on and S/E Location is not above Markers
     * Sort - look here to set the sort to various options including Season/Episode and Original Air Date
+      [http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-EpisodeSort.jpg http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-EpisodeSort-ppc.jpg] _click to view_
 === Simplified View===
   * a Series Banner driven clean approach to TV/Recordings
     * Diamond Options - select Options and then Diamond Options - from here change...
