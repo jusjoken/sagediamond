@@ -21,3 +21,10 @@ Look here first to see if your question has already been answered.
   * make sure you are running SageTV 7.1.x beta or above
   * make sure you have all other Menu Mod type plugins disabled or uninstalled
   * try a quick restart of SageTV (server, client etc)
+
+==Q. Where are my Recorded Movies==
+===A. You have some choices... check here....===
+  If you are using Diamond v3 it filters recorded movies out of recordings and into the Movies/Video views by default. 
+  * Use Movies/Video views
+  * Show Recorded Movies in the TV/Recording Views
+    * look at the Filters in the Options panel of the Recorded Movies View (or other Recording Views).  Make sure that Recorded Movies is filtered to be included.
