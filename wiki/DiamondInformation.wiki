@@ -6,6 +6,8 @@ Check here for basic information about what's available in Diamond and how to us
 
 = Details =
 
+http://dl.dropbox.com/u/7826058/Diamond/DiamondMainMenu1-small.jpg
+
 == Getting Started ==
 
   * available as a "UI Mod" plugin under SageTV version 7+ called "Diamond for Default Sagetv STV"
