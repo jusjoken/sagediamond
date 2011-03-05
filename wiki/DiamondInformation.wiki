@@ -46,7 +46,7 @@ http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-small.jpg
 	    * Season Popup - display the Season List in a popup menu - on - off
 	    * Switch to Simplified View - a Series Banner driven clean approach to TV/Recordings
 	  * Filters - select from the following filter options....
-    [http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-Filters-thumbs.jpg http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-Filters.jpg]
+    [http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-Filters.jpg http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-Filters-small.jpg]
 	    * Manual Recordings
 	    * Favorites
 	    * non Manual Recording or Favorite 
