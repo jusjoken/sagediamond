@@ -144,6 +144,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
   ===General Options===
   * applies to Cover, Wall and List Views
     * Folder Filters - here you can include or exclude specified Movie Folders
+    [http://dl.dropbox.com/u/7826058/Diamond/MovieFolderFilters.jpg http://dl.dropbox.com/u/7826058/Diamond/MovieFolderFilters-ppc.jpg] _click to view_
       * Add New Include Filter
       * Add New Exclude Filter
       * remove/change existing Folder filters
