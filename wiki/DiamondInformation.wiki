@@ -196,6 +196,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
         * change the order of the custom views
           * place focus on a view name and press the RIGHT arrow for options to move the view
         * "Edit Default Views to Show"
+        [http://dl.dropbox.com/u/7826058/Diamond/MainMenuCustomMovieViewsShowDefaultViews.jpg http://dl.dropbox.com/u/7826058/Diamond/MainMenuCustomMovieViewsShowDefaultViews-ppc.jpg] _click to view_
           * you can keep access to the Sage Default STV Video views 
             * Titles 
             * DVD/BD 
