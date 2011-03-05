@@ -3,6 +3,8 @@
 
 Check here for basic information about what's available in Diamond and how to use various functions.
 
+Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299329291&updated=DiamondFAQ#FAQ FAQ]
+
 <wiki:toc max_depth="3" />
 
 http://dl.dropbox.com/u/7826058/Diamond/DiamondMainMenu1-small.jpg
