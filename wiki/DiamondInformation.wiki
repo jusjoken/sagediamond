@@ -144,6 +144,7 @@ http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-small.jpg
       * Include Videos 
       * Include Recordings 
       * Include Unscraped Content 
+        * this will include content where metadata does not exist from sources like BMT. For example: mymovies or home videos.
       * Include `PlayOn` Content 
       * Categories filtered in: (select this option to pick which categories to include)
 
