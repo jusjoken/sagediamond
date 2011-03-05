@@ -4,9 +4,9 @@ Check here for basic information about what's available in Diamond and how to us
 
 <wiki:toc max_depth="3" />
 
-= Details =
-
 http://dl.dropbox.com/u/7826058/Diamond/DiamondMainMenu1-small.jpg
+
+= Details =
 
 == Getting Started ==
 
