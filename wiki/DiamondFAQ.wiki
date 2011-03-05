@@ -17,6 +17,6 @@ Look here first to see if your question has already been answered.
 
 ==Q. Where is the TV Main Menu Item==
 ===A. Make sure you are using the SageTV 7.1.x Beta or...===
-  * make sure the TV menu item is turned on in Diamond Options - Wiki - 
+  * make sure the TV menu item is turned on in Diamond Options - [http://code.google.com/p/sagediamond/wiki/DiamondInformation Wiki]
   * make sure you are running SageTV 7.1.x beta or above
   * make sure you have all other Menu Mod type plugins disabled or uninstalled
