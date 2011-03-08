@@ -41,6 +41,7 @@ public class FolderExclusion {
         Set Restrictions = filters.keySet();
         Boolean NeedAdder = filters.values().contains(true);
         ArrayList returnarray = new ArrayList<Object>();
+        ArrayList excludearray=new ArrayList<Object>();
 
         for (Object curr : MediaFiles) {
             String path = sagex.api.MediaFileAPI.GetParentDirectory(curr).toString();
@@ -53,7 +54,8 @@ public class FolderExclusion {
                 else if (!Include && path.contains(currs.toString()) && returnarray.contains(curr)) {
 //                 System.out.println("Exlude Filter Movie Removed="+path+";Current Restriction="+currs.toString());
                     returnarray.remove(curr);
-                } else if (!NeedAdder&&!(!Include && path.contains(currs.toString()))) {
+                    excludearray.add(curr);
+                } else if (!NeedAdder&&!(!Include && path.contains(currs.toString()))&&!excludearray.contains(curr)) {
                     if (!returnarray.contains(curr)) {
 //                     System.out.println("Movie added as end result="+path+";Current Restriction="+currs.toString());
                         returnarray.add(curr);

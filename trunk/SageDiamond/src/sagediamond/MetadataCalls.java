@@ -8,6 +8,7 @@ import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -228,8 +229,32 @@ public class MetadataCalls {
 
             return Cat.substring(0, Cat.indexOf(","));
         }
-        return Cat;
+       return Cat;
 
+    }
+
+    public static ArrayList<String> GetAllShowCategories(Object MediaObject){
+    String[] Cats=sagex.api.ShowAPI.GetShowCategory(MediaObject).split(",");
+    ArrayList<String> AllCats = new ArrayList<String>();
+    for(String curr:Cats){
+    if(curr.contains("and")){
+    curr=curr.trim();
+    String[] andsplit = curr.split("and");
+    String cat1=andsplit[0];
+    cat1=cat1.trim();
+    String cat2=andsplit[0];
+    cat1=cat2.trim();
+    System.out.print("Adding Category=="+cat1+"!!"+cat2+"!!");
+    AllCats.add(cat1);
+    AllCats.add(cat2);}
+    else if(curr.equals("")){
+    AllCats.add("unknown");}
+    else if(curr.startsWith(" ")){
+    AllCats.add(curr.substring(1));}
+    else{
+    System.out.println("Adding single categories="+curr+"!!");
+    AllCats.add(curr);}}
+    return AllCats;
     }
 //     public static String GetTimeAdded(Object Title) {
 //    // Check to see if date variables have been set
