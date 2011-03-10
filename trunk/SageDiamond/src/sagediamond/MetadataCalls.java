@@ -132,6 +132,26 @@ public class MetadataCalls {
 //         return "Unknown";}
 //                 return GetEpisodeTitle(MediaObject).substring(0,1).toUpperCase();
 //	}
+
+    public static String GetMovieReleaseYear(Object MediaObject){
+    
+            //System.out.println("No Original Air Date");
+             return sagex.api.ShowAPI.GetShowYear(MediaObject);
+
+    }
+
+    public static int GetMediaFileID(Object MediaObject){
+    return sagex.api.MediaFileAPI.GetMediaFileID(MediaObject);}
+
+     public static long GetMovieOriginalAirDate(Object MediaObject){
+      String s1 = sagex.api.MediaFileAPI.GetMediaFileMetadata(MediaObject, "OriginalAirDate");
+      if (s1.length() == 0) {
+            //System.out.println("No Original Air Date");
+            return 0;
+        }
+      return  Long.parseLong(s1);
+     }
+
     public static long GetOriginalAirDate(Object MediaObject) /*returns the OriginalAiringDate as a long (in java date format) gathered from the metadta
      * 0 if it does not exist or catches an error
      *
@@ -256,47 +276,5 @@ public class MetadataCalls {
     AllCats.add(curr);}}
     return AllCats;
     }
-//     public static String GetTimeAdded(Object Title) {
-//    // Check to see if date variables have been set
-//    if(!DateConverter.IsDateVariableSet){
-//    LOG.trace("DateVariablesNot set Go ahead and set them");
-//    String First =sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"DateGroupFirstTime","10080");
-//    String Second = sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"DateGroupSecondTime","20160");
-//    String Third = sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"DateGroupThirdTime","43200");
-//    String Fourth = sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"DateGroupFourthTime","86400");
-//    Long LFirst = java.lang.Long.parseLong(First);
-//    LFirst = LFirst *60*1000;
-//    Long LSecond = java.lang.Long.parseLong(Second);
-//    LSecond = LSecond*60*1000;
-//    Long LThird = java.lang.Long.parseLong(Third);
-//    LThird = LThird*60*1000;
-//    Long LFourth = java.lang.Long.parseLong(Fourth);
-//    LFourth = LFourth *60*1000;
-//        Long CurrTime = System.currentTimeMillis();
-//    DateConverter.FirstDateGroup =CurrTime-LFirst;
-//    DateConverter.SecondDateGroup=CurrTime-LSecond;
-//    DateConverter.ThirdDateGroup=CurrTime-LThird;
-//    DateConverter.FourthDateGroup=CurrTime-LFourth;
-//    DateConverter.FifthDateGroup =CurrTime-(Long.parseLong(sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"DateGroupFifthTime","86401"))*60*1000);
-//    DateConverter.IsDateVariableSet=true;}
-//    LOG.trace("DateVariables Set to="+DateConverter.FirstDateGroup+":");
-//    LOG.trace("DateVariables Set to="+DateConverter.SecondDateGroup+":");
-//    LOG.trace("DateVariables Set to="+DateConverter.ThirdDateGroup+":");
-//    LOG.trace("DateVariables Set to="+DateConverter.FourthDateGroup+":");
-//    LOG.trace("DateVariables Set to="+DateConverter.FifthDateGroup+":");
-//
-//    Long DateAdded = (Long) ClassFromString.GetDateClass("GetOriginalAirDate", Title);
-//    if(DateAdded>=DateConverter.FirstDateGroup){
-//    return sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"DateGroupFirstName","New");}
-//    else if (DateAdded>=DateConverter.SecondDateGroup){
-//    return sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"DateGroupSecondName","Last Week");}
-//    else if (DateAdded>=DateConverter.ThirdDateGroup){
-//    return sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"DateGroupThirdName","30 days");}
-//   else if (DateAdded>=DateConverter.FourthDateGroup){
-//    return sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"DateGroupFourthName","60 days");}
-//   else{
-//
-//    return sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"DateGroupFifthName","Older");}
-//
-//        }
+
 }

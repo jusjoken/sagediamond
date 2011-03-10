@@ -5,12 +5,14 @@
 package sagediamond;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import sagex.UIContext;
 
 
 /**
@@ -83,23 +85,23 @@ public class FanartCaching {
 
 
 
-        public static Object RegenerateCachedFanart(Object MediaFile,Boolean series,String Type){
-    boolean MT = MetadataCalls.IsMediaTypeTV(MediaFile);
-     String id = MetadataCalls.GetMediaTitle(MediaFile);
-     if (Type.equalsIgnoreCase("episode")) {
-            id = sagex.api.ShowAPI.GetShowEpisode(MediaFile);
-        }
-        String storeid = MetadataCalls.GetMediaTitle(MediaFile);
-        id = MT && !Type.equalsIgnoreCase("episode") ? sagex.phoenix.fanart.FanartUtil.createSafeTitle(id) + "_season" + MetadataCalls.GetSeasonNumberPad(MediaFile) : sagex.phoenix.fanart.FanartUtil.createSafeTitle(id);
-        String CT = MT ? "TV" : "Movies";
-        String FT = Type.equalsIgnoreCase("Background") ? "" : Type.equalsIgnoreCase("episode") ? "thumb_" : series ? "series_" : MT ? "season_" : "";
+        public static void  RegenerateCachedFanart(Object MediaFile){
+  
+     String id = sagex.phoenix.fanart.FanartUtil.createSafeTitle(MetadataCalls.GetMediaTitle(MediaFile));
+     System.out.println("Checking for stored fanart to clear for title="+id );
+        if (CachingUserRecord.HasStoredLocation(id)){
+         System.out.println("RecordExist for Fanart delete and clearing all caching records for diamond");
+        ArrayList<File> CachedFanarts= CachingUserRecord.GetAllCacheLocationsForID(id);
+        System.out.println("Total number of fanart cached for record="+CachedFanarts.size());
+        for(File curr:CachedFanarts){
+        System.out.println("Deleting Image="+curr);
+//        sagex.api.Utility.UnloadImage(new UIContext(sagex.api.Global.GetUIContextName()),curr.toString());
+        curr.delete();
 
-        if (CachingUserRecord.HasStoredLocation(id, FT + Type.toLowerCase())) {
-        String Location = CachingUserRecord.GetStoredLocation(id, FT + Type.toLowerCase());
-        sagex.api.Utility.UnloadImage(Location);
-        CachingUserRecord.deleteStoredLocation(FT, Type, Location);
         }
-        return GetCachedFanart(MediaFile,series,Type);
+        CachingUserRecord.DeleteStoresForID(id);
+        }
+       
     }
 
     public static Object GetCachedFanart(Object MediaFile, Boolean series, String Type) {
@@ -108,12 +110,12 @@ public class FanartCaching {
         if (Type.equalsIgnoreCase("episode")) {
             id = sagex.api.ShowAPI.GetShowEpisode(MediaFile);
         }
-        String storeid = MetadataCalls.GetMediaTitle(MediaFile);
-        id = MT &&!Type.equalsIgnoreCase("Background")&& !Type.equalsIgnoreCase("episode") ? sagex.phoenix.fanart.FanartUtil.createSafeTitle(id) + "_season" + MetadataCalls.GetSeasonNumberPad(MediaFile) : sagex.phoenix.fanart.FanartUtil.createSafeTitle(id);
+        String storeid = sagex.phoenix.fanart.FanartUtil.createSafeTitle(MetadataCalls.GetMediaTitle(MediaFile));
+        id = MT&&!series &&!Type.equalsIgnoreCase("Background")&& !Type.equalsIgnoreCase("episode") ? sagex.phoenix.fanart.FanartUtil.createSafeTitle(id) + "_season" + MetadataCalls.GetSeasonNumberPad(MediaFile) : sagex.phoenix.fanart.FanartUtil.createSafeTitle(id);
         String CT = MT ? "TV" : "Movies";
         String FT = Type.equalsIgnoreCase("Background") ? "" : Type.equalsIgnoreCase("episode") ? "thumb_" : series ? "series_" : MT ? "season_" : "";
 
-        if (!CachingUserRecord.HasStoredLocation(id, FT + Type.toLowerCase())) {
+        if (!CachingUserRecord.HasStoredLocation(storeid,id+FT + Type.toLowerCase())) {
             System.out.println("Caching Does Not Exist Yet for=" + storeid);
             String Dir = CacheLocation + Sep + CT + Sep + FT + Type.toLowerCase() + "s" + Sep;
             if (Type.equalsIgnoreCase("episode")) {
@@ -132,16 +134,16 @@ public class FanartCaching {
             Boolean FanartExist = CreateFanart(MediaFile, series, Type, CD);
             if (FanartExist) {
                 System.out.println("Settingtotrue!!!" + id);
-                CachingUserRecord.setStoredLocation(id, FT + Type.toLowerCase(), Image.toString());
+                CachingUserRecord.setStoredLocation(storeid,id+ FT + Type.toLowerCase(), Image.toString());
             } //        }
             //        if (Image.exists()) {
             else {
                 System.out.println("SettingtoFalse!!!" + id);
-                CachingUserRecord.setStoredLocation(id, FT + Type.toLowerCase(), "false");
+                CachingUserRecord.setStoredLocation(storeid,id+ FT + Type.toLowerCase(), "false");
             }
         }
 
-        String Location = CachingUserRecord.GetStoredLocation(id, FT + Type.toLowerCase());
+        String Location = CachingUserRecord.GetStoredLocation(storeid,id+ FT + Type.toLowerCase());
         if (Location.equals("false")) {
             return null;
         }
