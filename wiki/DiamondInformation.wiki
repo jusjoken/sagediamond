@@ -20,13 +20,14 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
   * TV/Recordings Views
     * S/E in Diamond Info - can be turned on in the options
     * default settings for TV view filters improved
-    * option to turn off infinite scrolling
   * Movies/Video View
     * Info Fade on Wall, List Flow and Cover Flow (pause on any item and see)
     * Movie Disc number with title for multi disc movies if in Metadata
     * new optional 2 poster row Wall View
-    * new Movie List Flow option to remove the poster list
-    * Movie List Flow - optionally show the row number before the movie title
+    * List Flow
+      * option to remove the poster list
+      * optionally show the row number before the movie title
+      * option to turn off list wrapping
   * Other
     * Ability to set default movies view by hitting favorites
     * Play toggles OSD - off by default - see options while on OSD
