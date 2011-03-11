@@ -11,6 +11,27 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
 
 = Details =
 
+== New in Version 3.10 ==
+
+  * Main Menu Widget 
+    * change the width of the Widget panel
+    * optional tabbed look
+    * Hide Widget panel if showing video window
+  * TV/Recordings Views
+    * S/E in Diamond Info - can be turned on in the options
+    * default settings for TV view filters improved
+    * option to turn off infinite scrolling
+  * Movies/Video View
+    * Info Fade on Wall, List Flow and Cover Flow (pause on any item and see)
+    * Movie Disc number with title for multi disc movies if in Metadata
+    * new optional 2 poster row Wall View
+    * new Movie List Flow option to remove the poster list
+    * Movie List Flow - optionally show the row number before the movie title
+  * Other
+    * Ability to set default movies view by hitting favorites
+    * Play toggles OSD - off by default - see options while on OSD
+    * Caching improvements  
+
 == Getting Started ==
 
   * available as a "UI Mod" plugin under SageTV version 7+ called "Diamond for Default Sagetv STV"
