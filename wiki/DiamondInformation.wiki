@@ -193,7 +193,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
  
 ==Main Menu Mods==
   * Widgets 
-  [http://dl.dropbox.com/u/7826058/Diamond/MainMenuWidgets.jpg http://dl.dropbox.com/u/7826058/Diamond/MainMenuWidgets.jpg] _click to view_
+  ||[http://dl.dropbox.com/u/7826058/Diamond/DiamondMainMenu1.jpg http://dl.dropbox.com/u/7826058/Diamond/DiamondMainMenu1-ppc.jpg] _Standard_||[http://dl.dropbox.com/u/7826058/Diamond/MainMenuWidgetsTabbed.jpg http://dl.dropbox.com/u/7826058/Diamond/MainMenuWidgetsTabbed-ppc.jpg] _Tabbed_|| _click to view_ ||
     * go to Options from the Main Menu - Diamond Options - Main Menu Widget Options
     * from here you can turn on/off combinations of the available Main Menu Widgets
       * Weather Widget - Off - Basic - Extended - Forecast 
