@@ -200,6 +200,10 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
       * Recent Recording Widget - on - off 
       * Upcoming Recording Widget - on - off 
       * Recording Space Widget - on - off
+      * Use Tab Style Widgets - on - off
+      * Menu Widget Width - to adjust select the Adjust button and use the slider
+      [http://dl.dropbox.com/u/7826058/Diamond/MainMenuWidgetsWidth.jpg http://dl.dropbox.com/u/7826058/Diamond/MainMenuWidgetsWidth-ppc.jpg] _click to view_
+      * *Note:* if the SageTV setting "Display Video on Menus" is on then the Main Menu Widgets will not display
   * Default Videos Menu 
   [http://dl.dropbox.com/u/7826058/Diamond/MainMenuVideosCustom.jpg http://dl.dropbox.com/u/7826058/Diamond/MainMenuVideosCustom-ppc.jpg] _click to view_
     * customize the default Videos view
