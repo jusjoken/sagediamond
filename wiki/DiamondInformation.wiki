@@ -140,7 +140,9 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
       * Folder Filters - see [#General_Options] below
       * Filters - see [#General_Options] below
       * Enter = Play
+      * Info Fade
       * Show Info Box - optionally show the Diamond Info panel on the right with the Wall view
+      * Less Posters - set to On to show only 2 rows of posters (may help performance on slower systems/extenders)
     * Press "down" while on the bottom row of posters to get the [http://dl.dropbox.com/u/7826058/Diamond/ABCScrollBar.jpg ABC Scrollbar] to Jump to the first movie starting with a selected letter.
   * List Flow - list based Movie view with a vertical scrolling poster view and Movie details on the right.
   [http://dl.dropbox.com/u/7826058/Diamond/MovieListFlowView.jpg http://dl.dropbox.com/u/7826058/Diamond/MovieListFlowView-ppc.jpg] _click to view_
@@ -150,7 +152,11 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
       * Filters - see [#General_Options] below 
       * Background Fanart 
       * Enter = Play
-      * Right Side - what to display on the right side of the title in the movie list - Blank - Ratings - Year
+      * Customize View
+        * Right Side - what to display on the right side of the title in the movie list - Blank - Ratings - Year
+        * Show Posters - turn Off to remove the verticle poster list (may help performance on slower systems/extenders)
+        * Wrap List - on - off - if on the list will loop back to the begin/end
+        * Show Row Number - on - off - displays the row number before the movie title
     * Press "right" in this view to get the [http://dl.dropbox.com/u/7826058/Diamond/ABCScrollBar.jpg ABC Scrollbar] to Jump to the first movie starting with a selected letter.
   * Categories - this is a Genre type view with Categories on the left and a Wall type view on the right. Use the Options menu to ........
   [http://dl.dropbox.com/u/7826058/Diamond/MovieCategories.jpg http://dl.dropbox.com/u/7826058/Diamond/MovieCategories-ppc.jpg] _click to view_
@@ -167,7 +173,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
  
   ===General Options===
   * applies to Cover, Wall and List Views
-    * Info Fade - select options
+    * Info Fade - this option will display a full screen info view when you "pause" on a movie for the specified delay - see options
       * Auto Fade - on - off
       * Delay in MS to fade - 5000 (5 seconds) by default
       * !FullScreen Fanart - on for Fullscreen background or off for background in a window
