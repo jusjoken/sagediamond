@@ -278,7 +278,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
 
 == OSD Customizations ==
   * While the OSD is displayed, hit Options...
-    ||[http://dl.dropbox.com/u/7826058/Diamond/OSDOptions.jpg http://dl.dropbox.com/u/7826058/Diamond/OSDOptions-ppc.jpg] _Options_||[http://dl.dropbox.com/u/7826058/Diamond/OSDNormal.jpg http://dl.dropbox.com/u/7826058/Diamond/OSDNormal-ppc.jpg] _Diamond Normal_||[http://dl.dropbox.com/u/7826058/Diamond/OSDSlim.jpg http://dl.dropbox.com/u/7826058/Diamond/OSDSlim-ppc.jpg] _diamond Slim_|| _click to view_ ||
+    ||[http://dl.dropbox.com/u/7826058/Diamond/OSDOptions.jpg http://dl.dropbox.com/u/7826058/Diamond/OSDOptions-ppc.jpg] _OSD Options_||[http://dl.dropbox.com/u/7826058/Diamond/OSDNormal.jpg http://dl.dropbox.com/u/7826058/Diamond/OSDNormal-ppc.jpg] _Diamond Normal OSD_||[http://dl.dropbox.com/u/7826058/Diamond/OSDSlim.jpg http://dl.dropbox.com/u/7826058/Diamond/OSDSlim-ppc.jpg] _Diamond Slim OSD_|| _click to view_ ||
     * Top OSD visible - can set this to Top OSD Hidden
     * Bottom OSD Slim Mode - on - off
     * Bottom OSD Sports Ticker Mode - on - off
