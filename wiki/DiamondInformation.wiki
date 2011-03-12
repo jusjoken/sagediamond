@@ -167,7 +167,11 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
  
   ===General Options===
   * applies to Cover, Wall and List Views
-    * Info Fade
+    * Info Fade - select options
+      * Auto Fade - on - off
+      * Delay in MS to fade - 5000 (5 seconds) by default
+      * FullScreen Fanart - on for Fullscreen background or off for background in a window
+      * SplitCreen - on - off
     ||[http://dl.dropbox.com/u/7826058/Diamond/MoviesInfoFadeBackground.jpg http://dl.dropbox.com/u/7826058/Diamond/MoviesInfoFadeBackground-ppc.jpg] _Background Full Screen_||[http://dl.dropbox.com/u/7826058/Diamond/MoviesInfoFadeBackgroundOff.jpg http://dl.dropbox.com/u/7826058/Diamond/MoviesInfoFadeBackgroundOff-ppc.jpg] _Background in Window_||[http://dl.dropbox.com/u/7826058/Diamond/MoviesInfoFadeSplitScreen.jpg http://dl.dropbox.com/u/7826058/Diamond/MoviesInfoFadeSplitScreen-ppc.jpg] _Split Screen_|| _click to view_ ||
     * Folder Filters - here you can include or exclude specified Movie Folders
     [http://dl.dropbox.com/u/7826058/Diamond/MovieFolderFilters.jpg http://dl.dropbox.com/u/7826058/Diamond/MovieFolderFilters-ppc.jpg] _click to view_
