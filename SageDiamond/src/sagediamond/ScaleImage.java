@@ -14,14 +14,21 @@ public class ScaleImage {
 
     @SuppressWarnings("static-access")
     public static void scale(String src, int scalewidth, int scaleheight, String dest) {
-        boolean preserveAlpha = src.contains(".png");
-        System.out.println("Scaling Image=" + src.toString());
-        System.out.println("Passed Dimensions=" + scalewidth + " x " + scaleheight);
+
+//    sagex.api.Utility.SaveImageToFile(sagex.api.Utility.LoadImage(src),new File(dest), scalewidth,scaleheight);
 
 
-        int imageType = !preserveAlpha ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
 
 
+//        Commented out to try sagetv native scaling
+//        boolean preserveAlpha = src.contains(".png");
+//        System.out.println("Scaling Image=" + src.toString());
+//        System.out.println("Passed Dimensions=" + scalewidth + " x " + scaleheight);
+//
+//
+//        int imageType = !preserveAlpha ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
+//
+//
         BufferedImage originalimage;
         int i = 0;
 
@@ -29,28 +36,30 @@ public class ScaleImage {
 
             originalimage = ImageIO.read(new File(src));
             Integer[] dims = GetDimsToScale(scalewidth, scaleheight, originalimage.getWidth(), originalimage.getHeight());
-            int width = dims[0];
-            int height = dims[1];
+             sagex.api.Utility.SaveImageToFile(sagex.api.Utility.LoadImage(src),new File(dest), dims[0],dims[1]);
 
-            BufferedImage scaledBI = new BufferedImage(width, height, imageType);
-
-            Graphics2D g = scaledBI.createGraphics();
-
-
-            if (preserveAlpha) {
-
-                g.setComposite(AlphaComposite.Src);
-            }
-
-
-
-            g.drawImage(originalimage, 0, 0, width, height, null);
-
-            g.dispose();
-
-
-            ImageIO.write(scaledBI, preserveAlpha ? "png" : "jpg", new File(dest));
-
+//            int width = dims[0];
+//            int height = dims[1];
+//
+//            BufferedImage scaledBI = new BufferedImage(width, height, imageType);
+//
+//            Graphics2D g = scaledBI.createGraphics();
+//
+//
+//            if (preserveAlpha) {
+//
+//                g.setComposite(AlphaComposite.Src);
+//            }
+//
+//
+//
+//            g.drawImage(originalimage, 0, 0, width, height, null);
+//
+//            g.dispose();
+//
+//
+//            ImageIO.write(scaledBI, preserveAlpha ? "png" : "jpg", new File(dest));
+//
         } catch (IOException ex) {
             System.out.println("Problem Scaling images" + ScaleImage.class.getName() + ex);
         } catch (Exception e) {

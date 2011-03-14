@@ -30,7 +30,7 @@ public class FanartCaching {
     public static String PosterName = sagex.api.Configuration.GetServerProperty("JOrton/Fanart/PosterName", "Poster.jpg");
     public static String PosterSize = sagex.api.Configuration.GetProperty("JOrton/Fanart/PosterSize", "300x200");
     public static String BannerSize = sagex.api.Configuration.GetProperty("JOrton/Fanart/BannerSize", "300x200");
-    public static String BackgroundSize = sagex.api.Configuration.GetProperty("JOrton/Fanart/BackgroundSize", "1920x1080");
+    public static String BackgroundSize = sagex.api.Configuration.GetProperty("JOrton/Fanart/BackgroundSize", "1280x720");
     public static Boolean CheckPosterFolderFirst = Boolean.parseBoolean(sagex.api.Configuration.GetServerProperty("JOrton/Fanart/CheckPosterFolderFirst", "false"));
     public static Boolean CheckBackgroundFolderFirst = Boolean.parseBoolean(sagex.api.Configuration.GetServerProperty("JOrton/Fanart/CheckBackgroundFolderFirst", "false"));
 
@@ -39,9 +39,23 @@ public class FanartCaching {
         return new int[]{Integer.parseInt(s[0]), Integer.parseInt(s[1])};
     }
 
+    public static void setBackdropName(String Name){
+    BackdropName=Name;}
+
+    public static void setPosterName(String Name){
+    PosterName=Name;}
+
     public static void setBackgroundSize() {
         BackgroundSize = sagex.api.Configuration.GetProperty("JOrton/Fanart/BackgroundSize", "1920x1080");
     }
+    
+     public static int[] GetBackgroundSizeTMB() {
+        String[] s = BackgroundSize.split("x");
+        return new int[]{Integer.parseInt(s[0])/4, Integer.parseInt(s[1])/4};
+    }
+
+
+
 
     public static int[] GetBannerSize() {
         String[] s = BannerSize.split("x");
@@ -113,7 +127,7 @@ public class FanartCaching {
         String storeid = sagex.phoenix.fanart.FanartUtil.createSafeTitle(MetadataCalls.GetMediaTitle(MediaFile));
         id = MT&&!series &&!Type.equalsIgnoreCase("Background")&& !Type.equalsIgnoreCase("episode") ? sagex.phoenix.fanart.FanartUtil.createSafeTitle(id) + "_season" + MetadataCalls.GetSeasonNumberPad(MediaFile) : sagex.phoenix.fanart.FanartUtil.createSafeTitle(id);
         String CT = MT ? "TV" : "Movies";
-        String FT = Type.equalsIgnoreCase("Background") ? "" : Type.equalsIgnoreCase("episode") ? "thumb_" : series ? "series_" : MT ? "season_" : "";
+        String FT = Type.equalsIgnoreCase("Background") ? "" :Type.equalsIgnoreCase("BackgroundThumb") ? "TMB":Type.equalsIgnoreCase("episode") ? "thumb_" : series ? "series_" : MT ? "season_" : "";
 
         if (!CachingUserRecord.HasStoredLocation(storeid,id+FT + Type.toLowerCase())) {
             System.out.println("Caching Does Not Exist Yet for=" + storeid);
@@ -133,13 +147,18 @@ public class FanartCaching {
 //        if(NoFanart) {
             Boolean FanartExist = CreateFanart(MediaFile, series, Type, CD);
             if (FanartExist) {
-                System.out.println("Settingtotrue!!!" + id);
+                System.out.println("Setting DiamondCache to has Fanart=" + id);
                 CachingUserRecord.setStoredLocation(storeid,id+ FT + Type.toLowerCase(), Image.toString());
             } //        }
             //        if (Image.exists()) {
             else {
-                System.out.println("SettingtoFalse!!!" + id);
-                CachingUserRecord.setStoredLocation(storeid,id+ FT + Type.toLowerCase(), "false");
+                   if(sagex.api.MediaFileAPI.IsTVFile(MediaFile)){
+                 if(!sagex.api.MediaFileAPI.IsFileCurrentlyRecording(MediaFile)){
+                System.out.println("Setting Diamond Cache to no Fanart=" + id);
+                CachingUserRecord.setStoredLocation(storeid,id+ FT + Type.toLowerCase(), "false");}}
+                   else{
+                System.out.println("Setting Diamond Cache to no Fanart=" + id);
+                CachingUserRecord.setStoredLocation(storeid,id+ FT + Type.toLowerCase(), "false");}
             }
         }
 
@@ -168,7 +187,10 @@ public class FanartCaching {
             Fanart = GetEpisodeThumb(MediaFile);
         } else {
             Fanart = GetFanartBackground(MediaFile);
-            dims = GetBackgroundSize();
+            if(Type.contains("BackgroundThumb")){
+            dims=GetBackgroundSizeTMB();}
+            else{
+            dims = GetBackgroundSize();}
         }
         if (Fanart != null) {
 
