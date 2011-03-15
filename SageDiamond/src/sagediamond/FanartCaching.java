@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import sagex.UIContext;
-
 
 /**
  *
@@ -33,29 +33,46 @@ public class FanartCaching {
     public static String BackgroundSize = sagex.api.Configuration.GetProperty("JOrton/Fanart/BackgroundSize", "1280x720");
     public static Boolean CheckPosterFolderFirst = Boolean.parseBoolean(sagex.api.Configuration.GetServerProperty("JOrton/Fanart/CheckPosterFolderFirst", "false"));
     public static Boolean CheckBackgroundFolderFirst = Boolean.parseBoolean(sagex.api.Configuration.GetServerProperty("JOrton/Fanart/CheckBackgroundFolderFirst", "false"));
+    public static String CurrentlyCachingType = "";
+    public static String CurrentlyCaching = "";
+    public static int CachingTotal = 0;
+    public static int CachingCurrent = 0;
+    public static boolean IsCachingActive = false;
+    public static int CurrentFanartVersion = 4;
+
+    public static int GetCurrentFanartVersion() {
+        return CurrentFanartVersion;
+    }
+
+    public static Object[] GetCachingStatus() {
+        return new Object[]{CurrentlyCachingType, CurrentlyCaching, CachingTotal, CachingCurrent};
+    }
+
+    public static boolean IsCachingActive() {
+        return IsCachingActive;
+    }
 
     public static int[] GetBackgroundSize() {
         String[] s = BackgroundSize.split("x");
         return new int[]{Integer.parseInt(s[0]), Integer.parseInt(s[1])};
     }
 
-    public static void setBackdropName(String Name){
-    BackdropName=Name;}
+    public static void setBackdropName(String Name) {
+        BackdropName = Name;
+    }
 
-    public static void setPosterName(String Name){
-    PosterName=Name;}
+    public static void setPosterName(String Name) {
+        PosterName = Name;
+    }
 
     public static void setBackgroundSize() {
         BackgroundSize = sagex.api.Configuration.GetProperty("JOrton/Fanart/BackgroundSize", "1920x1080");
     }
-    
-     public static int[] GetBackgroundSizeTMB() {
+
+    public static int[] GetBackgroundSizeTMB() {
         String[] s = BackgroundSize.split("x");
-        return new int[]{Integer.parseInt(s[0])/4, Integer.parseInt(s[1])/4};
+        return new int[]{Integer.parseInt(s[0]) / 4, Integer.parseInt(s[1]) / 4};
     }
-
-
-
 
     public static int[] GetBannerSize() {
         String[] s = BannerSize.split("x");
@@ -97,39 +114,37 @@ public class FanartCaching {
         }
     }
 
+    public static void RegenerateCachedFanart(Object MediaFile) {
 
-
-        public static void  RegenerateCachedFanart(Object MediaFile){
-  
-     String id = sagex.phoenix.fanart.FanartUtil.createSafeTitle(MetadataCalls.GetMediaTitle(MediaFile));
-     System.out.println("Checking for stored fanart to clear for title="+id );
-        if (CachingUserRecord.HasStoredLocation(id)){
-         System.out.println("RecordExist for Fanart delete and clearing all caching records for diamond");
-        ArrayList<File> CachedFanarts= CachingUserRecord.GetAllCacheLocationsForID(id);
-        System.out.println("Total number of fanart cached for record="+CachedFanarts.size());
-        for(File curr:CachedFanarts){
-        System.out.println("Deleting Image="+curr);
+        String id = sagex.phoenix.fanart.FanartUtil.createSafeTitle(MetadataCalls.GetMediaTitle(MediaFile));
+        System.out.println("Checking for stored fanart to clear for title=" + id);
+        if (CachingUserRecord.HasStoredLocation(id)) {
+            System.out.println("RecordExist for Fanart delete and clearing all caching records for diamond");
+            ArrayList<File> CachedFanarts = CachingUserRecord.GetAllCacheLocationsForID(id);
+            System.out.println("Total number of fanart cached for record=" + CachedFanarts.size());
+            for (File curr : CachedFanarts) {
+                System.out.println("Deleting Image=" + curr);
 //        sagex.api.Utility.UnloadImage(new UIContext(sagex.api.Global.GetUIContextName()),curr.toString());
-        curr.delete();
+                curr.delete();
 
+            }
+            CachingUserRecord.DeleteStoresForID(id);
         }
-        CachingUserRecord.DeleteStoresForID(id);
-        }
-       
+
     }
 
     public static Object GetCachedFanart(Object MediaFile, Boolean series, String Type) {
         boolean MT = MetadataCalls.IsMediaTypeTV(MediaFile);
         String id = MetadataCalls.GetMediaTitle(MediaFile);
         if (Type.equalsIgnoreCase("episode")) {
-            id = sagex.api.ShowAPI.GetShowEpisode(MediaFile);
+            id = sagex.api.ShowAPI.GetShowEpisode(MediaFile) + "-" + MetadataCalls.GetSeasonNumberPad(MediaFile) + "x" + MetadataCalls.GetEpisodeNumberPad(MediaFile);
         }
         String storeid = sagex.phoenix.fanart.FanartUtil.createSafeTitle(MetadataCalls.GetMediaTitle(MediaFile));
-        id = MT&&!series &&!Type.equalsIgnoreCase("Background")&& !Type.equalsIgnoreCase("episode") ? sagex.phoenix.fanart.FanartUtil.createSafeTitle(id) + "_season" + MetadataCalls.GetSeasonNumberPad(MediaFile) : sagex.phoenix.fanart.FanartUtil.createSafeTitle(id);
+        id = MT && !series && !Type.equalsIgnoreCase("Background") && !Type.equalsIgnoreCase("episode") ? sagex.phoenix.fanart.FanartUtil.createSafeTitle(id) + "_season" + MetadataCalls.GetSeasonNumberPad(MediaFile) : sagex.phoenix.fanart.FanartUtil.createSafeTitle(id);
         String CT = MT ? "TV" : "Movies";
-        String FT = Type.equalsIgnoreCase("Background") ? "" :Type.equalsIgnoreCase("BackgroundThumb") ? "TMB":Type.equalsIgnoreCase("episode") ? "thumb_" : series ? "series_" : MT ? "season_" : "";
+        String FT = Type.equalsIgnoreCase("Background") ? "" : Type.equalsIgnoreCase("Background_Thumb") ? "TMB" : Type.equalsIgnoreCase("episode") ? "thumb_" : series ? "series_" : MT ? "season_" : "";
 
-        if (!CachingUserRecord.HasStoredLocation(storeid,id+FT + Type.toLowerCase())) {
+        if (!CachingUserRecord.HasStoredLocation(storeid, id + FT + Type.toLowerCase())) {
             System.out.println("Caching Does Not Exist Yet for=" + storeid);
             String Dir = CacheLocation + Sep + CT + Sep + FT + Type.toLowerCase() + "s" + Sep;
             if (Type.equalsIgnoreCase("episode")) {
@@ -148,21 +163,23 @@ public class FanartCaching {
             Boolean FanartExist = CreateFanart(MediaFile, series, Type, CD);
             if (FanartExist) {
                 System.out.println("Setting DiamondCache to has Fanart=" + id);
-                CachingUserRecord.setStoredLocation(storeid,id+ FT + Type.toLowerCase(), Image.toString());
+                CachingUserRecord.setStoredLocation(storeid, id + FT + Type.toLowerCase(), Image.toString());
             } //        }
             //        if (Image.exists()) {
             else {
-                   if(sagex.api.MediaFileAPI.IsTVFile(MediaFile)){
-                 if(!sagex.api.MediaFileAPI.IsFileCurrentlyRecording(MediaFile)){
-                System.out.println("Setting Diamond Cache to no Fanart=" + id);
-                CachingUserRecord.setStoredLocation(storeid,id+ FT + Type.toLowerCase(), "false");}}
-                   else{
-                System.out.println("Setting Diamond Cache to no Fanart=" + id);
-                CachingUserRecord.setStoredLocation(storeid,id+ FT + Type.toLowerCase(), "false");}
+                if (sagex.api.MediaFileAPI.IsTVFile(MediaFile)) {
+                    if (!sagex.api.MediaFileAPI.IsFileCurrentlyRecording(MediaFile)) {
+                        System.out.println("Setting Diamond Cache to no Fanart=" + id);
+                        CachingUserRecord.setStoredLocation(storeid, id + FT + Type.toLowerCase(), "false");
+                    }
+                } else {
+                    System.out.println("Setting Diamond Cache to no Fanart=" + id);
+                    CachingUserRecord.setStoredLocation(storeid, id + FT + Type.toLowerCase(), "false");
+                }
             }
         }
 
-        String Location = CachingUserRecord.GetStoredLocation(storeid,id+ FT + Type.toLowerCase());
+        String Location = CachingUserRecord.GetStoredLocation(storeid, id + FT + Type.toLowerCase());
         if (Location.equals("false")) {
             return null;
         }
@@ -187,10 +204,11 @@ public class FanartCaching {
             Fanart = GetEpisodeThumb(MediaFile);
         } else {
             Fanart = GetFanartBackground(MediaFile);
-            if(Type.contains("BackgroundThumb")){
-            dims=GetBackgroundSizeTMB();}
-            else{
-            dims = GetBackgroundSize();}
+            if (Type.contains("BackgroundThumb")) {
+                dims = GetBackgroundSizeTMB();
+            } else {
+                dims = GetBackgroundSize();
+            }
         }
         if (Fanart != null) {
 
@@ -324,7 +342,6 @@ public class FanartCaching {
 //
 //        return id;
 //    }
-
     public static Object[] toArray(Object Arr) /*
      * returns an Object Array of a passed in Vector, Array, List
      * (converts to type Object[])
@@ -365,6 +382,64 @@ public class FanartCaching {
             curr.delete();
 
         }
+
+    }
+
+    public static void CacheAllFanart() {
+        IsCachingActive = true;
+        Object[] Media = sagex.api.MediaFileAPI.GetMediaFiles("TVDBL");
+        Object[] TVFiles = (Object[]) sagex.api.Database.FilterByBoolMethod(Media, "sagediamond_MetadataCalls_IsMediaTypeTV", true);
+        Object[] MovieFiles = (Object[]) sagex.api.Database.FilterByBoolMethod(Media, "sagediamond_MetadataCalls_IsMediaTypeTV", false);
+        System.out.println("GettingFanartForallMovies size=" + MovieFiles.length);
+        CurrentlyCaching = "Movies";
+        CachingTotal = MovieFiles.length;
+        CurrentlyCachingType = "Posters";
+        int i = 1;
+        for (Object curr : MovieFiles) {
+            GetCachedFanart(curr, false, "Poster");
+            CachingCurrent = i;
+            i++;
+        }
+        CurrentlyCachingType = "Backgrounds";
+        CachingCurrent = i;
+        i = 1;
+        for (Object curr : MovieFiles) {
+            GetCachedFanart(curr, false, "Background");
+            CachingCurrent = i;
+            i++;
+        }
+        CurrentlyCachingType = "BackgroundThumb";
+        i = 1;
+        for (Object curr : MovieFiles) {
+            GetCachedFanart(curr, false, "BackgroundThumb");
+            CachingCurrent = i;
+            i++;
+        }
+        i = 0;
+        CurrentlyCaching = "TV";
+        Map<String, Vector> TVGrouped = sagex.api.Database.GroupByMethod(TVFiles, "sagediamond_MetadataCalls_GetMediaTitle");
+        Set<String> Shows = TVGrouped.keySet();
+        CachingTotal = Shows.size();
+        for (String curr : Shows) {
+            CurrentlyCachingType = curr + " Series Fanarts";
+            CachingCurrent = i;
+            Vector shows = TVGrouped.get(curr);
+            Object FirstShow = shows.get(0);
+            GetCachedFanart(FirstShow, false, "Poster");
+            GetCachedFanart(FirstShow, false, "Banner");
+            GetCachedFanart(FirstShow, false, "Background");
+            GetCachedFanart(FirstShow, false, "BackgroundThumb");
+            CurrentlyCachingType = curr + " Episode Fanarts";
+            for (Object episode : shows) {
+                GetCachedFanart(episode, false, "Poster");
+                GetCachedFanart(episode, false, "Banner");
+                GetCachedFanart(episode, false, "episode");
+            }
+            i++;
+        }
+
+
+        IsCachingActive = false;
 
     }
 }

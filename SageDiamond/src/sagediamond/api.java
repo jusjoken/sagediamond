@@ -13,7 +13,7 @@ import sagex.UIContext;
  */
 public class api {
 
-    public static String Version = "3.133";
+    public static String Version = "3.134";
 
     public static int GetSeasonEpisodeNumber(Object MediaObject) {
         return MetadataCalls.GetSeasonEpisodeNumber(MediaObject);
