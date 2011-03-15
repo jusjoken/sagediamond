@@ -9,6 +9,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -74,9 +75,9 @@ public class MetadataCalls {
         if (Title.equals("") || Title.equals(null)) {
             Title = sagex.api.MediaFileAPI.GetMediaTitle(MediaObject);
         }
-         if (Title.equals("") || Title.equals(null)) {
-        Title = sagex.api.AiringAPI.GetAiringTitle(MediaObject);
-         }
+        if (Title.equals("") || Title.equals(null)) {
+            Title = sagex.api.AiringAPI.GetAiringTitle(MediaObject);
+        }
         if (Title.equals("") || Title.equals(null)) {
             return "Unknown";
         }
@@ -99,7 +100,7 @@ public class MetadataCalls {
 
     public static boolean IsPlayonFile(Object MediaObject) {
 //    System.out.println("Checking for playon type="+sagex.api.MediaFileAPI.GetParentDirectory(MediaObject)+"for value"+PlayonDirectory);
-   return sagex.api.MediaFileAPI.GetParentDirectory(MediaObject).toString().contains(PlayonDirectory);
+        return sagex.api.MediaFileAPI.GetParentDirectory(MediaObject).toString().contains(PlayonDirectory);
     }
 
     public static int GetPlayonFileType(Object MediaObject) {
@@ -132,25 +133,25 @@ public class MetadataCalls {
 //         return "Unknown";}
 //                 return GetEpisodeTitle(MediaObject).substring(0,1).toUpperCase();
 //	}
+    public static String GetMovieReleaseYear(Object MediaObject) {
 
-    public static String GetMovieReleaseYear(Object MediaObject){
-    
-            //System.out.println("No Original Air Date");
-             return sagex.api.ShowAPI.GetShowYear(MediaObject);
+        //System.out.println("No Original Air Date");
+        return sagex.api.ShowAPI.GetShowYear(MediaObject);
 
     }
 
-    public static int GetMediaFileID(Object MediaObject){
-    return sagex.api.MediaFileAPI.GetMediaFileID(MediaObject);}
+    public static int GetMediaFileID(Object MediaObject) {
+        return sagex.api.MediaFileAPI.GetMediaFileID(MediaObject);
+    }
 
-     public static long GetMovieOriginalAirDate(Object MediaObject){
-      String s1 = sagex.api.MediaFileAPI.GetMediaFileMetadata(MediaObject, "OriginalAirDate");
-      if (s1.length() == 0) {
+    public static String GetMovieOriginalAirDate(Object MediaObject) {
+        String s1 = sagex.api.MediaFileAPI.GetMediaFileMetadata(MediaObject, "OriginalAirDate");
+        if (s1.length() == 0) {
             //System.out.println("No Original Air Date");
-            return 0;
+            return "0";
         }
-      return  Long.parseLong(s1);
-     }
+        return DateConverter.GetDateFromLong(Long.parseLong(s1));
+    }
 
     public static long GetOriginalAirDate(Object MediaObject) /*returns the OriginalAiringDate as a long (in java date format) gathered from the metadta
      * 0 if it does not exist or catches an error
@@ -204,7 +205,7 @@ public class MetadataCalls {
     public static boolean IsMediaTypeTV(Object MediaObject) {
         String Type = sagex.api.MediaFileAPI.GetMediaFileMetadata(MediaObject, "MediaType");
         if (Type.contains("TV") || sagex.api.MediaFileAPI.IsTVFile(MediaObject)) {
-                        return true;
+            return true;
         } else {
 
             return false;
@@ -213,7 +214,7 @@ public class MetadataCalls {
 
     public static boolean IsImportedTV(Object MediaObject) {
 
-         if (IsMediaTypeTV(MediaObject) && !sagex.api.MediaFileAPI.IsTVFile(MediaObject)) {
+        if (IsMediaTypeTV(MediaObject) && !sagex.api.MediaFileAPI.IsTVFile(MediaObject)) {
             return true;
         } else {
             return false;
@@ -229,14 +230,11 @@ public class MetadataCalls {
 
     }
 
-
-
-
     public static String GetShowCategory(Object MediaObject) {
         String Cat = sagex.api.ShowAPI.GetShowCategory(MediaObject);
-        if(Cat.startsWith("Movie")&&Cat.contains("/")){
+        if (Cat.startsWith("Movie") && Cat.contains("/")) {
 
-        Cat=Cat.substring(Cat.indexOf("/"));
+            Cat = Cat.substring(Cat.indexOf("/"));
         }
 
         if (Cat.equals("")) {
@@ -249,32 +247,33 @@ public class MetadataCalls {
 
             return Cat.substring(0, Cat.indexOf(","));
         }
-       return Cat;
+        return Cat;
 
     }
 
-    public static ArrayList<String> GetAllShowCategories(Object MediaObject){
-    String[] Cats=sagex.api.ShowAPI.GetShowCategory(MediaObject).split(",");
-    ArrayList<String> AllCats = new ArrayList<String>();
-    for(String curr:Cats){
-    if(curr.contains("and")){
-    curr=curr.trim();
-    String[] andsplit = curr.split("and");
-    String cat1=andsplit[0];
-    cat1=cat1.trim();
-    String cat2=andsplit[0];
-    cat1=cat2.trim();
-    System.out.print("Adding Category=="+cat1+"!!"+cat2+"!!");
-    AllCats.add(cat1);
-    AllCats.add(cat2);}
-    else if(curr.equals("")){
-    AllCats.add("unknown");}
-    else if(curr.startsWith(" ")){
-    AllCats.add(curr.substring(1));}
-    else{
-    System.out.println("Adding single categories="+curr+"!!");
-    AllCats.add(curr);}}
-    return AllCats;
+    public static ArrayList<String> GetAllShowCategories(Object MediaObject) {
+        String[] Cats = sagex.api.ShowAPI.GetShowCategory(MediaObject).split(",");
+        ArrayList<String> AllCats = new ArrayList<String>();
+        for (String curr : Cats) {
+            if (curr.contains("and")) {
+                curr = curr.trim();
+                String[] andsplit = curr.split("and");
+                String cat1 = andsplit[0];
+                cat1 = cat1.trim();
+                String cat2 = andsplit[0];
+                cat1 = cat2.trim();
+                System.out.print("Adding Category==" + cat1 + "!!" + cat2 + "!!");
+                AllCats.add(cat1);
+                AllCats.add(cat2);
+            } else if (curr.equals("")) {
+                AllCats.add("unknown");
+            } else if (curr.startsWith(" ")) {
+                AllCats.add(curr.substring(1));
+            } else {
+                System.out.println("Adding single categories=" + curr + "!!");
+                AllCats.add(curr);
+            }
+        }
+        return AllCats;
     }
-
 }
