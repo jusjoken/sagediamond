@@ -144,13 +144,14 @@ public class MetadataCalls {
         return sagex.api.MediaFileAPI.GetMediaFileID(MediaObject);
     }
 
-    public static String GetMovieOriginalAirDate(Object MediaObject) {
+    public static long GetMovieOriginalAirDate(Object MediaObject) {
         String s1 = sagex.api.MediaFileAPI.GetMediaFileMetadata(MediaObject, "OriginalAirDate");
         if (s1.length() == 0) {
             //System.out.println("No Original Air Date");
-            return "0";
+            return 0;
         }
-        return DateConverter.GetDateFromLong(Long.parseLong(s1));
+//        return DateConverter.GetDateFromLong(Long.parseLong(s1));
+       return Long.parseLong(s1);
     }
 
     public static long GetOriginalAirDate(Object MediaObject) /*returns the OriginalAiringDate as a long (in java date format) gathered from the metadta
