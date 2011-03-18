@@ -63,10 +63,10 @@ public class util {
     }
 
     public static Object CheckFileSize(List<Object> files, String diamondprop) {
-        int viewtype = CustomViews.GetViewStyle(diamondprop);
+        String viewtype = CustomViews.GetViewStyle(diamondprop);
         ArrayList<Object> NewList = new ArrayList<Object>();
-        if (viewtype == 1 && files.size() < 5) {
-        } else if (viewtype == 3 && files.size() < 7) {
+        if (viewtype == "Wall Flow" && files.size() < 5) {
+        } else if (viewtype == "Cover Flow" && files.size() < 7) {
             NewList.add(null);
             NewList.add(null);
             NewList.add(null);
