@@ -14,14 +14,33 @@ public class CustomViews {
 
     public static final String PropName="JOrton/CustomViews";
 
-    public static int GetViewStyle(String View) {
-        if (View.contains("MovieWall")) {
-            return 1;
+    public static String GetViewStyle(String View) {
+    	String ViewType = View;
+    	if (ViewType.contains("&&")){
+    		ViewType = GetViewType(ViewType);
+        	System.out.println("Error: GetViewStyle ("+View+")("+ViewType+")");
+    	}
+
+        if (ViewType.equals("Wall Flow") || 
+        	View.equals("MovieWall")) {  // Needed for backwards compatability
+            return "Wall Flow";
         }
-        if (View.contains("ListFlow")) {
-            return 2;
-        } else {
-            return 3;
+        else if (ViewType.equals("List Flow") || 
+        		 ViewType.equals("ListFlow")) { // Needed for backwards compatability
+            return "List Flow";
+        }
+        else if (ViewType.equals("Cover Flow") || 
+        		 ViewType.equals("CoverFlow")) { // Needed for backwards compatability
+            return "Cover Flow";
+        }        
+        else if(ViewType.equals("Category Flow")) {
+            return "Category Flow";
+        }
+        else if(ViewType.equals("360 Flow")) {
+            return "360 Flow";
+        }
+        else {
+            return "Cover Flow";
         }
     }
 
@@ -38,10 +57,30 @@ public class CustomViews {
     }
 
     public static String GetViewName(String name){
-    return name.split("&&")[0];}
+    String[] SplitString = name.split("&&");
+    if (SplitString.length == 2)
+    {
+    	return name.split("&&")[0];
+    }
+    else
+    {
+    	System.out.println("ERROR: GetViewName("+name+")");
+    	return "Error";
+    }
+    }
 
     public static String GetViewType(String name){
-    return name.split("&&")[1];}
+    String[] SplitString = name.split("&&");
+    if (SplitString.length == 2)
+    {
+    	return name.split("&&")[1];
+    }
+    else
+    {
+    	System.out.println("ERROR: GetViewType("+name+")");
+    	return "Error";
+    }
+    }
 
     public static boolean HasView(String ViewName, String ViewType) {
 
