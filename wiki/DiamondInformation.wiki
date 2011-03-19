@@ -11,6 +11,37 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
 
 = Details =
 
+== Coming in Version 3.20 (release TBD) ==
+
+  * *Note:* Wiki details below still reflect 3.10 functionality
+  
+  * Works with SageTV 7.1.5 
+  
+  * Main Menu Widget 
+    * new approach so your old settings will be gone and set new ones in the Widget Control Panel
+    * Widget Control Panel - all settings in one spot
+  * TV/Recordings Views
+    * All TV/Recordings Views now save their settings (filters, fanart settings etc) independently - with this release previous settings will be lost to support this design change
+    * Diamond Play Menu - Play/FF/Stop buttons can be used to select menu items (Next/New/Close)
+    * Option - display Original Air Date OR Recorded Date in TV/Recording items
+    * Option - toggle New/Last/Next to display or not
+    * Option - include tv/recording list in Diamond Info Panel
+    * Option - include S/E in tv/recording list in Diamond Info Panel
+    * Option - can disable the Series Poster in TV/Recordings View
+    * Change - S/E info in Diamond Info Panel if On now matches S/E settings in options
+  * Movies/Video View
+    * NEW View - 360 Flow - a category style view based on the Xbox 360 Netflix implementation
+    * Category and 360 Flow Views are now part of the Custom Views and can have configurable filtering
+    * Flow views (except List) allows FF/RW for horizontal type paging
+    * Info Fade - new option for a right side slide out info panel (Slide Panel)
+  * Other
+    * Lots of changes under the hood
+    * Option to rebuild all Fanart when deleting the cache
+    * Instant re-cache of Series/Movie Fanart after deleting a single Fanart item
+    * Many fixes (see Issues list)
+    * Caching improvements (you will need to clear and rebuild your cache)
+    * Read ahead caching option found in Detailed Setup - Diamond Fanart
+
 == New in Version 3.10 ==
 
   * Main Menu Widget 
