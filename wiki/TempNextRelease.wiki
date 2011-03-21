@@ -213,7 +213,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
  
 ==Main Menu Mods==
   * Widgets
-    [http://dl.dropbox.com/u/7826058/Diamond/WidgetControlPanel.jpg http://dl.dropbox.com/u/7826058/Diamond/WidgetControlPanel-small.jpg] _click to view_
+  [http://dl.dropbox.com/u/7826058/Diamond/WidgetControlPanel.jpg http://dl.dropbox.com/u/7826058/Diamond/WidgetControlPanel-small.jpg] _click to view_
     ||[http://dl.dropbox.com/u/7826058/Diamond/Widgets1.jpg http://dl.dropbox.com/u/7826058/Diamond/Widgets1-ppc.jpg] _Sample 1_||[http://dl.dropbox.com/u/7826058/Diamond/Widgets2.jpg http://dl.dropbox.com/u/7826058/Diamond/Widgets2-ppc.jpg] _Sample 2_|| _click to view_ ||
     * go to Options from the Main Menu - Diamond Options - Main Menu Widget Control Panel
     * *TIP:* Make sure you set Show Widgets to On
