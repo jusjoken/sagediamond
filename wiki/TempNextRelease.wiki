@@ -212,8 +212,9 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
   * *Note:* options are saved per diamond movie view (including the custom views you create)
  
 ==Main Menu Mods==
-  * Widgets 
+  * Widgets
     [http://dl.dropbox.com/u/7826058/Diamond/WidgetControlPanel.jpg http://dl.dropbox.com/u/7826058/Diamond/WidgetControlPanel-small.jpg] _click to view_
+    ||[http://dl.dropbox.com/u/7826058/Diamond/Widgets1.jpg http://dl.dropbox.com/u/7826058/Diamond/Widgets1-ppc.jpg] _Sample 1_||[http://dl.dropbox.com/u/7826058/Diamond/Widgets2.jpg http://dl.dropbox.com/u/7826058/Diamond/Widgets2-ppc.jpg] _Sample 2_|| _click to view_ ||
     * go to Options from the Main Menu - Diamond Options - Main Menu Widget Control Panel
     * *TIP:* Make sure you set Show Widgets to On
     * from here you can...
@@ -234,10 +235,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
       * right panel - Widget Options
         * Use Tab Style Widgets - on - off
         * Widget Width - to adjust use left and right arrows while the slider has focus
-
-        ||[http://dl.dropbox.com/u/7826058/Diamond/Widgets1.jpg http://dl.dropbox.com/u/7826058/Diamond/Widgets1-ppc.jpg] _Sample 1_||[http://dl.dropbox.com/u/7826058/Diamond/Widgets2.jpg http://dl.dropbox.com/u/7826058/Diamond/Widgets2-ppc.jpg] _Sample 2_|| _click to view_ ||
-
-        * *Note:* if the SageTV setting "Display Video on Menus" is on then the Main Menu Widgets will not display
+      * *Note:* if the SageTV setting "Display Video on Menus" is on then the Main Menu Widgets will not display
       
   * Default Videos Menu 
   [http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuVideosCustom.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuVideosCustom-ppc.jpg] _click to view_
