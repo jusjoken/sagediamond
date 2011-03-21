@@ -31,9 +31,29 @@ public class MetadataCalls {
             SN = "0";
         }
         return Integer.parseInt(SN);
-
     }
 
+    // sagediamond_MetadataCalls_DisplaySeasonEpisode
+    public static String DisplaySeasonEpisode(Object MediaObject) {
+    	String RecordingView =  sagex.api.Configuration.GetProperty("sagetv_recordings_filter_status","");
+    	String SEFormat = sagex.api.Configuration.GetProperty("JOrton/Recordings/"+RecordingView+"/SEFormat","S1E01");
+    	if(SEFormat.equals("S1E01")) {
+    		return "S"+ GetSeasonNumber(MediaObject) + "E" + GetEpisodeNumberPad(MediaObject);
+    	} else if(SEFormat.equals("S01E01")) {
+    		return "S"+ GetSeasonNumberPad(MediaObject) + "E" + GetEpisodeNumberPad(MediaObject);
+    	} else if(SEFormat.equals("1x01")) {
+    		return GetSeasonNumber(MediaObject) + "x" + GetEpisodeNumberPad(MediaObject);
+    	} else if(SEFormat.equals("E01")) {
+    		return "E" + GetEpisodeNumberPad(MediaObject);
+    	} else if(SEFormat.equals("1")) {
+    		return "" + GetEpisodeNumber(MediaObject);	
+    	}else if(SEFormat.equals("None")) {
+    		return "";	
+    	} else {
+    		return "S"+ GetSeasonNumber(MediaObject) + "E" + GetEpisodeNumberPad(MediaObject);	
+    	}
+    }
+    
     public static String GetSeasonNumberDivider(Object MediaObject) {
         return "Season " + GetSeasonNumber(MediaObject);
 
@@ -58,8 +78,6 @@ public class MetadataCalls {
 
     public static String GetEpisodeNumberPad(Object MediaObject) {
         int en = GetEpisodeNumber(MediaObject);
-
-
         return String.format("%02d", en);
 
 
@@ -99,21 +117,20 @@ public class MetadataCalls {
     }
 
     public static boolean IsPlayonFile(Object MediaObject) {
-//    System.out.println("Checking for playon type="+sagex.api.MediaFileAPI.GetParentDirectory(MediaObject)+"for value"+PlayonDirectory);
-        return sagex.api.MediaFileAPI.GetParentDirectory(MediaObject).toString().contains(PlayonDirectory);
+    	if (sagex.api.MediaFileAPI.GetMediaFileMetadata(MediaObject, "Copyright").contains("PlayOn")) {
+        	return true;
+    	}
+    	return false;
     }
 
-    public static int GetPlayonFileType(Object MediaObject) {
-        String Type = sagex.api.MediaFileAPI.GetMediaFileFormatDescription(MediaObject);
-        if (Type.equals(HuluFile)) {
-            return 1;
-        }
-        if (Type.equals(NetflixFile)) {
-            return 2;
-        } else {
-            return 3;
-        }
-
+    public static String GetPlayonFileType(Object MediaObject) {
+    	String Comment = sagex.api.MediaFileAPI.GetMediaFileMetadata(MediaObject, "Copyright");
+    	String[] SplitString = Comment.split(",");
+    	if (SplitString.length == 2)
+    	{
+    		return SplitString[1];    		
+    	}
+        return "";
     }
 
 //   public static String GetEpisodeTitle(Object MediaObject){
