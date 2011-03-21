@@ -11,15 +11,13 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
 
 = Details =
 
-== Coming in Version 3.20 (release TBD) ==
+== New in Version 3.20 ==
 
-  * *Note:* Wiki details below still reflect 3.10 functionality
-  
   * Works with SageTV 7.1.5 
   
   * Main Menu Widget 
-    * new approach so your old settings will be gone and set new ones in the Widget Control Panel
     * Widget Control Panel - all settings in one spot
+    * this is a new approach so your old settings will be lost and you will need to set new ones in the Widget Control Panel
   * TV/Recordings Views
     * All TV/Recordings Views now save their settings (filters, fanart settings etc) independently - with this release previous settings will be lost to support this design change
     * Diamond Play Menu - Play/FF/Stop buttons can be used to select menu items (Next/New/Close)
@@ -41,28 +39,6 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
     * Many fixes (see Issues list)
     * Caching improvements (you will need to clear and rebuild your cache)
     * Read ahead caching option found in Detailed Setup - Diamond Fanart
-
-== New in Version 3.10 ==
-
-  * Main Menu Widget 
-    * change the width of the Widget panel
-    * optional tabbed look
-    * Hide Widget panel if showing video window
-  * TV/Recordings Views
-    * S/E in Diamond Info - can be turned on in the options
-    * default settings for TV view filters improved
-  * Movies/Video View
-    * Info Fade on Wall, List Flow and Cover Flow (pause on any item and see)
-    * Movie Disc number with title for multi disc movies if in Metadata
-    * new optional 2 poster row Wall View
-    * List Flow
-      * option to remove the poster list
-      * optionally show the row number before the movie title
-      * option to turn off list wrapping
-  * Other
-    * Ability to set default movies view by hitting favorites
-    * Play toggles OSD - off by default - see options while on OSD
-    * Caching improvements  
 
 == Getting Started ==
 
@@ -237,17 +213,32 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
  
 ==Main Menu Mods==
   * Widgets 
-  ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/DiamondMainMenu1.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/DiamondMainMenu1-ppc.jpg] _Standard_||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuWidgetsTabbed.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuWidgetsTabbed-ppc.jpg] _Tabbed_|| _click to view_ ||
-    * go to Options from the Main Menu - Diamond Options - Main Menu Widget Options
-    * from here you can turn on/off combinations of the available Main Menu Widgets
-      * Weather Widget - Off - Basic - Extended - Forecast 
-      * Recent Recording Widget - on - off 
-      * Upcoming Recording Widget - on - off 
-      * Recording Space Widget - on - off
-      * Use Tab Style Widgets - on - off
-      * Menu Widget Width - to adjust select the Adjust button and use the slider
-      [http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuWidgetsWidth.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuWidgetsWidth-ppc.jpg] _click to view_
+    [http://dl.dropbox.com/u/7826058/Diamond/WidgetControlPanel.jpg http://dl.dropbox.com/u/7826058/Diamond/WidgetControlPanel-ppc.jpg] _click to view_
+    * go to Options from the Main Menu - Diamond Options - Main Menu Widget Control Panel
+    * *TIP:* Make sure you set Show Widgets to On
+    * from here you can...
+      * left hand panel - Layouts
+        * select from valid widget layouts
+        * S = 14%, M = 28%, L = 42% and XL = 56% of the vertical screen
+        * select a layout and the Widget selection buttons will change to match the layout
+      * middle panel - Widget types
+        * each button will toggle between the valid widget types
+        * the Main Menu Widget will be updated dynamically while you select
+        * you can choose between....
+          * Basic Weather
+          * Extended Weather
+          * Weather Forecast
+          * Recent Recordings
+          * Upcoming Recordings
+          * Recording Space
+      * right panel - Widget Options
+        * Use Tab Style Widgets - on - off
+        * Widget Width - to adjust use left and right arrows while the slider has focus
+
+      ||[http://dl.dropbox.com/u/7826058/Diamond/Widgets1.jpg http://dl.dropbox.com/u/7826058/Diamond/Widgets1-ppc.jpg] _Sample 1_||[http://dl.dropbox.com/u/7826058/Diamond/Widgets2.jpg http://dl.dropbox.com/u/7826058/Diamond/Widgets2-ppc.jpg] _Sample 2_|| _click to view_ ||
+
       * *Note:* if the SageTV setting "Display Video on Menus" is on then the Main Menu Widgets will not display
+      
   * Default Videos Menu 
   [http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuVideosCustom.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuVideosCustom-ppc.jpg] _click to view_
     * customize the default Videos view
