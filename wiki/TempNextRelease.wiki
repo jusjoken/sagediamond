@@ -1,13 +1,330 @@
-#summary One-sentence summary of this page.
-
+#summary Information for Diamond
 = Introduction =
 
-Add your content here.
+Check here for basic information about what's available in Diamond and how to use various functions.
 
+Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299329291&updated=DiamondFAQ#FAQ FAQ]
+
+<wiki:toc max_depth="3" />
+
+[http://babgvant.com/downloads/pluckyhd/DiamondImages/DiamondMainMenu1.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/DiamondMainMenu1-small.jpg] _click to view_
 
 = Details =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+== Coming in Version 3.20 (release TBD) ==
+
+  * *Note:* Wiki details below still reflect 3.10 functionality
+  
+  * Works with SageTV 7.1.5 
+  
+  * Main Menu Widget 
+    * new approach so your old settings will be gone and set new ones in the Widget Control Panel
+    * Widget Control Panel - all settings in one spot
+  * TV/Recordings Views
+    * All TV/Recordings Views now save their settings (filters, fanart settings etc) independently - with this release previous settings will be lost to support this design change
+    * Diamond Play Menu - Play/FF/Stop buttons can be used to select menu items (Next/New/Close)
+    * Option - display Original Air Date OR Recorded Date in TV/Recording items
+    * Option - toggle New/Last/Next to display or not
+    * Option - include tv/recording list in Diamond Info Panel
+    * Option - include S/E in tv/recording list in Diamond Info Panel
+    * Option - can disable the Series Poster in TV/Recordings View
+    * Change - S/E info in Diamond Info Panel if On now matches S/E settings in options
+  * Movies/Video View
+    * NEW View - 360 Flow - a category style view based on the Xbox 360 Netflix implementation
+    * Category and 360 Flow Views are now part of the Custom Views and can have configurable filtering
+    * Flow views (except List) allows FF/RW for horizontal type paging
+    * Info Fade - new option for a right side slide out info panel (Slide Panel)
+  * Other
+    * Lots of changes under the hood
+    * Option to rebuild all Fanart when deleting the cache
+    * Instant re-cache of Series/Movie Fanart after deleting a single Fanart item
+    * Many fixes (see Issues list)
+    * Caching improvements (you will need to clear and rebuild your cache)
+    * Read ahead caching option found in Detailed Setup - Diamond Fanart
+
+== New in Version 3.10 ==
+
+  * Main Menu Widget 
+    * change the width of the Widget panel
+    * optional tabbed look
+    * Hide Widget panel if showing video window
+  * TV/Recordings Views
+    * S/E in Diamond Info - can be turned on in the options
+    * default settings for TV view filters improved
+  * Movies/Video View
+    * Info Fade on Wall, List Flow and Cover Flow (pause on any item and see)
+    * Movie Disc number with title for multi disc movies if in Metadata
+    * new optional 2 poster row Wall View
+    * List Flow
+      * option to remove the poster list
+      * optionally show the row number before the movie title
+      * option to turn off list wrapping
+  * Other
+    * Ability to set default movies view by hitting favorites
+    * Play toggles OSD - off by default - see options while on OSD
+    * Caching improvements  
+
+== Getting Started ==
+
+  * available as a "UI Mod" plugin under SageTV version 7+ called "Diamond for Default Sagetv STV"
+  * to get the most out of this plugin you will need some form of metadata/Fanart solution such as...
+    * Phoenix Core Services with BMT
+    * other provider that store folder level fanart (posters and backgrounds). See fanart below.
+  * select a Diamond theme from among the large selection available under Detailed Setup, Advanced, "select the user interface theme".
+  * if you are a previous Diamond 2.0 or greater user you may want to clear all the previous settings - look here [#Troubleshooting]
+
+== Diamond Themes ==
+
+||Diamond 	     	  ||Diamond MC		      ||Diamond Simplified  ||
+||Diamond All Clear  	  ||Diamond MC No Fanart BG   ||Diamond Tabs	    ||
+||Diamond Blue Too   	  ||Diamond Orange	      ||Diamond Winter      ||
+||Diamond Boxwee     	  ||Diamond Purple	      ||Diamond Winter Red  ||
+||Diamond Boxwee EP  	  ||Diamond Red		      ||		    ||
+||Diamond Green	     	  ||Diamond Serenity Blue     ||	            ||
+||Diamond Green Too	  ||Diamond Serenity Now      ||	            ||
+
+== TV/Recordings Views ==
+[http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-small.jpg] _click to view_
+=== Standard Diamond TV/Recordings View===
+  * select TV - Recordings - All Recordings (or one of the other default SageTV recording views)
+	  * Diamond Options - select Options and then Diamond Options - from here change...
+	    * Fanart Options
+	      * BG Fanart - on - off
+	      * Show Series Banner - on - off
+	      * Show Season Banner - on - off
+	      * Fanart Thumbnails - affects the default info list and episode view - on - off
+	      * Show Larger Thumbnails - affects the default info list and episode view - on - off
+	    * Count/Watched Format - (www/rrr) - (rrr) - Recordings:rrr - Recordings:rrr Watched:www - Blank
+	    * Show Seasons View - on - off
+	    * Use Diamond Info View - custom right hand info panel with poster view and metadata details - on - off
+	    ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfo-off.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfo-off-ppc.jpg] _Off_||[http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfo.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfo-ppc.jpg] _On_|| _click to view_ ||
+	    * Diamond Info Shows S/E # - on - off - include the S/E # after the episode name for New, Next and Last episodes in the right hand Diamond Info View
+	    [http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfoSE.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfoSE-ppc.jpg] _click to view_
+	    * Use Diamond Play Options - if enabled this will display a menu to play Next, Newest, All from Next or All - on - off
+      [http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondPlayOption.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondPlayOption-ppc.jpg] _click to view_
+	    * Metadata In Info List - if enabled then the default Info List will include Metadata (see Diamond Info View _Off_ image)
+	    * Season Popup - display the Season List in a popup menu - on - off
+      [http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-SeasonPopup.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-SeasonPopup-ppc.jpg] _click to view_
+	    * Switch to Simplified View - a Series Banner driven clean approach to TV/Recordings
+	  * Filters - select from the following filter options....
+    [http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-Filters.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-Filters-ppc.jpg] _click to view_
+	    * Manual Recordings
+	    * Favorites
+	    * non Manual Recording or Favorite 
+	    * archived Recordings 
+	    * First Runs 
+	    * HDTV Recordings 
+	    * Watched Recordings 
+	    * Recordings marked Don't Like 
+	    * Recorded movies 
+	    * Imported TV from !PlayOn
+	    * Imported TV 
+	    * Categories filtered in: (select this option to pick which categories to include).
+  * Episode View Options - while on the episode view select Options
+    * Select Diamond Options - from here change...
+      * BG Fanart - on - off
+      * Hide Title when grouped by Title - on - off
+      * Show Season/Episode Number - on - off
+      * Season/Episode Format - !S1E01 - !S01E01 - !E01 - !1x01 - !1 - Row Number - None
+      * Season/Episode Separator - "-" - "::" - "." - ")" - "|" - None
+      * Season/Episode Location - Before Title - After Title - Above Markers (only works if Minimal Recording Icons = on)
+      * Show Minimal Recording Icons - on - off
+      * Show Original Airing Date - only available if Minimal Recording Icons = on and S/E Location is not above Markers
+    * Sort - look here to set the sort to various options including Season/Episode and Original Air Date
+      [http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-EpisodeSort.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-EpisodeSort-ppc.jpg] _click to view_
+=== Simplified View===
+  [http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-SimplifiedView.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-SimplifiedView-small.jpg] _click to view_
+  * a Series Banner driven clean approach to TV/Recordings
+    * Diamond Options - select Options and then Diamond Options - from here change...
+	    * Fanart Options
+	      * BG Fanart - on - off
+	      * Show Poster - on - off
+	      * Fanart Thumbnails - affects the episode view - on - off
+	      * Show Larger Thumbnails - affects the episode view - on - off
+	    * Show Seasons View - on - off
+	    * Show Diamond Play Options - if enabled this will display a menu to play Next, Newest, All from Next or All - on - off
+	    * Metadata In Info List _does not apply to simplified view_
+	    * Season Popup - display the Season List in a popup menu - on - off
+            * Show Title on Right - on - off
+            * Show Title on Right - on - off
+            * Show Description - on - off
+            * Switch to Standard View
+
+  * *Note:* most options affect ALL Recordings/TV views (not saved per view). Filters are per View.
+ 
+==Movies/Videos Views==
+  * Cover Flow - movie poster driven view centered on the screen for quick selection. 
+  [http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieCoverFlowView.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieCoverFlowView-ppc.jpg] _click to view_
+    * Use the Options menu to set the following....
+      * Sort - see [#General_Options] below
+      * Folder Filters - see [#General_Options] below
+      * Filters - see [#General_Options] below
+      * Background Fanart
+      * Enter = Play.
+    * Press "down" in this view to get the [http://babgvant.com/downloads/pluckyhd/DiamondImages/ABCScrollBar.jpg ABC Scrollbar] to Jump to the first movie starting with a selected letter.
+    [http://babgvant.com/downloads/pluckyhd/DiamondImages/ABCScrollBar.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/ABCScrollBar-ppc.jpg] _click to view_
+    
+  * Wall View - a wall of Movie Posters to select from. 
+  ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieWallView-InfoOff.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieWallView-InfoOff-ppc.jpg] _No Info_||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieWallView-InfoOn.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieWallView-InfoOn-ppc.jpg] _Show Info_|| _click to view_ ||
+    * Use the Options menu to set the following....
+      * Sort - see [#General_Options] below
+      * Folder Filters - see [#General_Options] below
+      * Filters - see [#General_Options] below
+      * Enter = Play
+      * Info Fade
+      * Show Info Box - optionally show the Diamond Info panel on the right with the Wall view
+      * Less Posters - set to On to show only 2 rows of posters (may help performance on slower systems/extenders)
+    * Press "down" while on the bottom row of posters to get the [http://babgvant.com/downloads/pluckyhd/DiamondImages/ABCScrollBar.jpg ABC Scrollbar] to Jump to the first movie starting with a selected letter.
+  * List Flow - list based Movie view with a vertical scrolling poster view and Movie details on the right.
+  [http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieListFlowView.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieListFlowView-ppc.jpg] _click to view_
+    * Use the Options menu to set the following....
+      * Sort - see [#General_Options] below
+      * Folder Filters - see [#General_Options] below
+      * Filters - see [#General_Options] below 
+      * Background Fanart 
+      * Enter = Play
+      * Customize View
+        * Right Side - what to display on the right side of the title in the movie list - Blank - Ratings - Year
+        * Show Posters - turn Off to remove the verticle poster list (may help performance on slower systems/extenders)
+        * Wrap List - on - off - if on the list will loop back to the begin/end
+        * Show Row Number - on - off - displays the row number before the movie title
+    * Press "right" in this view to get the [http://babgvant.com/downloads/pluckyhd/DiamondImages/ABCScrollBar.jpg ABC Scrollbar] to Jump to the first movie starting with a selected letter.
+  * Categories - this is a Genre type view with Categories on the left and a Wall type view on the right. Use the Options menu to ........
+  [http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieCategories.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieCategories-ppc.jpg] _click to view_
+    * Use the Options menu to set the following....
+      * Delay Movies - system will wait a moment to display the Movie Posters to improve the speed of the Categories vertical list - on - off
+      * Enter = Play
+      * Sort
+        * Oldest/Newest Added First
+        * Title A to Z or Z to A
+          * !ScrubTitle - removes The, A etc - on - off
+        * Release Year 1900 to Present or Present to 1900
+      * Background Fanart 
+    * _ABC Scrollbar not available in this view_
+ 
+  ===General Options===
+  * applies to Cover, Wall and List Views
+    * Info Fade - this option will display a full screen info view when you "pause" on a movie for the specified delay - see options
+      * Auto Fade - on - off
+      * Delay in MS to fade - 5000 (5 seconds) by default
+      * !FullScreen Fanart - on for Fullscreen background or off for background in a window
+      * !SplitScreen - on - off
+    ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackground.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackground-ppc.jpg] _Background Full Screen_||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackgroundOff.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackgroundOff-ppc.jpg] _Background in Window_||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeSplitScreen.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeSplitScreen-ppc.jpg] _Split Screen_|| _click to view_ ||
+    * Folder Filters - here you can include or exclude specified Movie Folders
+    [http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieFolderFilters.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieFolderFilters-ppc.jpg] _click to view_
+      * Add New Include Filter
+      * Add New Exclude Filter
+      * remove/change existing Folder filters
+    * Filter 
+      * Include Watched
+      * Include DVD 
+      * Include !BluRay
+      * Include Videos 
+      * Include Recordings 
+      * Include Unscraped Content 
+        * this will include content where metadata does not exist from sources like BMT. For example: mymovies or home videos.
+      * Include !PlayOn Content 
+      * Categories filtered in: (select this option to pick which categories to include)
+
+  * applies to all Movie Views
+    * Sort
+      * Oldest/Newest Added First
+      * Title A to Z or Z to A
+        * !ScrubTitle - removes The, A etc - on - off
+      * Release Year 1900 to Present or Present to 1900
+
+  * *Note:* options are saved per diamond movie view (including the custom views you create)
+ 
+==Main Menu Mods==
+  * Widgets 
+  ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/DiamondMainMenu1.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/DiamondMainMenu1-ppc.jpg] _Standard_||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuWidgetsTabbed.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuWidgetsTabbed-ppc.jpg] _Tabbed_|| _click to view_ ||
+    * go to Options from the Main Menu - Diamond Options - Main Menu Widget Options
+    * from here you can turn on/off combinations of the available Main Menu Widgets
+      * Weather Widget - Off - Basic - Extended - Forecast 
+      * Recent Recording Widget - on - off 
+      * Upcoming Recording Widget - on - off 
+      * Recording Space Widget - on - off
+      * Use Tab Style Widgets - on - off
+      * Menu Widget Width - to adjust select the Adjust button and use the slider
+      [http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuWidgetsWidth.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuWidgetsWidth-ppc.jpg] _click to view_
+      * *Note:* if the SageTV setting "Display Video on Menus" is on then the Main Menu Widgets will not display
+  * Default Videos Menu 
+  [http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuVideosCustom.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuVideosCustom-ppc.jpg] _click to view_
+    * customize the default Videos view
+      * go to Options from the Main Menu - Diamond Options - make sure "Replace Video with Diamond Movies" is Off
+      * select from the various options to Show or Hide - these will show above the standard items (titles, DVD etc)
+        * Diamond Categories 
+        * Diamond Wall View 
+        * Diamond Flow View 
+        * Diamond List Flow.
+  * Custom Movie Menu 
+    * replace the default Videos menu with the Diamond "Movies" menu 
+      * go to Options from the Main Menu - Diamond Options - make sure "Replace Video with Diamond Movies" is On
+      * select "custom Views Setup" to create your own Diamond Views. From here you can....
+      ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuCustomMovieViews.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuCustomMovieViews-ppc.jpg] _Customize_||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuCustomMovieViewsAdd.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuCustomMovieViewsAdd-ppc.jpg] _Add New_|| _click to view_ ||
+        * "Add New View" (set the type and name it)
+        * edit views you previously created
+        * change the order of the custom views
+          * place focus on a view name and press the RIGHT arrow for options to move the view
+        * "Edit Default Views to Show"
+        [http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuCustomMovieViewsShowDefaultViews.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuCustomMovieViewsShowDefaultViews-ppc.jpg] _click to view_
+          * you can keep access to the Sage Default STV Video views 
+            * Titles 
+            * DVD/BD 
+            * Folders 
+            * CATEGORY 
+            * Playlists 
+            * !VideoConversions
+  * Hide Main Menu Items
+  [http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuShowHideMenuItems.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuShowHideMenuItems-ppc.jpg] _click to view_
+    * go to Options from the Main Menu - Diamond Options - Hide Main Menu Items
+      * TV Menu - on - off
+      * Show Video/Movies - on - off
+      * Show Music - on - off
+      * Show Photos - on - off
+      * Show Search - on - off
+      * Show Online - on - off
+      * Show Setup - on - off
+      * Show Exit - on - off
+ 
+==Fanart Options==
+  * Folder level Fanart
+  [http://babgvant.com/downloads/pluckyhd/DiamondImages/DetailedSetupFolderFanart.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/DetailedSetupFolderFanart-ppc.jpg] _click to view_
+    * if you use Folder Level Posters or Backgrounds set those options in Detailed Setup - Diamond Fanart
+    * select the type of fanart you use
+  * Phoenix Fanart
+    * check Detailed Setup - Diamond Fanart to ensure the Phoenix Fanart Directory is set to something valid for your extender/client to reach
+    * check that Phoenix Fanart Enabled is set to "On".
+  * Cache
+    * to delete the cache so it will rebuild
+    * select Detailed Setup - Diamond Fanart and select Delete All Cached Fanart
+    * answer Yes to the prompt
+  * Single TV/Recording/Movie Fanart delete
+  [http://babgvant.com/downloads/pluckyhd/DiamondImages/FanartDeleteSingleItem.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/FanartDeleteSingleItem-ppc.jpg] _click to view_
+    * in any Diamond view press the Delete key on any item and a menu option including Delete Fanart will be offered
+  * Background Fanart
+    * this feature can be turned on/off on the various Diamond Movie/TV Views on the Diamond Options menus
+  * Series Fanart options 
+    * see the [#TV/Recordings_Views] section
+
+== OSD Customizations ==
+  * While the OSD is displayed, hit Options...
+    ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/OSDOptions.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/OSDOptions-ppc.jpg] _OSD Options_||[http://babgvant.com/downloads/pluckyhd/DiamondImages/OSDNormal.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/OSDNormal-ppc.jpg] _Diamond Normal OSD_||[http://babgvant.com/downloads/pluckyhd/DiamondImages/OSDSlim.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/OSDSlim-ppc.jpg] _Diamond Slim OSD_|| _click to view_ ||
+    * Top OSD visible - can set this to Top OSD Hidden
+    * Bottom OSD Slim Mode - on - off
+    * Bottom OSD Sports Ticker Mode - on - off
+    * Bottom OSD Volume Bar - on - off
+    * Play toggle OSD - on - off
+ 
+== TV Guide ==
+  * Background Fanart
+  [http://babgvant.com/downloads/pluckyhd/DiamondImages/TVGuideFanart.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/TVGuideFanart-ppc.jpg] _click to view_
+    * the option is available on the Diamond Options menu
+  
+==Troubleshooting==
+  * Reset Diamond Settings
+  [http://babgvant.com/downloads/pluckyhd/DiamondImages/ResetDiamond.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/ResetDiamond-ppc.jpg] _click to view_
+    * go to the Options menu from the Main Menu - Diamond Options
+    * select "Clear All Diamond Settings"
+    * *Note:* this will delete the current local Fanart Cache and all custom views
+ 
