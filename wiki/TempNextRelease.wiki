@@ -63,6 +63,11 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
 [http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-small.jpg] _click to view_
 === Standard Diamond TV/Recordings View===
   * select TV - Recordings - All Recordings (or one of the other default SageTV recording views)
+    * Creating more TV/Recording Views and/or renaming the existing views
+      * Select Options and then "Menu Options"
+        * *NOTE:* this is a Default SageTV function
+        ****CHANGE # of views****
+        ****RENAME current view****
     * Diamond Options - select Options and then Diamond Options - from here change...
       * Fanart Options
         * BG Fanart - on - off
