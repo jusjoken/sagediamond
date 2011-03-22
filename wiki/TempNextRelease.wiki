@@ -85,9 +85,9 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
                 * S/E in Recording List - on - off
             * Show New, Last, Next - on - off
             * New, Last, Next Shows S/E - on - off
+            [http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfoSE.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfoSE-ppc.jpg] _click to view_
         * Season/Episode Format - !S1E01 - !S01E01 - !E01 - !1x01 - !1 - Row Number - None
         * Season/Episode Separator - "-" - "::" - "." - ")" - "|" - None
-        [http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfoSE.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfoSE-ppc.jpg] _click to view_
       * Count/Watched Format - (www/rrr) - (rrr) - Recordings:rrr - Recordings:rrr Watched:www - Blank
       * Show Seasons View - on - off
       * Show Diamond Play Options - if enabled this will display a menu to play Next, Newest, All from Next or All - on - off
