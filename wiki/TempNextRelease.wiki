@@ -91,6 +91,9 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
       * Count/Watched Format - (www/rrr) - (rrr) - Recordings:rrr - Recordings:rrr Watched:www - Blank
       * Show Seasons View - on - off
       * Show Diamond Play Options - if enabled this will display a menu to play Next, Newest, All from Next or All - on - off
+        * press Play again to "Play Next"
+        * press FFwd to "Play Newest"
+        * press Stop to close the options menu
       [http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-DiamondPlayOption.jpg http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-DiamondPlayOption-ppc.jpg] _click to view_
       * Season Popup - display the Season List in a popup menu - on - off
       [http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-SeasonPopup.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-SeasonPopup-ppc.jpg] _click to view_
