@@ -39,4 +39,4 @@ Look here first to see if your question has already been answered.
   
 ==Q. Can I use Diamond on an HDxxx Extender?==
 ===A. Absolutely===
-  * Testing and users reports indicate Diamond functions well on HD200 and HD300 extenders. Some users have indicated "Ok" performance on HD100's with much of the fanart options disabled. See [http://forums.sagetv.com/forums/showthread.php?p=488552&postcount=1  this SageTV thread] for more info.
+  * Testing and user reports indicate Diamond functions well on HD200 and HD300 extenders. Some users have indicated "Ok" performance on HD100's with much of the fanart options disabled. See [http://forums.sagetv.com/forums/showthread.php?p=488552&postcount=1  this SageTV thread] for more info.
