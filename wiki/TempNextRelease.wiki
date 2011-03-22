@@ -24,8 +24,8 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
     * Option - display Original Air Date OR Recorded Date in TV/Recording items
     * Option - toggle New/Last/Next to display or not
     * Option - include tv/recording list in Diamond Info Panel
-    * Option - include S/E in tv/recording list in Diamond Info Panel
-    * Option - can disable the Series Poster in TV/Recordings View
+    * Option - include S/E in tv/recording list in Diamond Info Panel or standard panel
+    * Option - can disable the Series Poster in Diamond Info Panel
     * Change - S/E info in Diamond Info Panel if On now matches S/E settings in options
   * Movies/Video View
     * NEW View - 360 Flow - a category style view based on the Xbox 360 Netflix implementation
@@ -198,12 +198,18 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
       * Background Fanart 
     * _ABC Scrollbar not available in this view_
  
-===General Options===
-  * applies to Cover, Wall and List Views
-    * Info Fade - this option will display a full screen info view when you "pause" on a movie for the specified delay - see options
+=== 360 Flow ===
+    * this is a Genre type view based on the Xbox 360 Netflix implementation........
+
+
+
+=== General Options for Flow Views ===
+  * applies to all Flow Views now (except where noted)
+    * Info Fade - this option will display a full or part screen info view when you "pause" on a movie for the specified delay - see options
       * Auto Fade - on - off
       * Delay in MS to fade - 5000 (5 seconds) by default
       * !FullScreen Fanart - on for Fullscreen background or off for background in a window
+      ***NEW Right Side Panel*** (not in List Flow)
       * !SplitScreen - on - off
     ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackground.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackground-ppc.jpg] _Background Full Screen_||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackgroundOff.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackgroundOff-ppc.jpg] _Background in Window_||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeSplitScreen.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeSplitScreen-ppc.jpg] _Split Screen_|| _click to view_ ||
     * Folder Filters - here you can include or exclude specified Movie Folders
@@ -221,8 +227,6 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
         * this will include content where metadata does not exist from sources like BMT. For example: mymovies or home videos.
       * Include !PlayOn Content 
       * Categories filtered in: (select this option to pick which categories to include)
-
-  * applies to all Movie Views
     * Sort
       * Oldest/Newest Added First
       * Title A to Z or Z to A
@@ -307,11 +311,13 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
     * check that Phoenix Fanart Enabled is set to "On".
   * Cache
     * to delete the cache so it will rebuild
-    * select Detailed Setup - Diamond Fanart and select Delete All Cached Fanart
-    * answer Yes to the prompt
+      * select Detailed Setup - Diamond Fanart and select Delete All Cached Fanart
+      * answer Yes to the prompt
+      ***NEW Rebuild Cache Option***
   * Single TV/Recording/Movie Fanart delete
   [http://babgvant.com/downloads/pluckyhd/DiamondImages/FanartDeleteSingleItem.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/FanartDeleteSingleItem-ppc.jpg] _click to view_
     * in any Diamond view press the Delete key on any item and a menu option including Delete Fanart will be offered
+    * new fanart will immediately be available and displayed
   * Background Fanart
     * this feature can be turned on/off on the various Diamond Movie/TV Views on the Diamond Options menus
   * Series Fanart options 
@@ -322,9 +328,9 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
     ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/OSDOptions.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/OSDOptions-ppc.jpg] _OSD Options_||[http://babgvant.com/downloads/pluckyhd/DiamondImages/OSDNormal.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/OSDNormal-ppc.jpg] _Diamond Normal OSD_||[http://babgvant.com/downloads/pluckyhd/DiamondImages/OSDSlim.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/OSDSlim-ppc.jpg] _Diamond Slim OSD_|| _click to view_ ||
     * Top OSD visible - can set this to Top OSD Hidden
     * Bottom OSD Slim Mode - on - off
-    * Bottom OSD Sports Ticker Mode - on - off
+    * Bottom OSD Sports Ticker Mode - will lift the Bottom OSD to allow for sports info to be seen - on - off
     * Bottom OSD Volume Bar - on - off
-    * Play toggle OSD - on - off
+    * Play toggle OSD - if on then pressing play will display/hide the OSD - on - off
  
 == TV Guide ==
   * Background Fanart
@@ -335,6 +341,8 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
   * Reset Diamond Settings
   [http://babgvant.com/downloads/pluckyhd/DiamondImages/ResetDiamond.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/ResetDiamond-ppc.jpg] _click to view_
     * go to the Options menu from the Main Menu - Diamond Options
+    * select "Debug Menu"
     * select "Clear All Diamond Settings"
+    ***CHECK STEPS for this***
     * *Note:* this will delete the current local Fanart Cache and all custom views
  
