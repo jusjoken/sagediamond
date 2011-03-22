@@ -63,39 +63,53 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
 [http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-small.jpg] _click to view_
 === Standard Diamond TV/Recordings View===
   * select TV - Recordings - All Recordings (or one of the other default SageTV recording views)
-	  * Diamond Options - select Options and then Diamond Options - from here change...
-	    * Fanart Options
-	      * BG Fanart - on - off
-	      * Show Series Banner - on - off
-	      * Show Season Banner - on - off
-	      * Fanart Thumbnails - affects the default info list and episode view - on - off
-	      * Show Larger Thumbnails - affects the default info list and episode view - on - off
-	    * Count/Watched Format - (www/rrr) - (rrr) - Recordings:rrr - Recordings:rrr Watched:www - Blank
-	    * Show Seasons View - on - off
-	    * Use Diamond Info View - custom right hand info panel with poster view and metadata details - on - off
-	    ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfo-off.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfo-off-ppc.jpg] _Off_||[http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfo.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfo-ppc.jpg] _On_|| _click to view_ ||
-	    * Diamond Info Shows S/E # - on - off - include the S/E # after the episode name for New, Next and Last episodes in the right hand Diamond Info View
-	    [http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfoSE.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfoSE-ppc.jpg] _click to view_
-	    * Use Diamond Play Options - if enabled this will display a menu to play Next, Newest, All from Next or All - on - off
+    * Diamond Options - select Options and then Diamond Options - from here change...
+      * Fanart Options
+        * BG Fanart - on - off
+        * Show Series Banner - on - off
+        * Show Season Banner - on - off
+        * Fanart Thumbnails - affects the default info list and episode view - on - off
+        * Show Larger Thumbnails - affects the default info list and episode view - on - off
+      * Series Info Options
+        * Use Diamond Info View - custom right hand info panel with poster view and metadata details - on - off
+        ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfo-off.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfo-off-ppc.jpg] _Off_||[http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfo.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfo-ppc.jpg] _On_|| _click to view_ ||
+          * With Diamond Info View - OFF
+            * S/E in Recording List - on - off
+            * Show Larger Thumbnails - on - off
+            * Fanart Thumbnails - on - off
+          * With Diamond Info View - ON
+            * Show Poster - on - off
+            * Diamond Info Recording List - include the recording list instead of the description - on - off
+              * if ON...
+                * Recording List Sort Style - Oringal Air Date - Recorded Date
+                * S/E in Recording List - on - off
+            * Show New, Last, Next - on - off
+            * New, Last, Next Shows S/E - on - off
+        * Season/Episode Format - !S1E01 - !S01E01 - !E01 - !1x01 - !1 - Row Number - None
+        * Season/Episode Separator - "-" - "::" - "." - ")" - "|" - None
+        [http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfoSE.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfoSE-ppc.jpg] _click to view_
+      * Count/Watched Format - (www/rrr) - (rrr) - Recordings:rrr - Recordings:rrr Watched:www - Blank
+      * Show Seasons View - on - off
+      * Show Diamond Play Options - if enabled this will display a menu to play Next, Newest, All from Next or All - on - off
       [http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondPlayOption.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondPlayOption-ppc.jpg] _click to view_
-	    * Metadata In Info List - if enabled then the default Info List will include Metadata (see Diamond Info View _Off_ image)
-	    * Season Popup - display the Season List in a popup menu - on - off
+      * Season Popup - display the Season List in a popup menu - on - off
       [http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-SeasonPopup.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-SeasonPopup-ppc.jpg] _click to view_
-	    * Switch to Simplified View - a Series Banner driven clean approach to TV/Recordings
-	  * Filters - select from the following filter options....
+      * Show Minimal Recording Icons - on - off
+      * Switch to Simplified View - a Series Banner driven clean approach to TV/Recordings
+    * Filters - select from the following filter options....
     [http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-Filters.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-Filters-ppc.jpg] _click to view_
-	    * Manual Recordings
-	    * Favorites
-	    * non Manual Recording or Favorite 
-	    * archived Recordings 
-	    * First Runs 
-	    * HDTV Recordings 
-	    * Watched Recordings 
-	    * Recordings marked Don't Like 
-	    * Recorded movies 
-	    * Imported TV from !PlayOn
-	    * Imported TV 
-	    * Categories filtered in: (select this option to pick which categories to include).
+      * Manual Recordings
+      * Favorites
+      * non Manual Recording or Favorite 
+      * archived Recordings 
+      * First Runs 
+      * HDTV Recordings 
+      * Watched Recordings 
+      * Recordings marked Don't Like 
+      * Recorded movies 
+      * Imported TV from !PlayOn
+      * Imported TV 
+      * Categories filtered in: (select this option to pick which categories to include).
   * Episode View Options - while on the episode view select Options
     * Select Diamond Options - from here change...
       * BG Fanart - on - off
@@ -112,21 +126,20 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
   [http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-SimplifiedView.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-SimplifiedView-small.jpg] _click to view_
   * a Series Banner driven clean approach to TV/Recordings
     * Diamond Options - select Options and then Diamond Options - from here change...
-	    * Fanart Options
-	      * BG Fanart - on - off
-	      * Show Poster - on - off
-	      * Fanart Thumbnails - affects the episode view - on - off
-	      * Show Larger Thumbnails - affects the episode view - on - off
-	    * Show Seasons View - on - off
-	    * Show Diamond Play Options - if enabled this will display a menu to play Next, Newest, All from Next or All - on - off
-	    * Metadata In Info List _does not apply to simplified view_
-	    * Season Popup - display the Season List in a popup menu - on - off
-            * Show Title on Right - on - off
-            * Show Title on Right - on - off
-            * Show Description - on - off
-            * Switch to Standard View
+      * Fanart Options
+        * BG Fanart - on - off
+        * Show Poster - on - off
+        * Fanart Thumbnails - affects the episode view - on - off
+        * Show Larger Thumbnails - affects the episode view - on - off
+      * Show Seasons View - on - off
+      * Show Diamond Play Options - if enabled this will display a menu to play Next, Newest, All from Next or All - on - off
+      * Metadata In Info List _does not apply to simplified view_
+      * Season Popup - display the Season List in a popup menu - on - off
+      * Show Title on Right - on - off
+      * Show Description - on - off
+      * Switch to Standard View
 
-  * *Note:* most options affect ALL Recordings/TV views (not saved per view). Filters are per View.
+  * *Note:* options are now saved per individual Recordings/TV view.
  
 ==Movies/Videos Views==
   * Cover Flow - movie poster driven view centered on the screen for quick selection. 
@@ -214,15 +227,15 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
 ==Main Menu Mods==
   * Widgets
   [http://dl.dropbox.com/u/7826058/Diamond/WidgetControlPanel.jpg http://dl.dropbox.com/u/7826058/Diamond/WidgetControlPanel-small.jpg] _click to view_
-    ||[http://dl.dropbox.com/u/7826058/Diamond/Widgets1.jpg http://dl.dropbox.com/u/7826058/Diamond/Widgets1-ppc.jpg] _Sample 1_||[http://dl.dropbox.com/u/7826058/Diamond/Widgets2.jpg http://dl.dropbox.com/u/7826058/Diamond/Widgets2-ppc.jpg] _Sample 2_|| _click to view_ ||
+    ||[http://dl.dropbox.com/u/7826058/Diamond/Widgets1.jpg http://dl.dropbox.com/u/7826058/Diamond/Widgets1-ppc.jpg] _Sample 1_ ||[http://dl.dropbox.com/u/7826058/Diamond/Widgets2.jpg http://dl.dropbox.com/u/7826058/Diamond/Widgets2-ppc.jpg] _Sample 2_ || _click to view_ ||
     * go to Options from the Main Menu - Diamond Options - Main Menu Widget Control Panel
-    * *TIP:* Make sure you set Show Widgets to On
+    * *TIP:* Make sure you set *Show Widgets* to On
     * from here you can...
       * left panel - Layouts
         * select from valid widget layouts
         * S = 14%, M = 28%, L = 42% and XL = 56% of the vertical screen
-        * select a layout and the Widget selection buttons will change to match the layout
-      * middle panel - Widget types
+        * select a layout and the Widget type selection buttons will change to match the layout
+      * middle panel - Widget Type Selection
         * each button will toggle between the valid widget types
         * the Main Menu Widget will be updated dynamically while you select
         * you can choose between....
@@ -232,6 +245,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
           * Recent Recordings
           * Upcoming Recordings
           * Recording Space
+        * *Note:* the widget contents will adjust depending on the size of the panel you place it in. For example an XL forecast panel will include 5 days of forecast where a M panel will only include 3 days.
       * right panel - Widget Options
         * Use Tab Style Widgets - on - off
         * Widget Width - to adjust use left and right arrows while the slider has focus
