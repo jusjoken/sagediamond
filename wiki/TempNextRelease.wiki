@@ -149,7 +149,8 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
 
   * *Note:* options are now saved per individual Recordings/TV view.
  
-==Movies/Videos Views==
+==Movies/Videos Flow Views==
+
 === Cover Flow ===
     * movie poster driven view centered on the screen for quick selection. 
   [http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieCoverFlowView.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieCoverFlowView-ppc.jpg] _click to view_
@@ -174,6 +175,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
       * Show Info Box - optionally show the Diamond Info panel on the right with the Wall view
       * Less Posters - set to On to show only 2 rows of posters (may help performance on slower systems/extenders)
     * Press "down" while on the bottom row of posters to get the [http://babgvant.com/downloads/pluckyhd/DiamondImages/ABCScrollBar.jpg ABC Scrollbar] to Jump to the first movie starting with a selected letter.
+
 === List Flow ===
     * list based Movie view with a vertical scrolling poster view and Movie details on the right.
   [http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieListFlowView.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieListFlowView-ppc.jpg] _click to view_
@@ -189,17 +191,16 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
         * Wrap List - on - off - if on the list will loop back to the begin/end
         * Show Row Number - on - off - displays the row number before the movie title
     * Press "right" in this view to get the [http://babgvant.com/downloads/pluckyhd/DiamondImages/ABCScrollBar.jpg ABC Scrollbar] to Jump to the first movie starting with a selected letter.
-=== Categories Flow ===
+
+=== Category Flow ===
     * this is a Genre type view with Categories on the left and a Wall type view on the right. Use the Options menu to ........
   [http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieCategories.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieCategories-ppc.jpg] _click to view_
     * Use the Options menu to set the following....
       * Delay Movies - system will wait a moment to display the Movie Posters to improve the speed of the Categories vertical list - on - off
       * Enter = Play
-      * Sort
-        * Oldest/Newest Added First
-        * Title A to Z or Z to A
-          * !ScrubTitle - removes The, A etc - on - off
-        * Release Year 1900 to Present or Present to 1900
+      * Sort - see [#General_Options] below
+      * Folder Filters - see [#General_Options] below
+      * Filters - see [#General_Options] below 
       * Background Fanart 
     * _ABC Scrollbar not available in this view_
  
@@ -272,19 +273,20 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
     * customize the default Videos view
       * go to Options from the Main Menu - Diamond Options - make sure "Replace Video with Diamond Movies" is Off
       * select from the various options to Show or Hide - these will show above the standard items (titles, DVD etc)
-        * Diamond Categories 
-        * Diamond Wall View 
-        * Diamond Flow View 
-        * Diamond List Flow.
+        * Wall Flow
+        * List Flow
+        * Cover Flow
+        * Category Flow 
+        * 360 Flow 
 === Custom Movie Menu ===
     * replace the default Videos menu with the Diamond "Movies" menu 
       * go to Options from the Main Menu - Diamond Options - make sure "Replace Video with Diamond Movies" is On
-      * select "custom Views Setup" to create your own Diamond Views. From here you can....
+      * select "custom Views Setup" to create your own Diamond Flow Views. From here you can....
       ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuCustomMovieViews.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuCustomMovieViews-ppc.jpg] _Customize_||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuCustomMovieViewsAdd.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuCustomMovieViewsAdd-ppc.jpg] _Add New_|| _click to view_ ||
         * "Add New View" (set the type and name it)
         * edit views you previously created
-        * change the order of the custom views
-          * place focus on a view name and press the RIGHT arrow for options to move the view
+        * change the order of the custom flow views
+          * place focus on a flow name and press the RIGHT arrow for options to move the view
         * "Edit Default Views to Show"
         [http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuCustomMovieViewsShowDefaultViews.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuCustomMovieViewsShowDefaultViews-ppc.jpg] _click to view_
           * you can keep access to the Sage Default STV Video views 
@@ -293,6 +295,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
             * Folders 
             * CATEGORY 
             * Playlists 
+            * Play DVD
             * !VideoConversions
 === Hide Main Menu Items ===
   [http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuShowHideMenuItems.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuShowHideMenuItems-ppc.jpg] _click to view_
