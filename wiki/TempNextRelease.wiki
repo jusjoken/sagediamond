@@ -141,15 +141,18 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
         * Show Poster - on - off
         * Fanart Thumbnails - affects the episode view - on - off
         * Show Larger Thumbnails - affects the episode view - on - off
+      * Series Info Options
+        * New, Last, Next Shows S/E - on - off
+        * Season/Episode Format - !S1E01 - !S01E01 - !E01 - !1x01 - !1 - Row Number - None
+        * Show Poster - on - off
+        * Show Title on Right - on - off
+        * Show Description - on - off
       * Show Seasons View - on - off
       * Show Diamond Play Options - if enabled this will display a menu to play Next, Newest, All from Next or All - on - off
         * press Play again to "Play Next"
         * press FFwd to "Play Newest"
         * press Stop to close the options menu
       * Season Popup - display the Season List in a popup menu - on - off
-      * New, Last, Next Shows S/E - on - off
-      * Show Title on Right - on - off
-      * Show Description - on - off
       * Show Minimal Recording Icons - on - off
       * Switch to Standard View
 
