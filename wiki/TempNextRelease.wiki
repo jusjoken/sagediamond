@@ -233,7 +233,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
         * Slide Panel - Info Panel will slide out from the right side (partial screen)
       * !FullScreen Fanart - on for Fullscreen background or off for background in a window
       * !SplitScreen - on - off
-||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackground.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackground-ppc.jpg] _FullScreen Fanart On_ ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackgroundOff.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackgroundOff-ppc.jpg] _FullScreen Fanart Off_ ||
+||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackground.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackground-ppc.jpg] _FS Fanart On_ ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackgroundOff.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackgroundOff-ppc.jpg] _FS Fanart Off_ ||
 ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeSplitScreen.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeSplitScreen-ppc.jpg] _Split Screen_ ||[http://dl.dropbox.com/u/7826058/Diamond/MoviesInfoFadeSlideInfo.jpg http://dl.dropbox.com/u/7826058/Diamond/MoviesInfoFadeSlideInfo-ppc.jpg] _Slide Info_ || _click to view_ ||
 
   * *Note:* options are saved per diamond movie view (including the custom views you create)
