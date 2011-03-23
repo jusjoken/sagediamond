@@ -185,7 +185,6 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
 ||Filters||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||_see below_||
 ||Sort||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||_see below_||
 ||Enter=Play||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||_pressing Enter will simulate pressing Play_||
-||Info Fade||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||_see below_||
 ||BG Fanart||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||_toggles Background Fanart off and on_||
 ||ABC Jumpbar||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||_see below_||
 ||Show Info Box||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||_show the Diamond Info panel on the right side_||
@@ -194,6 +193,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
 ||Delay Movies||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||_delays the display of the posters to speed the scrolling of the categories_||
 ||Less Posters||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||_display less posters to improve speed_||
 ||Customize View||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||_see below_||
+||Info Fade||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||_see below_||
 ||Option||Wall||Cover||List||Cat||360||
 
 
@@ -217,15 +217,6 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
       * Title A to Z or Z to A
         * !ScrubTitle - removes The, A etc - on - off
       * Release Year 1900 to Present or Present to 1900
-    * Info Fade - this option will display a full or part screen info view when you "pause" on a movie for the specified delay - see options
-      * Auto Fade - toggles this feature - on - off
-      * Delay in MS to fade - 5000 (5 seconds) by default
-      * Fade Style 
-        * !Fullscreen - Info Panel will consume the entire screen
-        * Slide Panel - Info Panel will slide out from the right side (partial screen)
-      * !FullScreen Fanart - on for Fullscreen background or off for background in a window
-      * !SplitScreen - on - off
-    ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackground.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackground-ppc.jpg] _Background Full Screen_ ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackgroundOff.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackgroundOff-ppc.jpg] _Background in Window_ ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeSplitScreen.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeSplitScreen-ppc.jpg] _Split Screen_ ||[http://dl.dropbox.com/u/7826058/Diamond/MoviesInfoFadeSlideInfo.jpg http://dl.dropbox.com/u/7826058/Diamond/MoviesInfoFadeSlideInfo-ppc.jpg] _Slide Info_ || _click to view_ ||
     * ABC Jumpbar
       * Press "down" in this view to get the [http://babgvant.com/downloads/pluckyhd/DiamondImages/ABCScrollBar.jpg ABC Jumpbar] to Jump to the first movie starting with a selected letter.
       [http://babgvant.com/downloads/pluckyhd/DiamondImages/ABCScrollBar.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/ABCScrollBar-ppc.jpg] _click to view_
@@ -234,6 +225,16 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
       * Show Posters - turn Off to remove the verticle poster list (may help performance on slower systems/extenders)
       * Wrap List - on - off - if on the list will loop back to the begin/end
       * Show Row Number - on - off - displays the row number before the movie title
+    * Info Fade - this option will display a full or part screen info view when you "pause" on a movie for the specified delay - see options
+      * Auto Fade - toggles this feature - on - off
+      * Delay in MS to fade - 5000 (5 seconds) by default
+      * Fade Style 
+        * !Fullscreen - Info Panel will consume the entire screen
+        * Slide Panel - Info Panel will slide out from the right side (partial screen)
+      * !FullScreen Fanart - on for Fullscreen background or off for background in a window
+      * !SplitScreen - on - off
+||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackground.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackground-ppc.jpg] _Background Full Screen_ ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackgroundOff.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackgroundOff-ppc.jpg] _Background in Window_ ||
+||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeSplitScreen.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeSplitScreen-ppc.jpg] _Split Screen_ ||[http://dl.dropbox.com/u/7826058/Diamond/MoviesInfoFadeSlideInfo.jpg http://dl.dropbox.com/u/7826058/Diamond/MoviesInfoFadeSlideInfo-ppc.jpg] _Slide Info_ || _click to view_ ||
 
   * *Note:* options are saved per diamond movie view (including the custom views you create)
  
