@@ -160,62 +160,25 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
 === Cover Flow ===
     * movie poster driven view centered on the screen for quick selection. 
   [http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieCoverFlowView.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieCoverFlowView-ppc.jpg] _click to view_
-    * Use the Options menu to set the following....
-      * Sort - see [#General_Options] below
-      * Folder Filters - see [#General_Options] below
-      * Filters - see [#General_Options] below
-      * Background Fanart
-      * Enter = Play.
-    * Press "down" in this view to get the [http://babgvant.com/downloads/pluckyhd/DiamondImages/ABCScrollBar.jpg ABC Scrollbar] to Jump to the first movie starting with a selected letter.
-    [http://babgvant.com/downloads/pluckyhd/DiamondImages/ABCScrollBar.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/ABCScrollBar-ppc.jpg] _click to view_
     
 === Wall Flow ===
     * a wall of Movie Posters to select from. 
   ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieWallView-InfoOff.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieWallView-InfoOff-ppc.jpg] _No Info_||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieWallView-InfoOn.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieWallView-InfoOn-ppc.jpg] _Show Info_|| _click to view_ ||
-    * Use the Options menu to set the following....
-      * Sort - see [#General_Options] below
-      * Folder Filters - see [#General_Options] below
-      * Filters - see [#General_Options] below
-      * Enter = Play
-      * Info Fade
-      * Show Info Box - optionally show the Diamond Info panel on the right with the Wall view
-      * Less Posters - set to On to show only 2 rows of posters (may help performance on slower systems/extenders)
-    * Press "down" while on the bottom row of posters to get the [http://babgvant.com/downloads/pluckyhd/DiamondImages/ABCScrollBar.jpg ABC Scrollbar] to Jump to the first movie starting with a selected letter.
 
 === List Flow ===
     * list based Movie view with a vertical scrolling poster view and Movie details on the right.
   [http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieListFlowView.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieListFlowView-ppc.jpg] _click to view_
-    * Use the Options menu to set the following....
-      * Sort - see [#General_Options] below
-      * Folder Filters - see [#General_Options] below
-      * Filters - see [#General_Options] below 
-      * Background Fanart 
-      * Enter = Play
-      * Customize View
-        * Right Side - what to display on the right side of the title in the movie list - Blank - Ratings - Year
-        * Show Posters - turn Off to remove the verticle poster list (may help performance on slower systems/extenders)
-        * Wrap List - on - off - if on the list will loop back to the begin/end
-        * Show Row Number - on - off - displays the row number before the movie title
-    * Press "right" in this view to get the [http://babgvant.com/downloads/pluckyhd/DiamondImages/ABCScrollBar.jpg ABC Scrollbar] to Jump to the first movie starting with a selected letter.
 
 === Category Flow ===
     * this is a Genre type view with Categories on the left and a Wall type view on the right. Use the Options menu to ........
   [http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieCategories.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieCategories-ppc.jpg] _click to view_
-    * Use the Options menu to set the following....
-      * Delay Movies - system will wait a moment to display the Movie Posters to improve the speed of the Categories vertical list - on - off
-      * Enter = Play
-      * Sort - see [#General_Options] below
-      * Folder Filters - see [#General_Options] below
-      * Filters - see [#General_Options] below 
-      * Background Fanart 
-    * _ABC Scrollbar not available in this view_
  
 === 360 Flow ===
     * this is a Genre type view based on the Xbox 360 Netflix implementation........
+  ||http://dl.dropbox.com/u/7826058/Diamond/Movie360Flow.jpg http://dl.dropbox.com/u/7826058/Diamond/Movie360Flow-ppc.jpg] _No Info_||[http://dl.dropbox.com/u/7826058/Diamond/Movie360FlowWithInfoBoxOn.jpg http://dl.dropbox.com/u/7826058/Diamond/Movie360FlowWithInfoBoxOn-ppc.jpg] _Show Info_|| _click to view_ ||
 
 
 === General Options for Flow Views ===
-  * applies to all Flow Views now (except where noted)
 
 ||Option||Wall||Cover||List||Cat||360||
 ||Folder Filters||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||_see below_||
@@ -224,12 +187,14 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
 ||Enter=Play||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||_pressing Enter will simulate pressing Play_||
 ||Info Fade||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||_see below_||
 ||BG Fanart||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||_toggles Background Fanart off and on_||
+||ABC Jumpbar||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||_see below_||
 ||Show Info Box||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||_show the Diamond Info panel on the right side_||
 ||Sub Categories||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||_include subcategories_||
 ||Small Fanart BG||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||_display a small window above the posters containing the background fanart_||
 ||Delay Movies||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||_delays the display of the posters to speed the scrolling of the categories_||
 ||Less Posters||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||_display less posters to improve speed_||
 ||Customize View||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||_see below_||
+||Option||Wall||Cover||List||Cat||360||
 
 
     * Folder Filters - here you can include or exclude specified Movie Folders
@@ -253,12 +218,22 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
         * !ScrubTitle - removes The, A etc - on - off
       * Release Year 1900 to Present or Present to 1900
     * Info Fade - this option will display a full or part screen info view when you "pause" on a movie for the specified delay - see options
-      * Auto Fade - on - off
+      * Auto Fade - toggles this feature - on - off
       * Delay in MS to fade - 5000 (5 seconds) by default
+      * Fade Style 
+        * !Fullscreen - Info Panel will consume the entire screen
+        * Slide Panel - Info Panel will slide out from the right side (partial screen)
       * !FullScreen Fanart - on for Fullscreen background or off for background in a window
-      ***NEW Right Side Panel*** (not in List Flow)
       * !SplitScreen - on - off
     ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackground.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackground-ppc.jpg] _Background Full Screen_||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackgroundOff.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackgroundOff-ppc.jpg] _Background in Window_||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeSplitScreen.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeSplitScreen-ppc.jpg] _Split Screen_|| _click to view_ ||
+    * ABC Jumpbar
+      * Press "down" in this view to get the [http://babgvant.com/downloads/pluckyhd/DiamondImages/ABCScrollBar.jpg ABC Jumpbar] to Jump to the first movie starting with a selected letter.
+      [http://babgvant.com/downloads/pluckyhd/DiamondImages/ABCScrollBar.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/ABCScrollBar-ppc.jpg] _click to view_
+    * Customize View
+      * Right Side - what to display on the right side of the title in the movie list - Blank - Ratings - Year
+      * Show Posters - turn Off to remove the verticle poster list (may help performance on slower systems/extenders)
+      * Wrap List - on - off - if on the list will loop back to the begin/end
+      * Show Row Number - on - off - displays the row number before the movie title
 
   * *Note:* options are saved per diamond movie view (including the custom views you create)
  
