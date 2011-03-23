@@ -66,8 +66,8 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
     * Creating more TV/Recording Views and/or renaming the existing views
       * Select Options and then "Menu Options"
         * *NOTE:* this is a Default SageTV function
-        ****CHANGE # of views****
-        ****RENAME current view****
+        * Change the number of Custom TV views to show (between 4 and 8) by selecting "Number of Views"
+        * Select "Rename the "Name of View you are in" View - to name the TV view something unique
     * Diamond Options - select Options and then Diamond Options - from here change...
       * Fanart Options
         * BG Fanart - on - off
@@ -274,29 +274,29 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
       * go to Options from the Main Menu - Diamond Options - make sure "Replace Video with Diamond Movies" is Off
       * select from the various options to Show or Hide - these will show above the standard items (titles, DVD etc)
         * Wall Flow
-        * List Flow
         * Cover Flow
+        * List Flow
         * Category Flow 
         * 360 Flow 
 === Custom Movie Menu ===
     * replace the default Videos menu with the Diamond "Movies" menu 
       * go to Options from the Main Menu - Diamond Options - make sure "Replace Video with Diamond Movies" is On
-      * select "custom Views Setup" to create your own Diamond Flow Views. From here you can....
+      * select "Custom Views Setup" to create your own Diamond Flow Views. From here you can....
       ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuCustomMovieViews.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuCustomMovieViews-ppc.jpg] _Customize_||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuCustomMovieViewsAdd.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuCustomMovieViewsAdd-ppc.jpg] _Add New_|| _click to view_ ||
         * "Add New View" (set the type and name it)
         * edit views you previously created
         * change the order of the custom flow views
-          * place focus on a flow name and press the RIGHT arrow for options to move the view
+          * place focus on a View Name and press the RIGHT arrow for options to move the view
         * "Edit Default Views to Show"
         [http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuCustomMovieViewsShowDefaultViews.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuCustomMovieViewsShowDefaultViews-ppc.jpg] _click to view_
           * you can keep access to the Sage Default STV Video views 
             * Titles 
             * DVD/BD 
             * Folders 
-            * CATEGORY 
+            * Category 
             * Playlists 
-            * Play DVD
             * !VideoConversions
+            * Play DVD
 === Hide Main Menu Items ===
   [http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuShowHideMenuItems.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuShowHideMenuItems-ppc.jpg] _click to view_
     * go to Options from the Main Menu - Diamond Options - Hide Main Menu Items
@@ -321,7 +321,10 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
     * to delete the cache so it will rebuild
       * select Detailed Setup - Diamond Fanart and select Delete All Cached Fanart
       * answer Yes to the prompt
-      ***NEW Rebuild Cache Option***
+      * Recommended - answer Yes to the next prompt to automatically Cache ALL fanart. Selecting No will cache fanart during the use of the Diamond Views.
+      [http://dl.dropbox.com/u/7826058/Diamond/CacheFanart.jpg http://dl.dropbox.com/u/7826058/Diamond/CacheFanart-ppc.jpg] _click to view_
+    * Cache Posters While Idle - on - off
+      * Number of Posters to Cache - Diamond will fetch this number of posters times 2 (forward and backward)
   * Single TV/Recording/Movie Fanart delete
   [http://babgvant.com/downloads/pluckyhd/DiamondImages/FanartDeleteSingleItem.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/FanartDeleteSingleItem-ppc.jpg] _click to view_
     * in any Diamond view press the Delete key on any item and a menu option including Delete Fanart will be offered
@@ -351,6 +354,6 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
     * go to the Options menu from the Main Menu - Diamond Options
     * select "Debug Menu"
     * select "Clear All Diamond Settings"
-    ***CHECK STEPS for this***
-    * *Note:* this will delete the current local Fanart Cache and all custom views
+    * select Delete Client (or Server) Settings
+    * *Note:* this will delete the current local Fanart Cache and all custom views and settings and CANNOT be undone
  
