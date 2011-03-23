@@ -167,7 +167,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
 
 === List Flow ===
     * list based Movie view with a vertical scrolling poster view and Movie details on the right.
-  [http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieListFlowView.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieListFlowView-ppc.jpg] _click to view_
+  ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieListFlowView.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieListFlowView-ppc.jpg]_Poster_||[http://dl.dropbox.com/u/7826058/Diamond/MovieListFlowView_noPoster.jpg http://dl.dropbox.com/u/7826058/Diamond/MovieListFlowView_noPoster-ppc.jpg]_no Poster_|| _click to view_
 
 === Category Flow ===
     * this is a Genre type view with Categories on the left and a Wall type view on the right. Use the Options menu to ........
