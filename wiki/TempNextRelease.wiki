@@ -213,15 +213,24 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
 === 360 Flow ===
     * this is a Genre type view based on the Xbox 360 Netflix implementation........
 
-||Option||Wall||Cover||List||Category||360||
+
+=== General Options for Flow Views ===
+  * applies to all Flow Views now (except where noted)
+
+||Option||Wall||Cover||List||Cat||360||
+||Folder Filters||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||
+||Filters||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||
 ||Enter=Play||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||
 ||Info Fade||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||
 ||BG Fanart||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||
 ||Show Info Box||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||
+||Sub Categories||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||
+||Small Fanart BG||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||
+||Delay Movies||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||
+||Less Posters||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||
+||Customize View||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||
 
 
-=== General Options for Flow Views ===
-  * applies to all Flow Views now (except where noted)
     * Info Fade - this option will display a full or part screen info view when you "pause" on a movie for the specified delay - see options
       * Auto Fade - on - off
       * Delay in MS to fade - 5000 (5 seconds) by default
