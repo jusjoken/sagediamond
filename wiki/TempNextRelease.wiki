@@ -121,13 +121,15 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
   * Episode View Options - while on the episode view select Options
     * Select Diamond Options - from here change...
       * BG Fanart - on - off
-      * Hide Title when grouped by Title - on - off
+      * Show Minimal Recording Icons - on - off
+      * Hide Title in title Grouping - on - off
       * Show Season/Episode Number - on - off
       * Season/Episode Format - !S1E01 - !S01E01 - !E01 - !1x01 - !1 - Row Number - None
       * Season/Episode Separator - "-" - "::" - "." - ")" - "|" - None
       * Season/Episode Location - Before Title - After Title - Above Markers (only works if Minimal Recording Icons = on)
-      * Show Minimal Recording Icons - on - off
-      * Show Original Airing Date - only available if Minimal Recording Icons = on and S/E Location is not above Markers
+      * Show Airing Date
+        * only available if Minimal Recording Icons = on and S/E Location is not above Markers
+        * can be set to "Original Airdate" or "Recorded Date"
     * Sort - look here to set the sort to various options including Season/Episode and Original Air Date
       [http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-EpisodeSort.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-EpisodeSort-ppc.jpg] _click to view_
 === Simplified View===
@@ -141,10 +143,14 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
         * Show Larger Thumbnails - affects the episode view - on - off
       * Show Seasons View - on - off
       * Show Diamond Play Options - if enabled this will display a menu to play Next, Newest, All from Next or All - on - off
-      * Metadata In Info List _does not apply to simplified view_
+        * press Play again to "Play Next"
+        * press FFwd to "Play Newest"
+        * press Stop to close the options menu
       * Season Popup - display the Season List in a popup menu - on - off
+      * New, Last, Next Shows S/E - on - off
       * Show Title on Right - on - off
       * Show Description - on - off
+      * Show Minimal Recording Icons - on - off
       * Switch to Standard View
 
   * *Note:* options are now saved per individual Recordings/TV view.
