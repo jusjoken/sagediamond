@@ -76,8 +76,8 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
         * Fanart Thumbnails - affects the default info list and episode view - on - off
         * Show Larger Thumbnails - affects the default info list and episode view - on - off
       * Series Info Options
-        * Use Diamond Info View - custom right hand info panel with poster view and metadata details - on - off
-        ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfo-off.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfo-off-ppc.jpg] _Off_||[http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfo.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfo-ppc.jpg] _On_|| _click to view_ ||
+        * Use Diamond Info View - custom right hand info panel with optional poster view and metadata details - on - off
+        ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfo-off.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfo-off-ppc.jpg] _Off_ ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfo.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfo-ppc.jpg] _On_ ||[http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-DiamondInfoNoPoster.jpg http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-DiamondInfoNoPoster-ppc.jpg] _no poster_ || _click to view_ ||
           * With Diamond Info View - OFF
             * S/E in Recording List - on - off
             * Show Larger Thumbnails - on - off
