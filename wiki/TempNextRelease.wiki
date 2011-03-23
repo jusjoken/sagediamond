@@ -213,6 +213,11 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
 === 360 Flow ===
     * this is a Genre type view based on the Xbox 360 Netflix implementation........
 
+||Option||Wall||Cover||List||Category||360||
+||Enter=Play||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||
+||Info Fade||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||
+||BG Fanart||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||
+||Show Info Box||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||
 
 
 === General Options for Flow Views ===
