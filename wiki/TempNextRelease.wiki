@@ -175,7 +175,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
  
 === 360 Flow ===
     * this is a Genre type view based on the Xbox 360 Netflix implementation........
-  ||http://dl.dropbox.com/u/7826058/Diamond/Movie360Flow.jpg http://dl.dropbox.com/u/7826058/Diamond/Movie360Flow-ppc.jpg] _No Info_||[http://dl.dropbox.com/u/7826058/Diamond/Movie360FlowWithInfoBoxOn.jpg http://dl.dropbox.com/u/7826058/Diamond/Movie360FlowWithInfoBoxOn-ppc.jpg] _Show Info_|| _click to view_ ||
+  ||[http://dl.dropbox.com/u/7826058/Diamond/Movie360Flow.jpg http://dl.dropbox.com/u/7826058/Diamond/Movie360Flow-ppc.jpg] _No Info_||[http://dl.dropbox.com/u/7826058/Diamond/Movie360FlowWithInfoBoxOn.jpg http://dl.dropbox.com/u/7826058/Diamond/Movie360FlowWithInfoBoxOn-ppc.jpg] _Show Info_|| _click to view_ ||
 
 
 === General Options for Flow Views ===
