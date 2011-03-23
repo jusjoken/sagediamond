@@ -218,26 +218,20 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
   * applies to all Flow Views now (except where noted)
 
 ||Option||Wall||Cover||List||Cat||360||
-||Folder Filters||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||
-||Filters||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||
-||Enter=Play||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||
-||Info Fade||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||
-||BG Fanart||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||
-||Show Info Box||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||
-||Sub Categories||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||
-||Small Fanart BG||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||
-||Delay Movies||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||
-||Less Posters||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||
-||Customize View||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||
+||Folder Filters||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||_see below_||
+||Filters||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||_see below_||
+||Sort||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||_see below_||
+||Enter=Play||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||_pressing Enter will simulate pressing Play_||
+||Info Fade||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||_see below_||
+||BG Fanart||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||_toggles Background Fanart off and on_||
+||Show Info Box||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||_show the Diamond Info panel on the right side_||
+||Sub Categories||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||_include subcategories_||
+||Small Fanart BG||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||_display a small window above the posters containing the background fanart_||
+||Delay Movies||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||_delays the display of the posters to speed the scrolling of the categories_||
+||Less Posters||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||_display less posters to improve speed_||
+||Customize View||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/yes.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||http://dl.dropbox.com/u/7826058/Diamond/no.png||_see below_||
 
 
-    * Info Fade - this option will display a full or part screen info view when you "pause" on a movie for the specified delay - see options
-      * Auto Fade - on - off
-      * Delay in MS to fade - 5000 (5 seconds) by default
-      * !FullScreen Fanart - on for Fullscreen background or off for background in a window
-      ***NEW Right Side Panel*** (not in List Flow)
-      * !SplitScreen - on - off
-    ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackground.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackground-ppc.jpg] _Background Full Screen_||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackgroundOff.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackgroundOff-ppc.jpg] _Background in Window_||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeSplitScreen.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeSplitScreen-ppc.jpg] _Split Screen_|| _click to view_ ||
     * Folder Filters - here you can include or exclude specified Movie Folders
     [http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieFolderFilters.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieFolderFilters-ppc.jpg] _click to view_
       * Add New Include Filter
@@ -258,6 +252,13 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
       * Title A to Z or Z to A
         * !ScrubTitle - removes The, A etc - on - off
       * Release Year 1900 to Present or Present to 1900
+    * Info Fade - this option will display a full or part screen info view when you "pause" on a movie for the specified delay - see options
+      * Auto Fade - on - off
+      * Delay in MS to fade - 5000 (5 seconds) by default
+      * !FullScreen Fanart - on for Fullscreen background or off for background in a window
+      ***NEW Right Side Panel*** (not in List Flow)
+      * !SplitScreen - on - off
+    ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackground.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackground-ppc.jpg] _Background Full Screen_||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackgroundOff.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackgroundOff-ppc.jpg] _Background in Window_||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeSplitScreen.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeSplitScreen-ppc.jpg] _Split Screen_|| _click to view_ ||
 
   * *Note:* options are saved per diamond movie view (including the custom views you create)
  
