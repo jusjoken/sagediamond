@@ -269,6 +269,54 @@ public class MetadataCalls {
 
     }
 
+
+    public static String[] GetShowCategories(Object MediaObject){
+    return sagex.api.ShowAPI.GetShowCategory(MediaObject).split(",");}
+//     public static String GetTimeAdded(Object Title) {
+//    // Check to see if date variables have been set
+//    if(!DateConverter.IsDateVariableSet){
+//    LOG.trace("DateVariablesNot set Go ahead and set them");
+//    String First =sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"DateGroupFirstTime","10080");
+//    String Second = sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"DateGroupSecondTime","20160");
+//    String Third = sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"DateGroupThirdTime","43200");
+//    String Fourth = sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"DateGroupFourthTime","86400");
+//    Long LFirst = java.lang.Long.parseLong(First);
+//    LFirst = LFirst *60*1000;
+//    Long LSecond = java.lang.Long.parseLong(Second);
+//    LSecond = LSecond*60*1000;
+//    Long LThird = java.lang.Long.parseLong(Third);
+//    LThird = LThird*60*1000;
+//    Long LFourth = java.lang.Long.parseLong(Fourth);
+//    LFourth = LFourth *60*1000;
+//        Long CurrTime = System.currentTimeMillis();
+//    DateConverter.FirstDateGroup =CurrTime-LFirst;
+//    DateConverter.SecondDateGroup=CurrTime-LSecond;
+//    DateConverter.ThirdDateGroup=CurrTime-LThird;
+//    DateConverter.FourthDateGroup=CurrTime-LFourth;
+//    DateConverter.FifthDateGroup =CurrTime-(Long.parseLong(sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"DateGroupFifthTime","86401"))*60*1000);
+//    DateConverter.IsDateVariableSet=true;}
+//    LOG.trace("DateVariables Set to="+DateConverter.FirstDateGroup+":");
+//    LOG.trace("DateVariables Set to="+DateConverter.SecondDateGroup+":");
+//    LOG.trace("DateVariables Set to="+DateConverter.ThirdDateGroup+":");
+//    LOG.trace("DateVariables Set to="+DateConverter.FourthDateGroup+":");
+//    LOG.trace("DateVariables Set to="+DateConverter.FifthDateGroup+":");
+//
+//    Long DateAdded = (Long) ClassFromString.GetDateClass("GetOriginalAirDate", Title);
+//    if(DateAdded>=DateConverter.FirstDateGroup){
+//    return sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"DateGroupFirstName","New");}
+//    else if (DateAdded>=DateConverter.SecondDateGroup){
+//    return sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"DateGroupSecondName","Last Week");}
+//    else if (DateAdded>=DateConverter.ThirdDateGroup){
+//    return sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"DateGroupThirdName","30 days");}
+//   else if (DateAdded>=DateConverter.FourthDateGroup){
+//    return sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"DateGroupFourthName","60 days");}
+//   else{
+//
+//    return sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"DateGroupFifthName","Older");}
+//
+//        }
+
+
     public static ArrayList<String> GetAllShowCategories(Object MediaObject) {
         String[] Cats = sagex.api.ShowAPI.GetShowCategory(MediaObject).split(",");
         ArrayList<String> AllCats = new ArrayList<String>();
