@@ -1,4 +1,4 @@
-#summary Reserved for future builds
+#summary Information on the use of the Diamond SageTV Mod
 = Introduction =
 
 Check here for basic information about what's available in Diamond and how to use various functions.
