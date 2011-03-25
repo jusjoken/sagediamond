@@ -1,4 +1,4 @@
-#summary Information for Diamond
+#summary Reserved for future builds
 = Introduction =
 
 Check here for basic information about what's available in Diamond and how to use various functions.
