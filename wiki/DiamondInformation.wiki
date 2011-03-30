@@ -284,7 +284,10 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
       * select "Custom Views Setup" to create your own Diamond Flow Views. From here you can....
       ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuCustomMovieViews.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuCustomMovieViews-ppc.jpg] _Customize_||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuCustomMovieViewsAdd.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MainMenuCustomMovieViewsAdd-ppc.jpg] _Add New_|| _click to view_ ||
         * "Add New View" (set the type and name it)
-        * edit views you previously created
+        * edit or delete views you previously created
+          * select a view from the numbered list and press Ok
+          * select "Delete View" from the menu to delete the custom View
+          * select "Change View Type" from the menu to change the Flow type for the view
         * change the order of the custom flow views
           * place focus on a View Name and press the RIGHT arrow for options to move the view
         * "Edit Default Views to Show"
