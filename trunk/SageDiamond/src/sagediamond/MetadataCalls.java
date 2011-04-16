@@ -34,20 +34,18 @@ public class MetadataCalls {
     }
 
     // sagediamond_MetadataCalls_DisplaySeasonEpisode
-    public static String DisplaySeasonEpisode(Object MediaObject) {
-    	String RecordingView =  sagex.api.Configuration.GetProperty("sagetv_recordings_filter_status","");
-    	String SEFormat = sagex.api.Configuration.GetProperty("JOrton/Recordings/"+RecordingView+"/SEFormat","S1E01");
-    	if(SEFormat.equals("S1E01")) {
+    public static String DisplaySeasonEpisode(Object MediaObject, String Property) {
+    	if(Property.equals("S1E01")) {
     		return "S"+ GetSeasonNumber(MediaObject) + "E" + GetEpisodeNumberPad(MediaObject);
-    	} else if(SEFormat.equals("S01E01")) {
+    	} else if(Property.equals("S01E01")) {
     		return "S"+ GetSeasonNumberPad(MediaObject) + "E" + GetEpisodeNumberPad(MediaObject);
-    	} else if(SEFormat.equals("1x01")) {
+    	} else if(Property.equals("1x01")) {
     		return GetSeasonNumber(MediaObject) + "x" + GetEpisodeNumberPad(MediaObject);
-    	} else if(SEFormat.equals("E01")) {
+    	} else if(Property.equals("E01")) {
     		return "E" + GetEpisodeNumberPad(MediaObject);
-    	} else if(SEFormat.equals("1")) {
+    	} else if(Property.equals("1")) {
     		return "" + GetEpisodeNumber(MediaObject);	
-    	}else if(SEFormat.equals("None")) {
+    	}else if(Property.equals("None")) {
     		return "";	
     	} else {
     		return "S"+ GetSeasonNumber(MediaObject) + "E" + GetEpisodeNumberPad(MediaObject);	
@@ -342,4 +340,15 @@ public class MetadataCalls {
         }
         return AllCats;
     }
+
+    public static int AiredAgeInDays(Object MediaObject) 
+    {
+    	return (int)(sagex.api.Utility.Time() - sagex.api.AiringAPI.GetAiringStartTime(MediaObject))/(86400*1000);
+    }
+    
+    public static int RecordedAgeInDays(Object MediaObject) 
+    {
+    	return (int)(sagex.api.Utility.Time() - sagex.api.AiringAPI.GetRealWatchedStartTime(MediaObject))/(86400*1000);
+    }
+
 }
