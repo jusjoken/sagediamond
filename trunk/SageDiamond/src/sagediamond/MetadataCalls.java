@@ -26,11 +26,7 @@ public class MetadataCalls {
     public static String NetflixFile = "Quicktime[H.264/50Kbps 480x368@25fps]";
 
     public static Integer GetSeasonNumber(Object MediaObject) {
-        String SN = sagex.api.MediaFileAPI.GetMediaFileMetadata(MediaObject, "SeasonNumber");
-        if (SN.equals("")) {
-            SN = "0";
-        }
-        return Integer.parseInt(SN);
+        return sagex.api.ShowAPI.GetShowSeasonNumber(MediaObject);
     }
 
     // sagediamond_MetadataCalls_DisplaySeasonEpisode
@@ -67,11 +63,7 @@ public class MetadataCalls {
     }
 
     public static Integer GetEpisodeNumber(Object MediaObject) {
-        String EN = sagex.api.MediaFileAPI.GetMediaFileMetadata(MediaObject, "EpisodeNumber");
-        if (EN.equals("")) {
-            EN = "0";
-        }
-        return Integer.parseInt(EN);
+        return sagex.api.ShowAPI.GetShowEpisodeNumber(MediaObject);
     }
 
     public static String GetEpisodeNumberPad(Object MediaObject) {
