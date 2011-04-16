@@ -36,7 +36,7 @@ public class CustomViews {
 			return "360 Flow";
 		}
 		else {
-			return "Cover Flow";
+			return ViewType;
 		}
 	}
 
