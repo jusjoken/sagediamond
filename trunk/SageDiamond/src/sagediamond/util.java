@@ -20,14 +20,14 @@ public class util {
 
 
 
-    public static Object CheckSeasonSize(Map<String, Object> Files) {
+    public static Object CheckSeasonSize(Map<String, Object> Files, int sizeneeded) {
         LinkedHashMap<String, Object> WithBlanks = new LinkedHashMap<String, Object>();
-        WithBlanks.put("blankelement1", null);
-        WithBlanks.put("blankelement2", null);
+        for(int index=0;index<sizeneeded;index++){
+        WithBlanks.put("blankelement1"+index, null);}
+        
         WithBlanks.putAll(Files);
-        WithBlanks.put("blankelement3", null);
-        WithBlanks.put("blankelement4", null);
-
+        for(int index=sizeneeded;index<sizeneeded+sizeneeded;index++){
+        WithBlanks.put("blankelement"+index, null);}
 
         return WithBlanks;
 
@@ -44,17 +44,20 @@ public class util {
 
     }
 
-    public static Object CheckSimpleSize(Object[] Files) {
+    public static Object CheckSimpleSize(Object[] Files,int sizeneeded) {
         if (!Files.toString().contains("blankelement")) {
 
             List<Object> WithBlanks = new ArrayList<Object>();
-            WithBlanks.add("blankelement1");
-            WithBlanks.add("blankelement2");
+            for(int index=0;index<sizeneeded;index++){
+            WithBlanks.add("blankelement"+index);}
+
+
             for (Object curr : Files) {
                 WithBlanks.add(curr);
             }
-            WithBlanks.add("blankelement3");
-            WithBlanks.add("blankelement4");
+            for(int index=sizeneeded;index<sizeneeded+sizeneeded;index++){
+            WithBlanks.add("blankelement"+index);}
+            
             return WithBlanks;
         }
         return Files;
