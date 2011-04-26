@@ -11,6 +11,16 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
 
 = Details =
 
+== New in Version 3.30 ==
+
+  * Main Menu Widget 
+    * Extended Weather widget enhanced
+  * TV/Recordings Views
+    * Bypass Single Seasons Options added
+    * Simplified view enhancements
+      * New option to show more rows (11 rows instead of 5)
+      * Can now toggle off the New/Last/Next in the Diamond Info Panel
+
 == New in Version 3.20 ==
 
   * Works with SageTV 7.1.5 
