@@ -25,7 +25,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
     * Info Options - new option to show the Diamond Info Fade screen when the Info button is pressed
     * Wall Flow - new option to show the title below each poster (Issue 153) 
   * Other
-    * Fixed issues 114, 118, 148, 149, 150, 151, 154, 155, 156, 157, 159, 160, 161, 164, 165, 167, 169, 175
+    * Fixed issue 114, issue 118, 148, 149, 150, 151, 154, 155, 156, 157, 159, 160, 161, 164, 165, 167, 169, 175
     
     
 == New in Version 3.20 ==
