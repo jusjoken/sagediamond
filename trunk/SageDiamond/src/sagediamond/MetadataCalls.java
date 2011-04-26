@@ -26,7 +26,7 @@ public class MetadataCalls {
     public static String NetflixFile = "Quicktime[H.264/50Kbps 480x368@25fps]";
 
     public static Integer GetSeasonNumber(Object MediaObject) {
-        return sagex.api.ShowAPI.GetSeasonNumber(MediaObject);
+        return sagex.api.ShowAPI.GetShowSeasonNumber(MediaObject);
     }
 
     // sagediamond_MetadataCalls_DisplaySeasonEpisode
@@ -63,7 +63,7 @@ public class MetadataCalls {
     }
 
     public static Integer GetEpisodeNumber(Object MediaObject) {
-        return sagex.api.ShowAPI.GetSeasonNumber(MediaObject);
+        return sagex.api.ShowAPI.GetShowEpisodeNumber(MediaObject);
     }
 
     public static String GetEpisodeNumberPad(Object MediaObject) {
