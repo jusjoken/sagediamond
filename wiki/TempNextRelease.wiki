@@ -114,6 +114,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
         * Season/Episode Separator - "-" - "::" - "." - ")" - "|" - None
       * Count/Watched Format - (www/rrr) - (rrr) - Recordings:rrr - Recordings:rrr Watched:www - Blank
       * Show Seasons View - on - off
+      * Bypass Single Seasons - on - off
       * Show Diamond Play Options - if enabled this will display a menu to play Next, Newest, All from Next or All - on - off
         * press Play again to "Play Next"
         * press FFwd to "Play Newest"
@@ -122,6 +123,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
       * Season Popup - display the Season List in a popup menu - on - off
       [http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-SeasonPopup.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-SeasonPopup-ppc.jpg] _click to view_
       * Show Minimal Recording Icons - on - off
+        * affects TV/Recordings List separately from group items
       * Switch to Simplified View - a Series Banner driven clean approach to TV/Recordings
     * Filters - select from the following filter options....
     [http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-Filters.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-Filters-ppc.jpg] _click to view_
@@ -152,7 +154,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
     * Sort - look here to set the sort to various options including Season/Episode and Original Air Date
       [http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-EpisodeSort.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-EpisodeSort-ppc.jpg] _click to view_
 === Simplified View===
-  [http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-SimplifiedView.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-SimplifiedView-small.jpg] _click to view_
+  ||[http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-SimplifiedView.JPG http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-SimplifiedView-ppc.JPG] _Default rows_||[http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-SimplifiedView_more.jpg http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-SimplifiedView_more-ppc.jpg] _More rows_|| _click to view_ ||
   * a Series Banner driven clean approach to TV/Recordings
     * Diamond Options - select Options and then Diamond Options - from here change...
       * Fanart Options
@@ -172,6 +174,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
         * press FFwd to "Play Newest"
         * press Stop to close the options menu
       * Season Popup - display the Season List in a popup menu - on - off
+      * Show More Rows - will display 11 rows vs. default 5 - on - off
       * Show Minimal Recording Icons - on - off
       * Switch to Standard View
 
@@ -263,7 +266,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
 ==Main Menu Mods==
 === Widgets ===
   [http://babgvant.com/downloads/pluckyhd/DiamondImages/WidgetControlPanel.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/WidgetControlPanel-small.jpg] _click to view_
-    ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/Widgets1.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Widgets1-ppc.jpg] _Sample 1_ ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/Widgets2.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Widgets2-ppc.jpg] _Sample 2_ || _click to view_ ||
+    ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/Widgets1.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Widgets1-ppc.jpg] _Sample 1_ ||[http://dl.dropbox.com/u/7826058/Diamond/Widgets2.jpg http://dl.dropbox.com/u/7826058/Diamond/Widgets2-ppc.jpg] _Sample 2_ || _click to view_ ||
     * go to Options from the Main Menu - Diamond Options - Main Menu Widget Control Panel
     * *TIP:* Make sure you set *Show Widgets* to On
     * from here you can...
