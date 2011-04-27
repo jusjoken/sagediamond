@@ -163,6 +163,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
         * Fanart Thumbnails - affects the episode view - on - off
         * Show Larger Thumbnails - affects the episode view - on - off
       * Series Info Options
+        * Show New, Last, Next - on - off
         * New, Last, Next Shows S/E - on - off
         * Season/Episode Format - !S1E01 - !S01E01 - !E01 - !1x01 - !1 - Row Number - None
         * Show Poster - on - off
@@ -216,8 +217,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
 ||Sub Categories||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||_include subcategories_||
 ||Small Fanart BG||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||_display a small window above the posters containing the background fanart_||
 ||Delay Movies||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||_delays the display of the posters to speed the scrolling of the categories_||
-||Less Posters||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||_display less posters to improve speed_||
-||Customize View||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||_see below_||
+||Customize View||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||_see below_||
 ||Info Fade||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||_see below_||
 ||Option||Wall||Cover||List||Cat||360||
 
@@ -246,11 +246,16 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
       * Press "down" in this view to get the [http://babgvant.com/downloads/pluckyhd/DiamondImages/ABCScrollBar.jpg ABC Jumpbar] to Jump to the first movie starting with a selected letter.
       [http://babgvant.com/downloads/pluckyhd/DiamondImages/ABCScrollBar.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/ABCScrollBar-ppc.jpg] _click to view_
     * Customize View
-      * Right Side - what to display on the right side of the title in the movie list - Blank - Ratings - Year
-      * Show Posters - turn Off to remove the verticle poster list (may help performance on slower systems/extenders)
-      * Wrap List - on - off - if on the list will loop back to the begin/end
-      * Show Row Number - on - off - displays the row number before the movie title
-    * Info Fade - this option will display a full or part screen info view when you "pause" on a movie for the specified delay - see options
+      * List Flow
+        * Right Side - what to display on the right side of the title in the movie list - Blank - Ratings - Year
+        * Show Posters - turn Off to remove the verticle poster list (may help performance on slower systems/extenders)
+        * Wrap List - on - off - if on the list will loop back to the begin/end
+        * Show Row Number - on - off - displays the row number before the movie title
+      * Wall Flow
+        * Show Info Box - on - off
+        * Less Posters - display less posters to improve speed - on - off
+        * Show Title - display the title below each poster - on - off
+    * Info Options - this option will display a full or part screen info view when you "pause" on a movie for the specified delay - see options
       * Auto Fade - toggles this feature - on - off
       * Delay in MS to fade - 5000 (5 seconds) by default
       * Fade Style 
@@ -258,6 +263,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
         * Slide Panel - Info Panel will slide out from the right side (partial screen)
       * !FullScreen Fanart - on for Fullscreen background or off for background in a window
       * !SplitScreen - on - off
+      * Info Shows Diamond Fade - if on the Info button will display the Diamond Info screen - on - off
 ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackground.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackground-ppc.jpg] _FS Fanart On_ ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackgroundOff.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackgroundOff-ppc.jpg] _FS Fanart Off_ ||
 ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeSplitScreen.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeSplitScreen-ppc.jpg] _Split Screen_ ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeSlideInfo.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeSlideInfo-ppc.jpg] _Slide Info_ || _click to view_ ||
 
