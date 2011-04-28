@@ -14,7 +14,7 @@ import sagex.UIContext;
 public class api {
 
 
-    public static String Version = "3.23";
+    public static String Version = "3.24";
 
 
     public static int GetSeasonEpisodeNumber(Object MediaObject) {

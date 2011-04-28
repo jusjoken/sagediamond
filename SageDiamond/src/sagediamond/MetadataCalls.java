@@ -79,7 +79,7 @@ public class MetadataCalls {
     }
 
     public static String GetMediaTitle(Object MediaObject) {
-        String Title = sagex.api.MediaFileAPI.GetMediaFileMetadata(MediaObject, "MediaTitle");
+        String Title ="";
         if (Title.equals("") || Title.equals(null)) {
             Title = sagex.api.MediaFileAPI.GetMediaTitle(MediaObject);
         }
