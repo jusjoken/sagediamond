@@ -51,11 +51,13 @@ public class FolderExclusion {
 //                    System.out.println("Include Filter Movie added="+path+";Current Restriction="+currs.toString());
                     returnarray.add(curr);
                 }
-                else if (!Include && path.contains(currs.toString()) && returnarray.contains(curr)) {
+                else if (!Include && path.contains(currs.toString())) {
 //                 System.out.println("Exlude Filter Movie Removed="+path+";Current Restriction="+currs.toString());
-                    returnarray.remove(curr);
+                    if(returnarray.contains(curr)){
+                    
+                    returnarray.remove(curr);}
                     excludearray.add(curr);
-                } else if (!NeedAdder&&!(!Include && path.contains(currs.toString()))&&!excludearray.contains(curr)) {
+                } else if (!NeedAdder&&!excludearray.contains(curr)) {
                     if (!returnarray.contains(curr)) {
 //                     System.out.println("Movie added as end result="+path+";Current Restriction="+currs.toString());
                         returnarray.add(curr);
