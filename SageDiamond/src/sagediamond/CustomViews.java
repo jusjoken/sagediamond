@@ -34,6 +34,8 @@ public class CustomViews {
 			return "Category Flow";
 		} else if(ViewType.equals("360 Flow")) {
 			return "360 Flow";
+		} else if(ViewType.equals("SideWays Flow")) {
+			return "SideWays Flow";
 		}
 		else {
 			return ViewType;
@@ -80,6 +82,8 @@ public class CustomViews {
 			return "Category Flow";
 		} else if(ViewType.equals("360 Flow")) {
 			return "360 Flow";
+		} else if(ViewType.equals("SideWays Flow")) {
+			return "SideWays Flow";
 		}
 		else {
 			return "Cover Flow";
