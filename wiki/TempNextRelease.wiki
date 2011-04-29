@@ -22,13 +22,14 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
       * New option to show more rows (11 rows instead of 5)
       * Can now toggle off the New/Last/Next in the Diamond Info Panel (Issue 157)
   * Movies/Video View
+    * NEW - Sideways Flow view which offers a vertically scrolling wall type view
     * Info Options - new option to show the Diamond Info Fade screen when the Info button is pressed
     * Wall Flow - new option to show the title below each poster (Issue 153) 
     * Custom Views can now be renamed in addition to changing their type (Issue 174)
   * Other
     * Fixed 
-      * issue 114, issue 118, issue 148, issue 149, issue 150, issue 151, issue 154, issue 155, issue 156
-      * issue 157, issue 159, issue 160, issue 161, issue 164, issue 165, issue 167, issue 169, issue 175
+      * issue 114, issue 118, issue 148, issue 149, issue 150, issue 151, issue 154, issue 155, issue 156, issue 157
+      * issue 159, issue 160, issue 161, issue 164, issue 165, issue 167, issue 169, issue 175, issue 179
     
     
 == New in Version 3.20 ==
