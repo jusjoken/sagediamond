@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class CustomViews {
 
 	public static final String PropName="JOrton/CustomViews";
+        public static final String PathFiltersPropName = "JOrton/PathFilters";
 
 	public static String GetViewStyle(String View) {
 		String ViewType = View;
@@ -129,14 +130,64 @@ public class CustomViews {
 	public static String RemoveView(String ViewName, String ViewType) {
 
 		String Element =ViewName + "&&" + ViewType;
+                String OldCVPropName = "JOrton/" + Element;
 		String CurrElements = sagex.api.Configuration.GetProperty(PropName, "");
 		String ElementRemoved = null;
 		String result = null;
 		if (CurrElements.contains(Element + ";")) {
 
 			ElementRemoved = CurrElements.replace(Element + ";", "");
-
 			sagex.api.Configuration.SetProperty(PropName, ElementRemoved);
+
+                        //remove the old ViewName properties
+                        sagex.api.Configuration.RemovePropertyAndChildren(OldCVPropName);
+
+                        //remove old pathfilters
+                        sagex.api.Configuration.RemoveProperty(PathFiltersPropName + "/" + Element);
+                        
+                        result = "1";
+		} else {
+			result = "0";
+		}
+		return result;
+
+	}
+
+               	public static String RenameView(String ViewName, String ViewType, String NewViewName) {
+                    return ChangeView(ViewName, ViewType, NewViewName, ViewType);
+                }
+
+               	public static String ChangeViewType(String ViewName, String ViewType, String NewViewType) {
+                    return ChangeView(ViewName, ViewType, ViewName, NewViewType);
+                }
+        
+        	private static String ChangeView(String ViewName, String ViewType, String NewViewName, String NewViewType) {
+
+		String Element =ViewName + "&&" + ViewType;
+		String ElementNew =NewViewName + "&&" + NewViewType;
+                String OldCVPropName = "JOrton/" + Element;
+                String NewCVPropName = "JOrton/" + ElementNew;
+                String[] AllProps = sagex.api.Configuration.GetSubpropertiesThatAreLeaves(OldCVPropName);
+		String CurrElements = sagex.api.Configuration.GetProperty(PropName, "");
+		String ElementRenamed = null;
+		String result = null;
+		if (CurrElements.contains(Element + ";")) {
+
+			//replace the old name with the new name in the customviews list
+                        ElementRenamed = CurrElements.replace(Element + ";", ElementNew + ";");
+			sagex.api.Configuration.SetProperty(PropName, ElementRenamed);
+                        
+                        //iterate through all the old ViewName properties and set them to the new one
+                        for (String curr:AllProps){
+                            sagex.api.Configuration.SetProperty(NewCVPropName + "/" + curr, sagex.api.Configuration.GetProperty(OldCVPropName + "/" + curr,""));
+                        }
+                        //remove the old ViewName properties
+                        sagex.api.Configuration.RemovePropertyAndChildren(OldCVPropName);
+
+                        //copy over existing pathfilters and remove old one
+                        sagex.api.Configuration.SetProperty(PathFiltersPropName + "/" + ElementNew, sagex.api.Configuration.GetProperty(PathFiltersPropName + "/" + Element,""));
+                        sagex.api.Configuration.RemoveProperty(PathFiltersPropName + "/" + Element);
+                                                
 			result = "1";
 		} else {
 			result = "0";
