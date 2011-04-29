@@ -205,6 +205,10 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
     * this is a Genre type view based on the Xbox 360 Netflix implementation........
   ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/Movie360Flow.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Movie360Flow-ppc.jpg] _No Info_||[http://babgvant.com/downloads/pluckyhd/DiamondImages/Movie360FlowWithInfoBoxOn.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Movie360FlowWithInfoBoxOn-ppc.jpg] _Show Info_|| _click to view_ ||
 
+=== SideWays Flow ===
+    * a vertical scrolling wall of Movie Posters with movie details on the right. 
+  ||[http://dl.dropbox.com/u/7826058/Diamond/MovieSideWaysFlow.JPG http://dl.dropbox.com/u/7826058/Diamond/MovieSideWaysFlow-ppc.JPG] _Default view_||[http://dl.dropbox.com/u/7826058/Diamond/MovieSideWaysFlow_lessPosters.JPG http://dl.dropbox.com/u/7826058/Diamond/MovieSideWaysFlow_lessPosters-ppc.JPG] _Less Posters_|| _click to view_ ||
+
 
 === General Options for Flow Views ===
 
