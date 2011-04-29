@@ -24,6 +24,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
   * Movies/Video View
     * Info Options - new option to show the Diamond Info Fade screen when the Info button is pressed
     * Wall Flow - new option to show the title below each poster (Issue 153) 
+    * Custom Views can now be renamed in addition to changing their type (Issue 174)
   * Other
     * Fixed 
       * issue 114, issue 118, issue 148, issue 149, issue 150, issue 151, issue 154, issue 155, issue 156
