@@ -261,7 +261,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
         * Show Info Box - on - off
         * Less Posters - display less posters to improve speed - on - off
         * Show Title - display the title below each poster - on - off
-      * SideWays Flow
+      * !SideWays Flow
         * Less Posters - display less posters to improve speed - on - off
         * Show Title - display the title below each poster - on - off
     * Info Options - this option will display a full or part screen info view when you "pause" on a movie for the specified delay - see options
