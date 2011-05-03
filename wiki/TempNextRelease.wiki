@@ -18,6 +18,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
   * TV/Recordings Views
     * Bypass Single Seasons Options added (Issue 160)
     * Show minimal recording options is now a seperate option for the TV/Recording list and the episodes (Issue 133)
+    * Enter=Play option added to the Episode Lists
     * Simplified view enhancements
       * New option to show more rows (11 rows instead of 5)
       * Can now toggle off the New/Last/Next in the Diamond Info Panel (Issue 157)
@@ -146,15 +147,16 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
   * Episode View Options - while on the episode view select Options
     * Select Diamond Options - from here change...
       * BG Fanart - on - off
-      * Show Minimal Recording Icons - on - off
       * Hide Title in title Grouping - on - off
       * Show Season/Episode Number - on - off
       * Season/Episode Format - !S1E01 - !S01E01 - !E01 - !1x01 - !1 - Row Number - None
       * Season/Episode Separator - "-" - "::" - "." - ")" - "|" - None
       * Season/Episode Location - Before Title - After Title - Above Markers (only works if Minimal Recording Icons = on)
+      * Show Minimal Recording Icons - on - off
       * Show Airing Date
         * only available if Minimal Recording Icons = on and S/E Location is not above Markers
         * can be set to "Original Airdate" or "Recorded Date"
+      * Enter=Play - pressing Enter will simulate pressing Play
     * Sort - look here to set the sort to various options including Season/Episode and Original Air Date
       [http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-EpisodeSort.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-EpisodeSort-ppc.jpg] _click to view_
 === Simplified View===
@@ -181,6 +183,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
       * Season Popup - display the Season List in a popup menu - on - off
       * Show More Rows - will display 11 rows vs. default 5 - on - off
       * Show Minimal Recording Icons - on - off
+      * Enter=Play - pressing Enter will simulate pressing Play
       * Switch to Standard View
 
   * *Note:* options are now saved per individual Recordings/TV view.
