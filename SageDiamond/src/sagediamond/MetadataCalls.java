@@ -78,6 +78,13 @@ public class MetadataCalls {
         return String.format("%02d", en);
     }
 
+    public static String GetFanartTitle(Object MediaObject){
+    String Title=sagex.api.MediaFileAPI.GetMediaFileMetadata(MediaObject, "MediaTitle");
+     if (Title.equals("") || Title.equals(null)) {
+     Title=GetMediaTitle(MediaObject);}
+     return Title;
+    }
+
     public static String GetMediaTitle(Object MediaObject) {
         String Title ="";
         if (Title.equals("") || Title.equals(null)) {

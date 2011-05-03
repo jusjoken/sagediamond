@@ -116,7 +116,7 @@ public class FanartCaching {
 
     public static void RegenerateCachedFanart(Object MediaFile) {
 
-        String id = sagex.phoenix.fanart.FanartUtil.createSafeTitle(MetadataCalls.GetMediaTitle(MediaFile));
+        String id = sagex.phoenix.fanart.FanartUtil.createSafeTitle(MetadataCalls.GetFanartTitle(MediaFile));
         System.out.println("Checking for stored fanart to clear for title=" + id);
         if (CachingUserRecord.HasStoredLocation(id)) {
             System.out.println("RecordExist for Fanart delete and clearing all caching records for diamond");
@@ -135,11 +135,11 @@ public class FanartCaching {
 
     public static Object GetCachedFanart(Object MediaFile, Boolean series, String Type) {
         boolean MT = MetadataCalls.IsMediaTypeTV(MediaFile);
-        String id = MetadataCalls.GetMediaTitle(MediaFile);
+        String id = MetadataCalls.GetFanartTitle(MediaFile);
         if (Type.equalsIgnoreCase("episode")) {
             id = sagex.api.ShowAPI.GetShowEpisode(MediaFile) + "-" + MetadataCalls.GetSeasonNumberPad(MediaFile) + "x" + MetadataCalls.GetEpisodeNumberPad(MediaFile);
         }
-        String storeid = sagex.phoenix.fanart.FanartUtil.createSafeTitle(MetadataCalls.GetMediaTitle(MediaFile));
+        String storeid = sagex.phoenix.fanart.FanartUtil.createSafeTitle(MetadataCalls.GetFanartTitle(MediaFile));
         id = MT && !series && !Type.equalsIgnoreCase("Background") && !Type.equalsIgnoreCase("episode") ? sagex.phoenix.fanart.FanartUtil.createSafeTitle(id) + "_season" + MetadataCalls.GetSeasonNumberPad(MediaFile) : sagex.phoenix.fanart.FanartUtil.createSafeTitle(id);
         String CT = MT ? "TV" : "Movies";
         String FT = Type.equalsIgnoreCase("Background") ? "" : Type.equalsIgnoreCase("Background_Thumb") ? "TMB" : Type.equalsIgnoreCase("episode") ? "thumb_" : series ? "series_" : MT ? "season_" : "";
@@ -417,7 +417,7 @@ public class FanartCaching {
         }
         i = 0;
         CurrentlyCaching = "TV";
-        Map<String, Vector> TVGrouped = sagex.api.Database.GroupByMethod(TVFiles, "sagediamond_MetadataCalls_GetMediaTitle");
+        Map<String, Vector> TVGrouped = sagex.api.Database.GroupByMethod(TVFiles, "sagediamond_MetadataCalls_GetFanartTitle");
         Set<String> Shows = TVGrouped.keySet();
         CachingTotal = Shows.size();
         for (String curr : Shows) {
