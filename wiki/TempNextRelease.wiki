@@ -114,7 +114,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
             * Show New, Last, Next - on - off
             * New, Last, Next Shows S/E - on - off
             [http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfoSE.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfoSE-ppc.jpg] _click to view_
-        * Season/Episode Format - !S1E01 - !S01E01 - !E01 - !1x01 - !1 - Row Number - None
+        * Season/Episode Format - !S1E01 - !S01E01 - E01 - 1x01 - 1 - Row Number - None
         * Season/Episode Separator - "-" - "::" - "." - ")" - "|" - None
       * Count/Watched Format - (www/rrr) - (rrr) - Recordings:rrr - Recordings:rrr Watched:www - Blank
       * Show Seasons View - on - off
