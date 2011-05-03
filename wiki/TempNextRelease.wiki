@@ -188,7 +188,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
 
 === Cover Flow ===
     * movie poster driven view centered on the screen for quick selection. 
-  [http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieCoverFlowView.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieCoverFlowView-ppc.jpg] _click to view_
+  ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieCoverFlowView.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieCoverFlowView-ppc.jpg] _Default_||[http://dl.dropbox.com/u/7826058/Diamond/MovieCoverFlowViewBottom.jpg http://dl.dropbox.com/u/7826058/Diamond/MovieCoverFlowViewBottom-ppc.jpg] _Posters on Bottom_|| _click to view_ ||
     
 === Wall Flow ===
     * a wall of Movie Posters to select from. 
