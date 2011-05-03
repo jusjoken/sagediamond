@@ -425,10 +425,10 @@ public class FanartCaching {
             CachingCurrent = i;
             Vector shows = TVGrouped.get(curr);
             Object FirstShow = shows.get(0);
-            GetCachedFanart(FirstShow, false, "Poster");
-            GetCachedFanart(FirstShow, false, "Banner");
-            GetCachedFanart(FirstShow, false, "Background");
-            GetCachedFanart(FirstShow, false, "BackgroundThumb");
+            GetCachedFanart(FirstShow, true, "Poster");
+            GetCachedFanart(FirstShow, true, "Banner");
+            GetCachedFanart(FirstShow, true, "Background");
+            GetCachedFanart(FirstShow, true, "BackgroundThumb");
             CurrentlyCachingType = curr + " Episode Fanarts";
             for (Object episode : shows) {
                 GetCachedFanart(episode, false, "Poster");
