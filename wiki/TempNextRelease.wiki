@@ -13,6 +13,8 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
 
 == New in Version 3.30 ==
 
+  * Works with SageTV 7.1.7 
+  
   * Main Menu Widget 
     * Extended Weather widget enhanced
   * TV/Recordings Views
@@ -25,6 +27,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
   * Movies/Video View
     * NEW - Sideways Flow view which offers a vertically scrolling wall type view
     * Cover Flow - new option to display the posters on the bottom of the screen
+    * Jump to Diamond Views from any other Diamond Views using the new Diamond Views option on the Options screen
     * Info Options - new option to show the Diamond Info Fade screen when the Info button is pressed
     * Wall Flow - new option to show the title below each poster (Issue 153) 
     * Custom Views can now be renamed in addition to changing their type (Issue 174)
