@@ -17,18 +17,20 @@ public class SortMethods {
 
 static private final Logger LOG = Logger.getLogger(SortMethods.class);
 
-    public static String Title = "PloxeeTV_MetadataCalls_GetSortTitle";
-    public static String AiringDate="PloxeeTV_MetadataCalls_GetOriginalAirDate";
+    public static String Title = "sagediamond_MetadataCalls_GetSortTitle";
+    public static String AiringDate="sagediamond_MetadataCalls_GetOriginalAirDate";
     public static String RecordingDate="GetAiringStartTime";
     public static String WatchedDate = "GetRealWatchedEndTime";
-    public static String Seasons = "PloxeeTV_MetadataCalls_GetSeasonNumber";
-    public static String EpisodeTitle = "PloxeeTV_MetadataCalls_GetEpisodeTitle";
+    public static String Seasons = "sagediamond_MetadataCalls_GetSeasonNumber";
+    public static String EpisodeTitle = "sagediamond_MetadataCalls_GetEpisodeTitle";
+    public static String DateAdded="sagediamond_MetadataCalls_GetMediaFileID";
+
 
     public static String PropertyAdder ="Default";
-    public static String PropertyDefault ="ortus/ploxee/tv/";
+    public static String PropertyDefault ="JOrton/";
 
 
-    public static String PropertyPrefix= "ortus/ploxee/tv/"+PropertyAdder;
+    public static String PropertyPrefix= "JOrton/"+PropertyAdder+"/";
 
     public static void main(String[] args){
     String Value=ClassFromString.GetSortMethod("AiringDate");

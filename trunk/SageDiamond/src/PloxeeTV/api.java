@@ -24,18 +24,21 @@ public class api {
 
     public static void Load(String PropertyAdder){
 //    Log4jConfigurator.configureQuietly("ploxeetv", this.getClass().getClassLoader());
-    PropertyConfigurator.configure("plugins/PloxeeTV/PloxeeTV.log4j.properties");
+    PropertyConfigurator.configure("plugins/SageDiamond/SageDiamond.log4j.properties");
     LOG = Logger.getLogger(api.class);
     LOG.info("Logger created successfully!");
-    SortMethods.PropertyAdder=PropertyAdder;
-    SortMethods.PropertyPrefix=SortMethods.PropertyDefault+PropertyAdder;
-    LOG.info("Loading Theme");
-    ThemeProperties.LoadThemeProperties();
-    Theme.SetTheme();
-    LOG.info("Done loading Theme");
+//    SortMethods.PropertyAdder=PropertyAdder;
+//    SortMethods.PropertyPrefix=SortMethods.PropertyDefault+PropertyAdder;
+//    LOG.info("Loading Theme");
+//    ThemeProperties.LoadThemeProperties();
+//    Theme.SetTheme();
+//    LOG.info("Done loading Theme");
    
 
    }
+
+    public static void LoadView(String CurrView){
+    SortMethods.PropertyPrefix=SortMethods.PropertyDefault+CurrView+"/";}
 
     public static void ResetVariables(){
     ThemeProperties.LoadThemeProperties();

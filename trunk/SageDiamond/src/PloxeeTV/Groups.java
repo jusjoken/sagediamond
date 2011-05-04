@@ -53,19 +53,19 @@ public class Groups {
       
      String FileTypes = GetFileTypes();
      AllTV=sagex.api.MediaFileAPI.GetMediaFiles(FileTypes);
-     if(!Boolean.parseBoolean(sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"Movies","true"))){
+     if(!Boolean.parseBoolean(sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"IncludeMovies","true"))){
      LOG.debug("Not Including Movies filterting them out");
-     AllTV=(Object[]) sagex.api.Database.FilterByBoolMethod(AllTV,"PloxeeTV_MetadataCalls_IsMediaTypeTV", true);}
-     if(!Boolean.parseBoolean(sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"ImportedTV","true"))){
+     AllTV=(Object[]) sagex.api.Database.FilterByBoolMethod(AllTV,"sagediamond_MetadataCalls_IsMediaTypeTV", true);}
+     if(!Boolean.parseBoolean(sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"IncludeImportedTV","true"))){
       LOG.debug("Not Including ImportedTV filterting them out");
-     AllTV=(Object[]) sagex.api.Database.FilterByBoolMethod(AllTV,"PloxeeTV_MetadataCalls_IsImportedTV", false);}
+     AllTV=(Object[]) sagex.api.Database.FilterByBoolMethod(AllTV,"sagediamond_MetadataCalls_IsImportedTV", false);}
 //     if(Boolean.parseBoolean(sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"ImportedTV","true"))&&!Boolean.parseBoolean(sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"RecordedTV","true"))){
 //     AllTV=(Object[]) sagex.api.Database.FilterByBoolMethod(AllTV,"PloxeeTV_MetadataCalls_IsRecordedTV", false);}
-     if(!Boolean.parseBoolean(sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"RecordedTV","true"))){
-      AllTV=(Object[]) sagex.api.Database.FilterByBoolMethod(AllTV,"PloxeeTV_MetadataCalls_IsRecordedTV", false);}
+     if(!Boolean.parseBoolean(sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"IncludeRecordedTV","true"))){
+      AllTV=(Object[]) sagex.api.Database.FilterByBoolMethod(AllTV,"sagediamond_MetadataCalls_IsRecordedTV", false);}
      if(!IsIncludingPlayon()){
       LOG.debug("Not Including Playon filterting them out");
-     AllTV = (Object[]) sagex.api.Database.FilterByBoolMethod(AllTV,"PloxeeTV_MetadataCalls_IsPlayonFile", false);}
+     AllTV = (Object[]) sagex.api.Database.FilterByBoolMethod(AllTV,"sagediamond_MetadataCalls_IsPlayonFile", false);}
      if(FilterMethod.equals("GettingFiles")){
      return AllTV;}
      }
@@ -78,12 +78,12 @@ public class Groups {
      if(AllTV.length>0){
      Dividers.SageClass=AllTV[0].getClass();
      AllTV = (Object[]) sagex.api.Database.SortLexical(AllTV,false,SortMethods.GetMainSortMethod());
-     HashMap<String,Vector> tester = (HashMap<String,Vector>) sagex.api.Database.GroupByArrayMethod(AllTV, "PloxeeTV_MetadataCalls_GetMediaTitle");
+     HashMap<String,Vector> tester = (HashMap<String,Vector>) sagex.api.Database.GroupByArrayMethod(AllTV, "sagediamond_MetadataCalls_GetMediaTitle");
    
      Iterator keys = tester.keySet().iterator();
      String EpisodeSortMethod =SortMethods.GetEpisodeSortMethod();
      LOG.info("Episode Sort Method="+EpisodeSortMethod);
-     Boolean ShowDividers =Boolean.parseBoolean(sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"ShowDividers","true"));
+     Boolean ShowDividers =Boolean.parseBoolean(sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"ShowDividers","false"));
      LOG.info("Dividers on ="+ShowDividers);
      Boolean ShowSeasons = Boolean.parseBoolean(sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"ShowSeasons","true"));
      LOG.info("Show Sesaons="+ShowSeasons);
@@ -95,19 +95,19 @@ public class Groups {
      LOG.trace("CurrentKey="+currentkey);
      Object[] Seasonsorted = (Object[]) sagex.api.Database.Sort(current, false,EpisodeSortMethod);
      LOG.trace("Done sorting Episodes for="+currentkey);
-     if(EpisodeSortMethod.equals("PloxeeTV_MetadataCalls_GetSeasonNumber")&&ShowSeasons){
+     if(EpisodeSortMethod.equals("sagediamond_MetadataCalls_GetSeasonNumber")&&ShowSeasons){
      SeasonHandler.BuildSeasonHashMap(Seasonsorted,String.format("%02d",i)+"&&"+currentkey);
-    presorted.put(String.format("%02d",i)+"&&"+currentkey,sagex.api.Database.GroupByMethod(Seasonsorted,"PloxeeTV_MetadataCalls_GetEpisodeTitle"));
+    presorted.put(String.format("%02d",i)+"&&"+currentkey,sagex.api.Database.GroupByMethod(Seasonsorted,"sagediamond_MetadataCalls_GetEpisodeTitle"));
 
      }
 
 
      else if(ShowDividers){
      LOG.trace("Show Dividers on go ahead and get them");
-      presorted.put(String.format("%02d",i)+"&&"+currentkey,sagex.api.Database.GroupByMethod(Dividers.AddDividers(Seasonsorted,EpisodeSortMethod),"PloxeeTV_MetadataCalls_GetEpisodeTitle"));}
+      presorted.put(String.format("%02d",i)+"&&"+currentkey,sagex.api.Database.GroupByMethod(Dividers.AddDividers(Seasonsorted,EpisodeSortMethod),"sagediamond_MetadataCalls_GetEpisodeTitle"));}
      else{
      LOG.trace("Show Dividers off just add sorted list without dividers");
-     presorted.put(String.format("%02d",i)+"&&"+currentkey,sagex.api.Database.GroupByMethod(Seasonsorted,"PloxeeTV_MetadataCalls_GetEpisodeTitle"));}
+     presorted.put(String.format("%02d",i)+"&&"+currentkey,sagex.api.Database.GroupByMethod(Seasonsorted,"sagediamond_MetadataCalls_GetEpisodeTitle"));}
 
       i++;
       LOG.info("CurrentKeyAdded="+currentkey);
@@ -115,7 +115,7 @@ public class Groups {
      
       Long Time2 = System.currentTimeMillis()-Time;
       LOG.debug("Done getting datafiles. Grouping/Sorting/Filter done in "+Time2+"ms");
-     return  sagex.api.Database.Sort(presorted, false,"PloxeeTV_SortMethods_GetFinalSortMethod");
+     return  sagex.api.Database.Sort(presorted, false,"sagediamond_SortMethods_GetFinalSortMethod");
 
 
     }
@@ -137,7 +137,7 @@ public class Groups {
 
    for(Object curr:currshows){
      if(!Dividers.IsDivider(curr)){
-   String currseason = MetadataCalls.GetSeasonNumberPad(curr);
+   String currseason = sagediamond.MetadataCalls.GetSeasonNumberPad(curr);
    if(!Seasons.contains(currseason)){
    Seasons.add(currseason);}}
    }
@@ -152,10 +152,15 @@ public class Groups {
 
    public static String GetFileTypes(){
    String Types = "L";
-      if(Boolean.parseBoolean(sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"ImportedTV","true"))||Boolean.parseBoolean(sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"Movies","true"))){
-         Types = "VDB"+Types;}
-   if(Boolean.parseBoolean(sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"RecordedTV","true"))){
-   Types = "T"+Types;}
+      if(Boolean.parseBoolean(sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"IncludeImportedTV","true"))||Boolean.parseBoolean(sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"IncludeVideos","true"))){
+         Types = Types+"V";}
+    if(Boolean.parseBoolean(sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"IncludeDVD","true"))){
+   Types=Types+"D"; }
+   if(Boolean.parseBoolean(sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"IncludeBluRay","true"))){
+    Types=Types+"B"; }
+   if(Boolean.parseBoolean(sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"IncludeRecordedTV","true"))){
+   Types = Types+"T";}
+
    LOG.info("Type of videos = "+Types);
    return Types;
    }
@@ -166,10 +171,10 @@ public class Groups {
 
   public static HashMap<String,Vector> GetPlayonFiles(){
   Object[] AllPlayonTV=sagex.api.MediaFileAPI.GetMediaFiles("TVDBL");
-  AllPlayonTV=(Object[]) sagex.api.Database.FilterByBoolMethod(AllPlayonTV,"PloxeeTV_MetadataCalls_IsMediaTypeTV", true);
-  AllPlayonTV = (Object[]) sagex.api.Database.FilterByBoolMethod(AllPlayonTV,"PloxeeTV_MetadataCalls_IsPlayonFile", true);
+  AllPlayonTV=(Object[]) sagex.api.Database.FilterByBoolMethod(AllPlayonTV,"sagediamond_MetadataCalls_IsMediaTypeTV", true);
+  AllPlayonTV = (Object[]) sagex.api.Database.FilterByBoolMethod(AllPlayonTV,"sagediamond_MetadataCalls_IsPlayonFile", true);
   AllPlayonTV = (Object[]) sagex.api.Database.SortLexical(AllPlayonTV,false,SortMethods.GetMainSortMethod());
-  HashMap<String,Vector> tester = (HashMap<String,Vector>) sagex.api.Database.GroupByArrayMethod(AllPlayonTV, "PloxeeTV_MetadataCalls_GetMediaTitle");
+  HashMap<String,Vector> tester = (HashMap<String,Vector>) sagex.api.Database.GroupByArrayMethod(AllPlayonTV, "sagediamond_MetadataCalls_GetMediaTitle");
   return tester;
   }
 
