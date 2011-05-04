@@ -232,7 +232,8 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
 ||Delay Movies||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||_delays the display of the posters to speed the scrolling of the categories_||
 ||Posters on Bottom||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||_delays the display of the posters to speed the scrolling of the categories_||
 ||Customize View||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||_see below_||
-||Info Fade||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||_see below_||
+||Diamond Views||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||_see below_||
+||Info Options||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||_see below_||
 ||Option||Wall||Cover||List||Cat||360||SW||
 
 
@@ -272,6 +273,9 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
       * !SideWays Flow
         * Less Posters - display less posters to improve speed - on - off
         * Show Title - display the title below each poster - on - off
+    * Diamond Views
+      * This option will display a submenu to allow you to jump to any other Custom or Default Diamond View
+      * The submenu will display an example screen for each view which can be customized
     * Info Options - this option will display a full or part screen info view when you "pause" on a movie for the specified delay - see options
       * Auto Fade - toggles this feature - on - off
       * Delay in MS to fade - 5000 (5 seconds) by default
