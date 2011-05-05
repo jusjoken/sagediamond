@@ -68,7 +68,7 @@ public class Groups {
 
      if(FilterMethod.equals("none")||FilterMethod.equals("GettingFiles")){
       Boolean IncludeTV=GetPropertyBoolean("IncludeTV","true");
-      Boolean IncludeMovies=GetPropertyBoolean("IncludeTV","true");
+      Boolean IncludeMovies=GetPropertyBoolean("IncludeMovies","true");
       Object[] AllTV=null;
       Object[] AllMovies=null;
      
