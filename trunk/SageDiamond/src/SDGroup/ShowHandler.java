@@ -35,36 +35,38 @@ public class ShowHandler extends GroupHandler {
     }
 
 
-    public static Boolean HasShowPoster(HashMap<String,Vector> CurrShows){
-    Object Episode=GetFirstEpisode(CurrShows);
-    return phoenix.api.HasFanartPoster(Episode)||sagex.api.MediaFileAPI.HasAnyThumbnail(Episode);}
+//    public static Boolean HasShowPoster(HashMap<String,Vector> CurrShows){
+//    Object Episode=GetFirstEpisode(CurrShows);
+//    return phoenix.api.HasFanartPoster(Episode)||sagex.api.MediaFileAPI.HasAnyThumbnail(Episode);}
 
     public static Object GetShowPoster(HashMap<String,Vector> CurrShows,boolean ShowsFocused){
     Object Episode = GetFirstEpisode(CurrShows);
-    String ArtifactType = "tv";
-    if(!MetadataCalls.IsMediaTypeTV(Episode)){
-    ArtifactType = "movie";}
-    if(phoenix.api.HasFanartPoster(Episode)){
-    if(ShowsFocused){
-    return phoenix.fanart.GetFanartArtifact(Episode,ArtifactType,null,"poster",null,new HashMap<String,String>());
+    return sagediamond.FanartCaching.GetCachedFanart(Episode, ShowsFocused, "Poster");
+
+//    String ArtifactType = "tv";
+//    if(!MetadataCalls.IsMediaTypeTV(Episode)){
+//    ArtifactType = "movie";}
+//    if(phoenix.api.HasFanartPoster(Episode)){
+//    if(ShowsFocused){
+//    return phoenix.fanart.GetFanartArtifact(Episode,ArtifactType,null,"poster",null,new HashMap<String,String>());
+//    }
+//    else{
+//    return phoenix.api.GetFanartPoster(Episode);
+//    }}
+//    else if(!MetadataCalls.IsMediaTypeTV(Episode)&&sagex.api.MediaFileAPI.HasAnyThumbnail(Episode)){
+//
+//    return   sagex.api.MediaFileAPI.GetThumbnail(Episode);}
+
+//    else{
+//     return Theme.GetNoPoster();}
     }
-    else{
-    return phoenix.api.GetFanartPoster(Episode);
-    }}
-    else if(!MetadataCalls.IsMediaTypeTV(Episode)&&sagex.api.MediaFileAPI.HasAnyThumbnail(Episode)){
-
-    return   sagex.api.MediaFileAPI.GetThumbnail(Episode);}
-
-    else{
-     return Theme.GetNoPoster();}
-    }
 
 
 
 
-    public static Boolean HasShowBanner(HashMap<String,Vector> CurrShows){
-    Object Episode=GetFirstEpisode(CurrShows);
-    return phoenix.api.HasFanartBanner(Episode);}
+//    public static Boolean HasShowBanner(HashMap<String,Vector> CurrShows){
+//    Object Episode=GetFirstEpisode(CurrShows);
+//    return phoenix.api.HasFanartBanner(Episode);}
 
     public static String GetShowDescription(HashMap<String,Vector> CurrShows){
       Object Episode=GetFirstEpisode(CurrShows);
@@ -73,29 +75,32 @@ public class ShowHandler extends GroupHandler {
 
 
 
-    public static String GetShowBanner(HashMap<String,Vector> CurrShows,boolean ShowsFocused){
+    public static Object GetShowBanner(HashMap<String,Vector> CurrShows,boolean ShowsFocused){
     Object Episode = GetFirstEpisode(CurrShows);
-    if(phoenix.api.HasFanartBanner(Episode)){
-    if(ShowsFocused){
-    return phoenix.fanart.GetFanartArtifact(Episode,"tv",null,"banner",null,new HashMap<String,String>());
-    }
-    else{
-    return phoenix.fanart.GetFanartBanner(Episode);
+    return sagediamond.FanartCaching.GetCachedFanart(Episode, ShowsFocused, "Banner");}
 
-    }}
-    else{
-    return Theme.GetNoPoster().toString();}}
+//    if(phoenix.api.HasFanartBanner(Episode)){
+//    if(ShowsFocused){
+//    return phoenix.fanart.GetFanartArtifact(Episode,"tv",null,"banner",null,new HashMap<String,String>());
+//    }
+//    else{
+//    return phoenix.fanart.GetFanartBanner(Episode);
+//
+//    }}
+//    else{
+//    return Theme.GetNoPoster().toString();}}
 
-    public static String GetShowFanart(HashMap<String,Vector> CurrShows){
+    public static Object GetShowFanart(HashMap<String,Vector> CurrShows){
     Object Episode = GetFirstEpisode(CurrShows);
-    String ArtifactType = "tv";
-      if(!MetadataCalls.IsMediaTypeTV(Episode)){
-    ArtifactType = "movie";}
-    if(phoenix.api.HasFanartBackground(Episode)){
-    return phoenix.fanart.GetFanartArtifact(Episode,ArtifactType,null,"background",null,new HashMap<String,String>());
-    }
-    else{
-    return DefaultFanart;}}
+    return sagediamond.FanartCaching.GetCachedFanart(Episode, Boolean.TRUE, "Background");}
+//    String ArtifactType = "tv";
+//      if(!MetadataCalls.IsMediaTypeTV(Episode)){
+//    ArtifactType = "movie";}
+//    if(phoenix.api.HasFanartBackground(Episode)){
+//    return phoenix.fanart.GetFanartArtifact(Episode,ArtifactType,null,"background",null,new HashMap<String,String>());
+//    }
+//    else{
+//    return DefaultFanart;}}
 
     public static int GetShowEpisodeCount(HashMap<String,Vector> CurrShows){
     int ShowCount = 0;

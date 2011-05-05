@@ -36,7 +36,7 @@ public class FolderExclusion {
         return rest;
     }
 
-    public static ArrayList<Object> RunFolderFilter(Object[] MediaFiles, String ViewName) {
+    public static Object[] RunFolderFilter(Object[] MediaFiles, String ViewName) {
         Map<String, Boolean> filters = GetAllFolderRestrictions(ViewName);
         Set Restrictions = filters.keySet();
         Boolean NeedAdder = filters.values().contains(true);
@@ -65,7 +65,7 @@ public class FolderExclusion {
                 }
             }
         }
-        return returnarray;
+        return returnarray.toArray();
 
     }
 
