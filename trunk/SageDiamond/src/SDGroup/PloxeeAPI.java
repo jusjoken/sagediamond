@@ -28,7 +28,7 @@ public class PloxeeAPI {
 
     LOG.info("Logger created successfully!");
     SortMethods.PropertyAdder=PropertyAdder;
-    SortMethods.PropertyPrefix=SortMethods.PropertyDefault+PropertyAdder;
+    SortMethods.PropertyPrefix=SortMethods.PropertyDefault+PropertyAdder+"/";
 //    LOG.info("Loading Theme");
 //    ThemeProperties.LoadThemeProperties();
 //    Theme.SetTheme();
