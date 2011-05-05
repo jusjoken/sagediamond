@@ -3,11 +3,11 @@
  * and open the template in the editor.
  */
 
-package PloxeeTV;
+package SDGroup;
 
-import PloxeeTV.*;
-import PloxeeTV.MetadataCalls;
-import PloxeeTV.SeasonHandler;
+import SDGroup.*;
+import SDGroup.MetadataCalls;
+import SDGroup.SeasonHandler;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -41,6 +41,22 @@ public class Groups {
 //
 //    }
 
+    public static void main(String[] args){
+    Object[] Test=(Object[]) GetAllTVByTitle("Test","GettingFiles",null,null);
+      Test = (Object[]) sagex.api.Database.SortLexical(Test,false,SortMethods.GetMainSortMethod());
+
+      for(Object Curr:Test){
+      System.out.println("Curr="+sagex.api.MediaFileAPI.GetMediaTitle(Curr));
+
+      }
+        System.out.println("Test Size"+Test.length);
+
+        Object tester =sagex.api.Database.GroupByArrayMethod(Test,"sagediamond_MetadataCalls_GetMediaTitle");
+
+    System.out.println("done"+tester.getClass());
+   
+
+    }
     public static Object GetAllTVByTitle(String PropertyAdder){
     return GetAllTVByTitle(PropertyAdder,"none","none",null);}
 
@@ -59,13 +75,14 @@ public class Groups {
      if(!Boolean.parseBoolean(sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"IncludeImportedTV","true"))){
       LOG.debug("Not Including ImportedTV filterting them out");
      AllTV=(Object[]) sagex.api.Database.FilterByBoolMethod(AllTV,"sagediamond_MetadataCalls_IsImportedTV", false);}
-//     if(Boolean.parseBoolean(sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"ImportedTV","true"))&&!Boolean.parseBoolean(sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"RecordedTV","true"))){
-//     AllTV=(Object[]) sagex.api.Database.FilterByBoolMethod(AllTV,"PloxeeTV_MetadataCalls_IsRecordedTV", false);}
+     if(Boolean.parseBoolean(sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"ImportedTV","true"))&&!Boolean.parseBoolean(sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"RecordedTV","true"))){
+     AllTV=(Object[]) sagex.api.Database.FilterByBoolMethod(AllTV,"PloxeeTV_MetadataCalls_IsRecordedTV", false);}
      if(!Boolean.parseBoolean(sagex.api.Configuration.GetProperty(SortMethods.PropertyPrefix+"IncludeRecordedTV","true"))){
       AllTV=(Object[]) sagex.api.Database.FilterByBoolMethod(AllTV,"sagediamond_MetadataCalls_IsRecordedTV", false);}
      if(!IsIncludingPlayon()){
       LOG.debug("Not Including Playon filterting them out");
      AllTV = (Object[]) sagex.api.Database.FilterByBoolMethod(AllTV,"sagediamond_MetadataCalls_IsPlayonFile", false);}
+     
      if(FilterMethod.equals("GettingFiles")){
      return AllTV;}
      }
@@ -79,7 +96,7 @@ public class Groups {
      Dividers.SageClass=AllTV[0].getClass();
      AllTV = (Object[]) sagex.api.Database.SortLexical(AllTV,false,SortMethods.GetMainSortMethod());
      HashMap<String,Vector> tester = (HashMap<String,Vector>) sagex.api.Database.GroupByArrayMethod(AllTV, "sagediamond_MetadataCalls_GetMediaTitle");
-   
+    
      Iterator keys = tester.keySet().iterator();
      String EpisodeSortMethod =SortMethods.GetEpisodeSortMethod();
      LOG.info("Episode Sort Method="+EpisodeSortMethod);
@@ -115,7 +132,7 @@ public class Groups {
      
       Long Time2 = System.currentTimeMillis()-Time;
       LOG.debug("Done getting datafiles. Grouping/Sorting/Filter done in "+Time2+"ms");
-     return  sagex.api.Database.Sort(presorted, false,"sagediamond_SortMethods_GetFinalSortMethod");
+     return  sagex.api.Database.Sort(presorted, false,"SDGroup_SortMethods_GetFinalSortMethod");
 
 
     }

@@ -3,9 +3,9 @@
  * and open the template in the editor.
  */
 
-package PloxeeTV;
+package SDGroup;
 
-import PloxeeTV.*;
+import SDGroup.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

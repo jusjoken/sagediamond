@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package PloxeeTV;
+package SDGroup;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -28,7 +28,7 @@ public class ClassFromString {
 	            /*
 	             * Step 3: Load the class
 	             */
-	            Class myClass = PloxeeTV.SortMethods.class;
+	            Class myClass = SDGroup.SortMethods.class;
         try {
             /*
              *Step 4: create a new instance of that class
@@ -74,7 +74,7 @@ public class ClassFromString {
 	               /*
 	             * Step 3: Load the class
 	             */
-	            Class myClass = PloxeeTV.MetadataCalls.class;
+	            Class myClass = SDGroup.MetadataCalls.class;
 
 	            /*
 	             *Step 4: create a new instance of that class

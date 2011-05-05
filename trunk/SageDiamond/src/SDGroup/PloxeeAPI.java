@@ -3,12 +3,11 @@
  * and open the template in the editor.
  */
 
-package PloxeeTV;
+package SDGroup;
 
 
 import java.util.HashMap;
-import sagex.util.Log4jConfigurator;
-import sagex.util.Log4jLog;
+
 import sun.rmi.runtime.Log;
  import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -16,7 +15,7 @@ import org.apache.log4j.PropertyConfigurator;
  *
  * @author SBANTA
  */
-public class api {
+public class PloxeeAPI {
 
     public static Logger LOG=null;
 
@@ -24,16 +23,17 @@ public class api {
 
     public static void Load(String PropertyAdder){
 //    Log4jConfigurator.configureQuietly("ploxeetv", this.getClass().getClassLoader());
+     LOG = Logger.getLogger(PloxeeAPI.class);
     PropertyConfigurator.configure("plugins/SageDiamond/SageDiamond.log4j.properties");
-    LOG = Logger.getLogger(api.class);
+
     LOG.info("Logger created successfully!");
-//    SortMethods.PropertyAdder=PropertyAdder;
-//    SortMethods.PropertyPrefix=SortMethods.PropertyDefault+PropertyAdder;
+    SortMethods.PropertyAdder=PropertyAdder;
+    SortMethods.PropertyPrefix=SortMethods.PropertyDefault+PropertyAdder;
 //    LOG.info("Loading Theme");
 //    ThemeProperties.LoadThemeProperties();
 //    Theme.SetTheme();
 //    LOG.info("Done loading Theme");
-   
+//
 
    }
 
