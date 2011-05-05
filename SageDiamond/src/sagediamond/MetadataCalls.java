@@ -29,6 +29,19 @@ public class MetadataCalls {
         return sagex.api.ShowAPI.GetShowSeasonNumber(MediaObject);
     }
 
+
+       public static String GetEpisodeTitle(Object MediaObject){
+      if(MediaObject.getClass().equals(SDGroup.Dividers.SageClass))
+	{
+       String Title  = sagex.api.ShowAPI.GetShowEpisode(MediaObject);
+       if(Title.equals("")){
+		return sagex.api.MediaFileAPI.GetMediaFileMetadata(MediaObject, "EpisodeTitle");}
+       return Title;
+	}
+      else{
+       return MediaObject.toString();}}
+
+
     // sagediamond_MetadataCalls_DisplaySeasonEpisode
     public static String DisplaySeasonEpisode(Object MediaObject, String Property) {
     	if(Property.equals("S1E01")) {

@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package PloxeeTV;
+package SDGroup;
 
 import java.io.File;
 
@@ -15,6 +15,7 @@ public class ThemeObject {
 
 
   private File WallBackground;
+
   private File PosterBackground;
   private File FlowBackground;
   private File ListBackground;

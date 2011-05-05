@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package PloxeeTV;
+package SDGroup;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

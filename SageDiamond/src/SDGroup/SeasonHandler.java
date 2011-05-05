@@ -3,9 +3,9 @@
  * and open the template in the editor.
  */
 
-package PloxeeTV;
+package SDGroup;
 
-import PloxeeTV.*;
+import SDGroup.*;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;

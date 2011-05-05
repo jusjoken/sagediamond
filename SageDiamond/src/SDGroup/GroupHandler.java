@@ -3,10 +3,10 @@
  * and open the template in the editor.
  */
 
-package PloxeeTV;
+package SDGroup;
 
 
-import PloxeeTV.*;
+import SDGroup.*;
 import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
@@ -20,9 +20,11 @@ import java.util.Vector;
 public class GroupHandler {
 
 
+
     public static Object GetGroupName(GroupObject Current){
     return Current.getName();}
 
+    
     public static Object GetGroupShows(GroupObject Current){
     return Current.getShows();}
 
