@@ -44,14 +44,14 @@ public class GroupBuilder {
     public static List<GroupObject> GetAllVideosForGroup(String PropertyAdder,String Method,String Folder){
      ArrayList<GroupObject> Grouped=new ArrayList<GroupObject>();
 //     Method = "PloxeeTV_MetadataCalls_"+Method;
-   Object[] AllCurrentFiles = (Object[]) Groups.GetAllTVByTitle(PropertyAdder, "GettingFiles", Folder,null);
+   Object[] AllCurrentFiles = (Object[]) Groups.GetAllVidsByTitle(PropertyAdder, "GettingFiles", Folder,null);
    HashMap<String,Object> Cats= (HashMap<String, Object>) sagex.api.Database.GroupByMethod(AllCurrentFiles,Method);
     Iterator AllCats = Cats.keySet().iterator();
     while(AllCats.hasNext()){
     GroupObject Group=new GroupObject();
     Object CurrentCategory=AllCats.next();
     LOG.debug("Getting and building group="+CurrentCategory);
-    HashMap<String,HashMap<String,Vector>> GroupedShows =(HashMap<String, HashMap<String, Vector>>) Groups.GetAllTVByTitle(PropertyAdder,Method,CurrentCategory,AllCurrentFiles);
+    HashMap<String,HashMap<String,Vector>> GroupedShows =(HashMap<String, HashMap<String, Vector>>) Groups.GetAllVidsByTitle(PropertyAdder,Method,CurrentCategory,AllCurrentFiles);
     if(GroupedShows.size()>0){
     LOG.debug("Done building group "+CurrentCategory+ "Go Ahead and Build Group Object");
     Group.setName(CurrentCategory);

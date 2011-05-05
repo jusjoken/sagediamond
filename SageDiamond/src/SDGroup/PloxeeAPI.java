@@ -55,7 +55,7 @@ public class PloxeeAPI {
 
     public static Object GetAllVideosGrouped(String PropertyAdder,String Method){
     if(Method.equals("none")){
-    return Groups.GetAllTVByTitle(PropertyAdder);}
+    return Groups.GetAllVidsByTitle(PropertyAdder);}
     else{
     return GroupBuilder.GetAllVideosGrouped(PropertyAdder, Method);}}
 
