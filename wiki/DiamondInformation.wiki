@@ -275,7 +275,9 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
         * Show Title - display the title below each poster - on - off
     * Diamond Views
       * This option will display a submenu to allow you to jump to any other Custom or Default Diamond View
-      * The submenu will display an example screen for each view which can be customized
+      * The submenu will display an example screen for each view
+      * If "Replace video with Diamond Movies" is On then "Manage Views" will be offered and take you to the "Custom Views Setup"
+  ||[http://dl.dropbox.com/u/7826058/Diamond/MoviesDiamonViewsJumpToOption.JPG http://dl.dropbox.com/u/7826058/Diamond/MoviesDiamonViewsJumpToOption-ppc.JPG] _Jump To_||[http://dl.dropbox.com/u/7826058/Diamond/MoviesDiamonViewsJumpToList.JPG http://dl.dropbox.com/u/7826058/Diamond/MoviesDiamonViewsJumpToList-ppc.JPG] _Diamond Views_|| _click to view_ ||
     * Info Options - this option will display a full or part screen info view when you "pause" on a movie for the specified delay - see options
       * Auto Fade - toggles this feature - on - off
       * Delay in MS to fade - 5000 (5 seconds) by default
