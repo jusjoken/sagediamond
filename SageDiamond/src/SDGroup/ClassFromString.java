@@ -74,7 +74,7 @@ public class ClassFromString {
 	               /*
 	             * Step 3: Load the class
 	             */
-	            Class myClass = SDGroup.MetadataCalls.class;
+	            Class myClass = sagediamond.MetadataCalls.class;
 
 	            /*
 	             *Step 4: create a new instance of that class
