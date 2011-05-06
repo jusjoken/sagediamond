@@ -11,6 +11,32 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
 
 = Details =
 
+== New in Version 3.30 ==
+
+  * Works with SageTV 7.1.7 
+  
+  * Main Menu Widget 
+    * Extended Weather widget enhanced
+  * TV/Recordings Views
+    * Bypass Single Seasons Options added (Issue 160)
+    * Show minimal recording options is now a seperate option for the TV/Recording list and the episodes (Issue 133)
+    * Enter=Play option added to the Episode Lists
+    * Simplified view enhancements
+      * New option to show more rows (11 rows instead of 5)
+      * Can now toggle off the New/Last/Next in the Diamond Info Panel (Issue 157)
+  * Movies/Video View
+    * NEW - Sideways Flow view which offers a vertically scrolling wall type view
+    * Cover Flow - new option to display the posters on the bottom of the screen
+    * Jump to Diamond Views from any other Diamond Views using the new Diamond Views option on the Options panel
+    * Info Options - new option to show the Diamond Info Fade screen when the Info button is pressed
+    * Wall Flow - new option to show the title below each poster (Issue 153) 
+    * Custom Views can now be renamed in addition to changing their type (Issue 174)
+  * Other
+    * SageTV default icons are now themed for various media types (Issue 180)
+    * Fixed 
+      * issue 114, issue 118, issue 148, issue 149, issue 150, issue 151, issue 154, issue 155, issue 156, issue 157, issue 159, issue 160, issue 161, issue 164, issue 165, issue 167, issue 169, issue 175, issue 179, issue 180, issue 181, issue 182, issue 184, issue 185, issue 187
+    
+    
 == New in Version 3.20 ==
 
   * Works with SageTV 7.1.5 
@@ -91,10 +117,11 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
             * Show New, Last, Next - on - off
             * New, Last, Next Shows S/E - on - off
             [http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfoSE.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-DiamondInfoSE-ppc.jpg] _click to view_
-        * Season/Episode Format - !S1E01 - !S01E01 - !E01 - !1x01 - !1 - Row Number - None
+        * Season/Episode Format - !S1E01 - !S01E01 - E01 - 1x01 - 1 - Row Number - None
         * Season/Episode Separator - "-" - "::" - "." - ")" - "|" - None
       * Count/Watched Format - (www/rrr) - (rrr) - Recordings:rrr - Recordings:rrr Watched:www - Blank
       * Show Seasons View - on - off
+      * Bypass Single Seasons - on - off
       * Show Diamond Play Options - if enabled this will display a menu to play Next, Newest, All from Next or All - on - off
         * press Play again to "Play Next"
         * press FFwd to "Play Newest"
@@ -103,6 +130,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
       * Season Popup - display the Season List in a popup menu - on - off
       [http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-SeasonPopup.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-SeasonPopup-ppc.jpg] _click to view_
       * Show Minimal Recording Icons - on - off
+        * affects TV/Recordings List separately from group items
       * Switch to Simplified View - a Series Banner driven clean approach to TV/Recordings
     * Filters - select from the following filter options....
     [http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-Filters.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-Filters-ppc.jpg] _click to view_
@@ -121,19 +149,20 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
   * Episode View Options - while on the episode view select Options
     * Select Diamond Options - from here change...
       * BG Fanart - on - off
-      * Show Minimal Recording Icons - on - off
       * Hide Title in title Grouping - on - off
       * Show Season/Episode Number - on - off
       * Season/Episode Format - !S1E01 - !S01E01 - !E01 - !1x01 - !1 - Row Number - None
       * Season/Episode Separator - "-" - "::" - "." - ")" - "|" - None
       * Season/Episode Location - Before Title - After Title - Above Markers (only works if Minimal Recording Icons = on)
+      * Show Minimal Recording Icons - on - off
       * Show Airing Date
         * only available if Minimal Recording Icons = on and S/E Location is not above Markers
         * can be set to "Original Airdate" or "Recorded Date"
+      * Enter=Play - pressing Enter will simulate pressing Play
     * Sort - look here to set the sort to various options including Season/Episode and Original Air Date
       [http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-EpisodeSort.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-EpisodeSort-ppc.jpg] _click to view_
 === Simplified View===
-  [http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-SimplifiedView.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Recordings-TV-View-SimplifiedView-small.jpg] _click to view_
+  ||[http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-SimplifiedView.JPG http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-SimplifiedView-ppc.JPG] _Default rows_||[http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-SimplifiedView_more.jpg http://dl.dropbox.com/u/7826058/Diamond/Recordings-TV-View-SimplifiedView_more-ppc.jpg] _More rows_|| _click to view_ ||
   * a Series Banner driven clean approach to TV/Recordings
     * Diamond Options - select Options and then Diamond Options - from here change...
       * Fanart Options
@@ -142,6 +171,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
         * Fanart Thumbnails - affects the episode view - on - off
         * Show Larger Thumbnails - affects the episode view - on - off
       * Series Info Options
+        * Show New, Last, Next - on - off
         * New, Last, Next Shows S/E - on - off
         * Season/Episode Format - !S1E01 - !S01E01 - !E01 - !1x01 - !1 - Row Number - None
         * Show Poster - on - off
@@ -153,7 +183,9 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
         * press FFwd to "Play Newest"
         * press Stop to close the options menu
       * Season Popup - display the Season List in a popup menu - on - off
+      * Show More Rows - will display 11 rows vs. default 5 - on - off
       * Show Minimal Recording Icons - on - off
+      * Enter=Play - pressing Enter will simulate pressing Play
       * Switch to Standard View
 
   * *Note:* options are now saved per individual Recordings/TV view.
@@ -162,7 +194,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
 
 === Cover Flow ===
     * movie poster driven view centered on the screen for quick selection. 
-  [http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieCoverFlowView.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieCoverFlowView-ppc.jpg] _click to view_
+  ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieCoverFlowView.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MovieCoverFlowView-ppc.jpg] _Default_||[http://dl.dropbox.com/u/7826058/Diamond/MovieCoverFlowViewBottom.jpg http://dl.dropbox.com/u/7826058/Diamond/MovieCoverFlowViewBottom-ppc.jpg] _Posters on Bottom_|| _click to view_ ||
     
 === Wall Flow ===
     * a wall of Movie Posters to select from. 
@@ -180,24 +212,29 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
     * this is a Genre type view based on the Xbox 360 Netflix implementation........
   ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/Movie360Flow.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Movie360Flow-ppc.jpg] _No Info_||[http://babgvant.com/downloads/pluckyhd/DiamondImages/Movie360FlowWithInfoBoxOn.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Movie360FlowWithInfoBoxOn-ppc.jpg] _Show Info_|| _click to view_ ||
 
+=== !SideWays Flow ===
+    * a vertical scrolling wall of Movie Posters with movie details on the right. 
+  ||[http://dl.dropbox.com/u/7826058/Diamond/MovieSideWaysFlow.JPG http://dl.dropbox.com/u/7826058/Diamond/MovieSideWaysFlow-ppc.JPG] _Default view_||[http://dl.dropbox.com/u/7826058/Diamond/MovieSideWaysFlow_lessPosters.JPG http://dl.dropbox.com/u/7826058/Diamond/MovieSideWaysFlow_lessPosters-ppc.JPG] _Less Posters_|| _click to view_ ||
+
 
 === General Options for Flow Views ===
 
-||Option||Wall||Cover||List||Cat||360||
-||Folder Filters||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||_see below_||
-||Filters||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||_see below_||
-||Sort||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||_see below_||
-||Enter=Play||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||_pressing Enter will simulate pressing Play_||
-||BG Fanart||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||_toggles Background Fanart off and on_||
-||ABC Jumpbar||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||_see below_||
-||Show Info Box||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||_show the Diamond Info panel on the right side_||
-||Sub Categories||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||_include subcategories_||
-||Small Fanart BG||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||_display a small window above the posters containing the background fanart_||
-||Delay Movies||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||_delays the display of the posters to speed the scrolling of the categories_||
-||Less Posters||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||_display less posters to improve speed_||
-||Customize View||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||_see below_||
-||Info Fade||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||_see below_||
-||Option||Wall||Cover||List||Cat||360||
+||Option||Wall||Cover||List||Cat||360||SW||
+||Folder Filters||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||_see below_||
+||Filters||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||_see below_||
+||Sort||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||_see below_||
+||Enter=Play||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||_pressing Enter will simulate pressing Play_||
+||BG Fanart||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||_toggles Background Fanart off and on_||
+||ABC Jumpbar||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||_see below_||
+||Show Info Box||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||_show the Diamond Info panel on the right side_||
+||Sub Categories||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||_include subcategories_||
+||Small Fanart BG||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||_display a small window above the posters containing the background fanart_||
+||Delay Movies||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||_delays the display of the posters to speed the scrolling of the categories_||
+||Posters on Bottom||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||_delays the display of the posters to speed the scrolling of the categories_||
+||Customize View||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/no.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||_see below_||
+||Diamond Views||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||_see below_||
+||Info Options||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||http://babgvant.com/downloads/pluckyhd/DiamondImages/yes.png||_see below_||
+||Option||Wall||Cover||List||Cat||360||SW||
 
 
     * Folder Filters - here you can include or exclude specified Movie Folders
@@ -224,11 +261,22 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
       * Press "down" in this view to get the [http://babgvant.com/downloads/pluckyhd/DiamondImages/ABCScrollBar.jpg ABC Jumpbar] to Jump to the first movie starting with a selected letter.
       [http://babgvant.com/downloads/pluckyhd/DiamondImages/ABCScrollBar.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/ABCScrollBar-ppc.jpg] _click to view_
     * Customize View
-      * Right Side - what to display on the right side of the title in the movie list - Blank - Ratings - Year
-      * Show Posters - turn Off to remove the verticle poster list (may help performance on slower systems/extenders)
-      * Wrap List - on - off - if on the list will loop back to the begin/end
-      * Show Row Number - on - off - displays the row number before the movie title
-    * Info Fade - this option will display a full or part screen info view when you "pause" on a movie for the specified delay - see options
+      * List Flow
+        * Right Side - what to display on the right side of the title in the movie list - Blank - Ratings - Year
+        * Show Posters - turn Off to remove the verticle poster list (may help performance on slower systems/extenders)
+        * Wrap List - on - off - if on the list will loop back to the begin/end
+        * Show Row Number - on - off - displays the row number before the movie title
+      * Wall Flow
+        * Show Info Box - on - off
+        * Less Posters - display less posters to improve speed - on - off
+        * Show Title - display the title below each poster - on - off
+      * !SideWays Flow
+        * Less Posters - display less posters to improve speed - on - off
+        * Show Title - display the title below each poster - on - off
+    * Diamond Views
+      * This option will display a submenu to allow you to jump to any other Custom or Default Diamond View
+      * The submenu will display an example screen for each view which can be customized
+    * Info Options - this option will display a full or part screen info view when you "pause" on a movie for the specified delay - see options
       * Auto Fade - toggles this feature - on - off
       * Delay in MS to fade - 5000 (5 seconds) by default
       * Fade Style 
@@ -236,6 +284,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
         * Slide Panel - Info Panel will slide out from the right side (partial screen)
       * !FullScreen Fanart - on for Fullscreen background or off for background in a window
       * !SplitScreen - on - off
+      * Info Shows Diamond Fade - if on the Info button will display the Diamond Info screen - on - off
 ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackground.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackground-ppc.jpg] _FS Fanart On_ ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackgroundOff.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeBackgroundOff-ppc.jpg] _FS Fanart Off_ ||
 ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeSplitScreen.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeSplitScreen-ppc.jpg] _Split Screen_ ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeSlideInfo.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/MoviesInfoFadeSlideInfo-ppc.jpg] _Slide Info_ || _click to view_ ||
 
@@ -244,7 +293,7 @@ Also check out the [http://code.google.com/p/sagediamond/wiki/DiamondFAQ?ts=1299
 ==Main Menu Mods==
 === Widgets ===
   [http://babgvant.com/downloads/pluckyhd/DiamondImages/WidgetControlPanel.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/WidgetControlPanel-small.jpg] _click to view_
-    ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/Widgets1.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Widgets1-ppc.jpg] _Sample 1_ ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/Widgets2.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Widgets2-ppc.jpg] _Sample 2_ || _click to view_ ||
+    ||[http://babgvant.com/downloads/pluckyhd/DiamondImages/Widgets1.jpg http://babgvant.com/downloads/pluckyhd/DiamondImages/Widgets1-ppc.jpg] _Sample 1_ ||[http://dl.dropbox.com/u/7826058/Diamond/Widgets2.jpg http://dl.dropbox.com/u/7826058/Diamond/Widgets2-ppc.jpg] _Sample 2_ || _click to view_ ||
     * go to Options from the Main Menu - Diamond Options - Main Menu Widget Control Panel
     * *TIP:* Make sure you set *Show Widgets* to On
     * from here you can...
