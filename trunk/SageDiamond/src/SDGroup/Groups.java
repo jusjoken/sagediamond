@@ -5,16 +5,12 @@
 
 package SDGroup;
 
-import SDGroup.*;
-import SDGroup.MetadataCalls;
-import SDGroup.SeasonHandler;
+
+
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Vector;
 import org.apache.log4j.Logger;
 
@@ -91,8 +87,8 @@ public class Groups {
        //Check for Unscraped Included and filter if needed
      if(!GetPropertyBoolean("IncludeUnScraped","true")){
      LOG.debug("Not Including UnScraped filterting them out");
-     AllTV =(Object[]) sagex.api.Database.FilterByBoolMethod(AllTV, "sagediamond_MetadataCalls_IsPlayonFile", false);
-     AllMovies =(Object[]) sagex.api.Database.FilterByBoolMethod(AllMovies, "sagediamond_MetadataCalls_IsPlayonFile", false);}
+   
+     AllMovies =(Object[]) sagex.api.Database.FilterByMethod(AllMovies, "phoenix_metadata_GetMediaType", "Movie",true);}
 
      //Check for Watch Included and filter if needed
      if(!GetPropertyBoolean("IncludeWatched","true")){
@@ -198,7 +194,7 @@ public class Groups {
 
    for(Object curr:currshows){
    if(!Dividers.IsDivider(curr)){
-   String currseason = MetadataCalls.GetSeasonNumberPad(curr);
+   String currseason = sagediamond.MetadataCalls.GetSeasonNumberPad(curr);
    if(!Seasons.contains(currseason)){
    Seasons.add(currseason);}}
    }
@@ -265,10 +261,10 @@ public class Groups {
   Vector currplay=PlayonTV.get(currkey);
   Vector currtv=AllVids.get(currkey);
   for(Object curr:currplay){
-  String Episode=MetadataCalls.GetEpisodeTitle(curr);
+  String Episode=sagediamond.MetadataCalls.GetEpisodeTitle(curr);
   int NumMatchFound = 0;
      for(Object cuurtv:currtv){
-     String TVEpisode = MetadataCalls.GetEpisodeTitle(cuurtv);
+     String TVEpisode = sagediamond.MetadataCalls.GetEpisodeTitle(cuurtv);
      if(TVEpisode.equals(Episode)){
      NumMatchFound++;}}
   if(NumMatchFound>1){

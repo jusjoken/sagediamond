@@ -128,13 +128,13 @@ public class ShowHandler extends GroupHandler {
 
     public static String GetLastWatched(HashMap<String,Vector> CurrShows){
     Vector Episodes = GetAllShowEpisodes(CurrShows);
-    Object LastWatched =airing.GetLastWatched(Episodes);
-    return airing.GetShowEpisode(LastWatched);}
+    Object LastWatched =sagediamond.airing.GetLastWatched(Episodes);
+    return sagediamond.MetadataCalls.GetEpisodeTitle(LastWatched);}
 
     public static String GetNewestEpisode(HashMap<String,Vector> CurrShows){
     Vector Episodes = GetAllShowEpisodes(CurrShows);
-    Object LastWatched =airing.GetNewestEpisode(Episodes);
-    return airing.GetShowEpisode(LastWatched);}
+    Object LastWatched =sagediamond.airing.GetLastWatched(Episodes);
+    return sagediamond.MetadataCalls.GetEpisodeTitle(LastWatched);}
 
     public static String GetShowCategory(HashMap<String,Vector> CurrShows){
     Object Episodes = GetFirstEpisode(CurrShows);
@@ -152,11 +152,11 @@ public class ShowHandler extends GroupHandler {
 
    public static boolean IsMovie(HashMap<String,Vector> CurrShows){
    Object Episode = GetFirstEpisode(CurrShows);
-   return !MetadataCalls.IsMediaTypeTV(Episode);}
+   return !sagediamond.MetadataCalls.IsMediaTypeTV(Episode);}
 
    public static int GetShowRuntime(HashMap<String,Vector> CurrShows){
    Object Episode = GetFirstEpisode(CurrShows);
-   return MetadataCalls.GetShowDuration(Episode);
+   return sagediamond.MetadataCalls.GetShowDuration(Episode);
    }
 
    public static boolean IsSingleFile(HashMap<String,Vector> CurrShows){
