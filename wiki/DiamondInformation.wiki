@@ -1,4 +1,5 @@
 #summary Information on the use of the Diamond SageTV Mod
+#labels Featured
 = Introduction =
 
 Check here for basic information about what's available in Diamond and how to use various functions.
