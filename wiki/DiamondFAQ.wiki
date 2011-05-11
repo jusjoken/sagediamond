@@ -41,3 +41,12 @@ Look here first to see if your question has already been answered.
 ===A. Absolutely===
   * Testing and user reports indicate Diamond functions well on HD200 and HD300 extenders. Some users have indicated "Ok" performance on HD100's with much of the fanart options disabled. See [http://forums.sagetv.com/forums/showthread.php?p=488552&postcount=1  this SageTV thread] for more info.
   * Diamond versions 3.10 and 3.20 added some options that may improve performance on some extenders such as "Less Posters" on Wall Flow, the new "360 Flow" in 3.20, the Option to hide the Poster in the Diamond Info View in TV/Recordings as well as in the Movie List Flow you can disable the center Poster scroll list.
+  
+==Q. Can I use "Custom" TV views in Diamond?==
+===A. sure - but this is actually a default SageTV feature - JOrton explains below...===
+  * Testing and user reports indicate Diamond functions well on HD200 and HD300 extenders. Some users have indicated "Ok" performance on HD100's with much of the fanart options disabled. See [http://forums.sagetv.com/forums/showthread.php?p=488552&postcount=1  this SageTV thread] for more info.
+  * The default Sagetv has this already built into it. In the main menu if you go TV/Recordings/ you should see "All Recordings", "Current Recordings", "Archived Recordings" and "Recorded Movies" setup by default. When in any of these TV views if you hit esc or "option" button then pick "menu options" you will see some options for the TV views at the bottom of the pop up, like number of views and Rename the "xxxxxx" view.
+  * By default these 4 views are setup but you can have more than this or rename and repurpose them for other uses like "Kid's TV" etc... and then modify the filtering on each view to only include the shows you would like to see, of course this means that the shows have to have enough metadata etc to allow them to be filtered from the rest of your shows.
+  * There currently isn't "folder" level filtering like in the move views so you are limited to using the filters that are availible be default plus any that we added as part of Diamond like the "recorded movies", "imported tv from playon" and "Imported TV" filters. Under catagories you can use the default catagories and the custom "user catagories".
+  * I have my "Archived Recordings" set to only include "Imported TV" so I have all my non recorded shows there and then I renamed it "Imported TV". Based on the number of filter options, catagory filtering and the use of custom user catagories (Sagetv feature) you can do quite a bit.
+  
