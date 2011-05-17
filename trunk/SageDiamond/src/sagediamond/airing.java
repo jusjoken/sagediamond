@@ -1,7 +1,8 @@
 package sagediamond;
 
 import java.util.Arrays;
-
+import java.util.Random;
+        
 import sagex.api.Database;
 import sagex.api.MediaFileAPI;
 import sagex.api.AiringAPI;
@@ -160,7 +161,58 @@ public class airing
 			return LastWatched;	
 		}
 	}
-	
+
+	public static Object GetShowNextPrev(Object MediaObjects, Object CurrentShow, Boolean DirectionNext)
+	/*
+	 * Given an array of Airings will return the Next or Previous episode by AiringDate (in real time).
+	 * Returns Null if Airings not found after or before Current Show. (end or begin of series hit)
+	 * 
+	 * @param MediaObjects - sage MediaFiles, Airings, or Shows Objects in an Array, list, or vector.
+	 * @param CurrentShow - sage MediaFile, Airing, or Show Object.
+	 * @param DirectionNext - true gets Next, false gets Previous.
+	 */
+	{
+                    MediaObjects = Database.Sort(MediaObjects, false, "sagediamond_MetadataCalls_GetOriginalAirDate");
+                    int index = Utility.FindElementIndex(MediaObjects, CurrentShow);
+                    
+                    if(DirectionNext){
+                        if(index >= Utility.Size(MediaObjects)){	
+                                System.out.println("JUSJOKEN: GetShowNextPrev - NEXT returning null");
+                                return null;
+                        }else{
+                                System.out.println("JUSJOKEN: GetShowNextPrev - NEXT returning item (" + (index+1) + ")" );
+                                return Utility.GetElement(MediaObjects, index+1);}
+                    }else{
+                        if(index == 0){	
+                                System.out.println("JUSJOKEN: GetShowNextPrev - PREV returning null");
+                                return null;
+                        }else{
+                                System.out.println("JUSJOKEN: GetShowNextPrev - PREV returning item (" + (index-1) + ")" );
+                                return Utility.GetElement(MediaObjects, index-1);}
+                    }
+	}
+        
+	public static Object GetNextShowRandom(Object MediaObjects)
+	/*
+	 * Given an array of Airings will return a random selection to watch by AiringDate (in real time).
+	 * Returns Null if Airings not found after last watched. (end of series)
+	 * 
+	 * @param MediaObjects - sage MediaFiles, Airings, or Shows Objects in an Array, list, or vector.
+	 */
+	{
+                Object Unwatched = airing.GetShowsFromLastWatched(MediaObjects);
+                if(Utility.Size(Unwatched)== 0){
+                    System.out.println("JUSJOKEN: GetNextShowRandom - No unwatched shows returned");
+                    return null;
+                }else{
+                    //sort the unwatched shows
+                    Random generator = new Random();
+                    int randomIndex = generator.nextInt( Utility.Size(Unwatched) );
+                    System.out.println("JUSJOKEN: GetNextShowRandom - returning item (" + randomIndex + ") of (" + Utility.Size(Unwatched) + ") unwatched items");
+                    return Utility.GetElement(Unwatched, randomIndex);
+                }
+	}
+        
 	public static Object[] GetShowsFromLastWatched(Object Arr)
 	/* 
 	 * given an array of Airings will return a subarray sorted by original airing date 
