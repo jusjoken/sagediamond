@@ -10,11 +10,13 @@ import sagex.UIContext;
 /**
  *
  * @author SBANTA
+ * @author JUSJOKEN
+ * - 9/29/2011 - version number changed to 3.401
  */
 public class api {
 
 
-    public static String Version = "3.31k";
+    public static String Version = "3.401";
 
 
     public static int GetSeasonEpisodeNumber(Object MediaObject) {
