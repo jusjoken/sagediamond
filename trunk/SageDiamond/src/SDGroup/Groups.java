@@ -11,6 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 import org.apache.log4j.Logger;
+import sagediamond.api;
+import sagex.api.Global;
 
 /**
  *
@@ -38,17 +40,24 @@ public class Groups {
 //    }
 
     public static void main(String[] args){
-
-        Object[] Test=(Object[]) GetAllVidsByTitle("Testnman","GettingFiles",null,null);
-   
-        for(Object Curr:Test){
-            System.out.println("Curr="+sagex.api.ShowAPI.GetShowTitle(Curr));
-        }
-        System.out.println("Test Size"+Test.length);
-
-        Object tester =sagex.api.Database.GroupByArrayMethod(Test,"sagediamond_MetadataCalls_GetMediaTitle");
-
-        System.out.println("done"+tester.getClass());
+        api.Load();
+        //PloxeeAPI.TestMe("Testing", "GettingFiles");
+        //PloxeeAPI.TestMe("Testing", "sagediamond_MetadataCalls_GetShowCategory");
+        //PloxeeAPI.TestMe("Testing", "sagediamond_MetadataCalls_GetSeasonNumberPad");
+        PloxeeAPI.TestMe("Testing", "GetShowTitle");
+        
+//        System.out.println("Sage OS: " + Global.GetOS());
+//
+//        Object[] Test=(Object[]) GetAllVidsByTitle("Testnman","GettingFiles",null,null);
+//   
+//        for(Object Curr:Test){
+//            System.out.println("Curr="+sagex.api.ShowAPI.GetShowTitle(Curr));
+//        }
+//        System.out.println("Test Size"+Test.length);
+//
+//        Object tester =sagex.api.Database.GroupByArrayMethod(Test,"sagediamond_MetadataCalls_GetMediaTitle");
+//
+//        System.out.println("done"+tester.getClass());
 
     }
     
@@ -72,6 +81,7 @@ public class Groups {
                 LOG.debug("Including TV getting all movie types.");
                 AllTV=sagex.api.MediaFileAPI.GetMediaFiles(GetFileTypes("TV"));
                 AllTV=(Object[]) sagex.api.Database.FilterByBoolMethod(AllTV,"sagediamond_MetadataCalls_IsMediaTypeTV",true);
+                LOG.debug("TV Size = '" + AllTV.length + "'");
             }
 
             if(IncludeMovies){
@@ -79,11 +89,14 @@ public class Groups {
                 AllMovies=sagex.api.MediaFileAPI.GetMediaFiles(GetFileTypes("Movies"));
             }
             AllMovies=(Object[]) sagex.api.Database.FilterByBoolMethod(AllMovies,"sagediamond_MetadataCalls_IsMediaTypeTV",false);
+            LOG.debug("Movies Size = '" + AllMovies.length + "'");
 
 
             //Check and run Folder Filter if necessary
             AllTV=RunFolderFilter(AllTV,PropertyAdder);
+            LOG.debug("TV Size = '" + AllTV.length + "'");
             AllMovies=RunFolderFilter(AllMovies,PropertyAdder);
+            LOG.debug("Movies Size = '" + AllMovies.length + "'");
 
             //Check for Unscraped Included and filter if needed
             if(!GetPropertyBoolean("IncludeUnScraped","true")){
@@ -122,6 +135,7 @@ public class Groups {
                     Object[] RecordedMovies = (Object[]) sagex.api.Database.FilterByMethod(sagex.api.MediaFileAPI.GetMediaFiles("T"), "UserCategories", "Movie,Film", true );
                     Vector test=sagex.api.Database.DataUnion(AllMovies, RecordedMovies);
                     AllMovies=test.toArray();
+                    LOG.debug("Movies Size = '" + AllMovies.length + "'");
                 }
                 if(!GetPropertyBoolean("IncludePlayonMovies","true")){
                     LOG.debug("Not Including Playon movies filterting them out");
@@ -129,19 +143,20 @@ public class Groups {
                 }
             }
             System.out.println("done");
-            Vector Test=sagex.api.Database.DataUnion(AllMovies,AllTV);
-            LOG.debug("VectorSize="+Test.size());
-            AllVids=Test.toArray();
-
-     
+            //Vector Test=sagex.api.Database.DataUnion(AllMovies,null);
+            //Vector Test=sagex.api.Database.DataUnion(AllTV,null);
+            Vector Test=sagex.api.Database.DataUnion(AllTV,AllMovies);
+            AllVids = Test.toArray();
+            LOG.debug("AllVids Size = '" + AllVids.length + "'");
      
             if(FilterMethod.equals("GettingFiles")){
+                LOG.debug("Returning AllVids Size = '" + AllVids.length + "'");
                 return AllVids;
             }
         }
         else{
 
-            LOG.debug("Building a custom group filter that method");
+            LOG.debug("Building a custom group filter using the method passed in");
             AllVids=(Object[]) sagex.api.Database.FilterByMethod(AllVids,FilterMethod,PassValue,true);
         }
 

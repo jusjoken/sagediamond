@@ -42,15 +42,27 @@ public class GroupBuilder {
     }
 
     public static List<GroupObject> GetAllVideosForGroup(String PropertyAdder,String Method,String Folder){
+        LOG.debug("Method = '" + Method + "' Folder = '" + Folder + "'");
         ArrayList<GroupObject> Grouped=new ArrayList<GroupObject>();
         //     Method = "PloxeeTV_MetadataCalls_"+Method;
         Object[] AllCurrentFiles = (Object[]) Groups.GetAllVidsByTitle(PropertyAdder, "GettingFiles", Folder,null);
-        HashMap<String,Object> Cats= (HashMap<String, Object>) sagex.api.Database.GroupByMethod(AllCurrentFiles,Method);
+        LOG.debug("AllCurrentFiles size = '" + AllCurrentFiles.length + "'");
+        
+        for(Object Curr:AllCurrentFiles){
+            LOG.debug("AllCurrent: = '" + sagex.api.ShowAPI.GetShowTitle(Curr) + "' Curr = '" + Curr + "'");
+        }
+        
+        //HashMap<String,Object> Cats= (HashMap<String, Object>) sagex.api.Database.GroupByMethod(AllCurrentFiles,Method);
+        
+        HashMap<String,Vector> Cats= (HashMap<String, Vector>) sagex.api.Database.GroupByMethod(AllCurrentFiles,Method);
+        LOG.debug("Cats size = '" + Cats.size() + "'");
         Iterator AllCats = Cats.keySet().iterator();
+        Integer counter = 0;
         while(AllCats.hasNext()){
+            counter++;
             GroupObject Group=new GroupObject();
             Object CurrentCategory=AllCats.next();
-            LOG.debug("Getting and building group="+CurrentCategory);
+            LOG.debug("Getting and building group " + counter + " = '" + CurrentCategory + "'");
             HashMap<String,HashMap<String,Vector>> GroupedShows =(HashMap<String, HashMap<String, Vector>>) Groups.GetAllVidsByTitle(PropertyAdder,Method,CurrentCategory,AllCurrentFiles);
             if(GroupedShows.size()>0){
                 LOG.debug("Done building group "+CurrentCategory+ "Go Ahead and Build Group Object");
