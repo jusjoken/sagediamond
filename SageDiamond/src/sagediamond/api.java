@@ -21,17 +21,25 @@ import sagex.UIContext;
 public class api {
 
     public static Logger LOG=null;
+
+    public static void main(String[] args){
+
+        Load();
+    }
     
     //load any SageDiamond settings that need to load at application start
     public static void Load(){
         //initialize the Logging 
+        System.out.println("Load: setting up logger");
         LOG = Logger.getLogger(api.class);
+        System.out.println("Load: setting up logger - 2");
         String log4jfile = "STVs" + File.separator + "SageDiamond" + File.separator + "Configuration" + File.separator + "SageDiamond.log4j.properties";
         String log4jfullpath = sagex.api.Utility.GetWorkingDirectory(new UIContext(sagex.api.Global.GetUIContextName())) + File.separator + log4jfile;
         //check if the log4j property file exists and use defaults if it does not
         Boolean FileExists = (new File(log4jfullpath)).exists();
+        System.out.println("Load: fileExists = '" + FileExists + "'");
         if (FileExists){
-            PropertyConfigurator.configure(log4jfile);
+            PropertyConfigurator.configure(log4jfullpath);
         }else{
             //configure manually
             Properties log4jProps = new Properties();
@@ -43,7 +51,7 @@ public class api {
             log4jProps.put("log4j.appender.SageDiamond.layout.ConversionPattern", "%d{EEE M/d HH:mm:ss.SSS} [%t] %-5p %c - %m%n");
             log4jProps.put("log4j.appender.SageDiamond.MaxBackupIndex", "5");
             log4jProps.put("log4j.appender.SageDiamond.MaxFileSize", "10000KB");
-            log4jProps.put("log4j.appender.Sage.Threshold", "debug");
+            log4jProps.put("log4j.appender.SageDiamond.Threshold", "debug");
             log4jProps.put("log4j.additivity.Sage", "false");
             log4jProps.put("log4j.appender.Sage", "org.apache.log4j.ConsoleAppender");
             log4jProps.put("log4j.appender.Sage.layout", "org.apache.log4j.PatternLayout");

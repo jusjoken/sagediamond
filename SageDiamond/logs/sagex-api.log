@@ -1,6 +1,41 @@
-2011-09-26 13:05:02,912 [Thread-1] INFO  sagex.remote.server.SimpleDatagramClient - Starting Datagram Client on 228.5.6.7:9998
-2011-09-26 13:05:07,915 [Timer-0] INFO  sagex.remote.server.SimpleDatagramClient - Killing Datagram client after timeout
-2011-09-26 13:05:07,916 [main] WARN  sagex.SageAPI - No Remote Provider, using Null API Provider (this is ok some times).
-2011-09-26 13:05:07,916 [main] INFO  sagex.SageAPI - Sage Provider Implementation: sagex.stub.NullSageAPIProvider; null://
-2011-09-26 13:05:07,917 [Thread-1] WARN  sagex.remote.server.SimpleDatagramClient - Shutting Down: socket closed
-2011-09-26 13:05:07,917 [Thread-1] INFO  sagex.remote.server.SimpleDatagramClient - Datagram Client is shutting down
+2011-09-28 13:27:25,183 [Thread-1] INFO  sagex.remote.server.SimpleDatagramClient - Starting Datagram Client on 228.5.6.7:9998
+2011-09-28 13:27:25,386 [main] INFO  sagex.SageAPI - Sage Provider Implementation: sagex.remote.rmi.RMISageAPI; rmi://CP83VM1:1098
+2011-09-28 13:27:30,183 [Timer-0] INFO  sagex.remote.server.SimpleDatagramClient - Killing Datagram client after timeout
+2011-09-28 13:27:30,185 [Thread-1] WARN  sagex.remote.server.SimpleDatagramClient - Shutting Down: socket closed
+2011-09-28 13:27:30,185 [Thread-1] INFO  sagex.remote.server.SimpleDatagramClient - Datagram Client is shutting down
+2011-09-28 13:29:35,793 [main] WARN  sagex.SageAPI - Call failed for Service: Sort; Args: 0: [SDGroup.GroupObject@1f378c8], 1: false, 2: SDGroup_GroupHandler_GetGroupName
+java.rmi.MarshalException: error marshalling arguments; nested exception is: 
+	java.io.NotSerializableException: SDGroup.GroupObject
+	at sun.rmi.server.UnicastRef.invoke(UnicastRef.java:138)
+	at java.rmi.server.RemoteObjectInvocationHandler.invokeRemoteMethod(RemoteObjectInvocationHandler.java:178)
+	at java.rmi.server.RemoteObjectInvocationHandler.invoke(RemoteObjectInvocationHandler.java:132)
+	at $Proxy0.executeCommand(Unknown Source)
+	at sagex.remote.rmi.RMISageAPI.callService(RMISageAPI.java:37)
+	at sagex.remote.rmi.RMISageAPI.callService(RMISageAPI.java:52)
+	at sagex.SageAPI.call(SageAPI.java:164)
+	at sagex.api.Database.Sort(Database.java:296)
+	at SDGroup.GroupBuilder.GetAllVideosGrouped(GroupBuilder.java:30)
+	at SDGroup.PloxeeAPI.TestMe(PloxeeAPI.java:78)
+	at SDGroup.Groups.main(Groups.java:47)
+Caused by: java.io.NotSerializableException: SDGroup.GroupObject
+	at java.io.ObjectOutputStream.writeObject0(ObjectOutputStream.java:1164)
+	at java.io.ObjectOutputStream.writeObject(ObjectOutputStream.java:330)
+	at java.util.ArrayList.writeObject(ArrayList.java:570)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at java.io.ObjectStreamClass.invokeWriteObject(ObjectStreamClass.java:945)
+	at java.io.ObjectOutputStream.writeSerialData(ObjectOutputStream.java:1469)
+	at java.io.ObjectOutputStream.writeOrdinaryObject(ObjectOutputStream.java:1400)
+	at java.io.ObjectOutputStream.writeObject0(ObjectOutputStream.java:1158)
+	at java.io.ObjectOutputStream.writeArray(ObjectOutputStream.java:1346)
+	at java.io.ObjectOutputStream.writeObject0(ObjectOutputStream.java:1154)
+	at java.io.ObjectOutputStream.defaultWriteFields(ObjectOutputStream.java:1518)
+	at java.io.ObjectOutputStream.writeSerialData(ObjectOutputStream.java:1483)
+	at java.io.ObjectOutputStream.writeOrdinaryObject(ObjectOutputStream.java:1400)
+	at java.io.ObjectOutputStream.writeObject0(ObjectOutputStream.java:1158)
+	at java.io.ObjectOutputStream.writeObject(ObjectOutputStream.java:330)
+	at sun.rmi.server.UnicastRef.marshalValue(UnicastRef.java:274)
+	at sun.rmi.server.UnicastRef.invoke(UnicastRef.java:133)
+	... 10 more
