@@ -17,31 +17,39 @@ import sagex.UIContext;
  * @author JUSJOKEN
  * - 9/26/2011 - version number changed to 3.401
  * - 9/27/2011 - added LOG4J setup and Load method
+ * - 10/1/2011 - implemented Load and InitLogger methods
  */
 public class api {
 
     public static Logger LOG=null;
 
+    public static String Version = "3.401";
+
     public static void main(String[] args){
 
         Load();
     }
-    
+
     //load any SageDiamond settings that need to load at application start
     public static void Load(){
         //initialize the Logging 
-        System.out.println("Load: setting up logger");
+        InitLogger();
+   }
+
+    public static void InitLogger(){
+        //initialize the Logging 
+        System.out.println("InitLogger: setting up logger");
         LOG = Logger.getLogger(api.class);
-        System.out.println("Load: setting up logger - 2");
         String log4jfile = "STVs" + File.separator + "SageDiamond" + File.separator + "Configuration" + File.separator + "SageDiamond.log4j.properties";
         String log4jfullpath = sagex.api.Utility.GetWorkingDirectory(new UIContext(sagex.api.Global.GetUIContextName())) + File.separator + log4jfile;
         //check if the log4j property file exists and use defaults if it does not
         Boolean FileExists = (new File(log4jfullpath)).exists();
-        System.out.println("Load: fileExists = '" + FileExists + "'");
         if (FileExists){
+            System.out.println("InitLogger: using '" + log4jfullpath + "' for log properties");
             PropertyConfigurator.configure(log4jfullpath);
         }else{
             //configure manually
+            System.out.println("InitLogger: using internal defaults for log properties. Properties file not found '" + log4jfullpath + "'");
             Properties log4jProps = new Properties();
             log4jProps.put("log4j.rootCategory", "debug, Log");
             log4jProps.put("log4j.additivity.SageDiamond", "false");
@@ -68,9 +76,6 @@ public class api {
 //        LOG.error("Test Log Message - error");
 //        LOG.fatal("Test Log Message - fatal");
    }
-
-    public static String Version = "3.401";
-
 
     public static int GetSeasonEpisodeNumber(Object MediaObject) {
         return MetadataCalls.GetSeasonEpisodeNumber(MediaObject);

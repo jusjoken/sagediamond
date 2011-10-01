@@ -4,23 +4,18 @@
  */
 package sagediamond;
 
-import java.io.File;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author SBANTA
+ * @author JUSJOKEN
+ * - 10/01/2011 - added logging and changes to Category Filters
  */
 public class MetadataCalls {
 
-//    static private final Logger LOG = Logger.getLogger(MetadataCalls.class);
+    static private final Logger LOG = Logger.getLogger(MetadataCalls.class);
     public static String PlayonDirectory = sagex.api.Configuration.GetServerProperty("PlayonPlayback/ImportDirectory", "/SageOnlineServicesEXEs\\UPnPBrowser\\PlayOn") + "\\TV\\";
     public static String HuluFile = "Quicktime[H.264/50Kbps 480x368@24fps]";
     public static String NetflixFile = "Quicktime[H.264/50Kbps 480x368@25fps]";
@@ -263,31 +258,38 @@ public class MetadataCalls {
 
     }
 
+    //return the first category ignoring the Movie and Film categories. Return unknow if none
     public static String GetShowCategory(Object MediaObject) {
-        String Cat = sagex.api.ShowAPI.GetShowCategory(MediaObject);
-        if (Cat.startsWith("Movie") && Cat.contains("/")) {
-
-            Cat = Cat.substring(Cat.indexOf("/"));
-        }
-
-        if (Cat.equals("")) {
-            return "unknown";
-        }
-        if (Cat.contains("and")) {
-            return Cat.substring(0, Cat.indexOf("and") - 1);
-        }
-        if (Cat.contains(",")) {
-
-            return Cat.substring(0, Cat.indexOf(","));
-        }
-        return Cat;
-
+        return GetAllShowCategories(MediaObject).get(0);
     }
+    
+//    public static String GetShowCategory(Object MediaObject) {
+//        String Cat = sagex.api.ShowAPI.GetShowCategory(MediaObject);
+//        LOG.debug("GetShowCategory = '" + Cat + "'");
+//        if (Cat.startsWith("Movie") && Cat.contains("/")) {
+//
+//            Cat = Cat.substring(Cat.indexOf("/"));
+//        }
+//
+//        if (Cat.equals("")) {
+//            return "unknown";
+//        }
+//        if (Cat.contains("and")) {
+//            return Cat.substring(0, Cat.indexOf("and") - 1);
+//        }
+//        if (Cat.contains(",")) {
+//
+//            return Cat.substring(0, Cat.indexOf(","));
+//        }
+//        return Cat;
+//
+//    }
 
+//    public static String[] GetShowCategories(Object MediaObject){
+//    return sagex.api.ShowAPI.GetShowCategory(MediaObject).split(",");}
 
-    public static String[] GetShowCategories(Object MediaObject){
-    return sagex.api.ShowAPI.GetShowCategory(MediaObject).split(",");}
-//     public static String GetTimeAdded(Object Title) {
+    
+    //     public static String GetTimeAdded(Object Title) {
 //    // Check to see if date variables have been set
 //    if(!DateConverter.IsDateVariableSet){
 //    LOG.trace("DateVariablesNot set Go ahead and set them");
@@ -332,26 +334,62 @@ public class MetadataCalls {
 //        }
 
 
+//    public static ArrayList<String> GetAllShowCategories(Object MediaObject) {
+//        String[] Cats = sagex.api.ShowAPI.GetShowCategory(MediaObject).split(",");
+//        
+//        ArrayList<String> AllCats = new ArrayList<String>();
+//        for (String curr : Cats) {
+//            if (curr.contains("and")) {
+//                curr = curr.trim();
+//                String[] andsplit = curr.split("and");
+//                String cat1 = andsplit[0];
+//                cat1 = cat1.trim();
+//                String cat2 = andsplit[0];
+//                cat1 = cat2.trim();
+//                System.out.print("Adding Category==" + cat1 + "!!" + cat2 + "!!");
+//                AllCats.add(cat1);
+//                AllCats.add(cat2);
+//            } else if (curr.equals("")) {
+//                AllCats.add("unknown");
+//            } else if (curr.startsWith(" ")) {
+//                AllCats.add(curr.substring(1));
+//            } else {
+//                System.out.println("Adding single categories=" + curr + "!!");
+//                AllCats.add(curr);
+//            }
+//        }
+//        return AllCats;
+//    }
+
+    //get a list of all the categories with Movies/Film removed and unknow assigned if no category exists
     public static ArrayList<String> GetAllShowCategories(Object MediaObject) {
-        String[] Cats = sagex.api.ShowAPI.GetShowCategory(MediaObject).split(",");
+        LOG.debug("====== " + GetMediaTitle(MediaObject) + "========");
+        LOG.debug("GetShowCategoriesString = '" + sagex.api.ShowAPI.GetShowCategoriesString(MediaObject) + "'");
+        String SplitChars = "[,;/]";
+        String[] Cats = sagex.api.ShowAPI.GetShowCategoriesString(MediaObject).split(SplitChars);
+        
         ArrayList<String> AllCats = new ArrayList<String>();
         for (String curr : Cats) {
-            if (curr.contains("and")) {
-                curr = curr.trim();
+            curr = curr.trim();
+            if (curr.contains(" and ")) {
+                //curr = curr.trim();
                 String[] andsplit = curr.split("and");
                 String cat1 = andsplit[0];
                 cat1 = cat1.trim();
-                String cat2 = andsplit[0];
-                cat1 = cat2.trim();
-                System.out.print("Adding Category==" + cat1 + "!!" + cat2 + "!!");
+                String cat2 = andsplit[1];
+                cat2 = cat2.trim();
+                LOG.debug("Adding Category ='" + cat1 + "'");
                 AllCats.add(cat1);
+                LOG.debug("Adding Category ='" + cat2 + "'");
                 AllCats.add(cat2);
+            } else if (curr.toLowerCase().equals("movie") || curr.toLowerCase().equals("film")) {
+                //do not add as we want to skip these
+                LOG.debug("Skipping 'movie or film' category");
             } else if (curr.equals("")) {
+                LOG.debug("Adding 'unknown' category");
                 AllCats.add("unknown");
-            } else if (curr.startsWith(" ")) {
-                AllCats.add(curr.substring(1));
             } else {
-                System.out.println("Adding single categories=" + curr + "!!");
+                LOG.debug("Adding single categories = '" + curr + "'");
                 AllCats.add(curr);
             }
         }
