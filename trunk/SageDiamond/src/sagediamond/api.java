@@ -18,12 +18,13 @@ import sagex.UIContext;
  * - 9/26/2011 - version number changed to 3.401
  * - 9/27/2011 - added LOG4J setup and Load method
  * - 10/1/2011 - implemented Load and InitLogger methods
+ * - 10/2/2011 - version number changed to 3.402
  */
 public class api {
 
     public static Logger LOG=null;
 
-    public static String Version = "3.401";
+    public static String Version = "3.402";
 
     public static void main(String[] args){
 
