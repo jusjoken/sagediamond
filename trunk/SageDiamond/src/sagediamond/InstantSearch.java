@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
  */
 public class InstantSearch {
 
-    static private final Logger LOG = Logger.getLogger(MetadataCalls.class);
+    static private final Logger LOG = Logger.getLogger(InstantSearch.class);
 
     public static Object GetInstantSearch(boolean keyboard,String SearchKeys,Object MediaFiles){
         Object[] files=FanartCaching.toArray(MediaFiles);
@@ -35,6 +35,30 @@ public class InstantSearch {
         return matches;
     }
 
+    public static String AddKey(Boolean IsKeyboard, String SearchString, String AddedString){
+        String NewString = "";
+        if (IsKeyboard){
+            //add keyboard keypress directly
+            NewString = SearchString + AddedString.toLowerCase();
+        }else{
+            NewString = SearchString + CreateRegexFromKeypad(AddedString);
+        }
+        LOG.debug("IsKeyboard = '" + IsKeyboard + "' SearchString = '" + NewString + "' AddedString = '" + AddedString + "'");
+        return NewString;
+    }
+    
+    public static Boolean ValidKey(Boolean IsKeyboard, String KeyPress){
+        Boolean IsValid = Boolean.FALSE;
+        if (IsKeyboard){
+            //check keyboard input
+            IsValid = KeyPress.matches("[A-Za-z]");
+        }else{
+            //check numeric input
+            IsValid = KeyPress.matches("[0-9]");
+        }
+        LOG.debug("IsKeyboard = '" + IsKeyboard + "' KeyPress = '" + KeyPress + "' Valid = '" + IsValid + "'");
+        return IsValid;
+    }
     
     /** From Phoenix api
      * Given a keypad of numbers return a regex that can be used to find titles
