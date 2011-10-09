@@ -4,21 +4,52 @@
  */
 package sagediamond;
 
-import java.io.File;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author SBANTA
+ * @author JUSJOKEN
+ * - 10/09/2011 - added LOG4J setup and Main method for testing, and StringNumberFormat
  */
 public class util {
 
+    static private final Logger LOG = Logger.getLogger(util.class);
+    
+    public static void main(String[] args){
 
+        //String test = StringNumberFormat("27.96903", 0, 2);
+        String test = StringNumberFormat("27.1", 0, 2);
+        LOG.debug(test);
+    }
+
+    //pass in a String that contains a number and this will format it to a specific number of decimal places
+    public static String StringNumberFormat(String Input, Integer DecimalPlaces){
+        return StringNumberFormat(Input, DecimalPlaces, DecimalPlaces);
+    }
+    public static String StringNumberFormat(String Input, Integer MinDecimalPlaces, Integer MaxDecimalPlaces){
+        float a = 0;
+        try {
+            a = Float.parseFloat(Input);
+        } catch (NumberFormatException nfe) {
+            LOG.error("StringNumberFormat - NumberFormatException for '" + Input + "'");
+            return Input;
+        }
+        NumberFormat df = DecimalFormat.getInstance();
+        df.setMinimumFractionDigits(MinDecimalPlaces);
+        df.setMaximumFractionDigits(MaxDecimalPlaces);
+        df.setRoundingMode(RoundingMode.DOWN);   
+        String retString = df.format(a);
+        return retString;
+    }
+    
 
     public static Object CheckSeasonSize(Map<String, Object> Files, int sizeneeded) {
         LinkedHashMap<String, Object> WithBlanks = new LinkedHashMap<String, Object>();
