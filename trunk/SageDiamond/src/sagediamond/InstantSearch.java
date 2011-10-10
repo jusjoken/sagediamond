@@ -7,6 +7,7 @@ package sagediamond;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import org.apache.log4j.Logger;
 
@@ -19,6 +20,8 @@ import org.apache.log4j.Logger;
 public class InstantSearch {
 
     static private final Logger LOG = Logger.getLogger(InstantSearch.class);
+    public static enum InstantSearchMode{KEYBOARD,KEYPAD,JUMPTO};
+    
 
     public static Object GetInstantSearch(boolean keyboard,String SearchKeys,Object MediaFiles){
         Object[] files=FanartCaching.toArray(MediaFiles);

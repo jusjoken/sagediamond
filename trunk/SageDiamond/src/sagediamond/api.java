@@ -19,12 +19,16 @@ import sagex.UIContext;
  * - 9/27/2011 - added LOG4J setup and Load method
  * - 10/1/2011 - implemented Load and InitLogger methods
  * - 10/2/2011 - version number changed to 3.402
+ * - 10/10/2011 - version number changed to 3.403
  */
 public class api {
 
     public static Logger LOG=null;
 
-    public static String Version = "3.402";
+    public static String Version = "3.403";
+    //public static PropList<String,Property> InstantSearchModes = new PropList<String,Property>();
+    public static PropList InstantSearchModes = new PropList();
+    
 
     public static void main(String[] args){
 
@@ -35,6 +39,10 @@ public class api {
     public static void Load(){
         //initialize the Logging 
         InitLogger();
+        //prep Property Lists
+        InstantSearchModes.put("JUMPTO", new Property("JUMPTO", "Jump to", Boolean.TRUE));
+        InstantSearchModes.put("KEYBOARD", new Property("KEYBOARD", "Keyboard"));
+        InstantSearchModes.put("KEYPAD", new Property("KEYPAD", "Keypad/Numeric"));
    }
 
     public static void InitLogger(){
