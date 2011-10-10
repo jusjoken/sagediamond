@@ -26,8 +26,11 @@ public class api {
     public static Logger LOG=null;
 
     public static String Version = "3.403";
-    //public static PropList<String,Property> InstantSearchModes = new PropList<String,Property>();
+
     public static PropList InstantSearchModes = new PropList();
+    public static PropList InstantSearchExecuteModes = new PropList();
+    public static enum InstantSearchMode{KEYBOARD,KEYPAD,JUMPTO};
+    public static enum InstantSearchExecuteMode{SELECT,AUTO};
     
 
     public static void main(String[] args){
@@ -35,14 +38,17 @@ public class api {
         Load();
     }
 
+
     //load any SageDiamond settings that need to load at application start
     public static void Load(){
         //initialize the Logging 
         InitLogger();
         //prep Property Lists
-        InstantSearchModes.put("JUMPTO", new Property("JUMPTO", "Jump to", Boolean.TRUE));
-        InstantSearchModes.put("KEYBOARD", new Property("KEYBOARD", "Keyboard"));
-        InstantSearchModes.put("KEYPAD", new Property("KEYPAD", "Keypad/Numeric"));
+        InstantSearchModes.put(InstantSearchMode.JUMPTO.toString(), new Property(InstantSearchMode.JUMPTO.toString(), "Jump to", Boolean.TRUE));
+        InstantSearchModes.put(InstantSearchMode.KEYBOARD.toString(), new Property(InstantSearchMode.KEYBOARD.toString(), "Keyboard"));
+        InstantSearchModes.put(InstantSearchMode.KEYPAD.toString(), new Property(InstantSearchMode.KEYPAD.toString(), "Keypad/Numeric"));
+        InstantSearchExecuteModes.put(InstantSearchExecuteMode.AUTO.toString(), new Property(InstantSearchExecuteMode.AUTO.toString(), "Auto Filter as you type"));
+        InstantSearchExecuteModes.put(InstantSearchExecuteMode.SELECT.toString(), new Property(InstantSearchExecuteMode.SELECT.toString(), "Press Select to Filter",Boolean.TRUE));
    }
 
     public static void InitLogger(){

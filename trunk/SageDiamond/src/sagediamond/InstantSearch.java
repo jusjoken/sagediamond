@@ -20,8 +20,7 @@ import org.apache.log4j.Logger;
 public class InstantSearch {
 
     static private final Logger LOG = Logger.getLogger(InstantSearch.class);
-    public static enum InstantSearchMode{KEYBOARD,KEYPAD,JUMPTO};
-    
+    //public static enum InstantSearchMode{KEYBOARD,KEYPAD,JUMPTO};
 
     public static Object GetInstantSearch(boolean keyboard,String SearchKeys,Object MediaFiles){
         Object[] files=FanartCaching.toArray(MediaFiles);
@@ -38,29 +37,70 @@ public class InstantSearch {
         return matches;
     }
 
-    public static String AddKey(Boolean IsKeyboard, String SearchString, String AddedString){
+    public static Object FilteredList(String FlowName,String SearchKeys,Object MediaFiles){
+        Object[] files=FanartCaching.toArray(MediaFiles);
+        if (Flow.GetInstantSearchMode(FlowName).equals(api.InstantSearchMode.KEYBOARD.toString())){
+            
+        }else if (Flow.GetInstantSearchMode(FlowName).equals(api.InstantSearchMode.KEYPAD.toString())){
+            SearchKeys=CreateRegexFromKeypad(SearchKeys);
+        }
+        ArrayList<Object> matches= new ArrayList<Object>();
+        LOG.debug("SearchKeys = '" + SearchKeys + "'");
+//        for(Object curr:files){
+//            String Title=MetadataCalls.GetMediaTitle(curr);
+//            if(Title.contains(SearchKeys)){
+//                matches.add(curr);
+//            }
+//        }
+        return matches;
+    }
+
+    public static String AddKey(String FlowName, String SearchString, String AddedString){
         String NewString = "";
-        if (IsKeyboard){
+        if (Flow.GetInstantSearchMode(FlowName).equals(api.InstantSearchMode.KEYBOARD.toString())){
             //add keyboard keypress directly
             NewString = SearchString + AddedString.toLowerCase();
-        }else{
-            NewString = SearchString + CreateRegexFromKeypad(AddedString);
+        }else if (Flow.GetInstantSearchMode(FlowName).equals(api.InstantSearchMode.KEYPAD.toString())){
+            //NewString = SearchString + CreateRegexFromKeypad(AddedString);
+            NewString = SearchString + AddedString;
         }
-        LOG.debug("IsKeyboard = '" + IsKeyboard + "' SearchString = '" + NewString + "' AddedString = '" + AddedString + "'");
+        LOG.debug("FlowName = '" + FlowName + "' SearchString = '" + NewString + "' AddedString = '" + AddedString + "'");
         return NewString;
     }
     
-    public static Boolean ValidKey(Boolean IsKeyboard, String KeyPress){
+    public static Boolean ValidKey(String FlowName, String KeyPress){
+        //see if the KeyPress is valid for the InstantSearchMode
         Boolean IsValid = Boolean.FALSE;
-        if (IsKeyboard){
+        if (Flow.GetInstantSearchMode(FlowName).equals(api.InstantSearchMode.KEYBOARD.toString())){
             //check keyboard input
             IsValid = KeyPress.matches("[A-Za-z]");
-        }else{
+        }else if (Flow.GetInstantSearchMode(FlowName).equals(api.InstantSearchMode.KEYPAD.toString())){
             //check numeric input
             IsValid = KeyPress.matches("[0-9]");
+        }else if (Flow.GetInstantSearchMode(FlowName).equals(api.InstantSearchMode.JUMPTO.toString())){
+            IsValid = KeyPress.matches("[A-Za-z]");
+        }else{
+            //return the default FALSE value
         }
-        LOG.debug("IsKeyboard = '" + IsKeyboard + "' KeyPress = '" + KeyPress + "' Valid = '" + IsValid + "'");
+        LOG.debug("FlowName = '" + FlowName + "' KeyPress = '" + KeyPress + "' Valid = '" + IsValid + "'");
         return IsValid;
+    }
+    
+    public static String ModeJumpTo(){
+        return api.InstantSearchMode.JUMPTO.toString();
+    }
+    public static String ModeKeyboard(){
+        return api.InstantSearchMode.KEYBOARD.toString();
+    }
+    public static String ModeKeyPad(){
+        return api.InstantSearchMode.KEYPAD.toString();
+    }
+
+    public static String ExecuteModeSelect(){
+        return api.InstantSearchExecuteMode.SELECT.toString();
+    }
+    public static String ExecuteModeAuto(){
+        return api.InstantSearchExecuteMode.AUTO.toString();
     }
     
     /** From Phoenix api

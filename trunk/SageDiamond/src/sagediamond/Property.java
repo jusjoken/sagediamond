@@ -23,7 +23,19 @@ public class Property {
         this.Default = Default;
     }
     
+    @Override
+    public String toString(){
+        return DisplayName;
+    }
+
     public Boolean IsDefault(){
         return Default;
     }
+    public String Key(){
+        return Key;
+    }
+    public String DisplayName(){
+        return DisplayName;
+    }
+    
 }

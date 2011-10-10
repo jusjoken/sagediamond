@@ -13,9 +13,11 @@ public class Const {
 
     //Constants for diamond Properties
     public static final String InstantSearchMode = "InstantSearchMode";
+    public static final String InstantSearchExecuteMode = "InstantSearchExecuteMode";
     
     //General Constants
     public static final String BaseProp = "JOrton";
     public static final String PropDivider = "/";
+    public static final sagediamond.Property NotFoundProp = new sagediamond.Property("NOTFOUND", "Not Found");
     
 }
