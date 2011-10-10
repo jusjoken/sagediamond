@@ -4,7 +4,9 @@
  */
 package sagediamond;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  *
@@ -14,23 +16,19 @@ import java.util.LinkedHashMap;
 //public class PropList<String,Property> extends LinkedHashMap<String,sagediamond.Property> {
 public class PropList extends LinkedHashMap<String,sagediamond.Property> {
     
+    //private List<String> DisplayNames = new ArrayList<String>();
     public PropList(){
         
     }
     
     //returns the Property with the Default set or the first Property if no Default set
     public Property GetDefault(){
-        sagediamond.Property FirstItem = null;
-        Integer counter = 0;
         for(sagediamond.Property Item:this.values()){
-            counter++;
-            if(counter==1){
-                FirstItem = Item;
-            }
             if(Item.IsDefault()){
                 return Item;
             }
         }
-        return FirstItem;
+        return Const.NotFoundProp;
     }
+    
 }

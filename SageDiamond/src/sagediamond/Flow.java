@@ -18,20 +18,33 @@ public class Flow {
     }
     
     public static String GetInstantSearchMode(String FlowName){
-        String InstantSearchModeProp = GetFlowBaseProp(FlowName) + Const.PropDivider + Const.InstantSearchMode;
-        return util.GetProperty(InstantSearchModeProp, InstantSearch.InstantSearchMode.JUMPTO.toString());
+        String tProp = GetFlowBaseProp(FlowName) + Const.PropDivider + Const.InstantSearchMode;
+        return util.GetProperty(tProp, api.InstantSearchModes.GetDefault().Key());
     }
     
     public static void SetInstantSearchMode(String FlowName, String Value){
-        String InstantSearchModeProp = GetFlowBaseProp(FlowName) + Const.PropDivider + Const.InstantSearchMode;
-        String SetValue = InstantSearch.InstantSearchMode.JUMPTO.toString();
-        for (InstantSearch.InstantSearchMode val:InstantSearch.InstantSearchMode.values()){
-            if (val.toString().equals(Value)){
-                SetValue = val.toString();
-                break;
-            }
+        String tProp = GetFlowBaseProp(FlowName) + Const.PropDivider + Const.InstantSearchMode;
+        if (api.InstantSearchModes.containsKey(Value)){
+            util.SetProperty(tProp, Value);
+        }else{
+            //use the default
+            util.SetProperty(tProp, api.InstantSearchModes.GetDefault().Key());
         }
-        util.SetProperty(InstantSearchModeProp, SetValue);
+    }
+    
+    public static String GetInstantSearchExecuteMode(String FlowName){
+        String tProp = GetFlowBaseProp(FlowName) + Const.PropDivider + Const.InstantSearchExecuteMode;
+        return util.GetProperty(tProp, api.InstantSearchExecuteModes.GetDefault().Key());
+    }
+    
+    public static void SetInstantSearchExecuteMode(String FlowName, String Value){
+        String tProp = GetFlowBaseProp(FlowName) + Const.PropDivider + Const.InstantSearchExecuteMode;
+        if (api.InstantSearchExecuteModes.containsKey(Value)){
+            util.SetProperty(tProp, Value);
+        }else{
+            //use the default
+            util.SetProperty(tProp, api.InstantSearchExecuteModes.GetDefault().Key());
+        }
     }
     
 }
