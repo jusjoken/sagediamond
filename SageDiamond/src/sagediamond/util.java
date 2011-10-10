@@ -8,20 +8,30 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import org.apache.log4j.Logger;
+import sagex.UIContext;
 
 /**
  *
  * @author SBANTA
  * @author JUSJOKEN
  * - 10/09/2011 - added LOG4J setup and Main method for testing, and StringNumberFormat
+ * - 10/10/2011 - added some generic functions
  */
 public class util {
 
     static private final Logger LOG = Logger.getLogger(util.class);
+    public static final char[] symbols = new char[36];
+    private static final Random random = new Random();
+    public static final String OptionNotFound = "Option not Found";
+    public static enum TriState{YES,NO,OTHER};
+    public static final String ListToken = ":&&:";
     
     public static void main(String[] args){
 
@@ -166,6 +176,177 @@ public class util {
     public static boolean IsHeader(Map headers, Object Key) {
         return headers.containsKey(Key);
     }
+
+    public static String GenerateRandomadmName(){
+        char[] buf = new char[10];
+        for (int idx = 0; idx < buf.length; ++idx)
+            buf[idx] = symbols[random.nextInt(symbols.length)];
+        return "adm" + new String(buf);
+    }
+
+    public static Boolean HasProperty(String Property){
+        String tValue = sagex.api.Configuration.GetProperty(new UIContext(sagex.api.Global.GetUIContextName()),Property, null);
+        if (tValue==null || tValue.equals(OptionNotFound)){
+            return Boolean.FALSE;
+        }else{
+            return Boolean.TRUE;
+        }
+    }
+    
+    public static String GetProperty(String Property, String DefaultValue){
+        String tValue = sagex.api.Configuration.GetProperty(new UIContext(sagex.api.Global.GetUIContextName()),Property, null);
+        if (tValue==null || tValue.equals(OptionNotFound)){
+            return DefaultValue;
+        }else{
+            return tValue;
+        }
+    }
+    
+    public static Boolean GetPropertyAsBoolean(String Property, Boolean DefaultValue){
+        String tValue = sagex.api.Configuration.GetProperty(new UIContext(sagex.api.Global.GetUIContextName()),Property, null);
+        if (tValue==null || tValue.equals(OptionNotFound)){
+            return DefaultValue;
+        }else{
+            return Boolean.parseBoolean(tValue);
+        }
+    }
+    
+    //Evaluates the property and returns it's value - must be true or false - returns true otherwise
+    public static Boolean GetPropertyEvalAsBoolean(String Property, Boolean DefaultValue){
+        String tValue = sagex.api.Configuration.GetProperty(new UIContext(sagex.api.Global.GetUIContextName()),Property, null);
+        if (tValue==null || tValue.equals(OptionNotFound)){
+            return DefaultValue;
+        }else{
+            return Boolean.parseBoolean(EvaluateAttribute(tValue));
+        }
+    }
+    
+    public static TriState GetPropertyAsTriState(String Property, TriState DefaultValue){
+        String tValue = sagex.api.Configuration.GetProperty(new UIContext(sagex.api.Global.GetUIContextName()),Property, null);
+        if (tValue==null || tValue.equals(OptionNotFound)){
+            return DefaultValue;
+        }else if(tValue.equals("YES")){
+            return TriState.YES;
+        }else if(tValue.equals("NO")){
+            return TriState.NO;
+        }else if(tValue.equals("OTHER")){
+            return TriState.OTHER;
+        }else if(Boolean.parseBoolean(tValue)){
+            return TriState.YES;
+        }else if(!Boolean.parseBoolean(tValue)){
+            return TriState.NO;
+        }else{
+            return TriState.YES;
+        }
+    }
+    
+    public static List<String> GetPropertyAsList(String Property){
+        String tValue = sagex.api.Configuration.GetProperty(new UIContext(sagex.api.Global.GetUIContextName()),Property, null);
+        if (tValue==null || tValue.equals(OptionNotFound)){
+            return new LinkedList<String>();
+        }else{
+            return ConvertStringtoList(tValue);
+        }
+    }
+    
+    public static Integer GetPropertyAsInteger(String Property, Integer DefaultValue){
+        //read in the Sage Property and force convert it to an Integer
+        Integer tInteger = DefaultValue;
+        String tValue = sagex.api.Configuration.GetProperty(new UIContext(sagex.api.Global.GetUIContextName()),Property, null);
+        if (tValue==null || tValue.equals(OptionNotFound)){
+            return DefaultValue;
+        }
+        try {
+            tInteger = Integer.valueOf(tValue);
+        } catch (NumberFormatException ex) {
+            //use DefaultValue
+            return DefaultValue;
+        }
+        return tInteger;
+    }
+    
+
+    public static String GetServerProperty(String Property, String DefaultValue){
+        String tValue = sagex.api.Configuration.GetServerProperty(new UIContext(sagex.api.Global.GetUIContextName()),Property, null);
+        if (tValue==null || tValue.equals(OptionNotFound)){
+            return DefaultValue;
+        }else{
+            return tValue;
+        }
+    }
+
+    public static void SetProperty(String Property, String Value){
+        sagex.api.Configuration.SetProperty(new UIContext(sagex.api.Global.GetUIContextName()),Property, Value);
+    }
+
+    public static void SetPropertyAsTriState(String Property, TriState Value){
+        sagex.api.Configuration.SetProperty(new UIContext(sagex.api.Global.GetUIContextName()),Property, Value.toString());
+    }
+
+    public static void SetPropertyAsList(String Property, List<String> ListValue){
+        String Value = ConvertListtoString(ListValue);
+        if (ListValue.size()>0){
+            sagex.api.Configuration.SetProperty(new UIContext(sagex.api.Global.GetUIContextName()),Property, Value);
+        }else{
+            RemovePropertyAndChildren(Property);
+        }
+    }
+
+    public static void SetServerProperty(String Property, String Value){
+        sagex.api.Configuration.SetServerProperty(new UIContext(sagex.api.Global.GetUIContextName()),Property, Value);
+    }
+
+    public static void RemoveServerProperty(String Property){
+        sagex.api.Configuration.RemoveServerProperty(new UIContext(sagex.api.Global.GetUIContextName()),Property);
+    }
+
+    public static void RemovePropertyAndChildren(String Property){
+        sagex.api.Configuration.RemovePropertyAndChildren(new UIContext(sagex.api.Global.GetUIContextName()),Property);
+    }
+
+    public static void RemoveServerPropertyAndChildren(String Property){
+        sagex.api.Configuration.RemoveServerPropertyAndChildren(new UIContext(sagex.api.Global.GetUIContextName()),Property);
+    }
+
+    public static String ConvertListtoString(List<String> ListValue){
+        String Value = "";
+        if (ListValue.size()>0){
+            Boolean tFirstItem = Boolean.TRUE;
+            for (String ListItem : ListValue){
+                if (tFirstItem){
+                    Value = ListItem;
+                    tFirstItem = Boolean.FALSE;
+                }else{
+                    Value = Value + ListToken + ListItem;
+                }
+            }
+        }
+        return Value;
+    }
+
+    public static List<String> ConvertStringtoList(String tValue){
+        if (tValue.equals(OptionNotFound) || tValue.equals("") || tValue==null){
+            return new LinkedList<String>();
+        }else{
+            return Arrays.asList(tValue.split(ListToken));
+        }
+    }
+    
+    public static String EvaluateAttribute(String Attribute){
+        //LOG.debug("EvaluateAttribute: Attribute = '" + Attribute + "'");
+        Object[] passvalue = new Object[1];
+        passvalue[0] = sagex.api.WidgetAPI.EvaluateExpression(new UIContext(sagex.api.Global.GetUIContextName()), Attribute);
+        if (passvalue[0]==null){
+            LOG.debug("EvaluateAttribute for Attribute = '" + Attribute + "' not evaluated.");
+            return OptionNotFound;
+        }else{
+            LOG.debug("EvaluateAttribute for Attribute = '" + Attribute + "' = '" + passvalue[0].toString() + "'");
+            return passvalue[0].toString();
+        }
+        
+    }
+
+
 }
 //         public static String GetTimeAdded(Object Title) {
 //    // Check to see if date variables have been set
