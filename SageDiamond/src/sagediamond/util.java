@@ -265,6 +265,22 @@ public class util {
         return tInteger;
     }
     
+    public static Double GetPropertyAsDouble(String Property, Double DefaultValue){
+        //read in the Sage Property and force convert it to an Integer
+        Double tDouble = DefaultValue;
+        String tValue = sagex.api.Configuration.GetProperty(new UIContext(sagex.api.Global.GetUIContextName()),Property, null);
+        if (tValue==null || tValue.equals(OptionNotFound)){
+            return DefaultValue;
+        }
+        try {
+            tDouble = Double.valueOf(tValue);
+        } catch (NumberFormatException ex) {
+            //use DefaultValue
+            return DefaultValue;
+        }
+        return tDouble;
+    }
+    
 
     public static String GetServerProperty(String Property, String DefaultValue){
         String tValue = sagex.api.Configuration.GetServerProperty(new UIContext(sagex.api.Global.GetUIContextName()),Property, null);

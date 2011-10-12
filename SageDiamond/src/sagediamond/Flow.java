@@ -47,4 +47,14 @@ public class Flow {
         }
     }
     
+    public static Double GetFocusedPosterScale(String FlowName){
+        String tProp = GetFlowBaseProp(FlowName) + Const.PropDivider + Const.FocusedPosterScale;
+        return util.GetPropertyAsDouble(tProp, 1.0);
+    }
+    
+    public static void SetFocusedPosterScale(String FlowName, Double Value){
+        String tProp = GetFlowBaseProp(FlowName) + Const.PropDivider + Const.FocusedPosterScale;
+        util.SetProperty(tProp, Value.toString());
+    }
+    
 }
