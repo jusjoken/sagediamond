@@ -14,6 +14,7 @@ public class Const {
     //Constants for diamond Properties
     public static final String InstantSearchMode = "InstantSearchMode";
     public static final String InstantSearchExecuteMode = "InstantSearchExecuteMode";
+    public static final String FocusedPosterScale = "FocusedPosterScale";
     
     //General Constants
     public static final String BaseProp = "JOrton";
