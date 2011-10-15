@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 
 /**
@@ -38,21 +39,22 @@ public class InstantSearch {
     }
 
     public static Object FilteredList(String FlowName,String SearchKeys,Object MediaFiles){
-        Object[] files=FanartCaching.toArray(MediaFiles);
+        Object[] InputMediaFiles = FanartCaching.toArray(MediaFiles);
+        LOG.debug("InputMediaFiles = '" + InputMediaFiles.length);
+        Object OutputMediaFiles = null;
         if (Flow.GetInstantSearchMode(FlowName).equals(api.InstantSearchMode.KEYBOARD.toString())){
-            
+            //searchkeys string is already Ok
         }else if (Flow.GetInstantSearchMode(FlowName).equals(api.InstantSearchMode.KEYPAD.toString())){
             SearchKeys=CreateRegexFromKeypad(SearchKeys);
         }
-        ArrayList<Object> matches= new ArrayList<Object>();
-        LOG.debug("SearchKeys = '" + SearchKeys + "'");
-//        for(Object curr:files){
-//            String Title=MetadataCalls.GetMediaTitle(curr);
-//            if(Title.contains(SearchKeys)){
-//                matches.add(curr);
-//            }
-//        }
-        return matches;
+        Pattern SearchPattern = Pattern.compile(SearchKeys);
+        OutputMediaFiles = sagex.api.Database.FilterByMethodRegex(InputMediaFiles, "sagediamond_MetadataCalls_GetMediaTitleLowerCase", SearchPattern, true, false);
+        //remove these 2 lines after testing
+        Object[] Tempfiles=FanartCaching.toArray(OutputMediaFiles);
+        LOG.debug("OutputMediaFiles = '" + Tempfiles.length);
+        //remove these 2 lines above after testing
+        LOG.debug("InstantSearch using RegEx = '" + SearchKeys + "'");
+        return OutputMediaFiles;
     }
 
     public static String AddKey(String FlowName, String SearchString, String AddedString){
@@ -78,7 +80,7 @@ public class InstantSearch {
             //check numeric input
             IsValid = KeyPress.matches("[0-9]");
         }else if (Flow.GetInstantSearchMode(FlowName).equals(api.InstantSearchMode.JUMPTO.toString())){
-            IsValid = KeyPress.matches("[A-Za-z]");
+            IsValid = KeyPress.matches("[A-Za-z0-9]");
         }else{
             //return the default FALSE value
         }

@@ -93,6 +93,11 @@ public class MetadataCalls {
      return Title;
     }
 
+    //used for searching
+    public static String GetMediaTitleLowerCase(Object MediaObject) {
+        return GetMediaTitle(MediaObject).toLowerCase();
+    }
+    
     public static String GetMediaTitle(Object MediaObject) {
         String Title ="";
 
