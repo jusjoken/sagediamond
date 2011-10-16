@@ -30,7 +30,7 @@ public class api {
 
     public static PropList InstantSearchModes = new PropList();
     public static PropList InstantSearchExecuteModes = new PropList();
-    public static enum InstantSearchMode{KEYBOARD,KEYPAD,JUMPTO};
+    public static enum InstantSearchMode{FILTERED,JUMPTO};
     public static enum InstantSearchExecuteMode{SELECT,AUTO};
     
 
@@ -46,8 +46,7 @@ public class api {
         InitLogger();
         //prep Property Lists
         InstantSearchModes.put(InstantSearchMode.JUMPTO.toString(), new Property(InstantSearchMode.JUMPTO.toString(), "Jump to", Boolean.TRUE));
-        InstantSearchModes.put(InstantSearchMode.KEYBOARD.toString(), new Property(InstantSearchMode.KEYBOARD.toString(), "Keyboard"));
-        InstantSearchModes.put(InstantSearchMode.KEYPAD.toString(), new Property(InstantSearchMode.KEYPAD.toString(), "Keypad/Numeric"));
+        InstantSearchModes.put(InstantSearchMode.FILTERED.toString(), new Property(InstantSearchMode.FILTERED.toString(), "Filtered"));
         InstantSearchExecuteModes.put(InstantSearchExecuteMode.AUTO.toString(), new Property(InstantSearchExecuteMode.AUTO.toString(), "Auto Filter as you type"));
         InstantSearchExecuteModes.put(InstantSearchExecuteMode.SELECT.toString(), new Property(InstantSearchExecuteMode.SELECT.toString(), "Press Select to Filter",Boolean.TRUE));
    }

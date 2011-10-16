@@ -4,6 +4,8 @@
  */
 package sagediamond;
 
+import org.apache.log4j.Logger;
+
 /**
  *
  * @author jusjoken
@@ -12,6 +14,7 @@ package sagediamond;
  */
 public class Flow {
     
+    static private final Logger LOG = Logger.getLogger(Flow.class);
    
     public static String GetFlowBaseProp(String FlowName){
         return Const.BaseProp + Const.PropDivider + FlowName;
@@ -20,6 +23,11 @@ public class Flow {
     public static String GetInstantSearchMode(String FlowName){
         String tProp = GetFlowBaseProp(FlowName) + Const.PropDivider + Const.InstantSearchMode;
         return util.GetProperty(tProp, api.InstantSearchModes.GetDefault().Key());
+    }
+    
+    public static String GetInstantSearchModeName(String FlowName){
+        String tProp = GetFlowBaseProp(FlowName) + Const.PropDivider + Const.InstantSearchMode;
+        return api.InstantSearchModes.get(util.GetProperty(tProp, api.InstantSearchModes.GetDefault().Key())).DisplayName();
     }
     
     public static void SetInstantSearchMode(String FlowName, String Value){
@@ -37,6 +45,11 @@ public class Flow {
         return util.GetProperty(tProp, api.InstantSearchExecuteModes.GetDefault().Key());
     }
     
+    public static String GetInstantSearchExecuteModeName(String FlowName){
+        String tProp = GetFlowBaseProp(FlowName) + Const.PropDivider + Const.InstantSearchExecuteMode;
+        return api.InstantSearchExecuteModes.get(util.GetProperty(tProp, api.InstantSearchExecuteModes.GetDefault().Key())).DisplayName();
+    }
+    
     public static void SetInstantSearchExecuteMode(String FlowName, String Value){
         String tProp = GetFlowBaseProp(FlowName) + Const.PropDivider + Const.InstantSearchExecuteMode;
         if (api.InstantSearchExecuteModes.containsKey(Value)){
@@ -45,6 +58,16 @@ public class Flow {
             //use the default
             util.SetProperty(tProp, api.InstantSearchExecuteModes.GetDefault().Key());
         }
+    }
+    
+    public static Boolean GetInstantSearchIsNumericListener(String FlowName){
+        String tProp = GetFlowBaseProp(FlowName) + Const.PropDivider + Const.InstantSearchIsNumericListener;
+        return util.GetPropertyAsBoolean(tProp, Boolean.FALSE);
+    }
+    
+    public static void SetInstantSearchIsNumericListener(String FlowName, Boolean Value){
+        String tProp = GetFlowBaseProp(FlowName) + Const.PropDivider + Const.InstantSearchIsNumericListener;
+        util.SetProperty(tProp, Value.toString());
     }
     
     public static Double GetFocusedPosterScale(String FlowName){
