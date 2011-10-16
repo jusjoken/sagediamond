@@ -5,9 +5,7 @@
 
 package sagediamond;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
@@ -21,81 +19,88 @@ import org.apache.log4j.Logger;
 public class InstantSearch {
 
     static private final Logger LOG = Logger.getLogger(InstantSearch.class);
-    //public static enum InstantSearchMode{KEYBOARD,KEYPAD,JUMPTO};
 
-    public static Object GetInstantSearch(boolean keyboard,String SearchKeys,Object MediaFiles){
-        Object[] files=FanartCaching.toArray(MediaFiles);
-        if(!keyboard){
-            SearchKeys=CreateRegexFromKeypad(SearchKeys);
-        }
-        ArrayList<Object> matches= new ArrayList<Object>();
-        for(Object curr:files){
-            String Title=MetadataCalls.GetMediaTitle(curr);
-            if(Title.contains(SearchKeys)){
-                matches.add(curr);
-            }
-        }
-        return matches;
-    }
+//    public static Object GetInstantSearch(boolean keyboard,String SearchKeys,Object MediaFiles){
+//        Object[] files=FanartCaching.toArray(MediaFiles);
+//        if(!keyboard){
+//            SearchKeys=CreateRegexFromKeypad(SearchKeys);
+//        }
+//        ArrayList<Object> matches= new ArrayList<Object>();
+//        for(Object curr:files){
+//            String Title=MetadataCalls.GetMediaTitle(curr);
+//            if(Title.contains(SearchKeys)){
+//                matches.add(curr);
+//            }
+//        }
+//        return matches;
+//    }
 
     public static Object FilteredList(String FlowName,String SearchKeys,Object MediaFiles){
+        StopWatch Elapsed = new StopWatch("Flitering " + FlowName + " by '" + SearchKeys + '"');
+        Elapsed.Start();
+        Boolean IsNumericKeyListener = Flow.GetInstantSearchIsNumericListener(FlowName);
         Object[] InputMediaFiles = FanartCaching.toArray(MediaFiles);
-        LOG.debug("InputMediaFiles = '" + InputMediaFiles.length);
+        //LOG.debug("InputMediaFiles = '" + InputMediaFiles.length);
         Object OutputMediaFiles = null;
-        if (Flow.GetInstantSearchMode(FlowName).equals(api.InstantSearchMode.KEYBOARD.toString())){
-            //searchkeys string is already Ok
-        }else if (Flow.GetInstantSearchMode(FlowName).equals(api.InstantSearchMode.KEYPAD.toString())){
+        if (IsNumericKeyListener){
             SearchKeys=CreateRegexFromKeypad(SearchKeys);
         }
         Pattern SearchPattern = Pattern.compile(SearchKeys);
         OutputMediaFiles = sagex.api.Database.FilterByMethodRegex(InputMediaFiles, "sagediamond_MetadataCalls_GetMediaTitleLowerCase", SearchPattern, true, false);
         //remove these 2 lines after testing
-        Object[] Tempfiles=FanartCaching.toArray(OutputMediaFiles);
-        LOG.debug("OutputMediaFiles = '" + Tempfiles.length);
+        //Object[] Tempfiles=FanartCaching.toArray(OutputMediaFiles);
+        //LOG.debug("OutputMediaFiles = '" + Tempfiles.length);
         //remove these 2 lines above after testing
-        LOG.debug("InstantSearch using RegEx = '" + SearchKeys + "'");
+        //LOG.debug("InstantSearch using RegEx = '" + SearchKeys + "'");
+        Elapsed.StopandLog();
         return OutputMediaFiles;
     }
 
     public static String AddKey(String FlowName, String SearchString, String AddedString){
         String NewString = "";
-        if (Flow.GetInstantSearchMode(FlowName).equals(api.InstantSearchMode.KEYBOARD.toString())){
-            //add keyboard keypress directly
-            NewString = SearchString + AddedString.toLowerCase();
-        }else if (Flow.GetInstantSearchMode(FlowName).equals(api.InstantSearchMode.KEYPAD.toString())){
-            //NewString = SearchString + CreateRegexFromKeypad(AddedString);
+        Boolean IsNumericKeyListener = Flow.GetInstantSearchIsNumericListener(FlowName);
+        if (IsNumericKeyListener){
             NewString = SearchString + AddedString;
+        }else{
+            //add keyboard keypress
+            if (AddedString.equals("Space")){
+                NewString = SearchString + " ";
+            }else{
+                NewString = SearchString + AddedString.toLowerCase();
+            }
         }
         LOG.debug("FlowName = '" + FlowName + "' SearchString = '" + NewString + "' AddedString = '" + AddedString + "'");
         return NewString;
     }
     
-    public static Boolean ValidKey(String FlowName, String KeyPress){
+    public static Boolean ValidKey(String FlowName, String KeyPress, Boolean IsNumericKeyListener){
         //see if the KeyPress is valid for the InstantSearchMode
         Boolean IsValid = Boolean.FALSE;
-        if (Flow.GetInstantSearchMode(FlowName).equals(api.InstantSearchMode.KEYBOARD.toString())){
-            //check keyboard input
-            IsValid = KeyPress.matches("[A-Za-z]");
-        }else if (Flow.GetInstantSearchMode(FlowName).equals(api.InstantSearchMode.KEYPAD.toString())){
+        if (Flow.GetInstantSearchMode(FlowName).equals(api.InstantSearchMode.JUMPTO.toString())){
+            IsValid = KeyPress.matches("[A-Za-z0-9]");
+        }else if (IsNumericKeyListener){
             //check numeric input
             IsValid = KeyPress.matches("[0-9]");
-        }else if (Flow.GetInstantSearchMode(FlowName).equals(api.InstantSearchMode.JUMPTO.toString())){
-            IsValid = KeyPress.matches("[A-Za-z0-9]");
         }else{
-            //return the default FALSE value
+            //check keyboard input
+            if (KeyPress.equals("Space")){
+                IsValid = Boolean.TRUE;
+            }else{
+                IsValid = KeyPress.matches("[A-Za-z]");
+            }
         }
-        LOG.debug("FlowName = '" + FlowName + "' KeyPress = '" + KeyPress + "' Valid = '" + IsValid + "'");
+        if (IsValid){
+            Flow.SetInstantSearchIsNumericListener(FlowName, IsNumericKeyListener);
+        }
+        LOG.debug("FlowName = '" + FlowName + "' KeyPress = '" + KeyPress + "' Valid = '" + IsValid + "' NumericKeyListener = '" + IsNumericKeyListener + "'");
         return IsValid;
     }
     
     public static String ModeJumpTo(){
         return api.InstantSearchMode.JUMPTO.toString();
     }
-    public static String ModeKeyboard(){
-        return api.InstantSearchMode.KEYBOARD.toString();
-    }
-    public static String ModeKeyPad(){
-        return api.InstantSearchMode.KEYPAD.toString();
+    public static String ModeFiltered(){
+        return api.InstantSearchMode.FILTERED.toString();
     }
 
     public static String ExecuteModeSelect(){
