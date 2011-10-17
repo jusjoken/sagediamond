@@ -320,6 +320,10 @@ public class util {
         sagex.api.Configuration.RemovePropertyAndChildren(new UIContext(sagex.api.Global.GetUIContextName()),Property);
     }
 
+    public static void RemoveProperty(String Property){
+        sagex.api.Configuration.RemoveProperty(new UIContext(sagex.api.Global.GetUIContextName()),Property);
+    }
+
     public static void RemoveServerPropertyAndChildren(String Property){
         sagex.api.Configuration.RemoveServerPropertyAndChildren(new UIContext(sagex.api.Global.GetUIContextName()),Property);
     }
