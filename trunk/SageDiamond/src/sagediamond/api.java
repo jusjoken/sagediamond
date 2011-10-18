@@ -26,7 +26,7 @@ public class api {
 
     public static Logger LOG=null;
 
-    public static String Version = "3.404";
+    public static String Version = "3.405";
 
     public static PropList InstantSearchModes = new PropList();
     public static PropList InstantSearchExecuteModes = new PropList();

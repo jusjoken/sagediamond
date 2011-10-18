@@ -366,7 +366,22 @@ public class MetadataCalls {
 //        return AllCats;
 //    }
 
-    //get a list of all the categories with Movies/Film removed and unknow assigned if no category exists
+    public static String GetShowCategoriesString(Object MediaObject){
+        String retString = "";
+        for (String Cat: GetAllShowCategories(MediaObject)){
+            if (retString.equals("unknown")){
+                //do not add the unknown category
+            }else if (retString.equals("")){
+                retString = Cat;
+            }else{
+                retString = retString + " / " + Cat;
+            }
+        }
+        return retString;
+    }
+
+    
+    //get a list of all the categories with Movies/Film removed and unknown assigned if no category exists
     public static ArrayList<String> GetAllShowCategories(Object MediaObject) {
         LOG.debug("====== " + GetMediaTitle(MediaObject) + "========");
         LOG.debug("GetShowCategoriesString = '" + sagex.api.ShowAPI.GetShowCategoriesString(MediaObject) + "'");
