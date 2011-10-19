@@ -16,6 +16,8 @@ public class Const {
     public static final String InstantSearchExecuteMode = "InstantSearchExecuteMode";
     public static final String InstantSearchIsNumericListener = "InstantSearchIsNumericListener";
     public static final String FocusedPosterScale = "FocusedPosterScale";
+    public static final String OptionsFocused = "OptionsFocused";
+    public static final String OptionsFocusedItem = "OptionsFocusedItem";
     
     //General Constants
     public static final String BaseProp = "JOrton";
