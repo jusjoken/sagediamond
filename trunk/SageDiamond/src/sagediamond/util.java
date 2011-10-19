@@ -366,7 +366,27 @@ public class util {
         
     }
 
+    public static void OptionsLastFocusedClear(){
+        String tProp = Const.BaseProp + Const.PropDivider + Const.OptionsFocused;
+        RemovePropertyAndChildren(tProp);
+    }
+    
+    public static void OptionsLastFocusedSet(Integer CurrentLevel, String FocusedItem){
+        String tProp = Const.BaseProp + Const.PropDivider + Const.OptionsFocused + Const.PropDivider + CurrentLevel.toString() + Const.OptionsFocusedItem;
+        LOG.debug("OptionsLastFocusedSet: CurrentLevel = '" + CurrentLevel + "' FocusedItem = '" + FocusedItem + "'");
+        SetProperty(tProp, FocusedItem);
+    }
 
+    public static String OptionsLastFocusedGet(Integer CurrentLevel){
+        String tProp = Const.BaseProp + Const.PropDivider + Const.OptionsFocused + Const.PropDivider + CurrentLevel.toString() + Const.OptionsFocusedItem;
+        String FocusedItem = GetProperty(tProp, OptionNotFound);
+        LOG.debug("OptionsLastFocusedGet: CurrentLevel = '" + CurrentLevel + "' FocusedItem = '" + FocusedItem + "'");
+        return FocusedItem;
+    }
+
+    public static String NotFound(){
+        return OptionNotFound;
+    }
 }
 //         public static String GetTimeAdded(Object Title) {
 //    // Check to see if date variables have been set

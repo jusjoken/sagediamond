@@ -15,18 +15,14 @@ import sagex.UIContext;
  *
  * @author SBANTA
  * @author JUSJOKEN
- * - 9/26/2011 - version number changed to 3.401
  * - 9/27/2011 - added LOG4J setup and Load method
  * - 10/1/2011 - implemented Load and InitLogger methods
- * - 10/2/2011 - version number changed to 3.402
- * - 10/10/2011 - version number changed to 3.403
- * - 10/15/2011 - version number changed to 3.404
  */
 public class api {
 
     public static Logger LOG=null;
 
-    public static String Version = "3.405";
+    public static String Version = "3.406";
 
     public static PropList InstantSearchModes = new PropList();
     public static PropList InstantSearchExecuteModes = new PropList();
