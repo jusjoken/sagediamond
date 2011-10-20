@@ -31,4 +31,22 @@ public class PropList extends LinkedHashMap<String,sagediamond.Property> {
         return Const.NotFoundProp;
     }
     
+    //returns the Property with the same Boolean Value
+    public Property GetBoolean(Boolean InValue){
+        for(sagediamond.Property Item:this.values()){
+            if(Item.BoolValue().equals(InValue)){
+                return Item;
+            }
+        }
+        return Const.NotFoundProp;
+    }
+    //returns the Name of the Property with the same Boolean Value
+    public String GetBooleanName(Boolean InValue){
+        for(sagediamond.Property Item:this.values()){
+            if(Item.BoolValue().equals(InValue)){
+                return Item.DisplayName();
+            }
+        }
+        return Const.NotFoundProp.DisplayName();
+    }
 }

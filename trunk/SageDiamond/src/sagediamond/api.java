@@ -24,8 +24,12 @@ public class api {
 
     public static String Version = "3.406";
 
+    public static PropList YESNOList = new PropList();
+    public static PropList ONOFFList = new PropList();
     public static PropList InstantSearchModes = new PropList();
     public static PropList InstantSearchExecuteModes = new PropList();
+    public static enum YESNO{YES,NO};
+    public static enum ONOFF{ON,OFF};
     public static enum InstantSearchMode{FILTERED,JUMPTO};
     public static enum InstantSearchExecuteMode{SELECT,AUTO};
     
@@ -41,6 +45,10 @@ public class api {
         //initialize the Logging 
         InitLogger();
         //prep Property Lists
+        YESNOList.put(YESNO.YES.toString(), new Property(YESNO.YES.toString(), "Yes",Boolean.FALSE,Boolean.TRUE));
+        YESNOList.put(YESNO.NO.toString(), new Property(YESNO.NO.toString(), "No", Boolean.TRUE, Boolean.FALSE));
+        ONOFFList.put(ONOFF.ON.toString(), new Property(ONOFF.ON.toString(), "On",Boolean.FALSE,Boolean.TRUE));
+        ONOFFList.put(ONOFF.OFF.toString(), new Property(ONOFF.OFF.toString(), "Off", Boolean.TRUE, Boolean.FALSE));
         InstantSearchModes.put(InstantSearchMode.JUMPTO.toString(), new Property(InstantSearchMode.JUMPTO.toString(), "Jump to", Boolean.TRUE));
         InstantSearchModes.put(InstantSearchMode.FILTERED.toString(), new Property(InstantSearchMode.FILTERED.toString(), "Filtered"));
         InstantSearchExecuteModes.put(InstantSearchExecuteMode.AUTO.toString(), new Property(InstantSearchExecuteMode.AUTO.toString(), "Auto Filter as you type"));

@@ -366,22 +366,54 @@ public class util {
         
     }
 
-    public static void OptionsLastFocusedClear(){
+    public static void OptionsClear(){
+        //clear all the Options settings used only while the Options menu is open
         String tProp = Const.BaseProp + Const.PropDivider + Const.OptionsFocused;
+        RemovePropertyAndChildren(tProp);
+        tProp = Const.BaseProp + Const.PropDivider + Const.OptionsType;
+        RemovePropertyAndChildren(tProp);
+        tProp = Const.BaseProp + Const.PropDivider + Const.OptionsTitle;
         RemovePropertyAndChildren(tProp);
     }
     
     public static void OptionsLastFocusedSet(Integer CurrentLevel, String FocusedItem){
-        String tProp = Const.BaseProp + Const.PropDivider + Const.OptionsFocused + Const.PropDivider + CurrentLevel.toString() + Const.OptionsFocusedItem;
-        LOG.debug("OptionsLastFocusedSet: CurrentLevel = '" + CurrentLevel + "' FocusedItem = '" + FocusedItem + "'");
+        String tProp = Const.BaseProp + Const.PropDivider + Const.OptionsFocused + Const.PropDivider + CurrentLevel.toString() + Const.PropDivider + Const.OptionsFocusedItem;
+        //LOG.debug("OptionsLastFocusedSet: CurrentLevel = '" + CurrentLevel + "' FocusedItem = '" + FocusedItem + "'");
         SetProperty(tProp, FocusedItem);
     }
 
     public static String OptionsLastFocusedGet(Integer CurrentLevel){
-        String tProp = Const.BaseProp + Const.PropDivider + Const.OptionsFocused + Const.PropDivider + CurrentLevel.toString() + Const.OptionsFocusedItem;
+        String tProp = Const.BaseProp + Const.PropDivider + Const.OptionsFocused + Const.PropDivider + CurrentLevel.toString() + Const.PropDivider + Const.OptionsFocusedItem;
         String FocusedItem = GetProperty(tProp, OptionNotFound);
-        LOG.debug("OptionsLastFocusedGet: CurrentLevel = '" + CurrentLevel + "' FocusedItem = '" + FocusedItem + "'");
+        //LOG.debug("OptionsLastFocusedGet: CurrentLevel = '" + CurrentLevel + "' FocusedItem = '" + FocusedItem + "'");
         return FocusedItem;
+    }
+
+    public static String OptionsTypeGet(Integer CurrentLevel){
+        String tProp = Const.BaseProp + Const.PropDivider + Const.OptionsType + Const.PropDivider + CurrentLevel.toString() + Const.PropDivider + Const.OptionsTypeName;
+        String OptionsType = GetProperty(tProp, OptionNotFound);
+        //LOG.debug("OptionsTypeGet: CurrentLevel = '" + CurrentLevel + "' OptionsType = '" + OptionsType + "'");
+        return OptionsType;
+    }
+
+    public static Integer OptionsTypeSet(Integer CurrentLevel, String OptionsType){
+        String tProp = Const.BaseProp + Const.PropDivider + Const.OptionsType + Const.PropDivider + CurrentLevel.toString() + Const.PropDivider + Const.OptionsTypeName;
+        //LOG.debug("OptionsTypeSet: CurrentLevel = '" + CurrentLevel + "' OptionsType = '" + OptionsType + "'");
+        SetProperty(tProp, OptionsType);
+        return CurrentLevel;
+    }
+
+    public static void OptionsTitleSet(Integer CurrentLevel, String Title){
+        String tProp = Const.BaseProp + Const.PropDivider + Const.OptionsTitle + Const.PropDivider + CurrentLevel.toString() + Const.PropDivider + Const.OptionsTitleName;
+        //LOG.debug("OptionsTitleSet: CurrentLevel = '" + CurrentLevel + "' Title = '" + Title + "'");
+        SetProperty(tProp, Title);
+    }
+
+    public static String OptionsTitleGet(Integer CurrentLevel){
+        String tProp = Const.BaseProp + Const.PropDivider + Const.OptionsTitle + Const.PropDivider + CurrentLevel.toString() + Const.PropDivider + Const.OptionsTitleName;
+        String Title = GetProperty(tProp, OptionNotFound);
+        //LOG.debug("OptionsTitleGet: CurrentLevel = '" + CurrentLevel + "' Title = '" + Title + "'");
+        return Title;
     }
 
     public static String NotFound(){
