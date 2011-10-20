@@ -79,5 +79,16 @@ public class Flow {
         String tProp = GetFlowBaseProp(FlowName) + Const.PropDivider + Const.FocusedPosterScale;
         util.SetProperty(tProp, Value.toString());
     }
+
+    public static String GetYesNoOptionName(String FlowName, String PropValue){
+        String tProp = GetFlowBaseProp(FlowName) + Const.PropDivider + PropValue;
+        return api.ONOFFList.GetBooleanName(util.GetPropertyAsBoolean(tProp, Boolean.FALSE));
+    }
+    public static void SetYesNoOption(String FlowName, String PropValue){
+        String tProp = GetFlowBaseProp(FlowName) + Const.PropDivider + PropValue;
+        Boolean NewValue = !util.GetPropertyAsBoolean(tProp, Boolean.FALSE);
+        util.SetProperty(tProp, NewValue.toString());
+    }
+    
     
 }

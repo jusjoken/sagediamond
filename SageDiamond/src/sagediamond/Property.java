@@ -13,14 +13,19 @@ public class Property {
     private String Key = "";
     private String DisplayName = "";
     private Boolean Default = Boolean.FALSE;
+    private Boolean BoolValue = Boolean.FALSE;
 
     public Property(String Key, String DisplayName){
         this(Key,DisplayName,Boolean.FALSE);
     }
     public Property(String Key, String DisplayName, Boolean Default){
+        this(Key,DisplayName,Boolean.FALSE,Boolean.FALSE);
+    }
+    public Property(String Key, String DisplayName, Boolean Default, Boolean BoolValue){
         this.Key = Key;
         this.DisplayName = DisplayName;
         this.Default = Default;
+        this.BoolValue = BoolValue;
     }
     
     @Override
@@ -36,6 +41,9 @@ public class Property {
     }
     public String DisplayName(){
         return DisplayName;
+    }
+    public Boolean BoolValue(){
+        return BoolValue;
     }
     
 }
