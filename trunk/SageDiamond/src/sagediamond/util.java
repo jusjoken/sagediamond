@@ -416,6 +416,65 @@ public class util {
         return Title;
     }
 
+    //Set of functions for Get/Set of generic True/False values with passed in test names to display
+    public static Boolean GetTrueFalseOption(String PropSection, String PropName, Boolean DefaultValue){
+        String tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+        return util.GetPropertyAsBoolean(tProp, DefaultValue);
+    }
+    public static String GetTrueFalseOptionName(String PropSection, String PropName, String TrueValue, String FalseValue){
+        String tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+        Boolean CurrentValue = util.GetPropertyAsBoolean(tProp, Boolean.FALSE);
+        if (CurrentValue){
+            return TrueValue;
+        }else{
+            return FalseValue;
+        }
+    }
+    public static void SetTrueFalseOptionNext(String PropSection, String PropName){
+        String tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+        Boolean NewValue = !util.GetPropertyAsBoolean(tProp, Boolean.FALSE);
+        util.SetProperty(tProp, NewValue.toString());
+    }
+    
+    //Set of functions for Get/Set of generic passed in List
+    //List items must be separated by ListToken
+    public static String GetListOptionName(String PropSection, String PropName, String OptionList, String DefaultValue){
+        String tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+        String CurrentValue = util.GetProperty(tProp, DefaultValue);
+        if (ConvertStringtoList(OptionList).contains(CurrentValue)){
+            return CurrentValue;
+        }else{
+            return DefaultValue;
+        }
+    }
+    public static void SetListOptionNext(String PropSection, String PropName, String OptionList){
+        String tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+        String CurrentValue = util.GetProperty(tProp, OptionNotFound);
+        List<String> FullList = ConvertStringtoList(OptionList);
+        if (CurrentValue.equals(OptionNotFound)){
+            util.SetProperty(tProp, FullList.get(0));
+        }else{
+            Integer pos = FullList.indexOf(CurrentValue);
+            if (pos==-1){ //not found
+                util.SetProperty(tProp, FullList.get(0));
+            }else if(pos==FullList.size()-1){ //last item
+                util.SetProperty(tProp, FullList.get(0));
+            }else{ //get next item
+                util.SetProperty(tProp, FullList.get(pos+1));
+            }
+        }
+    }
+    
+    //set of functions for generic String based properties
+    public static String GetOptionName(String PropSection, String PropName, String DefaultValue){
+        String tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+        return util.GetProperty(tProp, DefaultValue);
+    }
+    public static void SetOption(String PropSection, String PropName, String NewValue){
+        String tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+        util.SetProperty(tProp, NewValue);
+    }
+
     public static String NotFound(){
         return OptionNotFound;
     }
