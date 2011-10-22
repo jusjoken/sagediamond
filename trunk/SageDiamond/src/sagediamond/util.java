@@ -418,12 +418,25 @@ public class util {
 
     //Set of functions for Get/Set of generic True/False values with passed in test names to display
     public static Boolean GetTrueFalseOption(String PropSection, String PropName, Boolean DefaultValue){
-        String tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+        String tProp = "";
+        if (PropName.equals("")){  //expect the full property string in the PropSection
+            tProp = PropSection;
+        }else{
+            tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+        }
         return util.GetPropertyAsBoolean(tProp, DefaultValue);
     }
     public static String GetTrueFalseOptionName(String PropSection, String PropName, String TrueValue, String FalseValue){
-        String tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
-        Boolean CurrentValue = util.GetPropertyAsBoolean(tProp, Boolean.FALSE);
+        return GetTrueFalseOptionName(PropSection, PropName, TrueValue, FalseValue, Boolean.FALSE);
+    }
+    public static String GetTrueFalseOptionName(String PropSection, String PropName, String TrueValue, String FalseValue, Boolean DefaultValue){
+        String tProp = "";
+        if (PropName.equals("")){  //expect the full property string in the PropSection
+            tProp = PropSection;
+        }else{
+            tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+        }
+        Boolean CurrentValue = util.GetPropertyAsBoolean(tProp, DefaultValue);
         if (CurrentValue){
             return TrueValue;
         }else{
@@ -431,7 +444,12 @@ public class util {
         }
     }
     public static void SetTrueFalseOptionNext(String PropSection, String PropName){
-        String tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+        String tProp = "";
+        if (PropName.equals("")){  //expect the full property string in the PropSection
+            tProp = PropSection;
+        }else{
+            tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+        }
         Boolean NewValue = !util.GetPropertyAsBoolean(tProp, Boolean.FALSE);
         util.SetProperty(tProp, NewValue.toString());
     }
