@@ -444,13 +444,16 @@ public class util {
         }
     }
     public static void SetTrueFalseOptionNext(String PropSection, String PropName){
+        SetTrueFalseOptionNext(PropSection, PropName, Boolean.FALSE);
+    }
+    public static void SetTrueFalseOptionNext(String PropSection, String PropName, Boolean DefaultValue){
         String tProp = "";
         if (PropName.equals("")){  //expect the full property string in the PropSection
             tProp = PropSection;
         }else{
             tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
         }
-        Boolean NewValue = !util.GetPropertyAsBoolean(tProp, Boolean.FALSE);
+        Boolean NewValue = !util.GetPropertyAsBoolean(tProp, DefaultValue);
         util.SetProperty(tProp, NewValue.toString());
     }
     
