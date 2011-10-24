@@ -426,6 +426,12 @@ public class util {
         }
         return util.GetPropertyAsBoolean(tProp, DefaultValue);
     }
+    public static String GetTrueFalseOptionName(String PropSection, String TrueValue, String FalseValue, Boolean DefaultValue){
+        return GetTrueFalseOptionName(PropSection, "", TrueValue, FalseValue, DefaultValue);
+    }
+    public static String GetTrueFalseOptionName(String PropSection, String TrueValue, String FalseValue){
+        return GetTrueFalseOptionName(PropSection, "", TrueValue, FalseValue, Boolean.FALSE);
+    }
     public static String GetTrueFalseOptionName(String PropSection, String PropName, String TrueValue, String FalseValue){
         return GetTrueFalseOptionName(PropSection, PropName, TrueValue, FalseValue, Boolean.FALSE);
     }
@@ -443,6 +449,16 @@ public class util {
             return FalseValue;
         }
     }
+
+    //option for full Property string passed in
+    public static void SetTrueFalseOptionNext(String PropSection, Boolean DefaultValue){
+        SetTrueFalseOptionNext(PropSection, "", DefaultValue);
+    }
+    //option for assuming a FALSE default value and full Property string passed in
+    public static void SetTrueFalseOptionNext(String PropSection){
+        SetTrueFalseOptionNext(PropSection, "", Boolean.FALSE);
+    }
+    //option for assuming a FALSE default value
     public static void SetTrueFalseOptionNext(String PropSection, String PropName){
         SetTrueFalseOptionNext(PropSection, PropName, Boolean.FALSE);
     }
@@ -454,6 +470,20 @@ public class util {
             tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
         }
         Boolean NewValue = !util.GetPropertyAsBoolean(tProp, DefaultValue);
+        util.SetProperty(tProp, NewValue.toString());
+    }
+    
+    //option for full Property string passed in
+    public static void SetTrueFalseOption(String PropSection, Boolean NewValue){
+        SetTrueFalseOption(PropSection, "", NewValue);
+    }
+    public static void SetTrueFalseOption(String PropSection, String PropName, Boolean NewValue){
+        String tProp = "";
+        if (PropName.equals("")){  //expect the full property string in the PropSection
+            tProp = PropSection;
+        }else{
+            tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+        }
         util.SetProperty(tProp, NewValue.toString());
     }
     
