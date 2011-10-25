@@ -20,34 +20,34 @@ public class CustomViews {
     public static final String PropName="JOrton/CustomViews";
     public static final String PathFiltersPropName = "JOrton/PathFilters";
 
-    public static String GetViewStyle(String View) {
-        if (View==null){
-            LOG.debug("GetViewStyle: request for null View returned NotFound");
-            return util.OptionNotFound;
-        }
-        String ViewType = View;
-        if (ViewType.contains("&&")) {
-            ViewType = GetViewType(ViewType);
-            LOG.debug("GetViewStyle ERROR: ("+View+")("+ViewType+")");
-        }
-
-        if (ViewType.equals("Wall Flow") || ViewType.equals("MovieWall")) {  // Needed for backwards compatability
-            return "Wall Flow";
-        } else if (ViewType.equals("List Flow") || ViewType.equals("ListFlow")) { // Needed for backwards compatability
-            return "List Flow";
-        } else if (ViewType.equals("Cover Flow") || ViewType.equals("CoverFlow")) { // Needed for backwards compatability
-            return "Cover Flow";
-        } else if(ViewType.equals("Category Flow")) {
-            return "Category Flow";
-        } else if(ViewType.equals("360 Flow")) {
-            return "360 Flow";
-        } else if(ViewType.equals("SideWays Flow")) {
-            return "SideWays Flow";
-        }
-        else {
-            return ViewType;
-        }
-    }
+//    public static String GetViewStyle(String View) {
+//        if (View==null){
+//            LOG.debug("GetViewStyle: request for null View returned NotFound");
+//            return util.OptionNotFound;
+//        }
+//        String ViewType = View;
+//        if (ViewType.contains("&&")) {
+//            ViewType = GetViewType(ViewType);
+//            LOG.debug("GetViewStyle ERROR: ("+View+")("+ViewType+")");
+//        }
+//
+//        if (ViewType.equals("Wall Flow") || ViewType.equals("MovieWall")) {  // Needed for backwards compatability
+//            return "Wall Flow";
+//        } else if (ViewType.equals("List Flow") || ViewType.equals("ListFlow")) { // Needed for backwards compatability
+//            return "List Flow";
+//        } else if (ViewType.equals("Cover Flow") || ViewType.equals("CoverFlow")) { // Needed for backwards compatability
+//            return "Cover Flow";
+//        } else if(ViewType.equals("Category Flow")) {
+//            return "Category Flow";
+//        } else if(ViewType.equals("360 Flow")) {
+//            return "360 Flow";
+//        } else if(ViewType.equals("SideWays Flow")) {
+//            return "SideWays Flow";
+//        }
+//        else {
+//            return ViewType;
+//        }
+//    }
 
     public static Object GetCustomViews(){
         String views=sagex.api.Configuration.GetProperty(PropName,"");
@@ -62,14 +62,85 @@ public class CustomViews {
             LOG.debug("GetViewName: request for null name returned NotFound");
             return util.OptionNotFound;
         }
-        String[] SplitString = name.split("&&");
-        LOG.debug("GetViewName: '"+name+"'");
-        if (SplitString.length == 2) {
-            return SplitString[0];
-        } else {
-            LOG.debug("GetViewName ERROR:("+name+")");
-            return "Error";
+        //first see if the Flow has a FlowName Property and use it
+        String FlowNameProp = Flow.GetFlowBaseProp(name) + Const.PropDivider + Const.FlowName;
+        String tFlowName = Const.FlowNameNotFound;
+        if (util.HasProperty(FlowNameProp)){
+            tFlowName = util.GetProperty(FlowNameProp, Const.FlowNameNotFound);
+            LOG.debug("GetViewName: '" + name + "' FlowName = '" + tFlowName + "'");
+        }else{
+            //convert to using the new structure
+            tFlowName = ConvertFlowNames(name, Boolean.FALSE);
         }
+        return tFlowName;
+        
+    }
+    
+    //used the 1st time an old name or type is found to convert the flow to using the new naming structure
+    public static String ConvertFlowNames(String name, Boolean ReturnType){
+        String ElementNew = util.GenerateRandomName();
+        String FlowNameProp = Flow.GetFlowBaseProp(ElementNew) + Const.PropDivider + Const.FlowName;
+        String tFlowName = Const.FlowNameNotFound;
+        String FlowTypeProp = Flow.GetFlowBaseProp(ElementNew) + Const.PropDivider + Const.FlowType;
+        String tFlowType = Const.FlowTypeDefault;
+        String CurrElements = util.GetProperty(PropName, "");
+        //see if this is a Custom Flow
+        if (CurrElements.contains(name + ";")) {
+            
+        }
+        
+        String[] SplitString = name.split("&&");
+        if (SplitString.length == 2) {
+            tFlowName = SplitString[0];
+            tFlowType = StandardizeViewType(SplitString[1]);
+            //convert all the properties to a new name
+            
+
+            String OldCVPropName = "JOrton/" + name;
+            String NewCVPropName = "JOrton/" + ElementNew;
+            String[] AllProps = sagex.api.Configuration.GetSubpropertiesThatAreLeaves(new UIContext(sagex.api.Global.GetUIContextName()),OldCVPropName);
+            String ElementRenamed = null;
+            String result = null;
+            if (CurrElements.contains(name + ";")) {
+
+                //replace the old name with the new name in the customviews list
+                ElementRenamed = CurrElements.replace(name + ";", ElementNew + ";");
+                util.SetProperty(PropName, ElementRenamed);
+
+                //iterate through all the old ViewName properties and set them to the new one
+                for (String curr:AllProps){
+                    util.SetProperty(NewCVPropName + "/" + curr, util.GetProperty(OldCVPropName + "/" + curr,""));
+                }
+                //remove the old ViewName properties
+                util.RemovePropertyAndChildren(OldCVPropName);
+
+                //copy over existing pathfilters and remove old one
+                util.SetProperty(PathFiltersPropName + "/" + ElementNew, util.GetProperty(PathFiltersPropName + "/" + name,""));
+                util.RemoveProperty(PathFiltersPropName + "/" + name);
+
+                result = "1";
+            } else {
+                //this is a Default Flow - so do not restructure it
+                ElementNew = name;
+                FlowNameProp = Flow.GetFlowBaseProp(name) + Const.PropDivider + Const.FlowName;
+                FlowTypeProp = Flow.GetFlowBaseProp(name) + Const.PropDivider + Const.FlowType;
+                result = "0";
+            }
+            
+            //write the new name and type properties
+            util.SetProperty(FlowNameProp, tFlowName);
+            util.SetProperty(FlowTypeProp, tFlowType);
+            LOG.debug("ConvertFlowNames: old '" + name + "' new '" + ElementNew + "' FlowName = '" + tFlowName + "' FlowType = '" + tFlowType + "'");
+
+        } else {
+            LOG.debug("ConvertFlowNames: failed for name = '" + name + "'");
+        }
+        if (ReturnType){
+            return tFlowType;
+        }else{
+            return tFlowName;
+        }
+        
     }
 
     // Make sure View Type matches a valid type
@@ -97,7 +168,7 @@ public class CustomViews {
             return "SideWays Flow";
         }
         else {
-            return "Cover Flow";
+            return Const.FlowTypeDefault;
         }
     }
 	
@@ -106,34 +177,39 @@ public class CustomViews {
             LOG.debug("GetViewType: request for null name returned NotFound");
             return util.OptionNotFound;
         }
-        String[] SplitString = name.split("&&");
-        if (SplitString.length == 2){
-            return StandardizeViewType(SplitString[1]);
-        } else {
-            System.out.println("ERROR: GetViewType("+name+")");
-            return StandardizeViewType(name);
-	}
+        //first see if the Flow has a FlowType Property and use it
+        String FlowTypeProp = Flow.GetFlowBaseProp(name) + Const.PropDivider + Const.FlowType;
+        String tFlowType = Const.FlowTypeDefault;
+        if (util.HasProperty(FlowTypeProp)){
+            tFlowType = util.GetProperty(FlowTypeProp, Const.FlowTypeDefault);
+            LOG.debug("GetViewType: '" + name + "' FlowType = '" + tFlowType + "'");
+        }else{
+            //convert to using the new structure
+            tFlowType = ConvertFlowNames(name, Boolean.TRUE);
+        }
+        return tFlowType;
     }
 
-    public static Boolean HasView(String ViewName, String ViewType) {
-        if (ViewName==null){
-            LOG.debug("HasView: request for null name returned FALSE");
-            return Boolean.FALSE;
-        }
-        String Element = ViewName + "&&" + ViewType;
-        if (util.GetProperty(PropName, "").contains(Element + ";")) {
-            return Boolean.TRUE;
-        } else {
-            return Boolean.FALSE;
-        }
-    }
+//    public static Boolean HasView(String ViewName, String ViewType) {
+//        if (ViewName==null){
+//            LOG.debug("HasView: request for null name returned FALSE");
+//            return Boolean.FALSE;
+//        }
+//        String Element = ViewName + "&&" + ViewType;
+//        if (util.GetProperty(PropName, "").contains(Element + ";")) {
+//            return Boolean.TRUE;
+//        } else {
+//            return Boolean.FALSE;
+//        }
+//    }
 
     public static String SaveView(String ViewName, String ViewType) {
         if (ViewName==null){
             LOG.debug("SaveView: request for null name returned 0");
             return "0";
         }
-        String Element = ViewName + "&&" + ViewType;
+        //String Element = ViewName + "&&" + ViewType;
+        String Element = util.GenerateRandomName();
         String CurrentElements = util.GetProperty(PropName, "");
         String result = null;
         if (CurrentElements.contains(Element + ";")) {
@@ -141,17 +217,22 @@ public class CustomViews {
         } else {
             String NewElements = CurrentElements + Element + ";";
             util.SetProperty(PropName, NewElements);
+            //Save the Name and Type for the Flow
+            String FlowNameProp = Flow.GetFlowBaseProp(Element) + Const.PropDivider + Const.FlowName;
+            util.SetProperty(FlowNameProp, ViewName);
+            String FlowTypeProp = Flow.GetFlowBaseProp(Element) + Const.PropDivider + Const.FlowType;
+            util.SetProperty(FlowTypeProp, ViewType);
             result = "1";
         }
         return result;
     }
 
-    public static String RemoveView(String ViewName, String ViewType) {
-        if (ViewName==null){
+    public static String RemoveView(String Element) {
+        if (Element==null){
             LOG.debug("RemoveView: request for null name returned 0");
             return "0";
         }
-        String Element =ViewName + "&&" + ViewType;
+        //String Element =ViewName + "&&" + ViewType;
         String OldCVPropName = "JOrton/" + Element;
         String CurrElements = util.GetProperty(PropName, "");
         String ElementRemoved = null;
@@ -172,50 +253,55 @@ public class CustomViews {
         return result;
     }
 
-    public static String RenameView(String ViewName, String ViewType, String NewViewName) {
-        return ChangeView(ViewName, ViewType, NewViewName, ViewType);
+    public static String RenameView(String Element, String NewViewName) {
+        String FlowNameProp = Flow.GetFlowBaseProp(Element) + Const.PropDivider + Const.FlowName;
+        util.SetProperty(FlowNameProp, NewViewName);
+        return "1";
     }
 
-    public static String ChangeViewType(String ViewName, String ViewType, String NewViewType) {
-        return ChangeView(ViewName, ViewType, ViewName, NewViewType);
+    public static String ChangeViewType(String Element, String NewViewType) {
+        String FlowTypeProp = Flow.GetFlowBaseProp(Element) + Const.PropDivider + Const.FlowType;
+        util.SetProperty(FlowTypeProp, NewViewType);
+        return "1";
     }
         
-    private static String ChangeView(String ViewName, String ViewType, String NewViewName, String NewViewType) {
-        if (ViewName==null){
-            LOG.debug("ChangeView: request for null name returned 0");
-            return "0";
-        }
-        String Element =ViewName + "&&" + ViewType;
-        String ElementNew =NewViewName + "&&" + NewViewType;
-        String OldCVPropName = "JOrton/" + Element;
-        String NewCVPropName = "JOrton/" + ElementNew;
-        String[] AllProps = sagex.api.Configuration.GetSubpropertiesThatAreLeaves(new UIContext(sagex.api.Global.GetUIContextName()),OldCVPropName);
-        String CurrElements = util.GetProperty(PropName, "");
-        String ElementRenamed = null;
-        String result = null;
-        if (CurrElements.contains(Element + ";")) {
-
-            //replace the old name with the new name in the customviews list
-            ElementRenamed = CurrElements.replace(Element + ";", ElementNew + ";");
-            util.SetProperty(PropName, ElementRenamed);
-
-            //iterate through all the old ViewName properties and set them to the new one
-            for (String curr:AllProps){
-                util.SetProperty(NewCVPropName + "/" + curr, util.GetProperty(OldCVPropName + "/" + curr,""));
-            }
-            //remove the old ViewName properties
-            util.RemovePropertyAndChildren(OldCVPropName);
-
-            //copy over existing pathfilters and remove old one
-            util.SetProperty(PathFiltersPropName + "/" + ElementNew, util.GetProperty(PathFiltersPropName + "/" + Element,""));
-            util.RemoveProperty(PathFiltersPropName + "/" + Element);
-
-            result = "1";
-        } else {
-            result = "0";
-        }
-        return result;
-    }
+//    private static String ChangeView(String Element, String NewViewName, String NewViewType) {
+//        if (Element==null){
+//            LOG.debug("ChangeView: request for null name returned 0");
+//            return "0";
+//        }
+//        //String Element =ViewName + "&&" + ViewType;
+//        //TODO: need to change this to only change the new property with the name or type and not the Key (Element)
+//        String ElementNew =NewViewName + "&&" + NewViewType;
+//        String OldCVPropName = "JOrton/" + Element;
+//        String NewCVPropName = "JOrton/" + ElementNew;
+//        String[] AllProps = sagex.api.Configuration.GetSubpropertiesThatAreLeaves(new UIContext(sagex.api.Global.GetUIContextName()),OldCVPropName);
+//        String CurrElements = util.GetProperty(PropName, "");
+//        String ElementRenamed = null;
+//        String result = null;
+//        if (CurrElements.contains(Element + ";")) {
+//
+//            //replace the old name with the new name in the customviews list
+//            ElementRenamed = CurrElements.replace(Element + ";", ElementNew + ";");
+//            util.SetProperty(PropName, ElementRenamed);
+//
+//            //iterate through all the old ViewName properties and set them to the new one
+//            for (String curr:AllProps){
+//                util.SetProperty(NewCVPropName + "/" + curr, util.GetProperty(OldCVPropName + "/" + curr,""));
+//            }
+//            //remove the old ViewName properties
+//            util.RemovePropertyAndChildren(OldCVPropName);
+//
+//            //copy over existing pathfilters and remove old one
+//            util.SetProperty(PathFiltersPropName + "/" + ElementNew, util.GetProperty(PathFiltersPropName + "/" + Element,""));
+//            util.RemoveProperty(PathFiltersPropName + "/" + Element);
+//
+//            result = "1";
+//        } else {
+//            result = "0";
+//        }
+//        return result;
+//    }
 
     public static ArrayList<String> AllViewsInOrder(){
         String[] AllViews= (String[]) GetCustomViews();
@@ -232,13 +318,14 @@ public class CustomViews {
         return Views;
     }
 
-    public static void SetArrayAsProperty(ArrayList<String> Views){
+    public static void SaveViewList(ArrayList<String> Views){
         util.SetProperty(PropName,"");
+        String NewElements = "";
         for(String element:Views){
-            String View=GetViewName(element);
-            String Type=GetViewType(element);
-            SaveView(View,Type);
+            NewElements = NewElements + element + ";";
         }
+        LOG.debug("SaveViewList: writing new Flows list = '" + NewElements + "'");
+        util.SetProperty(PropName, NewElements);
     }
 
     public static void main(String[] args){
