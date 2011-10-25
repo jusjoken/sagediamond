@@ -107,7 +107,7 @@ public class util {
     }
 
     public static Object CheckFileSize(List<Object> files, String diamondprop) {
-        String viewtype = CustomViews.GetViewStyle(diamondprop);
+        String viewtype = CustomViews.GetViewType(diamondprop);
         ArrayList<Object> NewList = new ArrayList<Object>();
         if (viewtype == "Wall Flow" && files.size() < 5) {
         } else if (viewtype == "Cover Flow" && files.size() < 7) {
@@ -177,11 +177,11 @@ public class util {
         return headers.containsKey(Key);
     }
 
-    public static String GenerateRandomadmName(){
+    public static String GenerateRandomName(){
         char[] buf = new char[10];
         for (int idx = 0; idx < buf.length; ++idx)
             buf[idx] = symbols[random.nextInt(symbols.length)];
-        return "adm" + new String(buf);
+        return "sd" + new String(buf);
     }
 
     public static Boolean HasProperty(String Property){
@@ -529,6 +529,8 @@ public class util {
     public static String NotFound(){
         return OptionNotFound;
     }
+
+
 }
 //         public static String GetTimeAdded(Object Title) {
 //    // Check to see if date variables have been set

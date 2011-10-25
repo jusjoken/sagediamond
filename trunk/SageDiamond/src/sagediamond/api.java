@@ -22,7 +22,7 @@ public class api {
 
     public static Logger LOG=null;
 
-    public static String Version = "3.407";
+    public static String Version = "3.408";
 
     public static PropList YESNOList = new PropList();
     public static PropList ONOFFList = new PropList();
@@ -44,6 +44,13 @@ public class api {
     public static void Load(){
         //initialize the Logging 
         InitLogger();
+        
+        //generate symbols to be used for new names
+        for (int idx = 0; idx < 10; ++idx)
+            util.symbols[idx] = (char) ('0' + idx);
+        for (int idx = 10; idx < 36; ++idx)
+            util.symbols[idx] = (char) ('a' + idx - 10);
+        
         //prep Property Lists
         YESNOList.put(YESNO.YES.toString(), new Property(YESNO.YES.toString(), "Yes",Boolean.FALSE,Boolean.TRUE));
         YESNOList.put(YESNO.NO.toString(), new Property(YESNO.NO.toString(), "No", Boolean.TRUE, Boolean.FALSE));
@@ -53,6 +60,18 @@ public class api {
         InstantSearchModes.put(InstantSearchMode.FILTERED.toString(), new Property(InstantSearchMode.FILTERED.toString(), "Filtered"));
         InstantSearchExecuteModes.put(InstantSearchExecuteMode.AUTO.toString(), new Property(InstantSearchExecuteMode.AUTO.toString(), "Auto Filter as you type"));
         InstantSearchExecuteModes.put(InstantSearchExecuteMode.SELECT.toString(), new Property(InstantSearchExecuteMode.SELECT.toString(), "Press Select to Filter",Boolean.TRUE));
+        
+        //see if we need to convert any of the Custom Flows to the new structure
+        String FlowsConvertedProp = Const.BaseProp + Const.PropDivider + "FlowsConverted3_4";
+        if (!util.GetPropertyAsBoolean(FlowsConvertedProp, Boolean.FALSE)){
+            String[] AllViews= (String[]) CustomViews.GetCustomViews();
+            LOG.debug("Converting " + AllViews.length + " Flows to new format");
+            for (String OldName:AllViews){
+                CustomViews.ConvertFlowNames(OldName, Boolean.FALSE);
+            }
+            util.SetProperty(FlowsConvertedProp, Boolean.TRUE.toString());
+        }
+        
    }
 
     public static void InitLogger(){
