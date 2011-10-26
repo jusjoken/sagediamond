@@ -190,7 +190,16 @@ public class CustomViews {
         return tFlowType;
     }
 
-//    public static Boolean HasView(String ViewName, String ViewType) {
+    public static void SetViewType(String name, String FlowType){
+        if (name==null){
+            LOG.debug("SetViewType: request for null name returned NotFound");
+        }
+        String FlowTypeProp = Flow.GetFlowBaseProp(name) + Const.PropDivider + Const.FlowType;
+        //String tFlowType = Const.FlowTypeDefault;
+        util.SetProperty(FlowTypeProp, FlowType);
+    }
+
+    //    public static Boolean HasView(String ViewName, String ViewType) {
 //        if (ViewName==null){
 //            LOG.debug("HasView: request for null name returned FALSE");
 //            return Boolean.FALSE;
