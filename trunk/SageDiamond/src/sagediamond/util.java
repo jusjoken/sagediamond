@@ -530,6 +530,9 @@ public class util {
         return OptionNotFound;
     }
 
+    public static String UnknownName(){
+        return Const.UnknownName;
+    }
 
 }
 //         public static String GetTimeAdded(Object Title) {

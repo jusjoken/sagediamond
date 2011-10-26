@@ -34,5 +34,6 @@ public class Const {
     public static final String BaseProp = "JOrton";
     public static final String PropDivider = "/";
     public static final sagediamond.Property NotFoundProp = new sagediamond.Property("NOTFOUND", "Not Found");
+    public static final String UnknownName = "-UnknownName-";
     
 }

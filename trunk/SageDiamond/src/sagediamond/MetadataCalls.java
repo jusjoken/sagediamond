@@ -112,7 +112,7 @@ public class MetadataCalls {
             Title = sagex.api.AiringAPI.GetAiringTitle(MediaObject);
         }
         if (Title.equals("") || Title.equals(null)) {
-            return "Unknown";
+            return Const.UnknownName;  // was "Unkown"
         }
         return Title;
     }
