@@ -24,16 +24,16 @@ public class FanartCaching {
     static private final Logger LOG = Logger.getLogger(FanartCaching.class);
 //    public static HashMap<String,HashMap<Object,FanartCacheObject>> FanartCacheMap = new HashMap<String,HashMap<Object,FanartCacheObject>> ();
     public static final Pattern MetaImage = Pattern.compile("id=([0-9]+)\\s");
-    public static String CacheLocation = sagex.api.Configuration.GetProperty("JOrton/Fanart/CacheLocation", "cache/DiamondImages/");
+    public static String CacheLocation = sagex.api.Configuration.GetProperty(Const.BaseProp + Const.PropDivider + "Fanart/CacheLocation", "cache/DiamondImages/");
 //      public static String CacheLocation = "CacheTest/Diamond/";
     public static final String Sep = java.io.File.separator;
-    public static String BackdropName = sagex.api.Configuration.GetServerProperty("JOrton/Fanart/BackgroundName", "Backdrop.jpg");
-    public static String PosterName = sagex.api.Configuration.GetServerProperty("JOrton/Fanart/PosterName", "Poster.jpg");
-    public static String PosterSize = sagex.api.Configuration.GetProperty("JOrton/Fanart/PosterSize", "300x200");
-    public static String BannerSize = sagex.api.Configuration.GetProperty("JOrton/Fanart/BannerSize", "300x200");
-    public static String BackgroundSize = sagex.api.Configuration.GetProperty("JOrton/Fanart/BackgroundSize", "1280x720");
-    public static Boolean CheckPosterFolderFirst = Boolean.parseBoolean(sagex.api.Configuration.GetServerProperty("JOrton/Fanart/CheckPosterFolderFirst", "false"));
-    public static Boolean CheckBackgroundFolderFirst = Boolean.parseBoolean(sagex.api.Configuration.GetServerProperty("JOrton/Fanart/CheckBackgroundFolderFirst", "false"));
+    public static String BackdropName = sagex.api.Configuration.GetServerProperty(Const.BaseProp + Const.PropDivider + "Fanart/BackgroundName", "Backdrop.jpg");
+    public static String PosterName = sagex.api.Configuration.GetServerProperty(Const.BaseProp + Const.PropDivider + "Fanart/PosterName", "Poster.jpg");
+    public static String PosterSize = sagex.api.Configuration.GetProperty(Const.BaseProp + Const.PropDivider + "Fanart/PosterSize", "300x200");
+    public static String BannerSize = sagex.api.Configuration.GetProperty(Const.BaseProp + Const.PropDivider + "Fanart/BannerSize", "300x200");
+    public static String BackgroundSize = sagex.api.Configuration.GetProperty(Const.BaseProp + Const.PropDivider + "Fanart/BackgroundSize", "1280x720");
+    public static Boolean CheckPosterFolderFirst = Boolean.parseBoolean(sagex.api.Configuration.GetServerProperty(Const.BaseProp + Const.PropDivider + "Fanart/CheckPosterFolderFirst", "false"));
+    public static Boolean CheckBackgroundFolderFirst = Boolean.parseBoolean(sagex.api.Configuration.GetServerProperty(Const.BaseProp + Const.PropDivider + "Fanart/CheckBackgroundFolderFirst", "false"));
     public static String CurrentlyCachingType = "";
     public static String CurrentlyCaching = "";
     public static int CachingTotal = 0;
@@ -130,7 +130,7 @@ public class FanartCaching {
     }
 
     public static void setBackgroundSize() {
-        BackgroundSize = sagex.api.Configuration.GetProperty("JOrton/Fanart/BackgroundSize", "1920x1080");
+        BackgroundSize = sagex.api.Configuration.GetProperty(Const.BaseProp + Const.PropDivider + "Fanart/BackgroundSize", "1920x1080");
     }
 
     public static int[] GetBackgroundSizeTMB() {
@@ -144,7 +144,7 @@ public class FanartCaching {
     }
 
     public static void setBannerSize() {
-        BannerSize = sagex.api.Configuration.GetProperty("JOrton/Fanart/BannerSize", "300x200");
+        BannerSize = sagex.api.Configuration.GetProperty(Const.BaseProp + Const.PropDivider + "Fanart/BannerSize", "300x200");
     }
 
     public static int[] GetPosterSize() {
@@ -153,7 +153,7 @@ public class FanartCaching {
     }
 
     public static void setPosterSize() {
-        PosterSize = sagex.api.Configuration.GetProperty("JOrton/Fanart/PosterSize", "300x200");
+        PosterSize = sagex.api.Configuration.GetProperty(Const.BaseProp + Const.PropDivider + "Fanart/PosterSize", "300x200");
     }
 
     public static void DeleteAllCache() {
@@ -164,11 +164,11 @@ public class FanartCaching {
     }
 
     public static String[] GetAllBackgroundNames() {
-        return sagex.api.Configuration.GetServerProperty("JOrton/Fanart/BackgroundNames", "background.png;background.jpg;fanart.jpg;fanart.png;backdrop.jpg;backdrop.png").split(";");
+        return sagex.api.Configuration.GetServerProperty(Const.BaseProp + Const.PropDivider + "Fanart/BackgroundNames", "background.png;background.jpg;fanart.jpg;fanart.png;backdrop.jpg;backdrop.png").split(";");
     }
 
     public static String[] GetAllPosterNames() {
-        return sagex.api.Configuration.GetServerProperty("JOrton/Fanart/PosterNames", "poster.png;poster.jpg;folder.jpg;folder.png;cover.jpg;cover.png").split(";");
+        return sagex.api.Configuration.GetServerProperty(Const.BaseProp + Const.PropDivider + "Fanart/PosterNames", "poster.png;poster.jpg;folder.jpg;folder.png;cover.jpg;cover.png").split(";");
     }
 
     public static void main(String[] args) {
@@ -452,8 +452,8 @@ public class FanartCaching {
     public static void CacheAllFanart() {
         IsCachingActive = true;
         Object[] Media = sagex.api.MediaFileAPI.GetMediaFiles("TVDBL");
-        Object[] TVFiles = (Object[]) sagex.api.Database.FilterByBoolMethod(Media, "sagediamond_MetadataCalls_IsMediaTypeTV", true);
-        Object[] MovieFiles = (Object[]) sagex.api.Database.FilterByBoolMethod(Media, "sagediamond_MetadataCalls_IsMediaTypeTV", false);
+        Object[] TVFiles = (Object[]) sagex.api.Database.FilterByBoolMethod(Media, "Diamond_MetadataCalls_IsMediaTypeTV", true);
+        Object[] MovieFiles = (Object[]) sagex.api.Database.FilterByBoolMethod(Media, "Diamond_MetadataCalls_IsMediaTypeTV", false);
         System.out.println("GettingFanartForallMovies size=" + MovieFiles.length);
         CurrentlyCaching = "Movies";
         CachingTotal = MovieFiles.length;
@@ -481,7 +481,7 @@ public class FanartCaching {
         }
         i = 0;
         CurrentlyCaching = "TV";
-        Map<String, Vector> TVGrouped = sagex.api.Database.GroupByMethod(TVFiles, "sagediamond_MetadataCalls_GetFanartTitle");
+        Map<String, Vector> TVGrouped = sagex.api.Database.GroupByMethod(TVFiles, "Diamond_MetadataCalls_GetFanartTitle");
         Set<String> Shows = TVGrouped.keySet();
         CachingTotal = Shows.size();
         for (String curr : Shows) {

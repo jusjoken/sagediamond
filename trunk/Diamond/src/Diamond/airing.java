@@ -150,7 +150,7 @@ public class airing
 	{
 		Object LastWatched = airing.GetLastWatched(MediaObjects);
 		if(AiringAPI.IsWatched(LastWatched)){
-			MediaObjects = Database.Sort(MediaObjects, false, "sagediamond_MetadataCalls_GetOriginalAirDate");
+			MediaObjects = Database.Sort(MediaObjects, false, "Diamond_MetadataCalls_GetOriginalAirDate");
 			int index = Utility.FindElementIndex(MediaObjects, LastWatched);
 			
 			if(index >= Utility.Size(MediaObjects)){	
@@ -172,7 +172,7 @@ public class airing
 	 * @param DirectionNext - true gets Next, false gets Previous.
 	 */
 	{
-                    MediaObjects = Database.Sort(MediaObjects, false, "sagediamond_MetadataCalls_GetOriginalAirDate");
+                    MediaObjects = Database.Sort(MediaObjects, false, "Diamond_MetadataCalls_GetOriginalAirDate");
                     int index = Utility.FindElementIndex(MediaObjects, CurrentShow);
                     
                     if(DirectionNext){
@@ -229,7 +229,7 @@ public class airing
 		if (NextWatch == null){
 			return  null;
 		}else{
-			Arr = Database.Sort(Arr, false, "sagediamond_MetadataCalls_GetOriginalAirDate");
+			Arr = Database.Sort(Arr, false, "Diamond_MetadataCalls_GetOriginalAirDate");
 			Object[] Arr0 =FanartCaching.toArray(Arr);
 			int	elementlocation = Utility.FindElementIndex(Arr0, NextWatch);
 			
@@ -248,7 +248,7 @@ public class airing
 	 * @param MediaObject=sage object of current show to start from
 	 */
 	{
-		MediaObjects = Database.Sort(MediaObjects, false, "sagediamond_MetadataCalls_GetOriginalAirDate");
+		MediaObjects = Database.Sort(MediaObjects, false, "Diamond_MetadataCalls_GetOriginalAirDate");
 		int elementlocation = Utility.FindElementIndex(MediaObjects, MediaObject);
 		Object[] Arr0 = FanartCaching.toArray(MediaObjects);
 		

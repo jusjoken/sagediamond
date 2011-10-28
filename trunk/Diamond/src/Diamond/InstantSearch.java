@@ -46,7 +46,7 @@ public class InstantSearch {
             SearchKeys=CreateRegexFromKeypad(SearchKeys);
         }
         Pattern SearchPattern = Pattern.compile(SearchKeys);
-        OutputMediaFiles = sagex.api.Database.FilterByMethodRegex(InputMediaFiles, "sagediamond_MetadataCalls_GetMediaTitleLowerCase", SearchPattern, true, false);
+        OutputMediaFiles = sagex.api.Database.FilterByMethodRegex(InputMediaFiles, "Diamond_MetadataCalls_GetMediaTitleLowerCase", SearchPattern, true, false);
         //remove these 2 lines after testing
         //Object[] Tempfiles=FanartCaching.toArray(OutputMediaFiles);
         //LOG.debug("OutputMediaFiles = '" + Tempfiles.length);
