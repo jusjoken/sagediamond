@@ -37,7 +37,7 @@ public class MetadataCalls {
        return MediaObject.toString();}}
 
 
-    // sagediamond_MetadataCalls_DisplaySeasonEpisode
+    // Diamond_MetadataCalls_DisplaySeasonEpisode
     public static String DisplaySeasonEpisode(Object MediaObject, String Property) {
     	if(Property.equals("S1E01")) {
     		return "S"+ GetSeasonNumber(MediaObject) + "E" + GetEpisodeNumberPad(MediaObject);

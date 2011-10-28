@@ -107,7 +107,7 @@ public class util {
     }
 
     public static Object CheckFileSize(List<Object> files, String diamondprop) {
-        String viewtype = CustomViews.GetViewType(diamondprop);
+        String viewtype = Flow.GetFlowType(diamondprop);
         ArrayList<Object> NewList = new ArrayList<Object>();
         if (viewtype == "Wall Flow" && files.size() < 5) {
         } else if (viewtype == "Cover Flow" && files.size() < 7) {
@@ -418,29 +418,43 @@ public class util {
 
     //Set of functions for Get/Set of generic True/False values with passed in test names to display
     public static Boolean GetTrueFalseOption(String PropSection, String PropName, Boolean DefaultValue){
+        return GetTrueFalseOptionBase(Boolean.FALSE, PropSection, PropName, DefaultValue);
+    }
+    public static Boolean GetTrueFalseOptionBase(Boolean bFlow, String PropSection, String PropName, Boolean DefaultValue){
         String tProp = "";
         if (PropName.equals("")){  //expect the full property string in the PropSection
             tProp = PropSection;
         }else{
-            tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+            if (bFlow){
+                tProp = Flow.GetFlowBaseProp(PropSection) + Const.PropDivider + PropName;
+            }else{
+                tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+            }
         }
         return util.GetPropertyAsBoolean(tProp, DefaultValue);
     }
     public static String GetTrueFalseOptionName(String PropSection, String TrueValue, String FalseValue, Boolean DefaultValue){
-        return GetTrueFalseOptionName(PropSection, "", TrueValue, FalseValue, DefaultValue);
+        return GetTrueFalseOptionNameBase(Boolean.FALSE, PropSection, "", TrueValue, FalseValue, DefaultValue);
     }
     public static String GetTrueFalseOptionName(String PropSection, String TrueValue, String FalseValue){
-        return GetTrueFalseOptionName(PropSection, "", TrueValue, FalseValue, Boolean.FALSE);
+        return GetTrueFalseOptionNameBase(Boolean.FALSE, PropSection, "", TrueValue, FalseValue, Boolean.FALSE);
     }
     public static String GetTrueFalseOptionName(String PropSection, String PropName, String TrueValue, String FalseValue){
-        return GetTrueFalseOptionName(PropSection, PropName, TrueValue, FalseValue, Boolean.FALSE);
+        return GetTrueFalseOptionNameBase(Boolean.FALSE, PropSection, PropName, TrueValue, FalseValue, Boolean.FALSE);
     }
     public static String GetTrueFalseOptionName(String PropSection, String PropName, String TrueValue, String FalseValue, Boolean DefaultValue){
+        return GetTrueFalseOptionNameBase(Boolean.FALSE, PropSection, PropName, TrueValue, FalseValue, DefaultValue);
+    }
+    public static String GetTrueFalseOptionNameBase(Boolean bFlow, String PropSection, String PropName, String TrueValue, String FalseValue, Boolean DefaultValue){
         String tProp = "";
         if (PropName.equals("")){  //expect the full property string in the PropSection
             tProp = PropSection;
         }else{
-            tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+            if (bFlow){
+                tProp = Flow.GetFlowBaseProp(PropSection) + Const.PropDivider + PropName;
+            }else{
+                tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+            }
         }
         Boolean CurrentValue = util.GetPropertyAsBoolean(tProp, DefaultValue);
         if (CurrentValue){
@@ -452,22 +466,29 @@ public class util {
 
     //option for full Property string passed in
     public static void SetTrueFalseOptionNext(String PropSection, Boolean DefaultValue){
-        SetTrueFalseOptionNext(PropSection, "", DefaultValue);
+        SetTrueFalseOptionNextBase(Boolean.FALSE, PropSection, "", DefaultValue);
     }
     //option for assuming a FALSE default value and full Property string passed in
     public static void SetTrueFalseOptionNext(String PropSection){
-        SetTrueFalseOptionNext(PropSection, "", Boolean.FALSE);
+        SetTrueFalseOptionNextBase(Boolean.FALSE, PropSection, "", Boolean.FALSE);
     }
     //option for assuming a FALSE default value
     public static void SetTrueFalseOptionNext(String PropSection, String PropName){
-        SetTrueFalseOptionNext(PropSection, PropName, Boolean.FALSE);
+        SetTrueFalseOptionNextBase(Boolean.FALSE, PropSection, PropName, Boolean.FALSE);
     }
     public static void SetTrueFalseOptionNext(String PropSection, String PropName, Boolean DefaultValue){
+        SetTrueFalseOptionNextBase(Boolean.FALSE, PropSection, PropName, DefaultValue);
+    }
+    public static void SetTrueFalseOptionNextBase(Boolean bFlow, String PropSection, String PropName, Boolean DefaultValue){
         String tProp = "";
         if (PropName.equals("")){  //expect the full property string in the PropSection
             tProp = PropSection;
         }else{
-            tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+            if (bFlow){
+                tProp = Flow.GetFlowBaseProp(PropSection) + Const.PropDivider + PropName;
+            }else{
+                tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+            }
         }
         Boolean NewValue = !util.GetPropertyAsBoolean(tProp, DefaultValue);
         util.SetProperty(tProp, NewValue.toString());
@@ -490,7 +511,15 @@ public class util {
     //Set of functions for Get/Set of generic passed in List
     //List items must be separated by ListToken
     public static String GetListOptionName(String PropSection, String PropName, String OptionList, String DefaultValue){
-        String tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+        return GetListOptionNameBase(Boolean.FALSE, PropSection, PropName, OptionList, DefaultValue);
+    }
+    public static String GetListOptionNameBase(Boolean bFlow, String PropSection, String PropName, String OptionList, String DefaultValue){
+        String tProp = "";
+        if (bFlow){
+            tProp = Flow.GetFlowBaseProp(PropSection) + Const.PropDivider + PropName;
+        }else{
+            tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+        }
         String CurrentValue = util.GetProperty(tProp, DefaultValue);
         if (ConvertStringtoList(OptionList).contains(CurrentValue)){
             return CurrentValue;
@@ -499,7 +528,15 @@ public class util {
         }
     }
     public static void SetListOptionNext(String PropSection, String PropName, String OptionList){
-        String tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+        SetListOptionNextBase(Boolean.FALSE, PropSection, PropName, OptionList);
+    }
+    public static void SetListOptionNextBase(Boolean bFlow, String PropSection, String PropName, String OptionList){
+        String tProp = "";
+        if (bFlow){
+            tProp = Flow.GetFlowBaseProp(PropSection) + Const.PropDivider + PropName;
+        }else{
+            tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+        }
         String CurrentValue = util.GetProperty(tProp, OptionNotFound);
         List<String> FullList = ConvertStringtoList(OptionList);
         if (CurrentValue.equals(OptionNotFound)){
@@ -518,11 +555,27 @@ public class util {
     
     //set of functions for generic String based properties
     public static String GetOptionName(String PropSection, String PropName, String DefaultValue){
-        String tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+        return GetOptionNameBase(Boolean.FALSE, PropSection, PropName, DefaultValue);
+    }
+    public static String GetOptionNameBase(Boolean bFlow, String PropSection, String PropName, String DefaultValue){
+        String tProp = "";
+        if (bFlow){
+            tProp = Flow.GetFlowBaseProp(PropSection) + Const.PropDivider + PropName;
+        }else{
+            tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+        }
         return util.GetProperty(tProp, DefaultValue);
     }
     public static void SetOption(String PropSection, String PropName, String NewValue){
-        String tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+        SetOptionBase(Boolean.FALSE, PropSection, PropName, NewValue);
+    }
+    public static void SetOptionBase(Boolean bFlow, String PropSection, String PropName, String NewValue){
+        String tProp = "";
+        if (bFlow){
+            tProp = Flow.GetFlowBaseProp(PropSection) + Const.PropDivider + PropName;
+        }else{
+            tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+        }
         util.SetProperty(tProp, NewValue);
     }
 
@@ -535,51 +588,5 @@ public class util {
     }
 
 }
-//         public static String GetTimeAdded(Object Title) {
-//    // Check to see if date variables have been set
-//    String PropertyPrefix= "JOrton/DateDividers";
-//             if(!DateConverter.IsDateVariableSet){
-//
-//    System.out.println("DateVariablesNot set Go ahead and set them");
-//    String First =sagex.api.Configuration.GetServerProperty(PropertyPrefix+"DateGroupFirstTime","10080");
-//    String Second = sagex.api.Configuration.GetServerProperty(PropertyPrefix+"DateGroupSecondTime","20160");
-//    String Third = sagex.api.Configuration.GetServerProperty(PropertyPrefix+"DateGroupThirdTime","43200");
-//    String Fourth = sagex.api.Configuration.GetServerProperty("DateGroupFourthTime","86400");
-//    Long LFirst = java.lang.Long.parseLong(First);
-//    LFirst = LFirst *60*1000;
-//    Long LSecond = java.lang.Long.parseLong(Second);
-//    LSecond = LSecond*60*1000;
-//    Long LThird = java.lang.Long.parseLong(Third);
-//    LThird = LThird*60*1000;
-//    Long LFourth = java.lang.Long.parseLong(Fourth);
-//    LFourth = LFourth *60*1000;
-//        Long CurrTime = System.currentTimeMillis();
-//    DateConverter.FirstDateGroup =CurrTime-LFirst;
-//    DateConverter.SecondDateGroup=CurrTime-LSecond;
-//    DateConverter.ThirdDateGroup=CurrTime-LThird;
-//    DateConverter.FourthDateGroup=CurrTime-LFourth;
-//    DateConverter.FifthDateGroup =CurrTime-(Long.parseLong(sagex.api.Configuration.GetProperty(PropertyPrefix+"DateGroupFifthTime","86401"))*60*1000);
-//    DateConverter.IsDateVariableSet=true;
-//    System.out.println("DateVariables Set to="+DateConverter.FirstDateGroup+":");
-//    System.out.println("DateVariables Set to="+DateConverter.SecondDateGroup+":");
-//    System.out.println("DateVariables Set to="+DateConverter.ThirdDateGroup+":");
-//    System.out.println("DateVariables Set to="+DateConverter.FourthDateGroup+":");
-//    System.out.println("DateVariables Set to="+DateConverter.FifthDateGroup+":");}
-//
-//
-//    Long DateAdded = DateConverter.;
-//    if(DateAdded>=DateConverter.FirstDateGroup){
-//    return sagex.api.Configuration.GetServerProperty(PropertyPrefix+"DateGroupFirstName","New");}
-//    else if (DateAdded>=DateConverter.SecondDateGroup){
-//    return sagex.api.Configuration.GetServerProperty(PropertyPrefix+"DateGroupSecondName","Last Week");}
-//    else if (DateAdded>=DateConverter.ThirdDateGroup){
-//    return sagex.api.Configuration.GetServerProperty(PropertyPrefix+"DateGroupThirdName","30 days");}
-//   else if (DateAdded>=DateConverter.FourthDateGroup){
-//    return sagex.api.Configuration.GetServerProperty(PropertyPrefix+"DateGroupFourthName","60 days");}
-//   else{
-//
-//    return sagex.api.Configuration.GetServerProperty(PropertyPrefix+"DateGroupFifthName","Older");}
-//
-//        }
 
 

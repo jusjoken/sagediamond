@@ -41,7 +41,7 @@ public class api {
     }
 
 
-    //load any SageDiamond settings that need to load at application start
+    //load any Diamond settings that need to load at application start
     public static void Load(){
         //initialize the Logging 
         InitLogger();
@@ -62,16 +62,16 @@ public class api {
         InstantSearchExecuteModes.put(InstantSearchExecuteMode.AUTO.toString(), new Property(InstantSearchExecuteMode.AUTO.toString(), "Auto Filter as you type"));
         InstantSearchExecuteModes.put(InstantSearchExecuteMode.SELECT.toString(), new Property(InstantSearchExecuteMode.SELECT.toString(), "Press Select to Filter",Boolean.TRUE));
         
-        //see if we need to convert any of the Custom Flows to the new structure
-        String FlowsConvertedProp = Const.BaseProp + Const.PropDivider + "FlowsConverted3_4";
-        if (!util.GetPropertyAsBoolean(FlowsConvertedProp, Boolean.FALSE)){
-            String[] AllViews= (String[]) CustomViews.GetCustomViews();
-            LOG.debug("Converting " + AllViews.length + " Flows to new format");
-            for (String OldName:AllViews){
-                CustomViews.ConvertFlowNames(OldName, Boolean.FALSE);
-            }
-            util.SetProperty(FlowsConvertedProp, Boolean.TRUE.toString());
-        }
+//        //see if we need to convert any of the Custom Flows to the new structure
+//        String FlowsConvertedProp = Const.BaseProp + Const.PropDivider + "FlowsConverted3_4";
+//        if (!util.GetPropertyAsBoolean(FlowsConvertedProp, Boolean.FALSE)){
+//            String[] AllViews= (String[]) CustomViews.GetCustomViews();
+//            LOG.debug("Converting " + AllViews.length + " Flows to new format");
+//            for (String OldName:AllViews){
+//                CustomViews.ConvertFlowNames(OldName, Boolean.FALSE);
+//            }
+//            util.SetProperty(FlowsConvertedProp, Boolean.TRUE.toString());
+//        }
         
    }
 
@@ -79,7 +79,7 @@ public class api {
         //initialize the Logging 
         System.out.println("InitLogger: setting up logger");
         LOG = Logger.getLogger(api.class);
-        String log4jfile = "STVs" + File.separator + "SageDiamond" + File.separator + "Configuration" + File.separator + "SageDiamond.log4j.properties";
+        String log4jfile = "STVs" + File.separator + "Diamond" + File.separator + "Configuration" + File.separator + "Diamond.log4j.properties";
         String log4jfullpath = sagex.api.Utility.GetWorkingDirectory(new UIContext(sagex.api.Global.GetUIContextName())) + File.separator + log4jfile;
         //check if the log4j property file exists and use defaults if it does not
         Boolean FileExists = (new File(log4jfullpath)).exists();
@@ -91,24 +91,24 @@ public class api {
             System.out.println("InitLogger: using internal defaults for log properties. Properties file not found '" + log4jfullpath + "'");
             Properties log4jProps = new Properties();
             log4jProps.put("log4j.rootCategory", "debug, Log");
-            log4jProps.put("log4j.additivity.SageDiamond", "false");
-            log4jProps.put("log4j.appender.SageDiamond", "org.apache.log4j.RollingFileAppender");
-            log4jProps.put("log4j.appender.SageDiamond.File", "logs/SageDiamond.log");
-            log4jProps.put("log4j.appender.SageDiamond.layout", "org.apache.log4j.PatternLayout");
-            log4jProps.put("log4j.appender.SageDiamond.layout.ConversionPattern", "%d{EEE M/d HH:mm:ss.SSS} [%t] %-5p %c - %m%n");
-            log4jProps.put("log4j.appender.SageDiamond.MaxBackupIndex", "5");
-            log4jProps.put("log4j.appender.SageDiamond.MaxFileSize", "10000KB");
-            log4jProps.put("log4j.appender.SageDiamond.Threshold", "debug");
+            log4jProps.put("log4j.additivity.Diamond", "false");
+            log4jProps.put("log4j.appender.Diamond", "org.apache.log4j.RollingFileAppender");
+            log4jProps.put("log4j.appender.Diamond.File", "logs/Diamond.log");
+            log4jProps.put("log4j.appender.Diamond.layout", "org.apache.log4j.PatternLayout");
+            log4jProps.put("log4j.appender.Diamond.layout.ConversionPattern", "%d{EEE M/d HH:mm:ss.SSS} [%t] %-5p %c - %m%n");
+            log4jProps.put("log4j.appender.Diamond.MaxBackupIndex", "5");
+            log4jProps.put("log4j.appender.Diamond.MaxFileSize", "10000KB");
+            log4jProps.put("log4j.appender.Diamond.Threshold", "debug");
             log4jProps.put("log4j.additivity.Sage", "false");
             log4jProps.put("log4j.appender.Sage", "org.apache.log4j.ConsoleAppender");
             log4jProps.put("log4j.appender.Sage.layout", "org.apache.log4j.PatternLayout");
             log4jProps.put("log4j.appender.Sage.layout.ConversionPattern", "%d{EEE M/d HH:mm:ss.SSS} [%t] %-5p %c - %m%n");
             log4jProps.put("log4j.appender.Sage.Threshold", "info");
-            log4jProps.put("log4j.logger.SDGroup", "debug,SageDiamond,Sage");
-            log4jProps.put("log4j.logger.sagediamond", "debug,SageDiamond,Sage");
+            //log4jProps.put("log4j.logger.SDGroup", "debug,Diamond,Sage");
+            log4jProps.put("log4j.logger.Diamond", "debug,Diamond,Sage");
             PropertyConfigurator.configure(log4jProps);
         }
-        LOG.info("Logger for SageDiamond created successfully!");
+        LOG.info("Logger for Diamond created successfully!");
 //        LOG.debug("Test Log Message - debug");
 //        LOG.info("Test Log Message - info");
 //        LOG.warn("Test Log Message - warn");

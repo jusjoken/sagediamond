@@ -9,12 +9,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author SBANTA
  */
 public class FolderExclusion {
+
+    static private final Logger LOG = Logger.getLogger(FolderExclusion.class);
 
     public static void main(String[] args) {
 //    File 3232=new File("C:\\TVFiles\\TestPath\\TV\\Battlestar Galactica (2003)&&true");
@@ -23,8 +26,8 @@ public class FolderExclusion {
     }
 
     public static Map GetAllFolderRestrictions(String ViewName) {
-        String ExclusionFolders = sagex.api.Configuration.GetProperty("JOrton/PathFilters/" + ViewName, "");
-        System.out.println("Diamond Restriction Propery=" + ExclusionFolders);
+        String ExclusionFolders = Flow.GetOptionName(ViewName, Const.FlowPathFilters, "");
+        LOG.debug("GetAllFolderRestrictions: = '" + ExclusionFolders + "'");
         Map rest = new HashMap<String, Boolean>();
         if (!ExclusionFolders.equals("")) {
             String[] AllValues = ExclusionFolders.split(";");
@@ -70,9 +73,8 @@ public class FolderExclusion {
     }
 
     public static boolean HasFilter(String ViewName, String Path, Boolean include) {
-        String PropertyName = "JOrton/PathFilters/" + ViewName;
         String Element = Path + "&&" + include;
-        if (sagex.api.Configuration.GetProperty(PropertyName, "").contains(Element + ";")) {
+        if (Flow.GetOptionName(ViewName, Const.FlowPathFilters, "").contains(Element + ";")) {
             return true;
         } else {
             return false;
@@ -80,33 +82,27 @@ public class FolderExclusion {
     }
 
     public static String SetFilter(String ViewName, String Path, Boolean include) {
-        String PropertyName = "JOrton/PathFilters/" + ViewName;
         String Element = Path + "&&" + include;
-        String CurrentElements = sagex.api.Configuration.GetProperty(PropertyName, "");
+        String CurrentElements = Flow.GetOptionName(ViewName, Const.FlowPathFilters, "");
         String result = null;
         if (CurrentElements.contains(Element + ";")) {
             result = "0";
-
         } else {
-
             String NewElements = CurrentElements + Element + ";";
-            sagex.api.Configuration.SetProperty(PropertyName, NewElements);
+            Flow.SetOption(ViewName, Const.FlowPathFilters, NewElements);
             result = "1";
         }
         return result;
     }
 
     public static String RemoveFilter(String ViewName, String Path, Boolean include) {
-        String PropertyName = "JOrton/PathFilters/" + ViewName;
         String Element = Path + "&&" + include;
-        String CurrElements = sagex.api.Configuration.GetProperty(PropertyName, "");
+        String CurrentElements = Flow.GetOptionName(ViewName, Const.FlowPathFilters, "");
         String ElementRemoved = null;
         String result = null;
-        if (CurrElements.contains(Element + ";")) {
-
-            ElementRemoved = CurrElements.replace(Element + ";", "");
-
-            sagex.api.Configuration.SetProperty(PropertyName, ElementRemoved);
+        if (CurrentElements.contains(Element + ";")) {
+            ElementRemoved = CurrentElements.replace(Element + ";", "");
+            Flow.SetOption(ViewName, Const.FlowPathFilters, ElementRemoved);
             result = "1";
         } else {
             result = "0";

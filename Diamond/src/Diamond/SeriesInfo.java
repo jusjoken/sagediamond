@@ -25,7 +25,7 @@ public class SeriesInfo {
 
     System.out.println("Size of map="+tester.isEmpty());
     Object[] Files = sagex.api.MediaFileAPI.GetMediaFiles("TV");
-    Object[] FilterFiles = (Object[]) sagex.api.Database.FilterByBoolMethod(Files,"sagediamond_MetadataCalls_IsMediaTypeTV", true);
+    Object[] FilterFiles = (Object[]) sagex.api.Database.FilterByBoolMethod(Files,"Diamond_MetadataCalls_IsMediaTypeTV", true);
     for(Object current:FilterFiles){
     Object series=sagex.api.ShowAPI.GetShowSeriesInfo(current);
     String Title=MetadataCalls.GetMediaTitle(current);

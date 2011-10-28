@@ -19,18 +19,18 @@ public class SortMethods {
 
     static private final Logger LOG = Logger.getLogger(SortMethods.class);
 
-    public static String Title = "sagediamond_MetadataCalls_GetSortTitle";
-    public static String AiringDate="sagediamond_MetadataCalls_GetOriginalAirDate";
+    public static String Title = "Diamond_MetadataCalls_GetSortTitle";
+    public static String AiringDate="Diamond_MetadataCalls_GetOriginalAirDate";
     public static String RecordingDate="GetAiringStartTime";
     public static String WatchedDate = "GetRealWatchedEndTime";
-    public static String Seasons = "sagediamond_MetadataCalls_GetSeasonNumber";
-    public static String EpisodeTitle = "sagediamond_MetadataCalls_GetEpisodeTitle";
-    public static String DateAdded="sagediamond_MetadataCalls_GetMediaFileID";
+    public static String Seasons = "Diamond_MetadataCalls_GetSeasonNumber";
+    public static String EpisodeTitle = "Diamond_MetadataCalls_GetEpisodeTitle";
+    public static String DateAdded="Diamond_MetadataCalls_GetMediaFileID";
 
     public static String PropertyAdder ="Default";
-    public static String PropertyDefault ="JOrton/";
+    public static String PropertyDefault = Const.BaseProp + Const.PropDivider;
 
-    public static String PropertyPrefix= "JOrton/"+PropertyAdder+"/";
+    public static String PropertyPrefix= Const.BaseProp + Const.PropDivider + PropertyAdder + Const.PropDivider;
 
     public static void main(String[] args){
         String Value=ClassFromString.GetSortMethod("AiringDate");
