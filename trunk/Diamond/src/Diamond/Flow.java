@@ -94,7 +94,11 @@ public class Flow {
             return util.OptionNotFound;
         }
         String FlowTypeProp = Flow.GetFlowBaseProp(name) + Const.PropDivider + Const.FlowType;
-        return util.GetProperty(FlowTypeProp, Const.FlowTypeDefault);
+        if (IsValidFlow(name)){
+            return util.GetProperty(FlowTypeProp, Const.FlowTypeDefault);
+        }else{
+            return Const.FlowTypeNotFound;
+        }
     }
     
     public static String GetFlowTypeShortName(String name){
@@ -151,31 +155,43 @@ public class Flow {
     }
 
     public static ArrayList<String> GetFlows(){
-        LOG.debug("GetFlows: started");
         String[] FlowItems = sagex.api.Configuration.GetSubpropertiesThatAreBranches(new UIContext(sagex.api.Global.GetUIContextName()),GetFlowsBaseProp());
-        LOG.debug("GetFlows: Items = '" + FlowItems.length + "'");
         if (FlowItems.length>0){
             //Add the flows in Sort Order
             TreeMap<Integer,String> tSortedList = new TreeMap<Integer,String>();
             Integer counter = 0;
             for (String tFlow:FlowItems){
-                counter++;
-                LOG.debug("GetFlows: processing '" + tFlow + "'");
-                Integer thisSort = GetFlowSort(tFlow);
-                LOG.debug("GetFlows: thisSort '" + thisSort + "'");
-                if (thisSort==0){
-                    thisSort = counter;
-                }
-                while(tSortedList.containsKey(thisSort)){
+                //make sure this is a real Flow entry with a name property
+                if (!GetFlowName(tFlow).equals(Const.FlowNameNotFound)){
                     counter++;
-                    thisSort = counter;
+                    Integer thisSort = GetFlowSort(tFlow);
+                    if (thisSort==0){
+                        thisSort = counter;
+                    }
+                    while(tSortedList.containsKey(thisSort)){
+                        counter++;
+                        thisSort = counter;
+                    }
+                    tSortedList.put(thisSort, tFlow);
+                    //LOG.debug("GetFlows: '" + tFlow + "' added at '" + thisSort + "'");
                 }
-                tSortedList.put(thisSort, tFlow);
-                LOG.debug("GetFlows: '" + tFlow + "' added at '" + thisSort + "'");
             }
             return new ArrayList<String>(tSortedList.values()); 
         }else{
             return new ArrayList<String>();
+        }
+    }
+    
+    public static Boolean IsValidFlow(String Element){
+        String[] FlowItems = sagex.api.Configuration.GetSubpropertiesThatAreBranches(new UIContext(sagex.api.Global.GetUIContextName()),GetFlowsBaseProp());
+        if (FlowItems.length>0){
+            if (Arrays.asList(FlowItems).contains(Element)){
+                return Boolean.TRUE;
+            }else{
+                return Boolean.FALSE;
+            }
+        }else{
+            return Boolean.FALSE;
         }
     }
     
@@ -187,15 +203,6 @@ public class Flow {
         util.SetProperty(GetFlowBaseProp(Element) + Const.PropDivider + Const.FlowSort, iSort.toString());
     }
     
-//    public static ArrayList<String> AllFlowsInOrder(){
-//        //TODO:need to retain the order of the Flows
-////        String[] AllViews= (String[]) GetFlows();
-////        ArrayList AllViewsOrder=new ArrayList<String>();
-////        for (String curr:AllViews){
-////                AllViewsOrder.add(curr);}
-//        return GetFlows();
-//    }
-
     public static void SaveFlowOrder(ArrayList<String> inFlows){
         Integer counter = 0;
         for(String thisflow:inFlows){
