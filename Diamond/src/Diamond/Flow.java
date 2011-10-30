@@ -150,7 +150,7 @@ public class Flow {
         util.SetListOptionNextBase(Boolean.TRUE, PropSection, PropName, OptionList);
     }
 
-    public static Collection<String> GetFlows(){
+    public static ArrayList<String> GetFlows(){
         LOG.debug("GetFlows: started");
         String[] FlowItems = sagex.api.Configuration.GetSubpropertiesThatAreBranches(new UIContext(sagex.api.Global.GetUIContextName()),GetFlowsBaseProp());
         LOG.debug("GetFlows: Items = '" + FlowItems.length + "'");
@@ -164,16 +164,16 @@ public class Flow {
                 Integer thisSort = GetFlowSort(tFlow);
                 LOG.debug("GetFlows: thisSort '" + thisSort + "'");
                 if (thisSort==0){
-                    while(tSortedList.containsKey(counter)){
-                        counter++;
-                    }
                     thisSort = counter;
-                    LOG.debug("GetFlows: Sort for '" + tFlow + "' adjusted to '" + thisSort + "'");
+                }
+                while(tSortedList.containsKey(thisSort)){
+                    counter++;
+                    thisSort = counter;
                 }
                 tSortedList.put(thisSort, tFlow);
                 LOG.debug("GetFlows: '" + tFlow + "' added at '" + thisSort + "'");
             }
-            return tSortedList.values(); 
+            return new ArrayList<String>(tSortedList.values()); 
         }else{
             return new ArrayList<String>();
         }
@@ -196,12 +196,43 @@ public class Flow {
 //        return GetFlows();
 //    }
 
-//    public static ArrayList<String> SetElementLocation(ArrayList<String> Views,String Element,int Location){
-//        Views.remove(Element);
-//        Views.add(Location, Element);
-//        return Views;
-//    }
-
+    public static void SaveFlowOrder(ArrayList<String> inFlows){
+        Integer counter = 0;
+        for(String thisflow:inFlows){
+            counter++;
+            SetFlowSort(thisflow, counter);
+        }
+    }
+    
+    public static ArrayList<String> MoveFlowinList(ArrayList<String> inFlows, String thisFlow, Integer Delta){
+        Integer CurrentFlowLocation = inFlows.indexOf(thisFlow);
+        Boolean Moved = Boolean.FALSE;
+        if (CurrentFlowLocation==-1){
+            LOG.debug("MoveFlowinList: '" + thisFlow + "' not found in list");
+            return inFlows;
+        }else{
+            if (Delta>0){ //move down in list
+                if (CurrentFlowLocation+Delta<inFlows.size()){
+                    inFlows.remove(thisFlow);
+                    inFlows.add(CurrentFlowLocation+Delta, thisFlow);
+                    Moved = Boolean.TRUE;
+                }
+            }else{ //move up in list
+                if (CurrentFlowLocation+Delta>=0){
+                    inFlows.remove(thisFlow);
+                    inFlows.add(CurrentFlowLocation+Delta, thisFlow);
+                    Moved = Boolean.TRUE;
+                }
+            }
+        }
+//        if (Moved){
+//            LOG.debug("MoveFlowinList: '" + thisFlow + "' moved from '" + CurrentFlowLocation + "' to '" + (CurrentFlowLocation+Delta) + "' New = '" + inFlows + "'");
+//        }else{
+//            LOG.debug("MoveFlowinList: '" + thisFlow + "' NOT moved from '" + CurrentFlowLocation + "' to '" + (CurrentFlowLocation+Delta) + "'");
+//        }
+        return inFlows;
+    }
+    
     public static String SaveFlow(String ViewName, String ViewType) {
         if (ViewName==null){
             LOG.debug("SaveView: request for null name returned 0");
