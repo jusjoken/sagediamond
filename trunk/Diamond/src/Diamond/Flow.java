@@ -6,6 +6,9 @@ package Diamond;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.TreeMap;
 import org.apache.log4j.Logger;
 import sagex.UIContext;
 
@@ -94,6 +97,17 @@ public class Flow {
         return util.GetProperty(FlowTypeProp, Const.FlowTypeDefault);
     }
     
+    public static String GetFlowTypeShortName(String name){
+        if (name==null){
+            LOG.debug("GetViewType: request for null name returned NotFound");
+            return util.OptionNotFound;
+        }
+        String FlowTypeProp = Flow.GetFlowBaseProp(name) + Const.PropDivider + Const.FlowType;
+        String tFlow = util.GetProperty(FlowTypeProp, Const.FlowTypeDefault);
+        tFlow = tFlow.replaceAll("Flow", "");
+        return tFlow.trim();
+    }
+
     public static void SetFlowType(String name, String FlowType){
         if (name==null){
             LOG.debug("SetViewType: request for null name returned NotFound");
@@ -136,29 +150,57 @@ public class Flow {
         util.SetListOptionNextBase(Boolean.TRUE, PropSection, PropName, OptionList);
     }
 
-    public static ArrayList<String> GetFlows(){
+    public static Collection<String> GetFlows(){
+        LOG.debug("GetFlows: started");
         String[] FlowItems = sagex.api.Configuration.GetSubpropertiesThatAreBranches(new UIContext(sagex.api.Global.GetUIContextName()),GetFlowsBaseProp());
+        LOG.debug("GetFlows: Items = '" + FlowItems.length + "'");
         if (FlowItems.length>0){
-            return new ArrayList(Arrays.asList(FlowItems)); 
+            //Add the flows in Sort Order
+            TreeMap<Integer,String> tSortedList = new TreeMap<Integer,String>();
+            Integer counter = 0;
+            for (String tFlow:FlowItems){
+                counter++;
+                LOG.debug("GetFlows: processing '" + tFlow + "'");
+                Integer thisSort = GetFlowSort(tFlow);
+                LOG.debug("GetFlows: thisSort '" + thisSort + "'");
+                if (thisSort==0){
+                    while(tSortedList.containsKey(counter)){
+                        counter++;
+                    }
+                    thisSort = counter;
+                    LOG.debug("GetFlows: Sort for '" + tFlow + "' adjusted to '" + thisSort + "'");
+                }
+                tSortedList.put(thisSort, tFlow);
+                LOG.debug("GetFlows: '" + tFlow + "' added at '" + thisSort + "'");
+            }
+            return tSortedList.values(); 
         }else{
             return new ArrayList<String>();
         }
     }
     
-    public static ArrayList<String> AllFlowsInOrder(){
-        //TODO:need to retain the order of the Flows
-//        String[] AllViews= (String[]) GetFlows();
-//        ArrayList AllViewsOrder=new ArrayList<String>();
-//        for (String curr:AllViews){
-//                AllViewsOrder.add(curr);}
-        return GetFlows();
+    public static Integer GetFlowSort(String Element){
+        return util.GetPropertyAsInteger(GetFlowBaseProp(Element) + Const.PropDivider + Const.FlowSort, 0);
     }
+    
+    public static void SetFlowSort(String Element, Integer iSort){
+        util.SetProperty(GetFlowBaseProp(Element) + Const.PropDivider + Const.FlowSort, iSort.toString());
+    }
+    
+//    public static ArrayList<String> AllFlowsInOrder(){
+//        //TODO:need to retain the order of the Flows
+////        String[] AllViews= (String[]) GetFlows();
+////        ArrayList AllViewsOrder=new ArrayList<String>();
+////        for (String curr:AllViews){
+////                AllViewsOrder.add(curr);}
+//        return GetFlows();
+//    }
 
-    public static ArrayList<String> SetElementLocation(ArrayList<String> Views,String Element,int Location){
-        Views.remove(Element);
-        Views.add(Location, Element);
-        return Views;
-    }
+//    public static ArrayList<String> SetElementLocation(ArrayList<String> Views,String Element,int Location){
+//        Views.remove(Element);
+//        Views.add(Location, Element);
+//        return Views;
+//    }
 
     public static String SaveFlow(String ViewName, String ViewType) {
         if (ViewName==null){
@@ -166,12 +208,15 @@ public class Flow {
             return "0";
         }
         String Element = util.GenerateRandomName();
+        Integer NewSort = GetFlows().size();
         //Save the Name and Type for the Flow
         String FlowNameProp = GetFlowBaseProp(Element) + Const.PropDivider + Const.FlowName;
         util.SetProperty(FlowNameProp, ViewName);
         String FlowTypeProp = GetFlowBaseProp(Element) + Const.PropDivider + Const.FlowType;
         util.SetProperty(FlowTypeProp, ViewType);
-        return "1";
+        //Save the sort order
+        SetFlowSort(Element, NewSort);
+        return Element;
     }
   
     public static String RemoveFlow(String Element) {
