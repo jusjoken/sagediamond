@@ -7,7 +7,9 @@ package Diamond;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.TreeMap;
 import org.apache.log4j.Logger;
 import sagex.UIContext;
@@ -79,47 +81,6 @@ public class Flow {
         util.SetProperty(tProp, Value.toString());
     }
     
-    public static String GetFlowName(String name){
-        if (name==null){
-            LOG.debug("GetViewName: request for null name returned NotFound");
-            return util.OptionNotFound;
-        }
-        String FlowNameProp = Flow.GetFlowBaseProp(name) + Const.PropDivider + Const.FlowName;
-        return util.GetProperty(FlowNameProp, Const.FlowNameNotFound);
-    }
-    
-    public static String GetFlowType(String name){
-        if (name==null){
-            LOG.debug("GetViewType: request for null name returned NotFound");
-            return util.OptionNotFound;
-        }
-        String FlowTypeProp = Flow.GetFlowBaseProp(name) + Const.PropDivider + Const.FlowType;
-        if (IsValidFlow(name)){
-            return util.GetProperty(FlowTypeProp, Const.FlowTypeDefault);
-        }else{
-            return Const.FlowTypeNotFound;
-        }
-    }
-    
-    public static String GetFlowTypeShortName(String name){
-        if (name==null){
-            LOG.debug("GetViewType: request for null name returned NotFound");
-            return util.OptionNotFound;
-        }
-        String FlowTypeProp = Flow.GetFlowBaseProp(name) + Const.PropDivider + Const.FlowType;
-        String tFlow = util.GetProperty(FlowTypeProp, Const.FlowTypeDefault);
-        tFlow = tFlow.replaceAll("Flow", "");
-        return tFlow.trim();
-    }
-
-    public static void SetFlowType(String name, String FlowType){
-        if (name==null){
-            LOG.debug("SetViewType: request for null name returned NotFound");
-        }
-        String FlowTypeProp = Flow.GetFlowBaseProp(name) + Const.PropDivider + Const.FlowType;
-        util.SetProperty(FlowTypeProp, FlowType);
-    }
-
     public static Boolean GetTrueFalseOption(String PropSection, String PropName, Boolean DefaultValue){
         return util.GetTrueFalseOptionBase(Boolean.TRUE, PropSection, PropName, DefaultValue);
     }
@@ -181,6 +142,22 @@ public class Flow {
             return new ArrayList<String>();
         }
     }
+
+    public static String GetNextPrevFlow(String Element, Integer Delta){
+        ArrayList<String> tflows = GetFlows();
+        Integer currLocation = tflows.indexOf(Element);
+        if (currLocation==-1){
+            return tflows.get(0);
+        }
+        Integer NextPrev = currLocation + Delta;
+        if (NextPrev<0){
+            return tflows.get(tflows.size()-1);
+        }else if(NextPrev>=tflows.size()){
+            return tflows.get(0);
+        }else{
+            return tflows.get(NextPrev);
+        }
+    }
     
     public static Boolean IsValidFlow(String Element){
         String[] FlowItems = sagex.api.Configuration.GetSubpropertiesThatAreBranches(new UIContext(sagex.api.Global.GetUIContextName()),GetFlowsBaseProp());
@@ -240,13 +217,16 @@ public class Flow {
         return inFlows;
     }
     
-    public static String SaveFlow(String ViewName, String ViewType) {
+    public static String CreateNewFlow() {
+        return CreateNewFlow(Const.FlowTypeDefault, Const.FlowTypeDefault);
+    }
+    public static String CreateNewFlow(String ViewName, String ViewType) {
         if (ViewName==null){
             LOG.debug("SaveView: request for null name returned 0");
             return "0";
         }
         String Element = util.GenerateRandomName();
-        Integer NewSort = GetFlows().size();
+        Integer NewSort = GetFlows().size()+1;  //sort numbers are base of 1 - 0 is invalid
         //Save the Name and Type for the Flow
         String FlowNameProp = GetFlowBaseProp(Element) + Const.PropDivider + Const.FlowName;
         util.SetProperty(FlowNameProp, ViewName);
@@ -268,6 +248,12 @@ public class Flow {
         //util.RemoveProperty(PathFiltersPropName + "/" + Element);
         return "1";
     }
+    
+    public static void RemoveAllFlows(){
+        for (String tFlow: GetFlows()){
+            RemoveFlow(tFlow);
+        }
+    }
 
     public static String RenameFlow(String Element, String NewViewName) {
         String FlowNameProp = Flow.GetFlowBaseProp(Element) + Const.PropDivider + Const.FlowName;
@@ -275,11 +261,73 @@ public class Flow {
         return "1";
     }
 
+    public static String GetFlowName(String name){
+        if (name==null){
+            LOG.debug("GetViewName: request for null name returned NotFound");
+            return util.OptionNotFound;
+        }
+        String FlowNameProp = Flow.GetFlowBaseProp(name) + Const.PropDivider + Const.FlowName;
+        return util.GetProperty(FlowNameProp, Const.FlowNameNotFound);
+    }
+    
+    public static String GetFlowType(String name){
+        if (name==null){
+            LOG.debug("GetViewType: request for null name returned NotFound");
+            return util.OptionNotFound;
+        }
+        String FlowTypeProp = Flow.GetFlowBaseProp(name) + Const.PropDivider + Const.FlowType;
+        if (IsValidFlow(name)){
+            return util.GetProperty(FlowTypeProp, Const.FlowTypeDefault);
+        }else{
+            return Const.FlowTypeNotFound;
+        }
+    }
+    
+    public static String GetFlowTypeShortName(String name){
+        if (name==null){
+            LOG.debug("GetViewType: request for null name returned NotFound");
+            return util.OptionNotFound;
+        }
+        String FlowTypeProp = Flow.GetFlowBaseProp(name) + Const.PropDivider + Const.FlowType;
+        String tFlow = util.GetProperty(FlowTypeProp, Const.FlowTypeDefault);
+        tFlow = tFlow.replaceAll("Flow", "");
+        return tFlow.trim();
+    }
+
     public static String ChangeFlowType(String Element, String NewViewType) {
         String FlowTypeProp = Flow.GetFlowBaseProp(Element) + Const.PropDivider + Const.FlowType;
+        String OldType = GetFlowType(Element);
+        String OldName = GetFlowName(Element);
         util.SetProperty(FlowTypeProp, NewViewType);
+        if (OldType.equals(OldName)){
+            RenameFlow(Element, NewViewType);
+        }
         return "1";
     }
     
+    public static void SetFlowType(String name, String FlowType){
+        if (name==null){
+            LOG.debug("SetViewType: request for null name returned NotFound");
+        }
+        String FlowTypeProp = Flow.GetFlowBaseProp(name) + Const.PropDivider + Const.FlowType;
+        util.SetProperty(FlowTypeProp, FlowType);
+    }
+
+    public static Collection<String> FlowTypes(){
+        List<String> tTypes = new ArrayList<String>();
+        tTypes.add("Wall Flow");
+        tTypes.add("List Flow");
+        tTypes.add("Cover Flow");
+        tTypes.add("Category Flow");
+        tTypes.add("360 Flow");
+        tTypes.add("SideWays Flow");
+        return tTypes;
+    }
+    
+    public static void CreateDefaultFlows(){
+        for (String tFlow: FlowTypes()){
+            CreateNewFlow(tFlow, tFlow);
+        }
+    }
     
 }
