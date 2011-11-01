@@ -37,6 +37,7 @@ public class Const {
     public static final String BaseProp = "Diamond";
     public static final String PropDivider = "/";
     public static final String FlowProp = "Flow";
+    public static final String MainMenuProp = "MainMenu";
     public static final Diamond.Property NotFoundProp = new Diamond.Property("NOTFOUND", "Not Found");
     public static final String UnknownName = "-UnknownName-";
     
