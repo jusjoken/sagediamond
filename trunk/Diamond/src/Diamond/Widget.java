@@ -73,6 +73,20 @@ public class Widget {
         util.SetProperty(WidgetProps + "WidgetHeight" + tWidgetSize, Height.toString());
     }
     
+    public static Double GetTitleHeight(Integer WidgetNumber){
+        String tWidgetSize = GetSize(WidgetNumber);
+        return GetTitleHeight(tWidgetSize);
+    }
+    public static Double GetTitleHeight(String tWidgetSize){
+        Double tRetVal = StringtoDouble(util.GetProperty(WidgetProps + "WidgetTitleHeight" + tWidgetSize,"0.00"));
+        //LOG.debug("GetTitleHeight: for Widget Size = '" + tWidgetSize + "' height = '" + tRetVal + "'");
+        return tRetVal;
+    }
+    
+    public static void SetTitleHeight(String tWidgetSize, Double Height){
+        util.SetProperty(WidgetProps + "WidgetTitleHeight" + tWidgetSize, Height.toString());
+    }
+    
     private static Double StringtoDouble(String s){
         try
         {
