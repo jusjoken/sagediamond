@@ -23,7 +23,7 @@ public class api {
 
     public static Logger LOG=null;
 
-    public static String Version = "4.004";
+    public static String Version = "4.005";
 
     public static PropList YESNOList = new PropList();
     public static PropList ONOFFList = new PropList();
