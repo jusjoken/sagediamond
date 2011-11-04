@@ -316,6 +316,7 @@ public class Flow {
         tTypes.add("Wall Flow");
         tTypes.add("List Flow");
         tTypes.add("Cover Flow");
+        tTypes.add("Stage Flow");
         tTypes.add("Category Flow");
         tTypes.add("360 Flow");
         tTypes.add("SideWays Flow");
