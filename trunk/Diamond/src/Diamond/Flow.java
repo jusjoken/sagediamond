@@ -7,6 +7,7 @@ package Diamond;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 import org.apache.log4j.Logger;
@@ -21,7 +22,8 @@ import sagex.UIContext;
 public class Flow {
     
     static private final Logger LOG = Logger.getLogger(Flow.class);
-   
+    public static HashMap<String,String> InternalFlowTypes = new HashMap<String,String>();
+    
     public static String GetFlowsBaseProp(){
         return Const.BaseProp + Const.PropDivider + Const.FlowProp + Const.PropDivider;
     }
@@ -268,6 +270,10 @@ public class Flow {
         return util.GetProperty(FlowNameProp, Const.FlowNameNotFound);
     }
     
+    public static void AddFlowType(String FlowType, String ShortName){
+        InternalFlowTypes.put(FlowType, ShortName);
+    }
+   
     public static String GetFlowType(String name){
         if (name==null){
             LOG.debug("GetViewType: request for null name returned NotFound");
@@ -288,8 +294,11 @@ public class Flow {
         }
         String FlowTypeProp = Flow.GetFlowBaseProp(name) + Const.PropDivider + Const.FlowType;
         String tFlow = util.GetProperty(FlowTypeProp, Const.FlowTypeDefault);
-        tFlow = tFlow.replaceAll("Flow", "");
-        return tFlow.trim();
+        if (InternalFlowTypes.containsKey(tFlow)){
+            return InternalFlowTypes.get(tFlow);
+        }else{
+            return tFlow.replaceAll("Flow", "").trim();
+        }
     }
 
     public static String ChangeFlowType(String Element, String NewViewType) {
@@ -312,15 +321,16 @@ public class Flow {
     }
 
     public static Collection<String> FlowTypes(){
-        List<String> tTypes = new ArrayList<String>();
-        tTypes.add("Wall Flow");
-        tTypes.add("List Flow");
-        tTypes.add("Cover Flow");
-        tTypes.add("Stage Flow");
-        tTypes.add("Category Flow");
-        tTypes.add("360 Flow");
-        tTypes.add("SideWays Flow");
-        return tTypes;
+//        List<String> tTypes = new ArrayList<String>();
+//        tTypes.add("Wall Flow");
+//        tTypes.add("List Flow");
+//        tTypes.add("Cover Flow");
+//        tTypes.add("Stage Flow");
+//        tTypes.add("Category Flow");
+//        tTypes.add("360 Flow");
+//        tTypes.add("SideWays Flow");
+//        return tTypes;
+        return InternalFlowTypes.keySet();
     }
     
     public static void CreateDefaultFlows(){
