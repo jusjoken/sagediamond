@@ -26,11 +26,14 @@ public class Const {
     public static final String OptionsIteration = "OptionsIteration";
     public static final String FlowName = "FlowName";
     public static final String FlowType = "FlowType";
+    public static final String FlowSource = "FlowSource";
     public static final String FlowSort = "FlowSort";
     public static final String FlowPathFilters = "FlowPathFilters";
     public static final String FlowNameNotFound = "Flow Name Not Found";
     public static final String FlowTypeNotFound = "Flow Type Not Found";
     public static final String FlowTypeDefault = "Cover Flow";
+    public static final String FlowSourceNotFound = "Flow Source Not Found";
+    public static final String FlowSourceDefaultName = "Default";
     
     
     //General Constants

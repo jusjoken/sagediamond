@@ -587,6 +587,30 @@ public class util {
         return Const.UnknownName;
     }
 
+    public static Object PadMediaFiles(Integer PadBefore, Object MediaFiles, Integer PadAfter){
+        for (int index=0;index<PadBefore;index++){
+            MediaFiles = sagex.api.Database.DataUnion(sagex.api.Utility.CreateArray(index+1), MediaFiles);
+        }
+        for (int index=0;index<PadAfter;index++){
+            MediaFiles = sagex.api.Database.DataUnion(MediaFiles, sagex.api.Utility.CreateArray((index+1)*-1));
+        }
+        return MediaFiles;
+    }
+    
+    //VFS utility functions
+    
+    //Get the menu title based on the flow and the current folder
+    public static String GetMenuTitle(String FlowKey, Object thisFolder){
+        String tFlowName = Flow.GetFlowName(FlowKey);
+        String FolderName = phoenix.media.GetTitle(thisFolder);
+        String ParentName = phoenix.media.GetTitle(phoenix.umb.GetParent((sagex.phoenix.vfs.IMediaResource) thisFolder));
+        if (ParentName==null){
+            return tFlowName + " : " + FolderName;
+        }else{
+            return tFlowName + " : " + ParentName + "/" + FolderName;
+        }
+    }
+    
 }
 
 

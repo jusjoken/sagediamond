@@ -222,7 +222,7 @@ public class Flow {
     }
     public static String CreateNewFlow(String ViewName, String ViewType) {
         if (ViewName==null){
-            LOG.debug("SaveView: request for null name returned 0");
+            LOG.debug("CreateNewFlow: request for null name returned 0");
             return "0";
         }
         String Element = util.GenerateRandomName();
@@ -239,7 +239,7 @@ public class Flow {
   
     public static String RemoveFlow(String Element) {
         if (Element==null){
-            LOG.debug("RemoveView: request for null name returned 0");
+            LOG.debug("RemoveFlow: request for null name returned 0");
             return "0";
         }
         String OldCVPropName = GetFlowBaseProp(Element);
@@ -263,7 +263,7 @@ public class Flow {
 
     public static String GetFlowName(String name){
         if (name==null){
-            LOG.debug("GetViewName: request for null name returned NotFound");
+            LOG.debug("GetFlowName: request for null name returned NotFound");
             return util.OptionNotFound;
         }
         String FlowNameProp = Flow.GetFlowBaseProp(name) + Const.PropDivider + Const.FlowName;
@@ -276,7 +276,7 @@ public class Flow {
    
     public static String GetFlowType(String name){
         if (name==null){
-            LOG.debug("GetViewType: request for null name returned NotFound");
+            LOG.debug("GetFlowType: request for null name returned NotFound");
             return util.OptionNotFound;
         }
         String FlowTypeProp = Flow.GetFlowBaseProp(name) + Const.PropDivider + Const.FlowType;
@@ -289,7 +289,7 @@ public class Flow {
     
     public static String GetFlowTypeShortName(String name){
         if (name==null){
-            LOG.debug("GetViewType: request for null name returned NotFound");
+            LOG.debug("GetFlowType: request for null name returned NotFound");
             return util.OptionNotFound;
         }
         String FlowTypeProp = Flow.GetFlowBaseProp(name) + Const.PropDivider + Const.FlowType;
@@ -314,7 +314,7 @@ public class Flow {
     
     public static void SetFlowType(String name, String FlowType){
         if (name==null){
-            LOG.debug("SetViewType: request for null name returned NotFound");
+            LOG.debug("SetFlowType: request for null name returned NotFound");
         }
         String FlowTypeProp = Flow.GetFlowBaseProp(name) + Const.PropDivider + Const.FlowType;
         util.SetProperty(FlowTypeProp, FlowType);
@@ -338,5 +338,42 @@ public class Flow {
             CreateNewFlow(tFlow, tFlow);
         }
     }
+
+    public static String GetFlowSource(String name){
+        if (name==null){
+            LOG.debug("GetFlowSource: request for null name returned NotFound");
+            return util.OptionNotFound;
+        }
+        String FlowSourceProp = Flow.GetFlowBaseProp(name) + Const.PropDivider + Const.FlowSource;
+        return util.GetProperty(FlowSourceProp, util.OptionNotFound);
+    }
+    public static String GetSourceName(String tSource){
+        if (tSource==null){
+            LOG.debug("GetFlowSourceName: request for null name returned NotFound");
+            return Const.FlowSourceDefaultName;
+        }
+        if (tSource.equals(util.OptionNotFound)){
+            return Const.FlowSourceDefaultName;
+        }else{
+            return phoenix.media.GetTitle(phoenix.umb.CreateView(tSource));
+        }
+    }
+    public static String GetFlowSourceName(String name){
+        if (name==null){
+            LOG.debug("GetFlowSourceName: request for null name returned NotFound");
+            return Const.FlowSourceDefaultName;
+        }
+        String tSource = GetFlowSource(name);
+        return GetSourceName(tSource);
+    }
+    //
+    public static void SetFlowSource(String name, String FlowSource){
+        if (name==null){
+            LOG.debug("SetFlowSource: request for null name returned NotFound");
+        }
+        String FlowSourceProp = Flow.GetFlowBaseProp(name) + Const.PropDivider + Const.FlowSource;
+        util.SetProperty(FlowSourceProp, FlowSource);
+    }
+    
     
 }
