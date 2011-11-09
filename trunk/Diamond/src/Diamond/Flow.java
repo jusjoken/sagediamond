@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.TreeMap;
 import org.apache.log4j.Logger;
 import sagex.UIContext;
+import sagex.phoenix.vfs.views.ViewFactory;
 
 /**
  *
@@ -348,7 +349,7 @@ public class Flow {
         return util.GetProperty(FlowSourceProp, util.OptionNotFound);
     }
     public static String GetSourceName(String tSource){
-        LOG.debug("GetSourceName: getting source name for '" + tSource + "'");
+        //LOG.debug("GetSourceName: getting source name for '" + tSource + "'");
         if (tSource==null){
             LOG.debug("GetSourceName: request for null name returned NotFound");
             return Const.FlowSourceDefaultName;
@@ -357,8 +358,14 @@ public class Flow {
             LOG.debug("GetSourceName: Not Found for '" + tSource + "'");
             return Const.FlowSourceDefaultName;
         }else{
-            String tSourceName = phoenix.media.GetTitle(phoenix.umb.CreateView(tSource));
-            LOG.debug("GetSourceName: returning '" + tSourceName + "' for '" + tSource + "'");
+            String tSourceName = Const.FlowSourceDefaultName;
+            for (sagex.phoenix.vfs.views.ViewFactory factory: phoenix.umb.GetViewFactories()){
+                if (factory.getName().equals(tSource)){
+                    tSourceName = factory.getLabel();
+                    break;
+                }
+            }
+            //LOG.debug("GetSourceName: returning '" + tSourceName + "' for '" + tSource + "'");
             return tSourceName;
         }
     }
@@ -378,6 +385,25 @@ public class Flow {
         String FlowSourceProp = Flow.GetFlowBaseProp(name) + Const.PropDivider + Const.FlowSource;
         util.SetProperty(FlowSourceProp, FlowSource);
     }
+    
+    public static void Test(){
+        for (sagex.phoenix.vfs.views.ViewFactory factory: phoenix.umb.GetVisibleViews()){
+            LOG.debug("Factory = '" + factory.getLabel() + "' Name = '" + factory.getName() + "'");
+        }
+        for (sagex.phoenix.vfs.views.ViewFactory factory: phoenix.umb.GetViewFactories()){
+            LOG.debug("Factory = '" + factory.getLabel() + "' Name = '" + factory.getName() + "'");
+        }
+        
+    }
+    public static void main(String[] args){
+        
+        for (sagex.phoenix.vfs.views.ViewFactory factory: phoenix.umb.GetVisibleViews()){
+            LOG.debug("Factory = '" + factory.getLabel() + "' Name = '" + factory.getName() + "'");
+        }
+
+    }
+
+    
     
     
 }

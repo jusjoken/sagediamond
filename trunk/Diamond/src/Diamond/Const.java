@@ -41,6 +41,7 @@ public class Const {
     public static final String PropDivider = "/";
     public static final String FlowProp = "Flow";
     public static final String MainMenuProp = "MainMenu";
+    public static final String WidgetProp = "Widgets";
     public static final Diamond.Property NotFoundProp = new Diamond.Property("NOTFOUND", "Not Found");
     public static final String UnknownName = "-UnknownName-";
     
