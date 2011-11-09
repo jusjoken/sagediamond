@@ -348,14 +348,18 @@ public class Flow {
         return util.GetProperty(FlowSourceProp, util.OptionNotFound);
     }
     public static String GetSourceName(String tSource){
+        LOG.debug("GetSourceName: getting source name for '" + tSource + "'");
         if (tSource==null){
-            LOG.debug("GetFlowSourceName: request for null name returned NotFound");
+            LOG.debug("GetSourceName: request for null name returned NotFound");
             return Const.FlowSourceDefaultName;
         }
         if (tSource.equals(util.OptionNotFound)){
+            LOG.debug("GetSourceName: Not Found for '" + tSource + "'");
             return Const.FlowSourceDefaultName;
         }else{
-            return phoenix.media.GetTitle(phoenix.umb.CreateView(tSource));
+            String tSourceName = phoenix.media.GetTitle(phoenix.umb.CreateView(tSource));
+            LOG.debug("GetSourceName: returning '" + tSourceName + "' for '" + tSource + "'");
+            return tSourceName;
         }
     }
     public static String GetFlowSourceName(String name){
