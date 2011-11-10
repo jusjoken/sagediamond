@@ -589,10 +589,10 @@ public class util {
 
     public static Object PadMediaFiles(Integer PadBefore, Object MediaFiles, Integer PadAfter){
         for (int index=0;index<PadBefore;index++){
-            MediaFiles = sagex.api.Database.DataUnion(sagex.api.Utility.CreateArray(index+1), MediaFiles);
+            MediaFiles = sagex.api.Database.DataUnion(sagex.api.Utility.CreateArray("BlankItem" + (index+1)), MediaFiles);
         }
         for (int index=0;index<PadAfter;index++){
-            MediaFiles = sagex.api.Database.DataUnion(MediaFiles, sagex.api.Utility.CreateArray((index+1)*-1));
+            MediaFiles = sagex.api.Database.DataUnion(MediaFiles, sagex.api.Utility.CreateArray("BlankItem"+(index+1)*-1));
         }
         return MediaFiles;
     }
