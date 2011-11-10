@@ -20,7 +20,9 @@ public class Widget {
     public static List<String> InternalWidgetList = new ArrayList<String>();
     
     public static void AddWidgetType(String WidgetType){
-        InternalWidgetList.add(WidgetType);
+        if (!InternalWidgetList.contains(WidgetType)){
+            InternalWidgetList.add(WidgetType);
+        }
     }
 
     public static ArrayList<String> GetWidgetList(){
