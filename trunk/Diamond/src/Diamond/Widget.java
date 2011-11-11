@@ -56,23 +56,32 @@ public class Widget {
         }
     }
     
-    public static String GetUseWidgetsName(){
-        return util.GetTrueFalseOptionNameBase(Boolean.FALSE, WidgetProps + "WidgetsUse","", "On", "Off", Boolean.FALSE);
-    }
+//    public static String GetUseWidgetsName(){
+//        return util.GetTrueFalseOptionNameBase(Boolean.FALSE, WidgetProps + "WidgetsUse","", "On", "Off", Boolean.FALSE);
+//    }
     public static Boolean GetUseWidgets(){
-        if (util.GetPropertyAsBoolean(WidgetProps + "WidgetsUse", Boolean.FALSE)){
-            return Boolean.TRUE;
-        }else{
+        if (util.GetProperty(WidgetProps + "WidgetsUse", "Off").equals("Off")){
             return Boolean.FALSE;
+        }else{
+            return Boolean.TRUE;
         }
     }
-    public static void SetUseWidgets(Boolean Value){
-        util.SetProperty(WidgetProps + "WidgetsUse", Value.toString());
+    public static Boolean AllowWidgetToggle(){
+        if (util.GetProperty(WidgetProps + "WidgetsUse", "Off").equals("Off")){
+            return Boolean.FALSE;
+        }else if (util.GetProperty(WidgetProps + "WidgetsUse", "Off").equals("Shown")){
+            return Boolean.FALSE;
+        }else{
+            return Boolean.TRUE;
+        }
     }
+//    public static void SetUseWidgets(Boolean Value){
+//        util.SetProperty(WidgetProps + "WidgetsUse", Value.toString());
+//    }
 
-    public static String GetLiveWidgetsName(){
-        return util.GetTrueFalseOptionNameBase(Boolean.FALSE, WidgetProps + "WidgetsLive","", "On", "Off", Boolean.FALSE);
-    }
+//    public static String GetLiveWidgetsName(){
+//        return util.GetTrueFalseOptionNameBase(Boolean.FALSE, WidgetProps + "WidgetsLive","", "On", "Off", Boolean.FALSE);
+//    }
     public static Boolean GetLiveWidgets(){
         if (util.GetPropertyAsBoolean(WidgetProps + "WidgetsLive", Boolean.FALSE)){
             return Boolean.TRUE;
@@ -80,9 +89,9 @@ public class Widget {
             return Boolean.FALSE;
         }
     }
-    public static void SetLiveWidgets(Boolean Value){
-        util.SetProperty(WidgetProps + "WidgetsLive", Value.toString());
-    }
+//    public static void SetLiveWidgets(Boolean Value){
+//        util.SetProperty(WidgetProps + "WidgetsLive", Value.toString());
+//    }
 
     public static Boolean ShowWidgets(){
         //see if at least one of the 4 Widget Panels is not Off
