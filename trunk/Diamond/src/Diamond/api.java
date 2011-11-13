@@ -62,6 +62,9 @@ public class api {
         InstantSearchExecuteModes.put(InstantSearchExecuteMode.AUTO.toString(), new Property(InstantSearchExecuteMode.AUTO.toString(), "Auto Filter as you type"));
         InstantSearchExecuteModes.put(InstantSearchExecuteMode.SELECT.toString(), new Property(InstantSearchExecuteMode.SELECT.toString(), "Press Select to Filter",Boolean.TRUE));
         
+        //prep Weather Icon Defaults Lists
+        Widget.BuildWeatherIconLists();
+        
 //        //see if we need to convert any of the Custom Flows to the new structure
 //        String FlowsConvertedProp = Const.BaseProp + Const.PropDivider + "FlowsConverted3_4";
 //        if (!util.GetPropertyAsBoolean(FlowsConvertedProp, Boolean.FALSE)){

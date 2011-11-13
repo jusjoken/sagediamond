@@ -34,7 +34,7 @@ public class Const {
     public static final String FlowTypeDefault = "Cover Flow";
     public static final String FlowSourceNotFound = "Flow Source Not Found";
     public static final String FlowSourceDefaultName = "Default";
-    
+    public static final String Weather = "Weather";
     
     //General Constants
     public static final String BaseProp = "Diamond";

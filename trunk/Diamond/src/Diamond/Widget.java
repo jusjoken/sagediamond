@@ -5,6 +5,7 @@
 package Diamond;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,10 @@ public class Widget {
         }
     }
 
+    public static ArrayList<String> GetWidgetListBase(){
+        return new ArrayList<String>(InternalWidgetList);
+    }
+
     public static ArrayList<String> GetWidgetList(){
         return GetWidgetList(Boolean.FALSE);
     }
@@ -37,6 +42,7 @@ public class Widget {
         if (InternalWidgetList.size()>0){
             //Add the widgets in Sort Order
             TreeMap<Integer,String> tSortedList = new TreeMap<Integer,String>();
+            Boolean SortNeedsSaving = Boolean.FALSE;
             Integer counter = 0;
             for (String tWidget:InternalWidgetList){
                 //make sure this is a real Flow entry with a name property
@@ -45,13 +51,20 @@ public class Widget {
                     Integer thisSort = GetWidgetSort(tWidget);
                     if (thisSort==0){
                         thisSort = counter;
+                        SortNeedsSaving = Boolean.TRUE;
                     }
                     while(tSortedList.containsKey(thisSort)){
                         counter++;
                         thisSort = counter;
+                        SortNeedsSaving = Boolean.TRUE;
                     }
                     tSortedList.put(thisSort, tWidget);
                     //LOG.debug("GetFlows: '" + tFlow + "' added at '" + thisSort + "'");
+                }
+            }
+            if (SortNeedsSaving){
+                for (Integer tWidgetIndex:tSortedList.keySet()){
+                    SetWidgetSort(tSortedList.get(tWidgetIndex),tWidgetIndex);
                 }
             }
             return new ArrayList<String>(tSortedList.values()); 
@@ -111,6 +124,20 @@ public class Widget {
     }
     public static void SetWidgetSort(String WidgetType, Integer iSort){
         util.SetProperty(WidgetProps + WidgetType + Const.PropDivider + "Sort", iSort.toString());
+    }
+    
+    public static void MoveWidget(String WidgetType, Integer Delta){
+        Integer currentPos = GetWidgetSort(WidgetType);
+        Integer newPos = currentPos + Delta;
+        ArrayList<String> Widgets = GetWidgetList();
+        if (newPos>Widgets.size() || newPos<0){
+            //do not move the widget out of bounds
+        }else{
+            String newWidget = Widgets.get(newPos - 1);
+            SetWidgetSort(WidgetType, newPos);
+            SetWidgetSort(newWidget, currentPos);
+            //LOG.debug("MoveWidget: WidgetType '" + WidgetType + "' Delta '" + Delta + "' newPos '" + newPos + "' Switching with '" + newWidget + "'");
+        }
     }
     
     public static Boolean ShowWidget(String WidgetType){
@@ -261,7 +288,7 @@ public class Widget {
         for (String tWidget:GetWidgetList()){
             tHeight = tHeight + GetWidgetHeight(tWidget);
         }
-        LOG.debug("GetAllHeights: returning ='" + tHeight + "'");
+        //LOG.debug("GetAllHeights: returning ='" + tHeight + "'");
         return tHeight;
     }
 
@@ -273,7 +300,7 @@ public class Widget {
         for (Integer i=1;i<InternalWidgetListSections.get(WidgetType)+1;i++){
             tHeight = tHeight + GetWidgetSectionHeight(WidgetType, i);
         }
-        LOG.debug("GetWidgetHeight: returning ='" + tHeight + "'");
+        //LOG.debug("GetWidgetHeight: returning ='" + tHeight + "'");
         return tHeight;
     }
     public static Double GetWidgetSectionHeightP(String WidgetType, Integer Section){
@@ -288,9 +315,75 @@ public class Widget {
             }
             Double thisHeight = (GetSpaceSize()*GetSectionSize(WidgetType, Section)*ListItems);
             tHeight = tHeight + thisHeight;
-            LOG.debug("GetWidgetHeight: for Widget ='" + WidgetType + "' Section = '" + Section + "' Height = '" + thisHeight + "' totalHeight = '" + tHeight + "' ListItems = '" + ListItems + "'");
+            //LOG.debug("GetWidgetHeight: for Widget ='" + WidgetType + "' Section = '" + Section + "' Height = '" + thisHeight + "' totalHeight = '" + tHeight + "' ListItems = '" + ListItems + "'");
         }
         return tHeight;
     }
     
+    public static Boolean IsDaytime(){
+        Calendar myCalendar = Calendar.getInstance();
+        Integer currentHour = myCalendar.get(Calendar.HOUR_OF_DAY);
+        String tProp = WidgetProps + Const.Weather + Const.PropDivider;
+        Integer DayStartHour = util.GetPropertyAsInteger(tProp + "DayStartHour", 8);
+        Integer DayEndHour = util.GetPropertyAsInteger(tProp + "DayEndHour", 17);
+        if (currentHour>=DayStartHour && currentHour<=DayEndHour){
+            return Boolean.TRUE;
+        }else{
+            return Boolean.FALSE;
+        }
+    }
+    
+    //Weather related Widget functions
+    public static Map<String,String> IconsForDaytime = new HashMap<String, String>();
+    public static Map<String,String> IconsForNighttime = new HashMap<String, String>();
+    public static void BuildWeatherIconLists(){
+        AddIcon("sunny", "32", "31");
+        AddIcon("mostly_sunny", "34", "33");
+        AddIcon("partly_cloudy", "30", "29");
+        AddIcon("mostly_cloudy", "28", "27");
+        AddIcon("chance_of_storm", "37", "47");
+        AddIcon("rain", "12", "12");
+        AddIcon("chance_of_rain", "39", "45");
+        AddIcon("chance_of_snow", "41", "46");
+        AddIcon("cloudy", "26", "26");
+        AddIcon("mist", "11", "11");
+        AddIcon("storm", "35", "35");
+        AddIcon("thunderstorm", "35", "35");
+        AddIcon("chance_of_tstorm", "37", "47");
+        AddIcon("sleet", "5", "5");
+        AddIcon("snow", "16", "16");
+        AddIcon("icy", "10", "10");
+        AddIcon("dust", "19", "19");
+        AddIcon("fog", "20", "20");
+        AddIcon("smoke", "22", "22");
+        AddIcon("haze", "21", "21");
+        AddIcon("flurries", "14", "14");
+    }
+    private static void AddIcon(String IconSource, String IconForDay, String IconForNight){
+        IconsForDaytime.put(IconSource, IconForDay);
+        IconsForNighttime.put(IconSource, IconForNight);
+    }
+
+    public static String GetWeatherIcon(String Condition, Boolean ForceDay){
+        String tProp = WidgetProps + Const.Weather + Const.PropDivider;
+        String returnIcon = Condition;
+        String DefaultIcon = "";
+        if (IsDaytime() || ForceDay){
+            if (IconsForDaytime.containsKey(Condition)){
+                DefaultIcon = IconsForDaytime.get(Condition) + ".png";
+            }else{
+                DefaultIcon = Condition;
+            }
+            returnIcon = util.GetProperty(tProp + Condition + Const.PropDivider + "DayIcon", DefaultIcon );
+        }else{
+            if (IconsForNighttime.containsKey(Condition)){
+                DefaultIcon = IconsForNighttime.get(Condition) + ".png";
+            }else{
+                DefaultIcon = Condition;
+            }
+            returnIcon = util.GetProperty(tProp + Condition + Const.PropDivider + "NightIcon", DefaultIcon );
+        }
+        //LOG.debug("GetWeatherIcon: Condition = '" + Condition + "' returning = '" + returnIcon + "'");
+        return returnIcon;
+    }
 }
