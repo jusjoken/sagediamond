@@ -310,10 +310,15 @@ public class Widget {
         Double tHeight = 0.00;
         if (GetSectionEnabled(WidgetType, Section)){
             Integer ListItems = 1;
+            Integer ListExtraInfo = 1;
             if (Section>1){
-               ListItems = GetListSize(WidgetType);
+                ListItems = GetListSize(WidgetType);
+                String tProp = WidgetProps + WidgetType + Const.PropDivider + "ExtraInfoinList";
+                if (util.GetPropertyAsBoolean(tProp, Boolean.FALSE)){
+                   ListExtraInfo = 2;
+                }
             }
-            Double thisHeight = (GetSpaceSize()*GetSectionSize(WidgetType, Section)*ListItems);
+            Double thisHeight = (GetSpaceSize()*GetSectionSize(WidgetType, Section)*ListItems*ListExtraInfo);
             tHeight = tHeight + thisHeight;
             //LOG.debug("GetWidgetHeight: for Widget ='" + WidgetType + "' Section = '" + Section + "' Height = '" + thisHeight + "' totalHeight = '" + tHeight + "' ListItems = '" + ListItems + "'");
         }
