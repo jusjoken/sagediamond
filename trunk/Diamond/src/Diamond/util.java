@@ -611,6 +611,24 @@ public class util {
         }
     }
     
+    public static ArrayList<String> GetFirstListItems(ArrayList<String> InList, Integer Items){
+        //filter out null values and return at most Items items
+        ArrayList<String> OutList = new ArrayList<String>();
+        Integer counter = 0;
+        for (String Item: InList){
+            if (Item==null){
+                //do nothing
+            }else{
+                OutList.add(Item);
+                counter++;
+                if (counter>=Items){
+                    break;
+                }
+            }
+        }
+        return OutList;
+    }
+    
 }
 
 

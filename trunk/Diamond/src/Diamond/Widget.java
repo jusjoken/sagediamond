@@ -5,7 +5,9 @@
 package Diamond;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 import org.apache.log4j.Logger;
 
@@ -18,10 +20,12 @@ public class Widget {
     public static final String WidgetProps = Const.BaseProp + Const.PropDivider + Const.WidgetProp + Const.PropDivider;
     public static enum WidgetSize{XL,L,M,S};
     public static List<String> InternalWidgetList = new ArrayList<String>();
+    public static Map<String,Integer> InternalWidgetListSections = new HashMap<String,Integer>();
     
-    public static void AddWidgetType(String WidgetType){
+    public static void AddWidgetType(String WidgetType, Integer Sections){
         if (!InternalWidgetList.contains(WidgetType)){
             InternalWidgetList.add(WidgetType);
+            InternalWidgetListSections.put(WidgetType, Sections);
         }
     }
 
@@ -110,11 +114,7 @@ public class Widget {
     }
     
     public static Boolean ShowWidget(String WidgetType){
-        if (GetSize(WidgetType).equals("Off")){
-            return Boolean.FALSE;
-        }else{
-            return Boolean.TRUE;
-        }
+        return util.GetPropertyAsBoolean(WidgetProps + WidgetType + Const.PropDivider + "Show",false);
     }
     public static String GetSize(String WidgetType){
         return util.GetProperty(WidgetProps + WidgetType + Const.PropDivider + "Size","Off");
@@ -152,15 +152,6 @@ public class Widget {
 //        return util.GetProperty(WidgetProps + "WidgetPanel" + WidgetNumber,"Off");
 //    }
 //   
-    public static Double GetAllHeights(){
-        Double tHeight = 0.00;
-        for (String tWidget:GetWidgetList()){
-            tHeight = tHeight + GetHeightbyType(tWidget);
-        }
-        //LOG.debug("GetAllHeights: '" + tHeight.toString() + "'");
-        return tHeight;
-    }
-    
     public static Double GetHeightbyType(String WidgetType){
         String tWidgetSize = GetSize(WidgetType);
         Double tRetVal = GetHeight(tWidgetSize);
@@ -210,6 +201,96 @@ public class Widget {
     }
     public static void SetMaxListItems(String tWidgetSize, Integer MaxItems){
         util.SetProperty(WidgetProps + "WidgetMaxListItems" + tWidgetSize, MaxItems.toString());
+    }
+    
+    
+    
+    
+    public static String GetSectionEnabledName(String WidgetType, Integer Section, String TrueValue, String FalseValue){
+        if (GetSectionEnabled(WidgetType, Section)){
+            return TrueValue;
+        }else{
+            return FalseValue;
+        }
+    }
+    public static Boolean GetSectionEnabled(String WidgetType, Integer Section){
+        String tProp = WidgetProps + WidgetType + Const.PropDivider + Section.toString() + Const.PropDivider + "Enabled";
+        return util.GetPropertyAsBoolean(tProp,Boolean.TRUE);
+    }
+    public static void SetSectionEnabledNext(String WidgetType, Integer Section){
+        String tProp = WidgetProps + WidgetType + Const.PropDivider + Section.toString() + Const.PropDivider + "Enabled";
+        Boolean NewValue = !util.GetPropertyAsBoolean(tProp, Boolean.TRUE);
+        util.SetProperty(tProp, NewValue.toString());
+    }
+
+    public static Integer GetListSize(String WidgetType){
+        String tProp = WidgetProps + WidgetType + Const.PropDivider + "ListSize";
+        Integer tRetVal = util.GetPropertyAsInteger(tProp,1);
+        return tRetVal;
+    }
+    public static void SetListSize(String WidgetType, Integer tSize){
+        String tProp = WidgetProps + WidgetType + Const.PropDivider + "ListSize";
+        util.SetProperty(tProp,tSize.toString());
+    }
+
+    //Section 1 is always the Title
+    //Section size is how many "spaces" this Widget section will consume
+    public static Double GetSectionSize(String WidgetType, Integer Section){
+        Double tRetVal = StringtoDouble(util.GetProperty(WidgetProps + WidgetType + Const.PropDivider + Section.toString() + Const.PropDivider + "Size","0.00"));
+        return tRetVal;
+    }
+    public static void SetSectionSize(String WidgetType, Integer Section, Double tSize){
+        util.SetProperty(WidgetProps + WidgetType + Const.PropDivider + Section.toString() + Const.PropDivider + "Size",tSize.toString());
+    }
+
+    //Space size to use as a multiplier with Section size to determine the Height for the Section
+    public static Double GetSpaceSize(){
+        Double tRetVal = StringtoDouble(util.GetProperty(WidgetProps + "SpaceSize","0.00"));
+        return tRetVal;
+    }
+    public static void SetSpaceSize(Double tSize){
+        util.SetProperty(WidgetProps + "SpaceSize",tSize.toString());
+    }
+
+    public static Integer GetMaxSections(String WidgetType){
+        return InternalWidgetListSections.get(WidgetType);
+    }
+    
+    public static Double GetAllHeights(){
+        Double tHeight = 0.00;
+        for (String tWidget:GetWidgetList()){
+            tHeight = tHeight + GetWidgetHeight(tWidget);
+        }
+        LOG.debug("GetAllHeights: returning ='" + tHeight + "'");
+        return tHeight;
+    }
+
+    public static Double GetWidgetHeightP(String WidgetType){
+        return GetWidgetHeight(WidgetType)/GetAllHeights();
+    }
+    public static Double GetWidgetHeight(String WidgetType){
+        Double tHeight = 0.00;
+        for (Integer i=1;i<InternalWidgetListSections.get(WidgetType)+1;i++){
+            tHeight = tHeight + GetWidgetSectionHeight(WidgetType, i);
+        }
+        LOG.debug("GetWidgetHeight: returning ='" + tHeight + "'");
+        return tHeight;
+    }
+    public static Double GetWidgetSectionHeightP(String WidgetType, Integer Section){
+        return GetWidgetSectionHeight(WidgetType, Section)/GetWidgetHeight(WidgetType);
+    }
+    public static Double GetWidgetSectionHeight(String WidgetType, Integer Section){
+        Double tHeight = 0.00;
+        if (GetSectionEnabled(WidgetType, Section)){
+            Integer ListItems = 1;
+            if (Section>1){
+               ListItems = GetListSize(WidgetType);
+            }
+            Double thisHeight = (GetSpaceSize()*GetSectionSize(WidgetType, Section)*ListItems);
+            tHeight = tHeight + thisHeight;
+            LOG.debug("GetWidgetHeight: for Widget ='" + WidgetType + "' Section = '" + Section + "' Height = '" + thisHeight + "' totalHeight = '" + tHeight + "' ListItems = '" + ListItems + "'");
+        }
+        return tHeight;
     }
     
 }
