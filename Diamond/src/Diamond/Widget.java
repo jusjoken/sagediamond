@@ -59,12 +59,13 @@ public class Widget {
                         SortNeedsSaving = Boolean.TRUE;
                     }
                     tSortedList.put(thisSort, tWidget);
-                    //LOG.debug("GetFlows: '" + tFlow + "' added at '" + thisSort + "'");
+                    //LOG.debug("GetWidgetList: '" + tWidget + "' added at '" + thisSort + "'");
                 }
             }
             if (SortNeedsSaving){
                 for (Integer tWidgetIndex:tSortedList.keySet()){
                     SetWidgetSort(tSortedList.get(tWidgetIndex),tWidgetIndex);
+                    //LOG.debug("GetWidgetList: Saving sort for '" + tSortedList.get(tWidgetIndex) + "' at '" + tWidgetIndex + "'");
                 }
             }
             return new ArrayList<String>(tSortedList.values()); 
@@ -127,16 +128,27 @@ public class Widget {
     }
     
     public static void MoveWidget(String WidgetType, Integer Delta){
-        Integer currentPos = GetWidgetSort(WidgetType);
-        Integer newPos = currentPos + Delta;
         ArrayList<String> Widgets = GetWidgetList();
+        Integer currentPos = Widgets.indexOf(WidgetType);
+        Integer newPos = currentPos + Delta;
+        //LOG.debug("MoveWidget: WidgetType '" + WidgetType + "' newPos '" + newPos + " currentPos '" + currentPos + " Size = '" + Widgets.size() + " Delta '" + Delta + "'");
         if (newPos>Widgets.size() || newPos<0){
             //do not move the widget out of bounds
         }else{
-            String newWidget = Widgets.get(newPos - 1);
-            SetWidgetSort(WidgetType, newPos);
-            SetWidgetSort(newWidget, currentPos);
-            //LOG.debug("MoveWidget: WidgetType '" + WidgetType + "' Delta '" + Delta + "' newPos '" + newPos + "' Switching with '" + newWidget + "'");
+            String newWidget = Widgets.get(newPos);
+            //now resave all the sorts with the change in place
+            for (Integer i=0;i<Widgets.size();i++){
+                if (i==currentPos){
+                    SetWidgetSort(WidgetType, newPos+1);
+                    //LOG.debug("MoveWidget: WidgetType original '" + WidgetType + "' to: '" + (newPos+1) + " Delta '" + Delta + "'");
+                }else if (i==newPos){
+                    SetWidgetSort(newWidget, currentPos+1);
+                    //LOG.debug("MoveWidget: WidgetType replaced '" + newWidget + "' to: '" + (currentPos+1) + " Delta '" + Delta + "'");
+                }else{
+                    SetWidgetSort(Widgets.get(i), i+1);
+                    //LOG.debug("MoveWidget: WidgetType saving   '" + Widgets.get(i) + "' to: '" + (i+1) + " Delta '" + Delta + "'");
+                }
+            }
         }
     }
     
