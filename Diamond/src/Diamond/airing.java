@@ -9,6 +9,7 @@ import sagex.api.AiringAPI;
 import sagex.api.ShowAPI;
 import sagex.api.PlaylistAPI;
 import sagex.api.Utility;
+import sagex.phoenix.vfs.IMediaResource;
 
 
 public class airing
@@ -139,6 +140,21 @@ public class airing
 		return Utility.GetElement(MediaObjects, 0);
 	}
 
+	public static Object GetLastWatchedVFS(Object MediaObjects)
+	/*
+	 * Given an array of Airings will return the last watched (in real time) object.
+	 * 
+	 * @param MediaObjects - sage MediaFiles, Airings, or Shows Objects in an Array, list, or vector.
+	 */
+	{
+		MediaObjects = Database.Sort(MediaObjects, true, "Diamond_airing_GetRealWatchedStartTimeVFS");
+		return Utility.GetElement(MediaObjects, 0);
+	}
+
+        public static Long GetRealWatchedStartTimeVFS(IMediaResource MediaObject){
+            return sagex.api.AiringAPI.GetRealWatchedStartTime(phoenix.media.GetMediaObject(MediaObject));
+        }
+        
 	
 	public static Object GetNextShow(Object MediaObjects)
 	/*
@@ -162,6 +178,28 @@ public class airing
 		}
 	}
 
+	public static Object GetNextShowVFS(Object MediaObjects)
+	/*
+	 * Given an array of Airings will return the next episode to watch by AiringDate (in real time).
+	 * Returns Null if Airings not found after last watched. (end of series)
+	 * 
+	 * @param MediaObjects - sage MediaFiles, Airings, or Shows Objects in an Array, list, or vector.
+	 */
+	{
+            Object LastWatched = airing.GetLastWatchedVFS(MediaObjects);
+            if(phoenix.media.IsWatched(LastWatched)){
+                MediaObjects = Database.Sort(MediaObjects, false, "phoenix_metadata_GetOriginalAirDate");
+                int index = Utility.FindElementIndex(MediaObjects, LastWatched);
+
+                if(index >= Utility.Size(MediaObjects)){	
+                    return null;
+                }else{
+                    return Utility.GetElement(MediaObjects, index+1);}
+            }else{
+                return LastWatched;	
+            }
+	}
+        
 	public static Object GetShowNextPrev(Object MediaObjects, Object CurrentShow, Boolean DirectionNext)
 	/*
 	 * Given an array of Airings will return the Next or Previous episode by AiringDate (in real time).

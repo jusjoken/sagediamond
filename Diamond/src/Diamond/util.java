@@ -329,6 +329,9 @@ public class util {
     }
 
     public static String ConvertListtoString(List<String> ListValue){
+        return ConvertListtoString(ListValue, ListToken);
+    }
+    public static String ConvertListtoString(List<String> ListValue, String Separator){
         String Value = "";
         if (ListValue.size()>0){
             Boolean tFirstItem = Boolean.TRUE;
@@ -337,7 +340,7 @@ public class util {
                     Value = ListItem;
                     tFirstItem = Boolean.FALSE;
                 }else{
-                    Value = Value + ListToken + ListItem;
+                    Value = Value + Separator + ListItem;
                 }
             }
         }
