@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.TreeMap;
 import org.apache.log4j.Logger;
 import sagex.UIContext;
+import sagex.phoenix.vfs.IMediaResource;
 import sagex.phoenix.vfs.views.ViewFactory;
 
 /**
@@ -403,7 +404,15 @@ public class Flow {
 
     }
 
+    public static String DisplaySeasonEpisodeVFS(String Element, IMediaResource MediaObject) {
+        LOG.debug("DisplaySeasonEpisodeVFS: Object '" + MediaObject.getClass() + " Media '" + MediaObject + "'" );
+        return DisplaySeasonEpisode(Element, phoenix.media.GetMediaObject(MediaObject));
+    }
     
-    
+    public static String DisplaySeasonEpisode(String Element, Object MediaObject) {
+        String SEFormat = Flow.GetOptionName(Element,"SEFormat","S1E01");
+        LOG.debug("DisplaySeasonEpisode: SEFormat = '" + SEFormat + "' for '" + Element + "' Object '" + MediaObject.getClass() + " Media '" + MediaObject + "'" );
+        return MetadataCalls.DisplaySeasonEpisode(MediaObject, SEFormat);
+    }
     
 }

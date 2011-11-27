@@ -5,7 +5,9 @@
 package Diamond;
 
 import java.util.ArrayList;
+import java.util.List;
 import org.apache.log4j.Logger;
+import sagex.phoenix.vfs.IMediaResource;
 
 /**
  *
@@ -39,6 +41,10 @@ public class MetadataCalls {
 
     // Diamond_MetadataCalls_DisplaySeasonEpisode
     public static String DisplaySeasonEpisode(Object MediaObject, String Property) {
+        //ensure there is a valid SE otherwise return a blank string
+        if (GetSeasonNumber(MediaObject)==0 || GetEpisodeNumber(MediaObject)==0){
+            return "";
+        }
     	if(Property.equals("S1E01")) {
     		return "S"+ GetSeasonNumber(MediaObject) + "E" + GetEpisodeNumberPad(MediaObject);
     	} else if(Property.equals("S01E01")) {
@@ -380,6 +386,24 @@ public class MetadataCalls {
         return retString;
     }
 
+    public static String GetGenresasString(IMediaResource MediaObject, String Separator){
+        String Value = "";
+        List<String> ListValue = phoenix.metadata.GetGenres(MediaObject);
+        if (ListValue.size()>0){
+            for (String ListItem : ListValue){
+                if (ListItem.equalsIgnoreCase("movie")||ListItem.equalsIgnoreCase("film")){
+                    //skip these
+                }else{
+                    if (Value.equals("")){
+                        Value = ListItem;
+                    }else{
+                        Value = Value + Separator + ListItem;
+                    }
+                }
+            }
+        }
+        return Value;
+    }
     
     //get a list of all the categories with Movies/Film removed and unknown assigned if no category exists
     public static ArrayList<String> GetAllShowCategories(Object MediaObject) {
