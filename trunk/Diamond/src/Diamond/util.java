@@ -543,7 +543,7 @@ public class util {
         String CurrentValue = util.GetProperty(tProp, OptionNotFound);
         List<String> FullList = ConvertStringtoList(OptionList);
         if (CurrentValue.equals(OptionNotFound)){
-            util.SetProperty(tProp, FullList.get(0));
+            util.SetProperty(tProp, FullList.get(1));  //default to the 2nd item
         }else{
             Integer pos = FullList.indexOf(CurrentValue);
             if (pos==-1){ //not found
