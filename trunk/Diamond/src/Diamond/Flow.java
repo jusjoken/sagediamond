@@ -8,12 +8,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeMap;
 import org.apache.log4j.Logger;
 import sagex.UIContext;
 import sagex.phoenix.vfs.IMediaResource;
 import sagex.phoenix.vfs.views.ViewFactory;
+
 
 /**
  *
@@ -350,6 +353,9 @@ public class Flow {
         return util.GetProperty(FlowSourceProp, util.OptionNotFound);
     }
     public static String GetSourceName(String tSource){
+        return GetSourceName(tSource, Boolean.FALSE);
+    }
+    public static String GetSourceName(String tSource, Boolean AllowNongemstoneSources){
         //LOG.debug("GetSourceName: getting source name for '" + tSource + "'");
         if (tSource==null){
             LOG.debug("GetSourceName: request for null name returned NotFound");
@@ -360,7 +366,7 @@ public class Flow {
             return Const.FlowSourceDefaultName;
         }else{
             String tSourceName = Const.FlowSourceDefaultName;
-            for (sagex.phoenix.vfs.views.ViewFactory factory: phoenix.umb.GetViewFactories()){
+            for (sagex.phoenix.vfs.views.ViewFactory factory: SourceList(AllowNongemstoneSources)){
                 if (factory.getName().equals(tSource)){
                     tSourceName = factory.getLabel();
                     break;
@@ -371,12 +377,15 @@ public class Flow {
         }
     }
     public static String GetFlowSourceName(String name){
+        return GetFlowSourceName(name, Boolean.FALSE);
+    }
+    public static String GetFlowSourceName(String name, Boolean AllowNongemstoneSources){
         if (name==null){
             LOG.debug("GetFlowSourceName: request for null name returned NotFound");
             return Const.FlowSourceDefaultName;
         }
         String tSource = GetFlowSource(name);
-        return GetSourceName(tSource);
+        return GetSourceName(tSource,AllowNongemstoneSources);
     }
     //
     public static void SetFlowSource(String name, String FlowSource){
@@ -385,6 +394,38 @@ public class Flow {
         }
         String FlowSourceProp = Flow.GetFlowBaseProp(name) + Const.PropDivider + Const.FlowSource;
         util.SetProperty(FlowSourceProp, FlowSource);
+    }
+    
+    public static Boolean IsValidSource(String tSource){
+        return IsValidSource(tSource, Boolean.FALSE);
+    }
+    public static Boolean IsValidSource(String tSource, Boolean AllowNongemstoneSources){
+        if (tSource==null){
+            LOG.debug("IsValidSource: request for null name returned false");
+            return Boolean.FALSE;
+        }
+        if (tSource.equals(util.OptionNotFound)){
+            LOG.debug("IsValidSource: Not Found for '" + tSource + "'");
+            return Boolean.FALSE;
+        }else{
+            for (sagex.phoenix.vfs.views.ViewFactory factory: SourceList(AllowNongemstoneSources)){
+                if (factory.getName().equals(tSource)){
+                    return Boolean.TRUE;
+                }
+            }
+            return Boolean.FALSE;
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
+    public static Set<ViewFactory> SourceList(Boolean AllowNongemstoneSources){
+        Set<ViewFactory> Sources = null;
+        if (AllowNongemstoneSources){
+            Sources = new HashSet(phoenix.umb.GetViewFactories());
+        }else{
+            Sources = phoenix.umb.GetViewFactories("gemsource");
+        }
+        return Sources;
     }
     
     public static void Test(){
@@ -405,13 +446,13 @@ public class Flow {
     }
 
     public static String DisplaySeasonEpisodeVFS(String Element, IMediaResource MediaObject) {
-        LOG.debug("DisplaySeasonEpisodeVFS: Object '" + MediaObject.getClass() + " Media '" + MediaObject + "'" );
+        //LOG.debug("DisplaySeasonEpisodeVFS: Object '" + MediaObject.getClass() + " Media '" + MediaObject + "'" );
         return DisplaySeasonEpisode(Element, phoenix.media.GetMediaObject(MediaObject));
     }
     
     public static String DisplaySeasonEpisode(String Element, Object MediaObject) {
         String SEFormat = Flow.GetOptionName(Element,"SEFormat","S1E01");
-        LOG.debug("DisplaySeasonEpisode: SEFormat = '" + SEFormat + "' for '" + Element + "' Object '" + MediaObject.getClass() + " Media '" + MediaObject + "'" );
+        //LOG.debug("DisplaySeasonEpisode: SEFormat = '" + SEFormat + "' for '" + Element + "' Object '" + MediaObject.getClass() + " Media '" + MediaObject + "'" );
         return MetadataCalls.DisplaySeasonEpisode(MediaObject, SEFormat);
     }
     
