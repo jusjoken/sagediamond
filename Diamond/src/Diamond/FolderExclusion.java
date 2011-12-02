@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import org.apache.log4j.Logger;
+import sagex.phoenix.factory.ConfigurableOption;
+import sagex.phoenix.vfs.filters.Filter;
+import sagex.phoenix.vfs.views.ViewFolder;
 
 /**
  *
@@ -39,6 +42,59 @@ public class FolderExclusion {
         return rest;
     }
 
+    public static Boolean HasFilters(String ViewName) {
+        if (GetAllFolderRestrictions(ViewName).size()>0){
+            return Boolean.TRUE;
+        }else{
+            return Boolean.FALSE;
+        }
+    }
+    
+    //Same filter
+    //"(?!(\\\\PlayOn\\\\TV\\\\Eureka|\\\\PlayOn\\\\Movies\\\\The Mechanic))(\\\\PlayOn\\\\Test1|\\\\PlayOn\\\\TV|\\\\PlayOn\\\\Movies)"
+    
+    
+    public static void ApplyFilters(String ViewName, ViewFolder Folder){
+        if (HasFilters(ViewName)){
+            String IncludeFilters = "\\\\PlayOn\\\\Test1|\\\\PlayOn\\\\TV|\\\\PlayOn\\\\Movies";
+            String ExcludeFilters = "\\\\PlayOn\\\\TV\\\\Eureka|\\\\PlayOn\\\\Movies\\\\The Mechanic";
+            ApplyFilters(ViewName, Folder, IncludeFilters, ExcludeFilters);
+        }
+    }
+    public static void ApplyFilters(String ViewName, ViewFolder Folder, String IncludeFilters, String ExcludeFilters){
+        //LOG.debug("ApplyFilters: = '" + ViewName + "'");
+        //make sure we have a filter
+        String FilterString = BuildFilterRegEx(IncludeFilters, ExcludeFilters);
+        LOG.debug("ApplyFilters: = '" + ViewName + "' RegFilter = '" + FilterString + "'");
+        if (!FilterString.equals("")){
+            Filter NewFilter = phoenix.umb.CreateFilter("filepath");
+            ConfigurableOption tOption = phoenix.umb.GetOption(NewFilter, "use-regex-matching");
+            phoenix.opt.SetValue(tOption, "true");
+            tOption = phoenix.umb.GetOption(NewFilter, "scope");
+            phoenix.opt.SetValue(tOption, "include");
+            tOption = phoenix.umb.GetOption(NewFilter, "value");
+            phoenix.opt.SetValue(tOption, FilterString);
+            phoenix.umb.SetChanged(NewFilter);
+            phoenix.umb.SetFilter(Folder, NewFilter);
+            phoenix.umb.Refresh(Folder);
+        }
+    }
+
+    public static String BuildFilterRegEx(String IncludeFilters, String ExcludeFilters){
+        if (IncludeFilters.equals("") && ExcludeFilters.equals("")){
+            return "";
+        }else{
+            String RegExString = "";
+            if (!ExcludeFilters.equals("")){
+                RegExString = "(?!(" + ExcludeFilters + "))";
+            }
+            if (!IncludeFilters.equals("")){
+                RegExString = RegExString + "(" + IncludeFilters + ")";
+            }
+            return RegExString;
+        }
+    }
+    
     public static Object[] RunFolderFilter(Object[] MediaFiles, String ViewName) {
         Map<String, Boolean> filters = GetAllFolderRestrictions(ViewName);
         Set Restrictions = filters.keySet();
