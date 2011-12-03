@@ -23,7 +23,7 @@ public class api {
 
     public static Logger LOG=null;
 
-    public static String Version = "4.010";
+    public static String Version = "4.011";
 
     public static PropList YESNOList = new PropList();
     public static PropList ONOFFList = new PropList();
@@ -61,9 +61,6 @@ public class api {
         InstantSearchModes.put(InstantSearchMode.FILTERED.toString(), new Property(InstantSearchMode.FILTERED.toString(), "Filtered"));
         InstantSearchExecuteModes.put(InstantSearchExecuteMode.AUTO.toString(), new Property(InstantSearchExecuteMode.AUTO.toString(), "Auto Filter as you type"));
         InstantSearchExecuteModes.put(InstantSearchExecuteMode.SELECT.toString(), new Property(InstantSearchExecuteMode.SELECT.toString(), "Press Select to Filter",Boolean.TRUE));
-        
-        //prep Weather Icon Defaults Lists
-        Widget.BuildWeatherIconLists();
         
 //        //see if we need to convert any of the Custom Flows to the new structure
 //        String FlowsConvertedProp = Const.BaseProp + Const.PropDivider + "FlowsConverted3_4";
