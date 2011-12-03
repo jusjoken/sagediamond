@@ -4,12 +4,8 @@
  */
 package Diamond;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import sagex.phoenix.factory.ConfigurableOption;
 import sagex.phoenix.vfs.filters.Filter;
@@ -17,18 +13,11 @@ import sagex.phoenix.vfs.views.ViewFolder;
 
 /**
  *
- * @author SBANTA
+ * @author jusjoken
  */
-public class FolderExclusion {
-
-    static private final Logger LOG = Logger.getLogger(FolderExclusion.class);
-
-    public static void main(String[] args) {
-//    File 3232=new File("C:\\TVFiles\\TestPath\\TV\\Battlestar Galactica (2003)&&true");
-        String test = "C:\\TestMovies\\Blurays";
-       
-    }
-
+public class Source {
+    static private final Logger LOG = Logger.getLogger(Source.class);
+    
     public static Map GetAllFolderRestrictions(String ViewName) {
         String ExclusionFolders = Flow.GetOptionName(ViewName, Const.FlowPathFilters, "");
         //LOG.debug("GetAllFolderRestrictions: = '" + ExclusionFolders + "'");
@@ -51,9 +40,6 @@ public class FolderExclusion {
         }
     }
     
-    //Same filter
-    //"(?!(\\\\PlayOn\\\\TV\\\\Eureka|\\\\PlayOn\\\\Movies\\\\The Mechanic))(\\\\PlayOn\\\\Test1|\\\\PlayOn\\\\TV|\\\\PlayOn\\\\Movies)"
-    
     public static String FilterAppend(String filters, String filter){
         //LOG.debug("FilterAppend: called '" + filters + "' add '" + filter + "'");
         String tFilter = filter;
@@ -69,7 +55,7 @@ public class FolderExclusion {
         return filters;
     }
     
-    public static void ApplyFilters(String ViewName, ViewFolder Folder){
+    public static void ApplyFolderFilters(String ViewName, ViewFolder Folder){
         if (HasFilters(ViewName)){
             //LOG.debug("ApplyFilters: = '" + ViewName + "'");
             //String IncludeFilters = "\\\\PlayOn\\\\Test1|\\\\PlayOn\\\\TV|\\\\PlayOn\\\\Movies";
@@ -88,10 +74,10 @@ public class FolderExclusion {
                     //LOG.debug("ApplyFilters Exclude adding: = '" + filter + "' New = '" + ExcludeFilters + "'");
                 }
             }
-            ApplyFilters(ViewName, Folder, IncludeFilters, ExcludeFilters);
+            ApplyFolderFilters(ViewName, Folder, IncludeFilters, ExcludeFilters);
         }
     }
-    public static void ApplyFilters(String ViewName, ViewFolder Folder, String IncludeFilters, String ExcludeFilters){
+    public static void ApplyFolderFilters(String ViewName, ViewFolder Folder, String IncludeFilters, String ExcludeFilters){
         //LOG.debug("ApplyFilters: = '" + ViewName + "'");
         //make sure we have a filter
         String FilterString = BuildFilterRegEx(IncludeFilters, ExcludeFilters);
@@ -134,49 +120,7 @@ public class FolderExclusion {
         }
     }
     
-//    public static Object[] RunFolderFilter(Object[] MediaFiles, String ViewName) {
-//        Map<String, Boolean> filters = GetAllFolderRestrictions(ViewName);
-//        Set Restrictions = filters.keySet();
-//        Boolean NeedAdder = filters.values().contains(true);
-//        ArrayList returnarray = new ArrayList<Object>();
-//        ArrayList excludearray=new ArrayList<Object>();
-//
-//        for (Object curr : MediaFiles) {
-//            String path = sagex.api.MediaFileAPI.GetParentDirectory(curr).toString();
-//            for (Object currs : Restrictions) {
-//                Boolean Include = filters.get(currs);
-//                if (Include && path.contains(currs.toString()) && !returnarray.contains(curr)) {
-////                    System.out.println("Include Filter Movie added="+path+";Current Restriction="+currs.toString());
-//                    returnarray.add(curr);
-//                }
-//                else if (!Include && path.contains(currs.toString())) {
-////                 System.out.println("Exlude Filter Movie Removed="+path+";Current Restriction="+currs.toString());
-//                    if(returnarray.contains(curr)){
-//                    
-//                    returnarray.remove(curr);}
-//                    excludearray.add(curr);
-//                } else if (!NeedAdder&&!excludearray.contains(curr)) {
-//                    if (!returnarray.contains(curr)) {
-////                     System.out.println("Movie added as end result="+path+";Current Restriction="+currs.toString());
-//                        returnarray.add(curr);
-//                    }
-//                }
-//            }
-//        }
-//        return returnarray.toArray();
-//
-//    }
-
-    public static boolean HasFilter(String ViewName, String Path, Boolean include) {
-        String Element = Path + "&&" + include;
-        if (Flow.GetOptionName(ViewName, Const.FlowPathFilters, "").contains(Element + ";")) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public static String SetFilter(String ViewName, String Path, Boolean include) {
+    public static String SetFolderFilter(String ViewName, String Path, Boolean include) {
         String Element = Path + "&&" + include;
         String CurrentElements = Flow.GetOptionName(ViewName, Const.FlowPathFilters, "");
         String result = null;
@@ -190,7 +134,7 @@ public class FolderExclusion {
         return result;
     }
 
-    public static String RemoveFilter(String ViewName, String Path, Boolean include) {
+    public static String RemoveFolderFilter(String ViewName, String Path, Boolean include) {
         String Element = Path + "&&" + include;
         String CurrentElements = Flow.GetOptionName(ViewName, Const.FlowPathFilters, "");
         String ElementRemoved = null;
@@ -205,4 +149,5 @@ public class FolderExclusion {
         return result;
 
     }
+    
 }
