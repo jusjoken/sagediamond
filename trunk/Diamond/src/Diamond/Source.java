@@ -6,13 +6,10 @@ package Diamond;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeSet;
 import org.apache.log4j.Logger;
 import sagex.phoenix.factory.ConfigurableOption;
-import sagex.phoenix.vfs.IMediaResource;
 import sagex.phoenix.vfs.filters.Filter;
 import sagex.phoenix.vfs.views.ViewFolder;
 
@@ -23,6 +20,11 @@ import sagex.phoenix.vfs.views.ViewFolder;
 public class Source {
     static private final Logger LOG = Logger.getLogger(Source.class);
     
+    public static void ApplyFilters(String ViewName, ViewFolder Folder){
+        ApplyFolderFilters(ViewName, Folder);
+        ApplyGenreFilters(ViewName, Folder);
+    }
+
     public static Map GetAllFolderRestrictions(String ViewName) {
         String ExclusionFolders = Flow.GetOptionName(ViewName, Const.FlowPathFilters, "");
         //LOG.debug("GetAllFolderRestrictions: = '" + ExclusionFolders + "'");
@@ -45,7 +47,7 @@ public class Source {
         }
     }
     
-    public static String FilterAppend(String filters, String filter){
+    public static String FolderFilterAppend(String filters, String filter){
         //LOG.debug("FilterAppend: called '" + filters + "' add '" + filter + "'");
         String tFilter = filter;
         //format the filter as a RegEx compatible string
@@ -72,10 +74,10 @@ public class Source {
             for (String filter:filters.keySet()){
                 //LOG.debug("ApplyFilters: = processing filter '" + filter + "'");
                 if (filters.get(filter)){  //Include
-                    IncludeFilters = FilterAppend(IncludeFilters, filter);
+                    IncludeFilters = FolderFilterAppend(IncludeFilters, filter);
                     //LOG.debug("ApplyFilters Include adding: = '" + filter + "' New = '" + IncludeFilters + "'");
                 }else{  //Exclude
-                    ExcludeFilters = FilterAppend(ExcludeFilters, filter);
+                    ExcludeFilters = FolderFilterAppend(ExcludeFilters, filter);
                     //LOG.debug("ApplyFilters Exclude adding: = '" + filter + "' New = '" + ExcludeFilters + "'");
                 }
             }
@@ -168,4 +170,32 @@ public class Source {
         return new ArrayList<String>(GenreList);
     }
     
+    public static void ApplyGenreFilters(String ViewName, ViewFolder Folder){
+        //LOG.debug("ApplyFilters: = '" + ViewName + "'");
+        //make sure we have a filter
+        String tProp = Flow.GetFlowBaseProp(ViewName) + Const.PropDivider + Const.FlowGenreFilters;
+        String FilterString = util.ConvertListtoString(util.GetPropertyAsList(tProp),"|");
+        LOG.debug("ApplyGenreFilters: FilterString = '" + FilterString + "'");
+        if (!FilterString.equals("")){
+            FilterString = "(" + FilterString + ")";
+            Filter NewFilter = phoenix.umb.CreateFilter("genre");
+            ConfigurableOption tOption = phoenix.umb.GetOption(NewFilter, "use-regex-matching");
+            phoenix.opt.SetValue(tOption, "true");
+            tOption = phoenix.umb.GetOption(NewFilter, "scope");
+            tProp = Flow.GetFlowBaseProp(ViewName) + Const.PropDivider + Const.FlowGenreFilterMode;
+            if (util.GetPropertyAsBoolean(tProp, Boolean.TRUE)){
+                phoenix.opt.SetValue(tOption, "include");
+                LOG.debug("ApplyGenreFilters: include = '" + Flow.GetFlowName(ViewName) + "' RegExFilter = '" + FilterString + "'");
+            }else{
+                phoenix.opt.SetValue(tOption, "exclude");
+                LOG.debug("ApplyGenreFilters: exclude = '" + Flow.GetFlowName(ViewName) + "' RegExFilter = '" + FilterString + "'");
+            }
+            tOption = phoenix.umb.GetOption(NewFilter, "value");
+            phoenix.opt.SetValue(tOption, FilterString);
+            phoenix.umb.SetChanged(NewFilter);
+            phoenix.umb.SetFilter(Folder, NewFilter);
+            phoenix.umb.Refresh(Folder);
+        }
+    }
+
 }

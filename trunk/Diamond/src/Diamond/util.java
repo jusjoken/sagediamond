@@ -612,6 +612,19 @@ public class util {
         SetPropertyAsList(tProp, tList);
     }
     
+    public static void PropertyListRemoveAll(String PropSection, String PropName){
+        PropertyListRemoveAllBase(Boolean.FALSE, PropSection, PropName);
+    }
+    public static void PropertyListRemoveAllBase(Boolean bFlow, String PropSection, String PropName){
+        String tProp = "";
+        if (bFlow){
+            tProp = Flow.GetFlowBaseProp(PropSection) + Const.PropDivider + PropName;
+        }else{
+            tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+        }
+        RemoveProperty(tProp);
+    }
+    
     public static Boolean PropertyListContains(String PropSection, String PropName, String NewValue){
         return PropertyListContainsBase(Boolean.FALSE, PropSection, PropName, NewValue);
     }
@@ -628,6 +641,20 @@ public class util {
         }else{
             return Boolean.FALSE;
         }
+    }
+
+    public static Integer PropertyListCount(String PropSection, String PropName){
+        return PropertyListCountBase(Boolean.FALSE, PropSection, PropName);
+    }
+    public static Integer PropertyListCountBase(Boolean bFlow, String PropSection, String PropName){
+        String tProp = "";
+        if (bFlow){
+            tProp = Flow.GetFlowBaseProp(PropSection) + Const.PropDivider + PropName;
+        }else{
+            tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+        }
+        List<String> tList = GetPropertyAsList(tProp);
+        return tList.size();
     }
 
     public static String NotFound(){
