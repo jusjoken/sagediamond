@@ -126,8 +126,14 @@ public class Flow {
     public static void PropertyListRemove(String PropSection, String PropName, String NewValue){
         util.PropertyListRemoveBase(Boolean.TRUE, PropSection, PropName, NewValue);
     }
+    public static void PropertyListRemoveAll(String PropSection, String PropName){
+        util.PropertyListRemoveAllBase(Boolean.TRUE, PropSection, PropName);
+    }
     public static Boolean PropertyListContains(String PropSection, String PropName, String NewValue){
         return util.PropertyListContainsBase(Boolean.TRUE, PropSection, PropName, NewValue);
+    }
+    public static Integer PropertyListCount(String PropSection, String PropName){
+        return util.PropertyListCountBase(Boolean.TRUE, PropSection, PropName);
     }
     
     public static ArrayList<String> GetFlows(){
