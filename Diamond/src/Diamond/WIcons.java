@@ -111,7 +111,7 @@ public class WIcons {
             if (tCondition.equals(Condition)){
                 return ConditionURL;
             }else{
-                return "WeatherIcons\\Images\\" + tCondition;
+                return tCondition;
             }
             
         }
@@ -123,7 +123,7 @@ public class WIcons {
             System.out.println("WIcons: unhandled url - please report '" + ConditionURL + "'");
             return ConditionURL;
         }else{
-            return tCondition;
+            return "WeatherIcons\\Images\\" + tCondition + ".png";
         }
     }
     public static String GetWeatherIconURL(String ConditionURL){
@@ -131,6 +131,25 @@ public class WIcons {
         if (tCondition.equals(ConditionURL)){
             System.out.println("WIcons: unhandled url - please report '" + ConditionURL + "'");
             return ConditionURL;
+        }else{
+            return "WeatherIcons\\Images\\" + tCondition + ".png";
+        }
+    }
+
+    public static String GetWeatherIconNoURLDay(String ConditionURL){
+        String tCondition = ConvertURLtoCondition(ConditionURL, Boolean.TRUE);
+        if (tCondition.equals(ConditionURL)){
+            System.out.println("WIcons: unhandled url - please report '" + ConditionURL + "'");
+            return "-1";
+        }else{
+            return tCondition;
+        }
+    }
+    public static String GetWeatherIconNoURL(String ConditionURL){
+        String tCondition = ConvertURLtoCondition(ConditionURL, Boolean.FALSE);
+        if (tCondition.equals(ConditionURL)){
+            System.out.println("WIcons: unhandled url - please report '" + ConditionURL + "'");
+            return "-1";
         }else{
             return tCondition;
         }
@@ -151,14 +170,14 @@ public class WIcons {
         String DefaultIcon = "";
         if (IsDaytime() || ForceDay){
             if (IconsForDaytime.containsKey(Condition)){
-                DefaultIcon = IconsForDaytime.get(Condition) + ".png";
+                DefaultIcon = IconsForDaytime.get(Condition);
             }else{
                 DefaultIcon = Condition;
             }
             returnIcon = GetProperty(WIconProp + Condition + "/" + "DayIcon", DefaultIcon );
         }else{
             if (IconsForNighttime.containsKey(Condition)){
-                DefaultIcon = IconsForNighttime.get(Condition) + ".png";
+                DefaultIcon = IconsForNighttime.get(Condition);
             }else{
                 DefaultIcon = Condition;
             }

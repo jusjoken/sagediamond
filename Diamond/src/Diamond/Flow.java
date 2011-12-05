@@ -120,6 +120,16 @@ public class Flow {
         util.SetListOptionNextBase(Boolean.TRUE, PropSection, PropName, OptionList);
     }
 
+    public static void PropertyListAdd( String PropSection, String PropName, String NewValue){
+        util.PropertyListAddBase(Boolean.TRUE, PropSection, PropName, NewValue);
+    }
+    public static void PropertyListRemove(String PropSection, String PropName, String NewValue){
+        util.PropertyListRemoveBase(Boolean.TRUE, PropSection, PropName, NewValue);
+    }
+    public static Boolean PropertyListContains(String PropSection, String PropName, String NewValue){
+        return util.PropertyListContainsBase(Boolean.TRUE, PropSection, PropName, NewValue);
+    }
+    
     public static ArrayList<String> GetFlows(){
         String[] FlowItems = sagex.api.Configuration.GetSubpropertiesThatAreBranches(new UIContext(sagex.api.Global.GetUIContextName()),GetFlowsBaseProp());
         if (FlowItems.length>0){
