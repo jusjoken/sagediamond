@@ -304,7 +304,7 @@ public class util {
         if (ListValue.size()>0){
             sagex.api.Configuration.SetProperty(new UIContext(sagex.api.Global.GetUIContextName()),Property, Value);
         }else{
-            RemovePropertyAndChildren(Property);
+            RemoveProperty(Property);
         }
     }
 
@@ -580,6 +580,54 @@ public class util {
             tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
         }
         util.SetProperty(tProp, NewValue);
+    }
+
+    public static void PropertyListAdd( String PropSection, String PropName, String NewValue){
+        PropertyListAddBase(Boolean.FALSE, PropSection, PropName, NewValue);
+    }
+    public static void PropertyListAddBase(Boolean bFlow, String PropSection, String PropName, String NewValue){
+        String tProp = "";
+        if (bFlow){
+            tProp = Flow.GetFlowBaseProp(PropSection) + Const.PropDivider + PropName;
+        }else{
+            tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+        }
+        ArrayList<String> tList = new ArrayList<String>(GetPropertyAsList(tProp));
+        tList.add(NewValue);
+        SetPropertyAsList(tProp, tList);
+    }
+    
+    public static void PropertyListRemove(String PropSection, String PropName, String NewValue){
+        PropertyListRemoveBase(Boolean.FALSE, PropSection, PropName, NewValue);
+    }
+    public static void PropertyListRemoveBase(Boolean bFlow, String PropSection, String PropName, String NewValue){
+        String tProp = "";
+        if (bFlow){
+            tProp = Flow.GetFlowBaseProp(PropSection) + Const.PropDivider + PropName;
+        }else{
+            tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+        }
+        ArrayList<String> tList = new ArrayList<String>(GetPropertyAsList(tProp));
+        tList.remove(NewValue);
+        SetPropertyAsList(tProp, tList);
+    }
+    
+    public static Boolean PropertyListContains(String PropSection, String PropName, String NewValue){
+        return PropertyListContainsBase(Boolean.FALSE, PropSection, PropName, NewValue);
+    }
+    public static Boolean PropertyListContainsBase(Boolean bFlow, String PropSection, String PropName, String NewValue){
+        String tProp = "";
+        if (bFlow){
+            tProp = Flow.GetFlowBaseProp(PropSection) + Const.PropDivider + PropName;
+        }else{
+            tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+        }
+        List<String> tList = GetPropertyAsList(tProp);
+        if (tList.contains(NewValue)){
+            return Boolean.TRUE;
+        }else{
+            return Boolean.FALSE;
+        }
     }
 
     public static String NotFound(){

@@ -4,10 +4,15 @@
  */
 package Diamond;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import org.apache.log4j.Logger;
 import sagex.phoenix.factory.ConfigurableOption;
+import sagex.phoenix.vfs.IMediaResource;
 import sagex.phoenix.vfs.filters.Filter;
 import sagex.phoenix.vfs.views.ViewFolder;
 
@@ -148,6 +153,19 @@ public class Source {
         }
         return result;
 
+    }
+    
+    public static ArrayList<String> GetGenres(ViewFolder Folder){
+        if (Folder==null){
+            LOG.debug("GetGenres: request for null Folder returned empty list");
+            return new ArrayList<String>();
+        }
+        TreeSet<String> GenreList = new TreeSet<String>();
+        for (Object Item: phoenix.media.GetAllChildren(Folder)){
+            //LOG.debug("GetGenres: proecessing '" + phoenix.media.GetTitle(Item) + "' Genres '" + MetadataCalls.GetGenresasString((IMediaResource)Item, ","));
+            GenreList.addAll(phoenix.metadata.GetGenres(Item));
+        }
+        return new ArrayList<String>(GenreList);
     }
     
 }
