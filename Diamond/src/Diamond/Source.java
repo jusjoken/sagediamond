@@ -10,7 +10,9 @@ import java.util.Map;
 import java.util.TreeSet;
 import org.apache.log4j.Logger;
 import sagex.phoenix.factory.ConfigurableOption;
-import sagex.phoenix.vfs.filters.Filter;
+import sagex.phoenix.vfs.IMediaResource;
+import sagex.phoenix.vfs.filters.*;
+import sagex.phoenix.vfs.filters.GenresFilter;
 import sagex.phoenix.vfs.views.ViewFolder;
 
 /**
@@ -22,10 +24,22 @@ public class Source {
     
     public static void ApplyFilters(String ViewName, ViewFolder Folder){
         LOG.debug("ApplyFilters: Before Count = '" + phoenix.media.GetAllChildren(Folder).size() + "'");
-        ApplyGenreFilters(ViewName, Folder);
-        LOG.debug("ApplyFilters: After Genre Count = '" + phoenix.media.GetAllChildren(Folder).size() + "'");
-        ApplyFolderFilters(ViewName, Folder);
-        LOG.debug("ApplyFilters: After Folder Count = '" + phoenix.media.GetAllChildren(Folder).size() + "'");
+        Filter F1 = GetGenreFilter(ViewName);
+        Filter F2 = GetFolderFilter(ViewName);
+        AndResourceFilter andFilter = new AndResourceFilter();
+        if (F1!=null){
+            andFilter.addFilter(F1);
+        }
+        if (F2!=null){
+            andFilter.addFilter(F2);
+        }
+        WrappedResourceFilter filter = new WrappedResourceFilter(andFilter);
+        phoenix.umb.SetFilter(Folder, filter);
+        phoenix.umb.Refresh(Folder);
+        //ApplyGenreFilters(ViewName, Folder);
+        //LOG.debug("ApplyFilters: After Genre Count = '" + phoenix.media.GetAllChildren(Folder).size() + "'");
+        //ApplyFolderFilters(ViewName, Folder);
+        LOG.debug("ApplyFilters: After andFilter Count = '" + phoenix.media.GetAllChildren(Folder).size() + "'");
     }
 
     public static Map GetAllFolderRestrictions(String ViewName) {
@@ -111,6 +125,40 @@ public class Source {
         }
     }
 
+    public static Filter GetFolderFilter(String ViewName){
+        if (HasFilters(ViewName)){
+            String IncludeFilters = "";
+            String ExcludeFilters = "";
+            Map<String, Boolean> filters = GetAllFolderRestrictions(ViewName);
+            for (String filter:filters.keySet()){
+                if (filters.get(filter)){  //Include
+                    IncludeFilters = FolderFilterAppend(IncludeFilters, filter);
+                }else{  //Exclude
+                    ExcludeFilters = FolderFilterAppend(ExcludeFilters, filter);
+                }
+            }
+            String FilterString = BuildFilterRegEx(IncludeFilters, ExcludeFilters);
+            if (!FilterString.equals("")){
+                Filter NewFilter = phoenix.umb.CreateFilter("filepath");
+                ConfigurableOption tOption = phoenix.umb.GetOption(NewFilter, "use-regex-matching");
+                phoenix.opt.SetValue(tOption, "true");
+                tOption = phoenix.umb.GetOption(NewFilter, "scope");
+                if (IncludeFilters.equals("")){
+                    phoenix.opt.SetValue(tOption, "exclude");
+                    LOG.debug("ApplyFilters: exclude = '" + Flow.GetFlowName(ViewName) + "' RegExFilter = '" + FilterString + "'");
+                }else{
+                    phoenix.opt.SetValue(tOption, "include");
+                    LOG.debug("ApplyFilters: include = '" + Flow.GetFlowName(ViewName) + "' RegExFilter = '" + FilterString + "'");
+                }
+                tOption = phoenix.umb.GetOption(NewFilter, "value");
+                phoenix.opt.SetValue(tOption, FilterString);
+                phoenix.umb.SetChanged(NewFilter);
+                return NewFilter;
+            }
+        }
+        return null;
+    }
+
     public static String BuildFilterRegEx(String IncludeFilters, String ExcludeFilters){
         if (IncludeFilters.equals("") && ExcludeFilters.equals("")){
             return "";
@@ -173,6 +221,34 @@ public class Source {
         return new ArrayList<String>(GenreList);
     }
     
+    public static Filter GetGenreFilter(String ViewName){
+        //LOG.debug("ApplyFilters: = '" + ViewName + "'");
+        //make sure we have a filter
+        String tProp = Flow.GetFlowBaseProp(ViewName) + Const.PropDivider + Const.FlowGenreFilters;
+        String FilterString = util.ConvertListtoString(util.GetPropertyAsList(tProp),"|");
+        LOG.debug("GetGenreFilter: FilterString = '" + FilterString + "'");
+        if (!FilterString.equals("")){
+            FilterString = "(" + FilterString + ")";
+            Filter NewFilter = phoenix.umb.CreateFilter("genre");
+            ConfigurableOption tOption = phoenix.umb.GetOption(NewFilter, "use-regex-matching");
+            phoenix.opt.SetValue(tOption, "true");
+            tOption = phoenix.umb.GetOption(NewFilter, "scope");
+            tProp = Flow.GetFlowBaseProp(ViewName) + Const.PropDivider + Const.FlowGenreFilterMode;
+            if (util.GetPropertyAsBoolean(tProp, Boolean.TRUE)){
+                phoenix.opt.SetValue(tOption, "include");
+                LOG.debug("GetGenreFilter: include = '" + Flow.GetFlowName(ViewName) + "' RegExFilter = '" + FilterString + "'");
+            }else{
+                phoenix.opt.SetValue(tOption, "exclude");
+                LOG.debug("GetGenreFilter: exclude = '" + Flow.GetFlowName(ViewName) + "' RegExFilter = '" + FilterString + "'");
+            }
+            tOption = phoenix.umb.GetOption(NewFilter, "value");
+            phoenix.opt.SetValue(tOption, FilterString);
+            phoenix.umb.SetChanged(NewFilter);
+            return NewFilter;
+        }
+        return null;
+    }
+
     public static void ApplyGenreFilters(String ViewName, ViewFolder Folder){
         //LOG.debug("ApplyFilters: = '" + ViewName + "'");
         //make sure we have a filter
@@ -201,4 +277,16 @@ public class Source {
         }
     }
 
+    public static ViewFolder CreateView(String ViewName){
+        String DefaultSource = Flow.GetFlowSource(ViewName);
+        if (DefaultSource.equals(Const.BaseSource)){
+            ViewFolder tFolder = phoenix.umb.CreateView(Const.BaseSource);
+            ApplyGenreFilters(ViewName, tFolder);
+            //tFolder = phoenix.umb.CreateView(phoenix.umb.GetView(tFolder));
+            return tFolder;
+        }else{
+            return phoenix.umb.CreateView(DefaultSource);
+        }
+    }
+    
 }
