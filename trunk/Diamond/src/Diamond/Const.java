@@ -46,5 +46,6 @@ public class Const {
     public static final String WidgetProp = "Widgets";
     public static final Diamond.Property NotFoundProp = new Diamond.Property("NOTFOUND", "Not Found");
     public static final String UnknownName = "-UnknownName-";
+    public static final String BaseSource = "gemstone.source.Base";
     
 }
