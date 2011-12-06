@@ -21,8 +21,11 @@ public class Source {
     static private final Logger LOG = Logger.getLogger(Source.class);
     
     public static void ApplyFilters(String ViewName, ViewFolder Folder){
-        ApplyFolderFilters(ViewName, Folder);
+        LOG.debug("ApplyFilters: Before Count = '" + phoenix.media.GetAllChildren(Folder).size() + "'");
         ApplyGenreFilters(ViewName, Folder);
+        LOG.debug("ApplyFilters: After Genre Count = '" + phoenix.media.GetAllChildren(Folder).size() + "'");
+        ApplyFolderFilters(ViewName, Folder);
+        LOG.debug("ApplyFilters: After Folder Count = '" + phoenix.media.GetAllChildren(Folder).size() + "'");
     }
 
     public static Map GetAllFolderRestrictions(String ViewName) {
