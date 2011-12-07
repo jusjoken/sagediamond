@@ -28,8 +28,9 @@ public class Const {
     public static final String FlowType = "FlowType";
     public static final String FlowSource = "FlowSource";
     public static final String FlowSort = "FlowSort";
-    public static final String FlowPathFilters = "FlowPathFilters";
-    public static final String FlowGenreFilters = "GenreFilterList";
+    public static final String FlowPathFilters = "Filters/FlowPathFilters";
+    public static final String FlowGenreFilters = "Filters/GenreFilterList";
+    public static final String FlowFilters = "Filters";
     public static final String FlowGenreFilterMode = "GenreFilterMode";
     public static final String FlowNameNotFound = "Flow Name Not Found";
     public static final String FlowTypeNotFound = "Flow Type Not Found";
