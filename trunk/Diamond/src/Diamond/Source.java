@@ -6,13 +6,15 @@ package Diamond;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 import org.apache.log4j.Logger;
+import sagex.UIContext;
 import sagex.phoenix.factory.ConfigurableOption;
-import sagex.phoenix.vfs.IMediaResource;
 import sagex.phoenix.vfs.filters.*;
-import sagex.phoenix.vfs.filters.GenresFilter;
 import sagex.phoenix.vfs.views.ViewFolder;
 
 /**
@@ -22,24 +24,47 @@ import sagex.phoenix.vfs.views.ViewFolder;
 public class Source {
     static private final Logger LOG = Logger.getLogger(Source.class);
     
-    public static void ApplyFilters(String ViewName, ViewFolder Folder){
-        LOG.debug("ApplyFilters: Before Count = '" + phoenix.media.GetAllChildren(Folder).size() + "'");
-        Filter F1 = GetGenreFilter(ViewName);
-        Filter F2 = GetFolderFilter(ViewName);
-        AndResourceFilter andFilter = new AndResourceFilter();
-        if (F1!=null){
-            andFilter.addFilter(F1);
+    public static void ApplyFiltersOld(String ViewName, ViewFolder Folder){
+        LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' Before Count = '" + phoenix.media.GetAllChildren(Folder).size() + "'");
+        Set<Filter> AllFilters = new HashSet<Filter>();
+        if (HasGenreFilter(ViewName)){
+            AllFilters.add(GetGenreFilter(ViewName));
         }
-        if (F2!=null){
-            andFilter.addFilter(F2);
+        if (HasFolderFilter(ViewName)){
+            AllFilters.add(GetFolderFilter(ViewName));
+        }
+        AndResourceFilter andFilter = new AndResourceFilter();
+        for (Filter thisFilter: AllFilters){
+            andFilter.addFilter(thisFilter);
         }
         WrappedResourceFilter filter = new WrappedResourceFilter(andFilter);
         phoenix.umb.SetFilter(Folder, filter);
         phoenix.umb.Refresh(Folder);
-        //ApplyGenreFilters(ViewName, Folder);
-        //LOG.debug("ApplyFilters: After Genre Count = '" + phoenix.media.GetAllChildren(Folder).size() + "'");
-        //ApplyFolderFilters(ViewName, Folder);
-        LOG.debug("ApplyFilters: After andFilter Count = '" + phoenix.media.GetAllChildren(Folder).size() + "'");
+        LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' After Count = '" + phoenix.media.GetAllChildren(Folder).size() + "'");
+    }
+
+    public static void ApplyFilters(String ViewName, ViewFolder Folder, List<String> FilterTypes){
+        LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' Before Count = '" + phoenix.media.GetAllChildren(Folder).size() + "' Types '" + FilterTypes + "'");
+        Set<Filter> AllFilters = new HashSet<Filter>();
+        //Apply genre filter if any
+        if (HasGenreFilter(ViewName)){
+            AllFilters.add(GetGenreFilter(ViewName));
+        }
+        //Apply Folder filter if any
+        if (HasFolderFilter(ViewName)){
+            AllFilters.add(GetFolderFilter(ViewName));
+        }
+        //Apply other filters passed in 
+        for (String FilterType: FilterTypes){
+        }
+        AndResourceFilter andFilter = new AndResourceFilter();
+        for (Filter thisFilter: AllFilters){
+            andFilter.addFilter(thisFilter);
+        }
+        WrappedResourceFilter filter = new WrappedResourceFilter(andFilter);
+        phoenix.umb.SetFilter(Folder, filter);
+        phoenix.umb.Refresh(Folder);
+        LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' After Count = '" + phoenix.media.GetAllChildren(Folder).size() + "'");
     }
 
     public static Map GetAllFolderRestrictions(String ViewName) {
@@ -56,7 +81,7 @@ public class Source {
         return rest;
     }
 
-    public static Boolean HasFilters(String ViewName) {
+    public static Boolean HasFolderFilter(String ViewName) {
         if (GetAllFolderRestrictions(ViewName).size()>0){
             return Boolean.TRUE;
         }else{
@@ -78,55 +103,9 @@ public class Source {
         //LOG.debug("FilterAppend: adding '" + filter + "' to '" + filters + "'");
         return filters;
     }
-    
-    public static void ApplyFolderFilters(String ViewName, ViewFolder Folder){
-        if (HasFilters(ViewName)){
-            //LOG.debug("ApplyFilters: = '" + ViewName + "'");
-            //String IncludeFilters = "\\\\PlayOn\\\\Test1|\\\\PlayOn\\\\TV|\\\\PlayOn\\\\Movies";
-            //String ExcludeFilters = "\\\\PlayOn\\\\TV\\\\Eureka|\\\\PlayOn\\\\Movies\\\\The Mechanic";
-            String IncludeFilters = "";
-            String ExcludeFilters = "";
-            Map<String, Boolean> filters = GetAllFolderRestrictions(ViewName);
-            //LOG.debug("ApplyFilters: = filters '" + filters + "'");
-            for (String filter:filters.keySet()){
-                //LOG.debug("ApplyFilters: = processing filter '" + filter + "'");
-                if (filters.get(filter)){  //Include
-                    IncludeFilters = FolderFilterAppend(IncludeFilters, filter);
-                    //LOG.debug("ApplyFilters Include adding: = '" + filter + "' New = '" + IncludeFilters + "'");
-                }else{  //Exclude
-                    ExcludeFilters = FolderFilterAppend(ExcludeFilters, filter);
-                    //LOG.debug("ApplyFilters Exclude adding: = '" + filter + "' New = '" + ExcludeFilters + "'");
-                }
-            }
-            ApplyFolderFilters(ViewName, Folder, IncludeFilters, ExcludeFilters);
-        }
-    }
-    public static void ApplyFolderFilters(String ViewName, ViewFolder Folder, String IncludeFilters, String ExcludeFilters){
-        //LOG.debug("ApplyFilters: = '" + ViewName + "'");
-        //make sure we have a filter
-        String FilterString = BuildFilterRegEx(IncludeFilters, ExcludeFilters);
-        if (!FilterString.equals("")){
-            Filter NewFilter = phoenix.umb.CreateFilter("filepath");
-            ConfigurableOption tOption = phoenix.umb.GetOption(NewFilter, "use-regex-matching");
-            phoenix.opt.SetValue(tOption, "true");
-            tOption = phoenix.umb.GetOption(NewFilter, "scope");
-            if (IncludeFilters.equals("")){
-                phoenix.opt.SetValue(tOption, "exclude");
-                LOG.debug("ApplyFilters: exclude = '" + Flow.GetFlowName(ViewName) + "' RegExFilter = '" + FilterString + "'");
-            }else{
-                phoenix.opt.SetValue(tOption, "include");
-                LOG.debug("ApplyFilters: include = '" + Flow.GetFlowName(ViewName) + "' RegExFilter = '" + FilterString + "'");
-            }
-            tOption = phoenix.umb.GetOption(NewFilter, "value");
-            phoenix.opt.SetValue(tOption, FilterString);
-            phoenix.umb.SetChanged(NewFilter);
-            phoenix.umb.SetFilter(Folder, NewFilter);
-            phoenix.umb.Refresh(Folder);
-        }
-    }
 
     public static Filter GetFolderFilter(String ViewName){
-        if (HasFilters(ViewName)){
+        if (HasFolderFilter(ViewName)){
             String IncludeFilters = "";
             String ExcludeFilters = "";
             Map<String, Boolean> filters = GetAllFolderRestrictions(ViewName);
@@ -221,6 +200,16 @@ public class Source {
         return new ArrayList<String>(GenreList);
     }
     
+    public static Boolean HasGenreFilter(String ViewName){
+        String tProp = Flow.GetFlowBaseProp(ViewName) + Const.PropDivider + Const.FlowGenreFilters;
+        List<String> FilterList = util.GetPropertyAsList(tProp);
+        if (FilterList.isEmpty()){
+            return Boolean.FALSE;
+        }else{
+            return Boolean.TRUE;
+        }
+    }
+    
     public static Filter GetGenreFilter(String ViewName){
         //LOG.debug("ApplyFilters: = '" + ViewName + "'");
         //make sure we have a filter
@@ -249,44 +238,49 @@ public class Source {
         return null;
     }
 
-    public static void ApplyGenreFilters(String ViewName, ViewFolder Folder){
-        //LOG.debug("ApplyFilters: = '" + ViewName + "'");
-        //make sure we have a filter
-        String tProp = Flow.GetFlowBaseProp(ViewName) + Const.PropDivider + Const.FlowGenreFilters;
-        String FilterString = util.ConvertListtoString(util.GetPropertyAsList(tProp),"|");
-        LOG.debug("ApplyGenreFilters: FilterString = '" + FilterString + "'");
-        if (!FilterString.equals("")){
-            FilterString = "(" + FilterString + ")";
-            Filter NewFilter = phoenix.umb.CreateFilter("genre");
-            ConfigurableOption tOption = phoenix.umb.GetOption(NewFilter, "use-regex-matching");
-            phoenix.opt.SetValue(tOption, "true");
-            tOption = phoenix.umb.GetOption(NewFilter, "scope");
-            tProp = Flow.GetFlowBaseProp(ViewName) + Const.PropDivider + Const.FlowGenreFilterMode;
-            if (util.GetPropertyAsBoolean(tProp, Boolean.TRUE)){
-                phoenix.opt.SetValue(tOption, "include");
-                LOG.debug("ApplyGenreFilters: include = '" + Flow.GetFlowName(ViewName) + "' RegExFilter = '" + FilterString + "'");
-            }else{
-                phoenix.opt.SetValue(tOption, "exclude");
-                LOG.debug("ApplyGenreFilters: exclude = '" + Flow.GetFlowName(ViewName) + "' RegExFilter = '" + FilterString + "'");
+    //check all filter types to see if there are any filters set
+    public static Boolean HasFilter(String ViewName){
+        if (HasGenreFilter(ViewName) || HasFolderFilter(ViewName)){
+            return Boolean.TRUE;
+        }else{
+            //now check any Filter property under the Flow
+            String tProp = Flow.GetFlowBaseProp(ViewName) + Const.PropDivider + Const.FlowFilters;
+            String[] FilterProps = sagex.api.Configuration.GetSubpropertiesThatAreLeaves(new UIContext(sagex.api.Global.GetUIContextName()),tProp);
+            for (String FilterItem: FilterProps){
+                LOG.debug("HasFilter: checking '" + FilterItem + "'");
+                if (FilterItem.equals(Const.FlowGenreFilters) || FilterItem.equals(Const.FlowPathFilters)){
+                    //skip as already checked above
+                }else{
+                    if (HasTriFilter(ViewName, FilterItem)){
+                        return Boolean.TRUE;
+                    }
+                }
             }
-            tOption = phoenix.umb.GetOption(NewFilter, "value");
-            phoenix.opt.SetValue(tOption, FilterString);
-            phoenix.umb.SetChanged(NewFilter);
-            phoenix.umb.SetFilter(Folder, NewFilter);
-            phoenix.umb.Refresh(Folder);
+            return Boolean.FALSE;
         }
     }
 
-    public static ViewFolder CreateView(String ViewName){
-        String DefaultSource = Flow.GetFlowSource(ViewName);
-        if (DefaultSource.equals(Const.BaseSource)){
-            ViewFolder tFolder = phoenix.umb.CreateView(Const.BaseSource);
-            ApplyGenreFilters(ViewName, tFolder);
-            //tFolder = phoenix.umb.CreateView(phoenix.umb.GetView(tFolder));
-            return tFolder;
+    public static void ClearAllFilters(String ViewName){
+        String tProp = Flow.GetFlowBaseProp(ViewName) + Const.PropDivider + Const.FlowFilters;
+        util.RemovePropertyAndChildren(tProp);
+    }
+
+    //calls to handle generic TriState Filters - Off, Include or Exclude types - example watched, dvd etc
+    public static final String TriFilterList = "Off:&&:Include:&&:Exclude";
+    public static String GetTriFilterName(String ViewName, String FilterType){
+        return Flow.GetListOptionName(ViewName, Const.FlowFilters + Const.PropDivider + FilterType, TriFilterList, "Off");
+    }
+    public static void SetTriFilterNext(String ViewName, String FilterType){
+        Flow.SetListOptionNext(ViewName, Const.FlowFilters + Const.PropDivider + FilterType, TriFilterList);
+    }
+    public static Boolean HasTriFilter(String ViewName, String FilterType){
+        if (GetTriFilterName(ViewName, FilterType).equals("Off")){
+            return Boolean.FALSE;
         }else{
-            return phoenix.umb.CreateView(DefaultSource);
+            return Boolean.TRUE;
         }
     }
-    
+    public static void RemoveAllTriFilter(String ViewName, String FilterType){
+        Flow.PropertyListRemoveAll(ViewName, FilterType);
+    }
 }
