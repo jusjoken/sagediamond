@@ -26,8 +26,17 @@ public class Source {
     public static HashMap<String,String> InternalFilterTypes = new HashMap<String,String>();
     
     public static void AddFilterType(String FilterName, String FilterType){
-        if (!InternalFilterTypes.containsKey(FilterName)){
+        if (IsFilterTypeValid(FilterType)){
             InternalFilterTypes.put(FilterName, FilterType);
+        }
+    }
+    public static Boolean IsFilterTypeValid(String FilterType){
+        if (FilterType.equals("Off-Include-Exclude")){
+            return Boolean.TRUE;
+        }else if (FilterType.equals("List")){
+            return Boolean.TRUE;
+        }else{
+            return Boolean.FALSE;
         }
     }
    
@@ -46,12 +55,30 @@ public class Source {
         for (String FilterName: InternalFilterTypes.keySet()){
             String FilterType = InternalFilterTypes.get(FilterName);
             LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "'");
-            if (FilterType.equals("Off-Include-Exclude")){
-                
-            }else if (FilterType.equals("List")){
-                
+            if (FilterType.equals("Off-Include-Exclude") || FilterType.equals("List")){
+                if (HasTriFilter(ViewName, FilterName)){
+                    Filter NewFilter = phoenix.umb.CreateFilter(FilterName);
+                    ConfigurableOption tOption = phoenix.umb.GetOption(NewFilter, "scope");
+                    LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterSetting '" + GetTriFilterName(ViewName, FilterName) + "' Include '" + TriFilterInclude(ViewName, FilterName) + "'");
+                    if (TriFilterInclude(ViewName, FilterName)){
+                        phoenix.opt.SetValue(tOption, "include");
+                        LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' include");
+                    }else{
+                        phoenix.opt.SetValue(tOption, "exclude");
+                        LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' exclude");
+                    }
+                    if (FilterType.equals("List")){
+                        //get the list contents if any and set it to the value
+                        
+                        //tOption = phoenix.umb.GetOption(NewFilter, "value");
+                        //phoenix.opt.SetValue(tOption, FilterString);
+                        
+                    }
+                    phoenix.umb.SetChanged(NewFilter);
+                    AllFilters.add(NewFilter);
+                }
             }else{
-                
+                LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' invalid filtertype passed '" + FilterName + "' FilterType '" + FilterType + "'");
             }
         }
         AndResourceFilter andFilter = new AndResourceFilter();
@@ -277,6 +304,21 @@ public class Source {
             return Boolean.TRUE;
         }
     }
+    public static Boolean TriFilterInclude(String ViewName, String FilterType){
+        if (GetTriFilterName(ViewName, FilterType).equals("Include")){
+            return Boolean.TRUE;
+        }else{
+            return Boolean.FALSE;
+        }
+    }
+    public static Boolean TriFilterExclude(String ViewName, String FilterType){
+        if (GetTriFilterName(ViewName, FilterType).equals("Exclude")){
+            return Boolean.TRUE;
+        }else{
+            return Boolean.FALSE;
+        }
+    }
+
     public static void RemoveAllTriFilter(String ViewName, String FilterType){
         Flow.PropertyListRemoveAll(ViewName, FilterType);
     }

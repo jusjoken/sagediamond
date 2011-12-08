@@ -541,6 +541,7 @@ public class util {
             tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
         }
         String CurrentValue = util.GetProperty(tProp, OptionNotFound);
+        LOG.debug("SetListOptionNextBase: currentvalue '" + CurrentValue + "' for '" + tProp + "'");
         List<String> FullList = ConvertStringtoList(OptionList);
         if (CurrentValue.equals(OptionNotFound)){
             util.SetProperty(tProp, FullList.get(1));  //default to the 2nd item
