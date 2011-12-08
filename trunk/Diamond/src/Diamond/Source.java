@@ -23,28 +23,16 @@ import sagex.phoenix.vfs.views.ViewFolder;
  */
 public class Source {
     static private final Logger LOG = Logger.getLogger(Source.class);
+    public static HashMap<String,String> InternalFilterTypes = new HashMap<String,String>();
     
-    public static void ApplyFiltersOld(String ViewName, ViewFolder Folder){
-        LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' Before Count = '" + phoenix.media.GetAllChildren(Folder).size() + "'");
-        Set<Filter> AllFilters = new HashSet<Filter>();
-        if (HasGenreFilter(ViewName)){
-            AllFilters.add(GetGenreFilter(ViewName));
+    public static void AddFilterType(String FilterName, String FilterType){
+        if (!InternalFilterTypes.containsKey(FilterName)){
+            InternalFilterTypes.put(FilterName, FilterType);
         }
-        if (HasFolderFilter(ViewName)){
-            AllFilters.add(GetFolderFilter(ViewName));
-        }
-        AndResourceFilter andFilter = new AndResourceFilter();
-        for (Filter thisFilter: AllFilters){
-            andFilter.addFilter(thisFilter);
-        }
-        WrappedResourceFilter filter = new WrappedResourceFilter(andFilter);
-        phoenix.umb.SetFilter(Folder, filter);
-        phoenix.umb.Refresh(Folder);
-        LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' After Count = '" + phoenix.media.GetAllChildren(Folder).size() + "'");
     }
-
-    public static void ApplyFilters(String ViewName, ViewFolder Folder, List<String> FilterTypes){
-        LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' Before Count = '" + phoenix.media.GetAllChildren(Folder).size() + "' Types '" + FilterTypes + "'");
+   
+    public static void ApplyFilters(String ViewName, ViewFolder Folder){
+        LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' Before Count = '" + phoenix.media.GetAllChildren(Folder).size() + "' Types '" + InternalFilterTypes + "'");
         Set<Filter> AllFilters = new HashSet<Filter>();
         //Apply genre filter if any
         if (HasGenreFilter(ViewName)){
@@ -55,7 +43,16 @@ public class Source {
             AllFilters.add(GetFolderFilter(ViewName));
         }
         //Apply other filters passed in 
-        for (String FilterType: FilterTypes){
+        for (String FilterName: InternalFilterTypes.keySet()){
+            String FilterType = InternalFilterTypes.get(FilterName);
+            LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "'");
+            if (FilterType.equals("Off-Include-Exclude")){
+                
+            }else if (FilterType.equals("List")){
+                
+            }else{
+                
+            }
         }
         AndResourceFilter andFilter = new AndResourceFilter();
         for (Filter thisFilter: AllFilters){
