@@ -14,6 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.TreeSet;
 import org.apache.log4j.Logger;
 import sagex.UIContext;
 
@@ -541,7 +542,7 @@ public class util {
             tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
         }
         String CurrentValue = util.GetProperty(tProp, OptionNotFound);
-        LOG.debug("SetListOptionNextBase: currentvalue '" + CurrentValue + "' for '" + tProp + "'");
+        //LOG.debug("SetListOptionNextBase: currentvalue '" + CurrentValue + "' for '" + tProp + "'");
         List<String> FullList = ConvertStringtoList(OptionList);
         if (CurrentValue.equals(OptionNotFound)){
             util.SetProperty(tProp, FullList.get(1));  //default to the 2nd item
@@ -583,6 +584,20 @@ public class util {
         util.SetProperty(tProp, NewValue);
     }
 
+
+    public static String PropertyListasString(String PropSection, String PropName){
+        return PropertyListasStringBase(Boolean.FALSE, PropSection, PropName);
+    }
+    public static String PropertyListasStringBase(Boolean bFlow, String PropSection, String PropName){
+        String tProp = "";
+        if (bFlow){
+            tProp = Flow.GetFlowBaseProp(PropSection) + Const.PropDivider + PropName;
+        }else{
+            tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+        }
+        return ConvertListtoString(GetPropertyAsList(tProp),",");
+    }
+    
     public static List<String> PropertyList(String PropSection, String PropName){
         return PropertyListBase(Boolean.FALSE, PropSection, PropName);
     }
@@ -593,7 +608,9 @@ public class util {
         }else{
             tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
         }
-        return GetPropertyAsList(tProp);
+        TreeSet<String> tList = new TreeSet<String>();
+        tList.addAll(GetPropertyAsList(tProp));
+        return new ArrayList<String>(tList);
     }
     
     public static void PropertyListAdd( String PropSection, String PropName, String NewValue){
