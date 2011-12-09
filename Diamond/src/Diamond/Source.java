@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import org.apache.log4j.Logger;
-import sagex.UIContext;
 import sagex.phoenix.factory.ConfigurableOption;
 import sagex.phoenix.vfs.IMediaResource;
 import sagex.phoenix.vfs.MediaResourceType;
@@ -37,6 +36,8 @@ public class Source {
             return Boolean.TRUE;
         }else if (FilterType.equals("List")){
             return Boolean.TRUE;
+        }else if (FilterType.equals("pql")){
+            return Boolean.TRUE;
         }else{
             return Boolean.FALSE;
         }
@@ -56,12 +57,14 @@ public class Source {
         //Apply other filters passed in 
         for (String FilterName: InternalFilterTypes.keySet()){
             String FilterType = InternalFilterTypes.get(FilterName);
-            LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "'");
-            if (FilterType.equals("Off-Include-Exclude") || FilterType.equals("List")){
+            if (IsFilterTypeValid(FilterType)){
                 if (HasTriFilter(ViewName, FilterName)){
-                    Filter NewFilter = phoenix.umb.CreateFilter(FilterName);
+                    String FilterTypeforCreate = FilterName;
+                    if (FilterType.equals("pql")){
+                        FilterTypeforCreate = "pql";
+                    }
+                    Filter NewFilter = phoenix.umb.CreateFilter(FilterTypeforCreate);
                     ConfigurableOption tOption = phoenix.umb.GetOption(NewFilter, "scope");
-                    LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterSetting '" + GetTriFilterName(ViewName, FilterName) + "' Include '" + TriFilterInclude(ViewName, FilterName) + "'");
                     if (TriFilterInclude(ViewName, FilterName)){
                         phoenix.opt.SetValue(tOption, "include");
                         LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' include");
@@ -71,13 +74,32 @@ public class Source {
                     }
                     if (FilterType.equals("List")){
                         //get the list contents if any and set it to the value
-                        tOption = phoenix.umb.GetOption(NewFilter, "value");
-                        LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' List '" + tOption.getListValues() + "'");
-                        //phoenix.opt.SetValue(tOption, FilterString);
+                        String FilterString = Flow.PropertyListasString(ViewName, Const.FlowFilters + Const.PropDivider + FilterName + "FilterList");
+                        LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' filter '" + FilterString + "'");
+                        if (!FilterString.equals("")){
+                            tOption = phoenix.umb.GetOption(NewFilter, "value");
+                            phoenix.opt.SetValue(tOption, FilterString);
+                        }
                         
+                    }
+                    if (FilterType.equals("pql")){  //custom handling for these
+                        String FilterString = "";
+                        if (FilterName.equals("rating")){
+                            if (Flow.PropertyListCount(ViewName, GetFilterListProp(FilterName))>0){
+                                FilterString = BuildPQL(ViewName, FilterName, "Rated", "=", Boolean.FALSE);
+                                FilterString = FilterString + " or " + BuildPQL(ViewName, FilterName, "ParentalRating", "=", Boolean.FALSE);
+                                LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' filter '" + FilterString + "'");
+                            }
+                        }
+                        if (!FilterString.equals("")){
+                            tOption = phoenix.umb.GetOption(NewFilter, "value");
+                            phoenix.opt.SetValue(tOption, FilterString);
+                        }
                     }
                     phoenix.umb.SetChanged(NewFilter);
                     AllFilters.add(NewFilter);
+                }else{
+                    LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' Filter is turned Off");
                 }
             }else{
                 LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' invalid filtertype passed '" + FilterName + "' FilterType '" + FilterType + "'");
@@ -93,6 +115,22 @@ public class Source {
         LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' After Count = '" + phoenix.media.GetAllChildren(Folder).size() + "'");
     }
 
+    public static String BuildPQL(String ViewName, String FilterName, String FieldName, String FieldVerb, Boolean AndValues){
+        String tFilterString = "";
+        for (String Item: Flow.PropertyList(ViewName, GetFilterListProp(FilterName))){
+            if (tFilterString.equals("")){
+                tFilterString = FieldName + " " + FieldVerb + " '" + Item + "' ";
+            }else{
+                String AndOr = " or ";
+                if (AndValues){
+                    AndOr = " and ";
+                }
+                tFilterString = tFilterString + AndOr + FieldName + " " + FieldVerb + " '" + Item + "' ";
+            }
+        }
+        return tFilterString;
+    }
+    
     public static Map GetAllFolderRestrictions(String ViewName) {
         String ExclusionFolders = Flow.GetOptionName(ViewName, Const.FlowPathFilters, "");
         //LOG.debug("GetAllFolderRestrictions: = '" + ExclusionFolders + "'");
@@ -218,6 +256,7 @@ public class Source {
             LOG.debug("GetGenres: request for null Folder returned empty list");
             return new ArrayList<String>();
         }
+        //TODO: get all children and group by Show to shorten then list
         TreeSet<String> GenreList = new TreeSet<String>();
         for (Object Item: phoenix.media.GetAllChildren(Folder)){
             //LOG.debug("GetGenres: proecessing '" + phoenix.media.GetTitle(Item) + "' Genres '" + MetadataCalls.GetGenresasString((IMediaResource)Item, ","));
@@ -232,6 +271,8 @@ public class Source {
             return new ArrayList<String>();
         }
         TreeSet<String> RatingList = new TreeSet<String>();
+        //TODO: get all children and group by Show to shorten then list
+        
         for (Object Item: phoenix.media.GetAllChildren(Folder)){
             String thisRating = "";
             IMediaResource thisMedia = (IMediaResource)Item;
@@ -240,7 +281,7 @@ public class Source {
             }else{
                 thisRating = phoenix.metadata.GetRated(thisMedia);
             }
-            LOG.debug("GetRating: proecessing '" + phoenix.media.GetTitle(Item) + "' Ratings '" + thisRating + "'");
+            //LOG.debug("GetRating: proecessing '" + phoenix.media.GetTitle(Item) + "' Ratings '" + thisRating + "'");
             if (!thisRating.equals("")){
                 RatingList.add(thisRating);
             }
@@ -291,11 +332,11 @@ public class Source {
         if (HasGenreFilter(ViewName) || HasFolderFilter(ViewName)){
             return Boolean.TRUE;
         }else{
-            //now check any Filter property under the Flow
-            String tProp = Flow.GetFlowBaseProp(ViewName) + Const.PropDivider + Const.FlowFilters;
-            String[] FilterProps = sagex.api.Configuration.GetSubpropertiesThatAreLeaves(new UIContext(sagex.api.Global.GetUIContextName()),tProp);
-            for (String FilterItem: FilterProps){
-                LOG.debug("HasFilter: checking '" + FilterItem + "'");
+            //now check any valid Filter Type
+            //String tProp = Flow.GetFlowBaseProp(ViewName) + Const.PropDivider + Const.FlowFilters;
+            //String[] FilterProps = sagex.api.Configuration.GetSubpropertiesThatAreLeaves(new UIContext(sagex.api.Global.GetUIContextName()),tProp);
+            for (String FilterItem: InternalFilterTypes.keySet()){
+                //LOG.debug("HasFilter: checking '" + FilterItem + "'");
                 if (FilterItem.equals(Const.FlowGenreFilters) || FilterItem.equals(Const.FlowPathFilters)){
                     //skip as already checked above
                 }else{
@@ -316,10 +357,10 @@ public class Source {
     //calls to handle generic TriState Filters - Off, Include or Exclude types - example watched, dvd etc
     public static final String TriFilterList = "Off:&&:Include:&&:Exclude";
     public static String GetTriFilterName(String ViewName, String FilterType){
-        return Flow.GetListOptionName(ViewName, Const.FlowFilters + Const.PropDivider + FilterType, TriFilterList, "Off");
+        return Flow.GetListOptionName(ViewName, GetFilterTypeProp(FilterType), TriFilterList, "Off");
     }
     public static void SetTriFilterNext(String ViewName, String FilterType){
-        Flow.SetListOptionNext(ViewName, Const.FlowFilters + Const.PropDivider + FilterType, TriFilterList);
+        Flow.SetListOptionNext(ViewName, GetFilterTypeProp(FilterType), TriFilterList);
     }
     public static Boolean HasTriFilter(String ViewName, String FilterType){
         if (GetTriFilterName(ViewName, FilterType).equals("Off")){
@@ -344,6 +385,16 @@ public class Source {
     }
 
     public static void RemoveAllTriFilter(String ViewName, String FilterType){
-        Flow.PropertyListRemoveAll(ViewName, FilterType);
+        //clear the list associated with this Filter
+        Flow.PropertyListRemoveAll(ViewName, GetFilterListProp(FilterType));
+        //turn the filter state to Off
+        Flow.SetOption(ViewName, GetFilterTypeProp(FilterType), "Off");
+    }
+
+    public static String GetFilterListProp(String FilterName){
+        return Const.FlowFilters + Const.PropDivider + FilterName + "FilterList";
+    }
+    public static String GetFilterTypeProp(String FilterName){
+        return Const.FlowFilters + Const.PropDivider + FilterName;
     }
 }

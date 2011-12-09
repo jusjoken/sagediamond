@@ -120,6 +120,9 @@ public class Flow {
         util.SetListOptionNextBase(Boolean.TRUE, PropSection, PropName, OptionList);
     }
 
+    public static String PropertyListasString(String PropSection, String PropName){
+        return util.PropertyListasStringBase(Boolean.TRUE, PropSection, PropName);
+    }
     public static List<String> PropertyList(String PropSection, String PropName){
         return util.PropertyListBase(Boolean.TRUE, PropSection, PropName);
     }
