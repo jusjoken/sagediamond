@@ -14,6 +14,8 @@ import java.util.TreeSet;
 import org.apache.log4j.Logger;
 import sagex.UIContext;
 import sagex.phoenix.factory.ConfigurableOption;
+import sagex.phoenix.vfs.IMediaResource;
+import sagex.phoenix.vfs.MediaResourceType;
 import sagex.phoenix.vfs.filters.*;
 import sagex.phoenix.vfs.views.ViewFolder;
 
@@ -69,8 +71,8 @@ public class Source {
                     }
                     if (FilterType.equals("List")){
                         //get the list contents if any and set it to the value
-                        
-                        //tOption = phoenix.umb.GetOption(NewFilter, "value");
+                        tOption = phoenix.umb.GetOption(NewFilter, "value");
+                        LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' List '" + tOption.getListValues() + "'");
                         //phoenix.opt.SetValue(tOption, FilterString);
                         
                     }
@@ -222,6 +224,28 @@ public class Source {
             GenreList.addAll(phoenix.metadata.GetGenres(Item));
         }
         return new ArrayList<String>(GenreList);
+    }
+    
+    public static ArrayList<String> GetRatings(ViewFolder Folder){
+        if (Folder==null){
+            LOG.debug("GetRatings: request for null Folder returned empty list");
+            return new ArrayList<String>();
+        }
+        TreeSet<String> RatingList = new TreeSet<String>();
+        for (Object Item: phoenix.media.GetAllChildren(Folder)){
+            String thisRating = "";
+            IMediaResource thisMedia = (IMediaResource)Item;
+            if (thisMedia.isType(MediaResourceType.TV.value())){
+                thisRating = phoenix.metadata.GetParentalRating(thisMedia);
+            }else{
+                thisRating = phoenix.metadata.GetRated(thisMedia);
+            }
+            LOG.debug("GetRating: proecessing '" + phoenix.media.GetTitle(Item) + "' Ratings '" + thisRating + "'");
+            if (!thisRating.equals("")){
+                RatingList.add(thisRating);
+            }
+        }
+        return new ArrayList<String>(RatingList);
     }
     
     public static Boolean HasGenreFilter(String ViewName){
