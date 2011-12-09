@@ -583,6 +583,19 @@ public class util {
         util.SetProperty(tProp, NewValue);
     }
 
+    public static List<String> PropertyList(String PropSection, String PropName){
+        return PropertyListBase(Boolean.FALSE, PropSection, PropName);
+    }
+    public static List<String> PropertyListBase(Boolean bFlow, String PropSection, String PropName){
+        String tProp = "";
+        if (bFlow){
+            tProp = Flow.GetFlowBaseProp(PropSection) + Const.PropDivider + PropName;
+        }else{
+            tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+        }
+        return GetPropertyAsList(tProp);
+    }
+    
     public static void PropertyListAdd( String PropSection, String PropName, String NewValue){
         PropertyListAddBase(Boolean.FALSE, PropSection, PropName, NewValue);
     }
