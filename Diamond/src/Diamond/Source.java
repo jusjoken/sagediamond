@@ -44,7 +44,7 @@ public class Source {
     }
    
     public static void ApplyFilters(String ViewName, ViewFolder Folder){
-        LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' Before Count = '" + phoenix.media.GetAllChildren(Folder).size() + "' Types '" + InternalFilterTypes + "'");
+        //LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' Before Count = '" + phoenix.media.GetAllChildren(Folder).size() + "' Types '" + InternalFilterTypes + "'");
         Set<Filter> AllFilters = new HashSet<Filter>();
         //Apply genre filter if any
         if (HasGenreFilter(ViewName)){
@@ -112,7 +112,7 @@ public class Source {
         WrappedResourceFilter filter = new WrappedResourceFilter(andFilter);
         phoenix.umb.SetFilter(Folder, filter);
         phoenix.umb.Refresh(Folder);
-        LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' After Count = '" + phoenix.media.GetAllChildren(Folder).size() + "'");
+        //LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' After Count = '" + phoenix.media.GetAllChildren(Folder).size() + "'");
     }
 
     public static String BuildPQL(String ViewName, String FilterName, String FieldName, String FieldVerb, Boolean AndValues){
@@ -281,7 +281,10 @@ public class Source {
             }else{
                 thisRating = phoenix.metadata.GetRated(thisMedia);
             }
-            //LOG.debug("GetRating: proecessing '" + phoenix.media.GetTitle(Item) + "' Ratings '" + thisRating + "'");
+            if (thisRating==null || thisRating.equals("null")){
+                thisRating = "";
+            }
+            LOG.debug("GetRating: proecessing '" + phoenix.media.GetTitle(Item) + "' Ratings '" + thisRating + "'");
             if (!thisRating.equals("")){
                 RatingList.add(thisRating);
             }

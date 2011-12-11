@@ -43,6 +43,14 @@ public class StopWatch {
         LOG.debug(StopWatchName + ": completed in '" + getElapsedTime() + "' milliseconds");
     }
     
+    public void LogCurrent(String LogText) {
+        this.stopTime = System.currentTimeMillis();
+        this.running = Boolean.FALSE;
+        LOG.debug(StopWatchName + ": " + LogText + " in '" + getElapsedTime() + "' milliseconds");
+        this.startTime = System.currentTimeMillis();
+        this.running = Boolean.TRUE;
+    }
+
     //elaspsed time in milliseconds
     public long getElapsedTime() {
         long elapsed;
