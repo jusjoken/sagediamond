@@ -57,9 +57,18 @@ public class Source {
         //Apply other filters passed in 
         for (String FilterName: InternalFilterTypes.keySet()){
             String FilterType = InternalFilterTypes.get(FilterName);
+            String FilterValue = "";
             if (IsFilterTypeValid(FilterType)){
                 if (HasTriFilter(ViewName, FilterName)){
                     String FilterTypeforCreate = FilterName;
+                    //grab the value from the filtername if passed in - example "mediatype:tv"
+                    //the filtername remains the same to differentiate the different filters in the properties
+                    if (FilterName.contains(":")){
+                        //LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' filter '" + FilterValue + "'");
+                        FilterValue = FilterName.split(":")[1];
+                        FilterTypeforCreate = FilterName.split(":")[0];
+                        LOG.debug("ApplyFilters 1: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' filter '" + FilterValue + "'");
+                    }
                     if (FilterType.equals("pql")){
                         FilterTypeforCreate = "pql";
                     }
@@ -74,27 +83,22 @@ public class Source {
                     }
                     if (FilterType.equals("List")){
                         //get the list contents if any and set it to the value
-                        String FilterString = Flow.PropertyListasString(ViewName, Const.FlowFilters + Const.PropDivider + FilterName + "FilterList");
-                        LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' filter '" + FilterString + "'");
-                        if (!FilterString.equals("")){
-                            tOption = phoenix.umb.GetOption(NewFilter, "value");
-                            phoenix.opt.SetValue(tOption, FilterString);
-                        }
-                        
+                        FilterValue = Flow.PropertyListasString(ViewName, Const.FlowFilters + Const.PropDivider + FilterName + "FilterList");
+                        LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' filter '" + FilterValue + "'");
                     }
                     if (FilterType.equals("pql")){  //custom handling for these
-                        String FilterString = "";
                         if (FilterName.equals("rating")){
                             if (Flow.PropertyListCount(ViewName, GetFilterListProp(FilterName))>0){
-                                FilterString = BuildPQL(ViewName, FilterName, "Rated", "=", Boolean.FALSE);
-                                FilterString = FilterString + " or " + BuildPQL(ViewName, FilterName, "ParentalRating", "=", Boolean.FALSE);
-                                LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' filter '" + FilterString + "'");
+                                FilterValue = BuildPQL(ViewName, FilterName, "Rated", "=", Boolean.FALSE);
+                                FilterValue = FilterValue + " or " + BuildPQL(ViewName, FilterName, "ParentalRating", "=", Boolean.FALSE);
+                                LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' filter '" + FilterValue + "'");
                             }
                         }
-                        if (!FilterString.equals("")){
-                            tOption = phoenix.umb.GetOption(NewFilter, "value");
-                            phoenix.opt.SetValue(tOption, FilterString);
-                        }
+                    }
+                    if (!FilterValue.equals("")){
+                        LOG.debug("ApplyFilters 2: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' filter '" + FilterValue + "'");
+                        tOption = phoenix.umb.GetOption(NewFilter, "value");
+                        phoenix.opt.SetValue(tOption, FilterValue);
                     }
                     phoenix.umb.SetChanged(NewFilter);
                     AllFilters.add(NewFilter);
@@ -284,7 +288,7 @@ public class Source {
             if (thisRating==null || thisRating.equals("null")){
                 thisRating = "";
             }
-            LOG.debug("GetRating: proecessing '" + phoenix.media.GetTitle(Item) + "' Ratings '" + thisRating + "'");
+            //LOG.debug("GetRating: proecessing '" + phoenix.media.GetTitle(Item) + "' Ratings '" + thisRating + "'");
             if (!thisRating.equals("")){
                 RatingList.add(thisRating);
             }
