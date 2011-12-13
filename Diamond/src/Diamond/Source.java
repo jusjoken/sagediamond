@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import org.apache.log4j.Logger;
 import sagex.phoenix.factory.ConfigurableOption;
@@ -25,6 +26,34 @@ import sagex.phoenix.vfs.views.ViewFolder;
 public class Source {
     static private final Logger LOG = Logger.getLogger(Source.class);
     public static HashMap<String,String> InternalFilterTypes = new HashMap<String,String>();
+    public static HashMap<String,String> InternalMediaTypeFilters = new HashMap<String,String>();
+    
+    public static void AddMediaTypeFilter(String MediaType, String MediaTypeName){
+        if (IsMediaTypeValid(MediaType)){
+            InternalMediaTypeFilters.put(MediaType, MediaTypeName);
+        }
+    }
+    public static Boolean IsMediaTypeValid(String MediaType){
+        for (MediaResourceType t: MediaResourceType.values()){
+            if (MediaType.equals(t.toString())){
+                return Boolean.TRUE;
+            }
+        }
+        return Boolean.FALSE;
+    }
+    public static ArrayList<String> GetMediaTypes(){
+        TreeMap<String,String> MediaTypesList = new TreeMap<String,String>();
+        for (String tKey: InternalMediaTypeFilters.keySet()){
+            MediaTypesList.put(InternalMediaTypeFilters.get(tKey), tKey);
+        }
+        return new ArrayList<String>(MediaTypesList.values());
+    }
+    public static String GetMediaTypeName(String MediaType){
+        if (InternalMediaTypeFilters.containsKey(MediaType)){
+            return InternalMediaTypeFilters.get(MediaType);
+        }
+        return util.OptionNotFound;
+    }
     
     public static void AddFilterType(String FilterName, String FilterType){
         if (IsFilterTypeValid(FilterType)){
@@ -84,19 +113,17 @@ public class Source {
                     if (FilterType.equals("List")){
                         //get the list contents if any and set it to the value
                         FilterValue = Flow.PropertyListasString(ViewName, Const.FlowFilters + Const.PropDivider + FilterName + "FilterList");
-                        LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' filter '" + FilterValue + "'");
                     }
                     if (FilterType.equals("pql")){  //custom handling for these
                         if (FilterName.equals("rating")){
                             if (Flow.PropertyListCount(ViewName, GetFilterListProp(FilterName))>0){
                                 FilterValue = BuildPQL(ViewName, FilterName, "Rated", "=", Boolean.FALSE);
                                 FilterValue = FilterValue + " or " + BuildPQL(ViewName, FilterName, "ParentalRating", "=", Boolean.FALSE);
-                                LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' filter '" + FilterValue + "'");
                             }
                         }
                     }
                     if (!FilterValue.equals("")){
-                        LOG.debug("ApplyFilters 2: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' filter '" + FilterValue + "'");
+                        LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' filter '" + FilterValue + "'");
                         tOption = phoenix.umb.GetOption(NewFilter, "value");
                         phoenix.opt.SetValue(tOption, FilterValue);
                     }
