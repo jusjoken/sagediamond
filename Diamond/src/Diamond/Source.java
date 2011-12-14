@@ -312,14 +312,16 @@ public class Source {
         //add a group for genre
         Grouper NewGrouper = phoenix.umb.CreateGrouper("genre");
         ConfigurableOption tOption = phoenix.umb.GetOption(NewGrouper, "empty-foldername");
-        phoenix.opt.SetValue(tOption, "No Genre");
+        phoenix.opt.SetValue(tOption, "NONE");
         phoenix.umb.SetChanged(NewGrouper);
         phoenix.umb.SetGrouper(Folder, NewGrouper);
         phoenix.umb.Refresh(Folder);
         //LOG.debug("GetGenres: first child check during '" + phoenix.media.GetTitle(phoenix.umb.GetChild(Folder, 0)) + "'");
         for (Object Item: phoenix.media.GetChildren(Folder)){
             //LOG.debug("GetGenres: proecessing '" + phoenix.media.GetTitle(Item) + "'");
-            GenreList.add(phoenix.media.GetTitle(Item));
+            if (!phoenix.media.GetTitle(Item).equals("NONE")){
+                GenreList.add(phoenix.media.GetTitle(Item));
+            }
         }
         phoenix.umb.RemoveGrouper(Folder, NewGrouper);
         phoenix.umb.Refresh(Folder);
@@ -368,12 +370,15 @@ public class Source {
         CleanFolderPresentation(Folder);
         //add a group for show
         Grouper NewGrouper = phoenix.umb.CreateGrouper("parental-ratings");
+        ConfigurableOption tOption = phoenix.umb.GetOption(NewGrouper, "empty-foldername");
+        phoenix.opt.SetValue(tOption, "NONE");
+        phoenix.umb.SetChanged(NewGrouper);
         phoenix.umb.SetGrouper(Folder, NewGrouper);
         phoenix.umb.Refresh(Folder);
         for (Object Item: phoenix.media.GetChildren(Folder)){
             String thisRating = phoenix.media.GetTitle(Item);
             //LOG.debug("GetRating: proecessing '" + phoenix.media.GetTitle(Item) + "' Ratings '" + thisRating + "' type '" + phoenix.media.GetId(Item) + "' Item '" +  Item + "'");
-            if (!thisRating.equals("") && thisRating.equals(phoenix.media.GetId(Item))){
+            if (!thisRating.equals("") && !thisRating.equals("null") && !thisRating.equals("NONE") && thisRating!=null && thisRating.equals(phoenix.media.GetId(Item))){
                 RatingList.add(thisRating);
             }
         }
