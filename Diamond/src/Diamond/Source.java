@@ -20,6 +20,7 @@ import sagex.phoenix.vfs.IMediaResource;
 import sagex.phoenix.vfs.MediaResourceType;
 import sagex.phoenix.vfs.filters.*;
 import sagex.phoenix.vfs.groups.Grouper;
+import sagex.phoenix.vfs.sorters.Sorter;
 import sagex.phoenix.vfs.views.ViewFolder;
 
 /**
@@ -284,18 +285,20 @@ public class Source {
         return result;
 
     }
-    
-    public static ArrayList<String> GetGenres2(ViewFolder Folder){
-        if (Folder==null){
-            LOG.debug("GetGenres: request for null Folder returned empty list");
-            return new ArrayList<String>();
+
+    public static void CleanFolderPresentation(ViewFolder Folder){
+        //remove any existing groupers - there should not be any but to be safe
+        while (phoenix.umb.GetGroupers(Folder).size()>0){
+            Grouper curGrouper = phoenix.umb.GetGroupers(Folder).get(0);
+            LOG.debug("GetGenres: removing existing grouper prior to adding one '" + curGrouper.getLabel() + "' Name '" + curGrouper.getName() + "'");
+            phoenix.umb.RemoveGrouper(Folder, curGrouper);
         }
-        TreeSet<String> GenreList = new TreeSet<String>();
-        for (Object Item: phoenix.media.GetAllChildren(Folder)){
-            //LOG.debug("GetGenres: proecessing '" + phoenix.media.GetTitle(Item) + "' Genres '" + MetadataCalls.GetGenresasString((IMediaResource)Item, ","));
-            GenreList.addAll(phoenix.metadata.GetGenres(Item));
+        //remove any existing sorters - there should not be any but to be safe
+        while (phoenix.umb.GetSorters(Folder).size()>0){
+            Sorter curSorter = phoenix.umb.GetSorters(Folder).get(0);
+            LOG.debug("GetGenres: removing existing Sorters prior to adding one '" + curSorter.getLabel() + "' Name '" + curSorter.getName() + "'");
+            phoenix.umb.RemoveSorter(Folder, curSorter);
         }
-        return new ArrayList<String>(GenreList);
     }
     
     public static ArrayList<String> GetGenres(ViewFolder Folder){
@@ -303,12 +306,9 @@ public class Source {
             LOG.debug("GetGenres: request for null Folder returned empty list");
             return new ArrayList<String>();
         }
-        LOG.debug("GetGenres: first child check before '" + phoenix.media.GetTitle(phoenix.umb.GetChild(Folder, 0)) + "'");
+        //LOG.debug("GetGenres: first child check before '" + phoenix.media.GetTitle(phoenix.umb.GetChild(Folder, 0)) + "'");
         TreeSet<String> GenreList = new TreeSet<String>();
-        //TODO: remove any existing groupers - there should not be any but to be safe
-        for (Grouper gTemp: phoenix.umb.GetGroupers(Folder)){
-            LOG.debug("GetGenres: current groupers 1 Label '" + gTemp.getLabel() + "' Name '" + gTemp.getName() + "'");
-        }
+        CleanFolderPresentation(Folder);
         //add a group for genre
         Grouper NewGrouper = phoenix.umb.CreateGrouper("genre");
         ConfigurableOption tOption = phoenix.umb.GetOption(NewGrouper, "empty-foldername");
@@ -316,20 +316,14 @@ public class Source {
         phoenix.umb.SetChanged(NewGrouper);
         phoenix.umb.SetGrouper(Folder, NewGrouper);
         phoenix.umb.Refresh(Folder);
-        LOG.debug("GetGenres: first child check during '" + phoenix.media.GetTitle(phoenix.umb.GetChild(Folder, 0)) + "'");
-        for (Grouper gTemp: phoenix.umb.GetGroupers(Folder)){
-            LOG.debug("GetGenres: current groupers 2 Label '" + gTemp.getLabel() + "' Name '" + gTemp.getName() + "'");
-        }
+        //LOG.debug("GetGenres: first child check during '" + phoenix.media.GetTitle(phoenix.umb.GetChild(Folder, 0)) + "'");
         for (Object Item: phoenix.media.GetChildren(Folder)){
-            LOG.debug("GetGenres: proecessing '" + phoenix.media.GetTitle(Item) + "'");
+            //LOG.debug("GetGenres: proecessing '" + phoenix.media.GetTitle(Item) + "'");
             GenreList.add(phoenix.media.GetTitle(Item));
         }
         phoenix.umb.RemoveGrouper(Folder, NewGrouper);
         phoenix.umb.Refresh(Folder);
-        LOG.debug("GetGenres: first child check after '" + phoenix.media.GetTitle(phoenix.umb.GetChild(Folder, 0)) + "'");
-        for (Grouper gTemp: phoenix.umb.GetGroupers(Folder)){
-            LOG.debug("GetGenres: current groupers 3 Label '" + gTemp.getLabel() + "' Name '" + gTemp.getName() + "'");
-        }
+        //LOG.debug("GetGenres: first child check after '" + phoenix.media.GetTitle(phoenix.umb.GetChild(Folder, 0)) + "'");
         return new ArrayList<String>(GenreList);
     }
     
@@ -371,24 +365,20 @@ public class Source {
             return new ArrayList<String>();
         }
         TreeSet<String> RatingList = new TreeSet<String>();
-        //TODO: get all children and group by Show to shorten then list
-        
-        for (Object Item: phoenix.media.GetAllChildren(Folder)){
-            String thisRating = "";
-            IMediaResource thisMedia = (IMediaResource)Item;
-            if (thisMedia.isType(MediaResourceType.TV.value())){
-                thisRating = phoenix.metadata.GetParentalRating(thisMedia);
-            }else{
-                thisRating = phoenix.metadata.GetRated(thisMedia);
-            }
-            if (thisRating==null || thisRating.equals("null")){
-                thisRating = "";
-            }
-            //LOG.debug("GetRating: proecessing '" + phoenix.media.GetTitle(Item) + "' Ratings '" + thisRating + "'");
-            if (!thisRating.equals("")){
+        CleanFolderPresentation(Folder);
+        //add a group for show
+        Grouper NewGrouper = phoenix.umb.CreateGrouper("parental-ratings");
+        phoenix.umb.SetGrouper(Folder, NewGrouper);
+        phoenix.umb.Refresh(Folder);
+        for (Object Item: phoenix.media.GetChildren(Folder)){
+            String thisRating = phoenix.media.GetTitle(Item);
+            //LOG.debug("GetRating: proecessing '" + phoenix.media.GetTitle(Item) + "' Ratings '" + thisRating + "' type '" + phoenix.media.GetId(Item) + "' Item '" +  Item + "'");
+            if (!thisRating.equals("") && thisRating.equals(phoenix.media.GetId(Item))){
                 RatingList.add(thisRating);
             }
         }
+        phoenix.umb.RemoveGrouper(Folder, NewGrouper);
+        phoenix.umb.Refresh(Folder);
         return new ArrayList<String>(RatingList);
     }
     
