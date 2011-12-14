@@ -14,10 +14,12 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
+import sagex.phoenix.configuration.Group;
 import sagex.phoenix.factory.ConfigurableOption;
 import sagex.phoenix.vfs.IMediaResource;
 import sagex.phoenix.vfs.MediaResourceType;
 import sagex.phoenix.vfs.filters.*;
+import sagex.phoenix.vfs.groups.Grouper;
 import sagex.phoenix.vfs.views.ViewFolder;
 
 /**
@@ -283,7 +285,7 @@ public class Source {
 
     }
     
-    public static ArrayList<String> GetGenres(ViewFolder Folder){
+    public static ArrayList<String> GetGenres2(ViewFolder Folder){
         if (Folder==null){
             LOG.debug("GetGenres: request for null Folder returned empty list");
             return new ArrayList<String>();
@@ -296,6 +298,41 @@ public class Source {
         return new ArrayList<String>(GenreList);
     }
     
+    public static ArrayList<String> GetGenres(ViewFolder Folder){
+        if (Folder==null){
+            LOG.debug("GetGenres: request for null Folder returned empty list");
+            return new ArrayList<String>();
+        }
+        LOG.debug("GetGenres: first child check before '" + phoenix.media.GetTitle(phoenix.umb.GetChild(Folder, 0)) + "'");
+        TreeSet<String> GenreList = new TreeSet<String>();
+        //TODO: remove any existing groupers - there should not be any but to be safe
+        for (Grouper gTemp: phoenix.umb.GetGroupers(Folder)){
+            LOG.debug("GetGenres: current groupers 1 Label '" + gTemp.getLabel() + "' Name '" + gTemp.getName() + "'");
+        }
+        //add a group for genre
+        Grouper NewGrouper = phoenix.umb.CreateGrouper("genre");
+        ConfigurableOption tOption = phoenix.umb.GetOption(NewGrouper, "empty-foldername");
+        phoenix.opt.SetValue(tOption, "No Genre");
+        phoenix.umb.SetChanged(NewGrouper);
+        phoenix.umb.SetGrouper(Folder, NewGrouper);
+        phoenix.umb.Refresh(Folder);
+        LOG.debug("GetGenres: first child check during '" + phoenix.media.GetTitle(phoenix.umb.GetChild(Folder, 0)) + "'");
+        for (Grouper gTemp: phoenix.umb.GetGroupers(Folder)){
+            LOG.debug("GetGenres: current groupers 2 Label '" + gTemp.getLabel() + "' Name '" + gTemp.getName() + "'");
+        }
+        for (Object Item: phoenix.media.GetChildren(Folder)){
+            LOG.debug("GetGenres: proecessing '" + phoenix.media.GetTitle(Item) + "'");
+            GenreList.add(phoenix.media.GetTitle(Item));
+        }
+        phoenix.umb.RemoveGrouper(Folder, NewGrouper);
+        phoenix.umb.Refresh(Folder);
+        LOG.debug("GetGenres: first child check after '" + phoenix.media.GetTitle(phoenix.umb.GetChild(Folder, 0)) + "'");
+        for (Grouper gTemp: phoenix.umb.GetGroupers(Folder)){
+            LOG.debug("GetGenres: current groupers 3 Label '" + gTemp.getLabel() + "' Name '" + gTemp.getName() + "'");
+        }
+        return new ArrayList<String>(GenreList);
+    }
+    
     public static ArrayList<String> GetTitles(ViewFolder Folder){
         if (Folder==null){
             LOG.debug("GetTitles: request for null Folder returned empty list");
@@ -303,7 +340,7 @@ public class Source {
         }
         TreeSet<String> TitleList = new TreeSet<String>();
         for (Object Item: phoenix.media.GetAllChildren(Folder)){
-            LOG.debug("GetTitles: proecessing '" + phoenix.media.GetTitle(Item) + "'");
+            //LOG.debug("GetTitles: proecessing '" + phoenix.media.GetTitle(Item) + "'");
             TitleList.add(phoenix.media.GetTitle(Item));
         }
         return new ArrayList<String>(TitleList);
@@ -313,10 +350,10 @@ public class Source {
         TreeSet<String> TitleList = new TreeSet<String>();
         for (String Item: inList){
             String tItem = Item.substring(0,1).toUpperCase();
-            LOG.debug("GetTitleFirstChar: proecessing '" + Item + "' adding '" + tItem + "'");
+            //LOG.debug("GetTitleFirstChar: proecessing '" + Item + "' adding '" + tItem + "'");
             TitleList.add(tItem);
         }
-        LOG.debug("GetTitleFirstChar: final list '" + TitleList + "'");
+        //LOG.debug("GetTitleFirstChar: final list '" + TitleList + "'");
         return new ArrayList<String>(TitleList);
     }
 
@@ -324,7 +361,7 @@ public class Source {
         //TreeSet<String> TitleList = new TreeSet<String>();
         Pattern SearchPattern = Pattern.compile(firstChar);
         ArrayList<String> outList = (ArrayList<String>) sagex.api.Database.FilterByMethodRegex(inList, "Diamond_MetadataCalls_GetMediaTitleLowerCase", SearchPattern, true, false);
-        LOG.debug("GetTitlesWithFirstChar: for '" + firstChar + "' List '" + outList + "'");
+        //LOG.debug("GetTitlesWithFirstChar: for '" + firstChar + "' List '" + outList + "'");
         return outList;
     }
 
