@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import sagex.phoenix.factory.ConfigurableOption;
 import sagex.phoenix.vfs.IMediaResource;
@@ -287,7 +288,6 @@ public class Source {
             LOG.debug("GetGenres: request for null Folder returned empty list");
             return new ArrayList<String>();
         }
-        //TODO: get all children and group by Show to shorten then list
         TreeSet<String> GenreList = new TreeSet<String>();
         for (Object Item: phoenix.media.GetAllChildren(Folder)){
             //LOG.debug("GetGenres: proecessing '" + phoenix.media.GetTitle(Item) + "' Genres '" + MetadataCalls.GetGenresasString((IMediaResource)Item, ","));
@@ -296,6 +296,38 @@ public class Source {
         return new ArrayList<String>(GenreList);
     }
     
+    public static ArrayList<String> GetTitles(ViewFolder Folder){
+        if (Folder==null){
+            LOG.debug("GetTitles: request for null Folder returned empty list");
+            return new ArrayList<String>();
+        }
+        TreeSet<String> TitleList = new TreeSet<String>();
+        for (Object Item: phoenix.media.GetAllChildren(Folder)){
+            LOG.debug("GetTitles: proecessing '" + phoenix.media.GetTitle(Item) + "'");
+            TitleList.add(phoenix.media.GetTitle(Item));
+        }
+        return new ArrayList<String>(TitleList);
+    }
+
+    public static ArrayList<String> GetTitlesFirstChar(ArrayList<String> inList){
+        TreeSet<String> TitleList = new TreeSet<String>();
+        for (String Item: inList){
+            String tItem = Item.substring(0,1).toUpperCase();
+            LOG.debug("GetTitleFirstChar: proecessing '" + Item + "' adding '" + tItem + "'");
+            TitleList.add(tItem);
+        }
+        LOG.debug("GetTitleFirstChar: final list '" + TitleList + "'");
+        return new ArrayList<String>(TitleList);
+    }
+
+    public static ArrayList<String> GetTitlesWithFirstChar(ArrayList<String> inList, String firstChar){
+        //TreeSet<String> TitleList = new TreeSet<String>();
+        Pattern SearchPattern = Pattern.compile(firstChar);
+        ArrayList<String> outList = (ArrayList<String>) sagex.api.Database.FilterByMethodRegex(inList, "Diamond_MetadataCalls_GetMediaTitleLowerCase", SearchPattern, true, false);
+        LOG.debug("GetTitlesWithFirstChar: for '" + firstChar + "' List '" + outList + "'");
+        return outList;
+    }
+
     public static ArrayList<String> GetRatings(ViewFolder Folder){
         if (Folder==null){
             LOG.debug("GetRatings: request for null Folder returned empty list");
