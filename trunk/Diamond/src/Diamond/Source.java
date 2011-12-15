@@ -22,6 +22,7 @@ import sagex.phoenix.vfs.filters.*;
 import sagex.phoenix.vfs.groups.Grouper;
 import sagex.phoenix.vfs.sorters.Sorter;
 import sagex.phoenix.vfs.views.ViewFolder;
+import sagex.phoenix.vfs.views.ViewPresentation;
 
 /**
  *
@@ -327,6 +328,42 @@ public class Source {
         phoenix.umb.Refresh(Folder);
         //LOG.debug("GetGenres: first child check after '" + phoenix.media.GetTitle(phoenix.umb.GetChild(Folder, 0)) + "'");
         return new ArrayList<String>(GenreList);
+    }
+    
+    public static void PrepareTitleSource(ViewFolder Folder){
+        if (Folder==null){
+            LOG.debug("PrepareTitleSource: request for null Folder");
+        }else{
+            //LOG.debug("PrepareTitleSource: first child check before '" + phoenix.media.GetTitle(phoenix.umb.GetChild(Folder, 0)) + "'");
+            CleanFolderPresentation(Folder);
+            //add a group for genre
+            Grouper NewGrouper = phoenix.umb.CreateGrouper("firstletter");
+            ConfigurableOption tOption = phoenix.umb.GetOption(NewGrouper, "regex");
+            phoenix.opt.SetValue(tOption, ".");
+            phoenix.umb.SetChanged(NewGrouper);
+            Grouper NewGrouper2 = phoenix.umb.CreateGrouper("show");
+            tOption = phoenix.umb.GetOption(NewGrouper2, "empty-foldername");
+            phoenix.opt.SetValue(tOption, "NONE");
+            phoenix.umb.SetChanged(NewGrouper2);
+            //ViewPresentation NewPresentation = 
+            phoenix.umb.SetGrouper(Folder, NewGrouper);
+            phoenix.umb.SetGrouper(Folder, NewGrouper2);
+            phoenix.umb.Refresh(Folder);
+            //LOG.debug("PrepareTitleSource: first child check during '" + phoenix.media.GetTitle(phoenix.umb.GetChild(Folder, 0)) + "'");
+            for (Object Item: phoenix.media.GetChildren(Folder)){
+                LOG.debug("PrepareTitleSource: level 1 '" + phoenix.media.GetTitle(Item) + "' Item '" + Item + "'");
+                for (Object Item2: phoenix.media.GetChildren(Item)){
+                    LOG.debug("  PrepareTitleSource: level 2 '" + phoenix.media.GetTitle(Item2) + "' Item2 '" + Item2 + "'");
+                }
+                //                if (!phoenix.media.GetTitle(Item).equals("NONE")){
+//                    GenreList.add(phoenix.media.GetTitle(Item));
+//                }
+            }
+            phoenix.umb.RemoveGrouper(Folder, NewGrouper);
+            phoenix.umb.RemoveGrouper(Folder, NewGrouper2);
+            phoenix.umb.Refresh(Folder);
+            //LOG.debug("GetGenres: first child check after '" + phoenix.media.GetTitle(phoenix.umb.GetChild(Folder, 0)) + "'");
+        }
     }
     
     public static ArrayList<String> GetTitles(ViewFolder Folder){
