@@ -368,18 +368,34 @@ public class Source {
         }
     }
     
-    public static void BuildView(){
-        ViewFactory NewFactory = new ViewFactory();
-        ViewPresentation NewPresentation = new ViewPresentation(0);
-        Grouper NewGrouper = phoenix.umb.CreateGrouper("firstletter");
-        ConfigurableOption tOption = phoenix.umb.GetOption(NewGrouper, "regex");
+    public static void BuildView(ViewFolder Folder){
+        ViewFactory vf = new ViewFactory();
+        ViewPresentation vp = new ViewPresentation();
+        Grouper grpr = phoenix.umb.CreateGrouper("firstletter");
+        ConfigurableOption tOption = phoenix.umb.GetOption(grpr, "regex");
         phoenix.opt.SetValue(tOption, ".");
-        phoenix.umb.SetChanged(NewGrouper);
-        Grouper NewGrouper2 = phoenix.umb.CreateGrouper("show");
-        tOption = phoenix.umb.GetOption(NewGrouper2, "empty-foldername");
+        phoenix.umb.SetChanged(grpr);
+        vp.getGroupers().add(new Grouper(grpr));
+        vp.setLevel(1);
+        vf.addViewPresentations(vp);
+
+        ViewPresentation vp2 = new ViewPresentation();
+        Grouper grpr2 = phoenix.umb.CreateGrouper("show");
+        tOption = phoenix.umb.GetOption(grpr2, "empty-foldername");
         phoenix.opt.SetValue(tOption, "NONE");
-        phoenix.umb.SetChanged(NewGrouper2);
-        NewFactory.addViewPresentations(NewPresentation);
+        phoenix.umb.SetChanged(grpr2);
+        vp2.getGroupers().add(new Grouper(grpr2));
+        vp.setLevel(2);
+        vf.addViewPresentations(vp2);
+        //vf.addViewPresentations(new ViewPresentation(2)); 
+
+        ViewFolder view = new ViewFolder(vf, 0, null, Folder); 
+            for (Object Item: phoenix.media.GetChildren(view)){
+                LOG.debug("BuildView: level 1 '" + phoenix.media.GetTitle(Item) + "' Item '" + Item + "'");
+                for (Object Item2: phoenix.media.GetChildren(Item)){
+                    LOG.debug("  BuildView: level 2 '" + phoenix.media.GetTitle(Item2) + "' Item2 '" + Item2 + "'");
+                }
+            }
         
     }
     
