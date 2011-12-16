@@ -16,11 +16,13 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import sagex.phoenix.configuration.Group;
 import sagex.phoenix.factory.ConfigurableOption;
+import sagex.phoenix.factory.Factory;
 import sagex.phoenix.vfs.IMediaResource;
 import sagex.phoenix.vfs.MediaResourceType;
 import sagex.phoenix.vfs.filters.*;
 import sagex.phoenix.vfs.groups.Grouper;
 import sagex.phoenix.vfs.sorters.Sorter;
+import sagex.phoenix.vfs.views.ViewFactory;
 import sagex.phoenix.vfs.views.ViewFolder;
 import sagex.phoenix.vfs.views.ViewPresentation;
 
@@ -364,6 +366,21 @@ public class Source {
             phoenix.umb.Refresh(Folder);
             //LOG.debug("GetGenres: first child check after '" + phoenix.media.GetTitle(phoenix.umb.GetChild(Folder, 0)) + "'");
         }
+    }
+    
+    public static void BuildView(){
+        ViewFactory NewFactory = new ViewFactory();
+        ViewPresentation NewPresentation = new ViewPresentation(0);
+        Grouper NewGrouper = phoenix.umb.CreateGrouper("firstletter");
+        ConfigurableOption tOption = phoenix.umb.GetOption(NewGrouper, "regex");
+        phoenix.opt.SetValue(tOption, ".");
+        phoenix.umb.SetChanged(NewGrouper);
+        Grouper NewGrouper2 = phoenix.umb.CreateGrouper("show");
+        tOption = phoenix.umb.GetOption(NewGrouper2, "empty-foldername");
+        phoenix.opt.SetValue(tOption, "NONE");
+        phoenix.umb.SetChanged(NewGrouper2);
+        NewFactory.addViewPresentations(NewPresentation);
+        
     }
     
     public static ArrayList<String> GetTitles(ViewFolder Folder){
