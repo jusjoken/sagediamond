@@ -4,6 +4,7 @@
  */
 package Diamond;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -25,6 +26,7 @@ import sagex.phoenix.vfs.sorters.Sorter;
 import sagex.phoenix.vfs.views.ViewFactory;
 import sagex.phoenix.vfs.views.ViewFolder;
 import sagex.phoenix.vfs.views.ViewPresentation;
+import sagex.api.*;
 
 /**
  *
@@ -387,6 +389,7 @@ public class Source {
         vp2.getGroupers().add(new Grouper(grpr2));
         vp.setLevel(2);
         vf.addViewPresentations(vp2);
+        
         //vf.addViewPresentations(new ViewPresentation(2)); 
 
         ViewFolder view = new ViewFolder(vf, 0, null, Folder); 
@@ -398,6 +401,28 @@ public class Source {
             }
         
     }
+    
+//  public void testRegexTitleFilter() throws ParseException {
+//      
+//int id=1;
+// sagex.api.AiringAPI.Airing mf = api.newMediaFile(id++);
+// mf.put("GetMediaTitle", "House");
+// mf.put("IsTVFile", true);
+// mf.put("GetShowTitle","House");
+// mf.put("GetShowEpisode","Pilot");
+// mf.METADATA.put("Title", "House");
+// mf.METADATA.put("MediaType", "TV");
+// mf.METADATA.put("SeasonNumber", "2");
+//
+// 
+// RegexTitleGrouper rgrouper = new RegexTitleGrouper();
+// Grouper grouper = new Grouper(rgrouper);
+// grouper.getOption(RegexTitleGrouper.OPT_REGEX).value().setValue(".");
+// grouper.setChanged(true);
+// String grp = grouper.getGroupName(new SageMediaFile(null, mf));
+// assertEquals("H", grp);
+//}
+    
     
     public static ArrayList<String> GetTitles(ViewFolder Folder){
         if (Folder==null){
