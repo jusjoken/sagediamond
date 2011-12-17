@@ -27,6 +27,8 @@ import sagex.phoenix.vfs.views.ViewFactory;
 import sagex.phoenix.vfs.views.ViewFolder;
 import sagex.phoenix.vfs.views.ViewPresentation;
 import sagex.api.*;
+import sagex.phoenix.Phoenix;
+import sagex.phoenix.vfs.IMediaFolder;
 
 /**
  *
@@ -370,7 +372,44 @@ public class Source {
         }
     }
     
-    public static void BuildView(ViewFolder Folder){
+    public static void BuildView(ViewFolder Folder) throws CloneNotSupportedException{
+//        Factory<IMediaFolder> source = (Factory<IMediaFolder>) Phoenix.getInstance().getVFSManager().getVFSSourceFactory().getFactory("expression").clone();
+//        source.getOption("expression").value().set("GetMediaFiles(\"TVDB\")");
+        Factory<IMediaFolder> source = (Factory<IMediaFolder>) Phoenix.getInstance().getVFSManager().getVFSViewFactory().getFactory("gemstone.base.all").clone();
+        
+        ViewFactory vf = new ViewFactory();
+        vf.setName("TitleLetterView");
+        vf.addFolderSource(source);
+        ViewPresentation vp = new ViewPresentation(0);
+        Grouper grpr = phoenix.umb.CreateGrouper("regextitle");
+        grpr.getOption("regex").value().set(".");
+        vp.getGroupers().add(grpr);
+        Sorter sort = phoenix.umb.CreateSorter("title");
+        sort.getOption("ignore-all").value().set("true");
+        vp.getSorters().add(sort);
+        vf.addViewPresentations(vp);
+
+        ViewPresentation vp2 = new ViewPresentation(1);
+        Grouper grpr2 = phoenix.umb.CreateGrouper("show");
+        grpr2.getOption("empty-foldername").value().set("NONE");
+        vp2.getGroupers().add(grpr2);
+        Sorter sort2 = phoenix.umb.CreateSorter("title");
+        sort2.getOption("ignore-all").value().set("true");
+        vp2.getSorters().add(sort2);
+        vf.addViewPresentations(vp2);
+        
+        ViewFolder view = vf.create(null);
+        //ViewFolder view = new ViewFolder(vf, 0, null, Folder); 
+        LOG.debug("BuildView: view '" + view + "'");
+        for (Object Item: phoenix.media.GetChildren(view)){
+            LOG.debug("BuildView: level 1 '" + phoenix.media.GetTitle(Item) + "' Item '" + Item + "'");
+            for (Object Item2: phoenix.media.GetChildren(Item)){
+                LOG.debug("  BuildView: level 2 '" + phoenix.media.GetTitle(Item2) + "' Item2 '" + Item2 + "'");
+            }
+        }
+    }
+    
+    public static void BuildView2(ViewFolder Folder){
         ViewFactory vf = new ViewFactory();
         ViewPresentation vp = new ViewPresentation();
         Grouper grpr = phoenix.umb.CreateGrouper("firstletter");
