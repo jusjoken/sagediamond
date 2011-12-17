@@ -29,6 +29,7 @@ import sagex.phoenix.vfs.views.ViewPresentation;
 import sagex.api.*;
 import sagex.phoenix.Phoenix;
 import sagex.phoenix.vfs.IMediaFolder;
+import sagex.phoenix.vfs.groups.RegexTitleGrouper;
 
 /**
  *
@@ -381,9 +382,11 @@ public class Source {
         vf.setName("TitleLetterView");
         vf.addFolderSource(source);
         ViewPresentation vp = new ViewPresentation(0);
-        Grouper grpr = phoenix.umb.CreateGrouper("regextitle");
-        //grpr.getOption("regex").value().set("^(?!(the|a|an)\\s)(.)");
-        grpr.getOption("regex").value().set(".");
+        //Grouper grpr = phoenix.umb.CreateGrouper("regextitle");
+        FirstLetterTitleGrouper tgrpr = new FirstLetterTitleGrouper();
+        Grouper grpr = new Grouper(tgrpr);
+        //grpr.getOption("regex").value().set("^(?:(?:the|a|an)\\s+)?(\\S)");
+        //grpr.getOption("regex").value().set(".");
         vp.getGroupers().add(grpr);
         Sorter sort = phoenix.umb.CreateSorter("title");
         sort.getOption("ignore-all").value().set("true");
