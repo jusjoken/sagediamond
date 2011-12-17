@@ -382,6 +382,7 @@ public class Source {
         vf.addFolderSource(source);
         ViewPresentation vp = new ViewPresentation(0);
         Grouper grpr = phoenix.umb.CreateGrouper("regextitle");
+        //grpr.getOption("regex").value().set("^(?!(the|a|an)\\s)(.)");
         grpr.getOption("regex").value().set(".");
         vp.getGroupers().add(grpr);
         Sorter sort = phoenix.umb.CreateSorter("title");
