@@ -132,6 +132,10 @@ public class Source {
                                 FilterValue = BuildPQL(ViewName, FilterName, "Rated", "=", Boolean.FALSE);
                                 FilterValue = FilterValue + " or " + BuildPQL(ViewName, FilterName, "ParentalRating", "=", Boolean.FALSE);
                             }
+                        }else if (FilterName.equals("title")){
+                            if (Flow.PropertyListCount(ViewName, GetFilterListProp(FilterName))>0){
+                                FilterValue = BuildPQL(ViewName, FilterName, "Title", "=", Boolean.FALSE);
+                            }
                         }
                     }
                     if (!FilterValue.equals("")){

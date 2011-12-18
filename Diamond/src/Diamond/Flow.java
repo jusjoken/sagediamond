@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import sagex.UIContext;
 import sagex.phoenix.vfs.IMediaResource;
 import sagex.phoenix.vfs.views.ViewFactory;
+import sagex.phoenix.vfs.views.ViewFolder;
 
 
 /**
@@ -137,6 +138,9 @@ public class Flow {
     }
     public static Boolean PropertyListContains(String PropSection, String PropName, String NewValue){
         return util.PropertyListContainsBase(Boolean.TRUE, PropSection, PropName, NewValue);
+    }
+    public static Boolean PropertyListContains(String PropSection, String PropName, ViewFolder Folder){
+        return util.PropertyListContainsBase(Boolean.TRUE, PropSection, PropName, Folder);
     }
     public static Integer PropertyListCount(String PropSection, String PropName){
         return util.PropertyListCountBase(Boolean.TRUE, PropSection, PropName);
