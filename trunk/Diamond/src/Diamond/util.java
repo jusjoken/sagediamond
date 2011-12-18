@@ -17,6 +17,8 @@ import java.util.Random;
 import java.util.TreeSet;
 import org.apache.log4j.Logger;
 import sagex.UIContext;
+import sagex.phoenix.vfs.IMediaResource;
+import sagex.phoenix.vfs.views.ViewFolder;
 
 /**
  *
@@ -669,6 +671,29 @@ public class util {
         List<String> tList = GetPropertyAsList(tProp);
         if (tList.contains(NewValue)){
             return Boolean.TRUE;
+        }else{
+            return Boolean.FALSE;
+        }
+    }
+    public static Boolean PropertyListContains(String PropSection, String PropName, ViewFolder Folder){
+        return PropertyListContainsBase(Boolean.FALSE, PropSection, PropName, Folder);
+    }
+    public static Boolean PropertyListContainsBase(Boolean bFlow, String PropSection, String PropName, ViewFolder Folder){
+        String tProp = "";
+        if (bFlow){
+            tProp = Flow.GetFlowBaseProp(PropSection) + Const.PropDivider + PropName;
+        }else{
+            tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+        }
+        List<String> tList = GetPropertyAsList(tProp);
+        if (tList.size()>0){
+            for (IMediaResource Child: Folder.getChildren()){
+                String NewValue = Child.getTitle();
+                if (tList.contains(NewValue)){
+                    return Boolean.TRUE;
+                }
+            }
+            return Boolean.FALSE;
         }else{
             return Boolean.FALSE;
         }
