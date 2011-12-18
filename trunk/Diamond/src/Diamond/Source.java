@@ -386,6 +386,8 @@ public class Source {
         FirstLetterTitleGrouper tgrpr = new FirstLetterTitleGrouper();
         Grouper grpr = new Grouper(tgrpr);
         //grpr.getOption("regex").value().set("^(?:(?:the|a|an)\\s+)?(\\S)");
+        //grpr.getOption("ignore-all").value().set("true");
+        grpr.getOption("ignore-the").value().set("true");
         //grpr.getOption("regex").value().set(".");
         vp.getGroupers().add(grpr);
         Sorter sort = phoenix.umb.CreateSorter("title");
