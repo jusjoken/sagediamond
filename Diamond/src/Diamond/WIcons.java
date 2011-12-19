@@ -22,6 +22,7 @@ public class WIcons {
     public static Map<String,String> IconsForNighttime = new HashMap<String, String>();
     public static Boolean IconsBuilt = Boolean.FALSE;
     public static void BuildWeatherIconLists(){
+        //start google Icons here
         AddIcon("sunny", "32", "31");
         AddIcon("mostly_sunny", "34", "33");
         AddIcon("partly_cloudy", "30", "29");
@@ -43,21 +44,23 @@ public class WIcons {
         AddIcon("smoke", "22", "22");
         AddIcon("haze", "21", "21");
         AddIcon("flurries", "14", "14");
-        AddIcon("nbkn", "28", "27");
+        //start NWS Icons here - those begining with a "n" are the night icons (if one exists)
+        //NWS is only used for Forecasts - so only the "day" or first entry is used
+        AddIcon("nbkn", "27", "27");
         AddIcon("bkn", "28", "27");
         AddIcon("nra", "12", "12");
         AddIcon("ra", "12", "12");
-        AddIcon("nskc", "32", "31");
+        AddIcon("nskc", "31", "31");
         AddIcon("skc", "32", "31");
-        AddIcon("nfew", "34", "33");
+        AddIcon("nfew", "33", "33");
         AddIcon("few", "34", "33");
-        AddIcon("nsct", "30", "29");
+        AddIcon("nsct", "29", "29");
         AddIcon("sct", "30", "29");
-        AddIcon("hi_nshwrs", "39", "45");
+        AddIcon("hi_nshwrs", "45", "45");
         AddIcon("hi_shwrs", "39", "45");
         AddIcon("novc", "26", "26");
         AddIcon("ovc", "26", "26");
-        AddIcon("nrasn", "41", "46");
+        AddIcon("nrasn", "46", "46");
         AddIcon("rasn", "41", "46");
         AddIcon("sn", "16", "16");
         AddIcon("nsn", "16", "16");
@@ -65,16 +68,17 @@ public class WIcons {
         AddIcon("tsra", "35", "35");
         AddIcon("nscttsra", "35", "35");
         AddIcon("scttsra", "35", "35");
-        AddIcon("nwind", "23", "24");
+        AddIcon("nwind", "24", "24");
         AddIcon("wind", "23", "24");
         AddIcon("nfg", "20", "20");
         AddIcon("fg", "20", "20");
         AddIcon("cold", "15", "15");
         AddIcon("blizzard", "43", "43");
-        AddIcon("ntor", "23", "24");
+        AddIcon("ntor", "24", "24");
         AddIcon("tor", "23", "24");
         AddIcon("fzra", "5", "5");
         AddIcon("du", "19", "19");
+        AddIcon("nshra", "12", "12");
         AddIcon("shra", "12", "12");
         AddIcon("nfu", "22", "22");
         AddIcon("fu", "22", "22");
