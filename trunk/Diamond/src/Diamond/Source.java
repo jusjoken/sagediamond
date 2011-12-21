@@ -28,6 +28,7 @@ import sagex.phoenix.vfs.views.ViewFolder;
 import sagex.phoenix.vfs.views.ViewPresentation;
 import sagex.api.*;
 import sagex.phoenix.Phoenix;
+import sagex.phoenix.util.PublicCloneable;
 import sagex.phoenix.vfs.IMediaFolder;
 import sagex.phoenix.vfs.groups.RegexTitleGrouper;
 
@@ -341,40 +342,43 @@ public class Source {
         return new ArrayList<String>(GenreList);
     }
     
-    public static void PrepareTitleSource(ViewFolder Folder){
-        if (Folder==null){
-            LOG.debug("PrepareTitleSource: request for null Folder");
-        }else{
-            //LOG.debug("PrepareTitleSource: first child check before '" + phoenix.media.GetTitle(phoenix.umb.GetChild(Folder, 0)) + "'");
-            CleanFolderPresentation(Folder);
-            //add a group for genre
-            Grouper NewGrouper = phoenix.umb.CreateGrouper("firstletter");
-            ConfigurableOption tOption = phoenix.umb.GetOption(NewGrouper, "regex");
-            phoenix.opt.SetValue(tOption, ".");
-            phoenix.umb.SetChanged(NewGrouper);
-            Grouper NewGrouper2 = phoenix.umb.CreateGrouper("show");
-            tOption = phoenix.umb.GetOption(NewGrouper2, "empty-foldername");
-            phoenix.opt.SetValue(tOption, "NONE");
-            phoenix.umb.SetChanged(NewGrouper2);
-            //ViewPresentation NewPresentation = 
-            phoenix.umb.SetGrouper(Folder, NewGrouper);
-            phoenix.umb.SetGrouper(Folder, NewGrouper2);
-            phoenix.umb.Refresh(Folder);
-            //LOG.debug("PrepareTitleSource: first child check during '" + phoenix.media.GetTitle(phoenix.umb.GetChild(Folder, 0)) + "'");
-            for (Object Item: phoenix.media.GetChildren(Folder)){
-                LOG.debug("PrepareTitleSource: level 1 '" + phoenix.media.GetTitle(Item) + "' Item '" + Item + "'");
-                for (Object Item2: phoenix.media.GetChildren(Item)){
-                    LOG.debug("  PrepareTitleSource: level 2 '" + phoenix.media.GetTitle(Item2) + "' Item2 '" + Item2 + "'");
-                }
-                //                if (!phoenix.media.GetTitle(Item).equals("NONE")){
-//                    GenreList.add(phoenix.media.GetTitle(Item));
-//                }
+    //load or build a view from the saved Flow settings
+    public static ViewFolder LoadView(String ViewName){
+        String flowSource = Flow.GetFlowSource(ViewName);
+        ViewFolder view = null;
+        //check if the flow has a presentation saved
+        // - if a presentation then build the view from the saved source plus apply the presentation and filters
+        // - if no presentation - load the view and apply any filters
+        if (HasPresentation(ViewName)){
+            ViewFactory vf = new ViewFactory();
+            //set base view options
+            vf.setName("source:" + ViewName);
+            vf.getOption(ViewFactory.OPT_LABEL).value().set(Flow.GetFlowName(ViewName));
+            vf.getOption(ViewFactory.OPT_VISIBLE).value().set("false");
+            //Optional attributes to set at the view level
+            //TODO:need to get these from the Flow settings
+            vf.getOption(ViewFactory.OPT_FLAT).value().set("true");
+            vf.getOption(ViewFactory.OPT_PRUNE_SINGLE_ITEM_FOLDERS).value().set("true");
+            //add the source to the view
+            ViewFactory source = null;
+            try {
+                source = (ViewFactory) Phoenix.getInstance().getVFSManager().getVFSViewFactory().getFactory(flowSource).clone();
+            } catch (Exception e) {
+                LOG.debug("LoadView: unable to create source from '" + flowSource + "'");
+                return null;
             }
-            phoenix.umb.RemoveGrouper(Folder, NewGrouper);
-            phoenix.umb.RemoveGrouper(Folder, NewGrouper2);
-            phoenix.umb.Refresh(Folder);
-            //LOG.debug("GetGenres: first child check after '" + phoenix.media.GetTitle(phoenix.umb.GetChild(Folder, 0)) + "'");
+            vf.addViewSource((ViewFactory) source);
+            view = vf.create(null);
+        }else{
+            view = phoenix.umb.CreateView(flowSource);
+            ApplyFilters(ViewName, view);
         }
+        return view;
+    }
+    
+    public static Boolean HasPresentation(String ViewName){
+        //TODO: needs to determine if a presentation exists
+        return Boolean.FALSE;
     }
     
     public static void BuildView(ViewFolder Folder) throws CloneNotSupportedException{
@@ -419,92 +423,6 @@ public class Source {
         }
     }
     
-    public static void BuildView2(ViewFolder Folder){
-        ViewFactory vf = new ViewFactory();
-        ViewPresentation vp = new ViewPresentation();
-        Grouper grpr = phoenix.umb.CreateGrouper("firstletter");
-        ConfigurableOption tOption = phoenix.umb.GetOption(grpr, "regex");
-        phoenix.opt.SetValue(tOption, ".");
-        phoenix.umb.SetChanged(grpr);
-        vp.getGroupers().add(new Grouper(grpr));
-        vp.setLevel(1);
-        vf.addViewPresentations(vp);
-
-        ViewPresentation vp2 = new ViewPresentation();
-        Grouper grpr2 = phoenix.umb.CreateGrouper("show");
-        tOption = phoenix.umb.GetOption(grpr2, "empty-foldername");
-        phoenix.opt.SetValue(tOption, "NONE");
-        phoenix.umb.SetChanged(grpr2);
-        vp2.getGroupers().add(new Grouper(grpr2));
-        vp.setLevel(2);
-        vf.addViewPresentations(vp2);
-        
-        //vf.addViewPresentations(new ViewPresentation(2)); 
-
-        ViewFolder view = new ViewFolder(vf, 0, null, Folder); 
-            for (Object Item: phoenix.media.GetChildren(view)){
-                LOG.debug("BuildView: level 1 '" + phoenix.media.GetTitle(Item) + "' Item '" + Item + "'");
-                for (Object Item2: phoenix.media.GetChildren(Item)){
-                    LOG.debug("  BuildView: level 2 '" + phoenix.media.GetTitle(Item2) + "' Item2 '" + Item2 + "'");
-                }
-            }
-        
-    }
-    
-//  public void testRegexTitleFilter() throws ParseException {
-//      
-//int id=1;
-// sagex.api.AiringAPI.Airing mf = api.newMediaFile(id++);
-// mf.put("GetMediaTitle", "House");
-// mf.put("IsTVFile", true);
-// mf.put("GetShowTitle","House");
-// mf.put("GetShowEpisode","Pilot");
-// mf.METADATA.put("Title", "House");
-// mf.METADATA.put("MediaType", "TV");
-// mf.METADATA.put("SeasonNumber", "2");
-//
-// 
-// RegexTitleGrouper rgrouper = new RegexTitleGrouper();
-// Grouper grouper = new Grouper(rgrouper);
-// grouper.getOption(RegexTitleGrouper.OPT_REGEX).value().setValue(".");
-// grouper.setChanged(true);
-// String grp = grouper.getGroupName(new SageMediaFile(null, mf));
-// assertEquals("H", grp);
-//}
-    
-    
-    public static ArrayList<String> GetTitles(ViewFolder Folder){
-        if (Folder==null){
-            LOG.debug("GetTitles: request for null Folder returned empty list");
-            return new ArrayList<String>();
-        }
-        TreeSet<String> TitleList = new TreeSet<String>();
-        for (Object Item: phoenix.media.GetAllChildren(Folder)){
-            //LOG.debug("GetTitles: proecessing '" + phoenix.media.GetTitle(Item) + "'");
-            TitleList.add(phoenix.media.GetTitle(Item));
-        }
-        return new ArrayList<String>(TitleList);
-    }
-
-    public static ArrayList<String> GetTitlesFirstChar(ArrayList<String> inList){
-        TreeSet<String> TitleList = new TreeSet<String>();
-        for (String Item: inList){
-            String tItem = Item.substring(0,1).toUpperCase();
-            //LOG.debug("GetTitleFirstChar: proecessing '" + Item + "' adding '" + tItem + "'");
-            TitleList.add(tItem);
-        }
-        //LOG.debug("GetTitleFirstChar: final list '" + TitleList + "'");
-        return new ArrayList<String>(TitleList);
-    }
-
-    public static ArrayList<String> GetTitlesWithFirstChar(ArrayList<String> inList, String firstChar){
-        //TreeSet<String> TitleList = new TreeSet<String>();
-        Pattern SearchPattern = Pattern.compile(firstChar);
-        ArrayList<String> outList = (ArrayList<String>) sagex.api.Database.FilterByMethodRegex(inList, "Diamond_MetadataCalls_GetMediaTitleLowerCase", SearchPattern, true, false);
-        //LOG.debug("GetTitlesWithFirstChar: for '" + firstChar + "' List '" + outList + "'");
-        return outList;
-    }
-
     public static ArrayList<String> GetRatings(ViewFolder Folder){
         if (Folder==null){
             LOG.debug("GetRatings: request for null Folder returned empty list");
