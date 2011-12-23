@@ -344,41 +344,40 @@ public class Source {
     
     //load or build a view from the saved Flow settings
     public static ViewFolder LoadView(String ViewName){
-        String flowSource = Flow.GetFlowSource(ViewName);
+        SourceUI mySource = new SourceUI(ViewName);
         ViewFolder view = null;
         //check if the flow has a presentation saved
         // - if a presentation then build the view from the saved source plus apply the presentation and filters
         // - if no presentation - load the view and apply any filters
-        if (HasPresentation(ViewName)){
+        if (mySource.HasPresentation()){
             ViewFactory vf = new ViewFactory();
             //set base view options
-            vf.setName("source:" + ViewName);
-            vf.getOption(ViewFactory.OPT_LABEL).value().set(Flow.GetFlowName(ViewName));
+            vf.setName(mySource.Name());
+            vf.getOption(ViewFactory.OPT_LABEL).value().set(mySource.Label());
             vf.getOption(ViewFactory.OPT_VISIBLE).value().set("false");
             //Optional attributes to set at the view level
             //TODO:need to get these from the Flow settings
-            vf.getOption(ViewFactory.OPT_FLAT).value().set("true");
-            vf.getOption(ViewFactory.OPT_PRUNE_SINGLE_ITEM_FOLDERS).value().set("true");
+            vf.getOption(ViewFactory.OPT_FLAT).value().set(mySource.IsFlat());
+            vf.getOption(ViewFactory.OPT_PRUNE_SINGLE_ITEM_FOLDERS).value().set(mySource.PruneSingleItemFolders());
             //add the source to the view
             ViewFactory source = null;
             try {
-                source = (ViewFactory) Phoenix.getInstance().getVFSManager().getVFSViewFactory().getFactory(flowSource).clone();
+                source = (ViewFactory) Phoenix.getInstance().getVFSManager().getVFSViewFactory().getFactory(mySource.Source()).clone();
             } catch (Exception e) {
-                LOG.debug("LoadView: unable to create source from '" + flowSource + "'");
+                LOG.debug("LoadView: unable to create source from '" + mySource.Source() + "'");
                 return null;
             }
             vf.addViewSource((ViewFactory) source);
+            //set presentations
+            
+            
             view = vf.create(null);
         }else{
-            view = phoenix.umb.CreateView(flowSource);
-            ApplyFilters(ViewName, view);
+            view = phoenix.umb.CreateView(mySource.Source());
         }
+        //now apply the filters
+        ApplyFilters(ViewName, view);
         return view;
-    }
-    
-    public static Boolean HasPresentation(String ViewName){
-        //TODO: needs to determine if a presentation exists
-        return Boolean.FALSE;
     }
     
     public static void BuildView(ViewFolder Folder) throws CloneNotSupportedException{
