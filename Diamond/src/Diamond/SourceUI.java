@@ -7,6 +7,9 @@ package Diamond;
 import java.util.HashMap;
 import java.util.HashSet;
 import org.apache.log4j.Logger;
+import sagex.phoenix.factory.ConfigurableOption.ListValue;
+import sagex.phoenix.vfs.groups.Grouper;
+import sagex.phoenix.vfs.sorters.Sorter;
 
 /**
  *
@@ -109,6 +112,17 @@ public class SourceUI {
                 }else{
                     this.Name = "season";
                 }
+                Grouper tBundle = phoenix.umb.CreateGrouper(this.Name);
+                LOG.debug("Name: '" + this.Name + "' OptionsList '" + tBundle.getOptionNames() + "'");
+                for (String tOpt: tBundle.getOptionNames()){
+                    if (tBundle.getOption(tOpt).isList()){
+                        for (ListValue Item: tBundle.getOption(tOpt).getListValues()){
+                            LOG.debug("GroupBy: Option '" + tOpt + "' Name '" + Item.getName() + "' Value '" + Item.getValue() + "'");
+                        }
+                    }else{
+                        LOG.debug("GroupBy: Option '" + tOpt + "' Not a list");
+                    }
+                }
             }
             public String Name(){
                 return this.Name;
@@ -138,6 +152,17 @@ public class SourceUI {
             public SortBy(Integer Level){
                 this.Name = "title";
                 optList.put("ignore-all", "true");
+                Sorter tBundle = phoenix.umb.CreateSorter(this.Name);
+                LOG.debug("Name: '" + this.Name + "' OptionsList '" + tBundle.getOptionNames() + "'");
+                for (String tOpt: tBundle.getOptionNames()){
+                    if (tBundle.getOption(tOpt).isList()){
+                        for (ListValue Item: tBundle.getOption(tOpt).getListValues()){
+                            LOG.debug("GroupBy: Option '" + tOpt + "' Name '" + Item.getName() + "' Value '" + Item.getValue() + "'");
+                        }
+                    }else{
+                        LOG.debug("GroupBy: Option '" + tOpt + "' Not a list");
+                    }
+                }
             }
             public String Name(){
                 return this.Name;
