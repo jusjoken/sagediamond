@@ -369,8 +369,25 @@ public class Source {
             }
             vf.addViewSource((ViewFactory) source);
             //set presentations
-            
-            
+            for (SourceUI.UI tUI: mySource.UIList()){
+                String tGroup = tUI.Group().Name();
+                String tSort = tUI.Sort().Name();
+                ViewPresentation vp = new ViewPresentation(tUI.Level());
+                Grouper grpr = phoenix.umb.CreateGrouper(tGroup);
+                //process the options
+                for (String tOpt:tUI.Group().optList().keySet()){
+                    grpr.getOption(tOpt).value().set(tUI.Group().optList().get(tOpt));
+                }
+                vp.getGroupers().add(grpr);
+                Sorter sort = phoenix.umb.CreateSorter(tSort);
+                //process the options
+                for (String tOpt:tUI.Sort().optList().keySet()){
+                    sort.getOption(tOpt).value().set(tUI.Sort().optList().get(tOpt));
+                }
+                vp.getSorters().add(sort);
+                vf.addViewPresentations(vp);
+                //LOG.debug("LoadView: Level '" + tUI.Level() + "' GroupBy '" + tGroup + "' SortBy '" + tSort + "'");
+            }
             view = vf.create(null);
         }else{
             view = phoenix.umb.CreateView(mySource.Source());
