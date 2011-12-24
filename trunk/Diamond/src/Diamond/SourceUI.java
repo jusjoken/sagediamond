@@ -40,12 +40,12 @@ public class SourceUI {
         return Flow.GetFlowName(thisFlowName);
     }
     public String IsFlat(){
-        //TODO:read from properties
-        return Boolean.TRUE.toString();
+        String tProp = Const.FlowSourceUI + Const.PropDivider + "IsFlat";
+        return Flow.GetOptionName(thisFlowName, tProp, Boolean.TRUE.toString());
     }
     public String PruneSingleItemFolders(){
-        //TODO:read from properties
-        return Boolean.TRUE.toString();
+        String tProp = Const.FlowSourceUI + Const.PropDivider + "PruneSingleItemFolders";
+        return Flow.GetOptionName(thisFlowName, tProp, Boolean.TRUE.toString());
     }
     
     //Presentation specific settings
