@@ -39,6 +39,7 @@ public class Const {
     public static final String FlowSourceDefaultName = "Default";
     public static final String Weather = "Weather";
     public static final String FlowSourceUI = "SourceUI";
+    public static final String FlowPresentation = "FlowPresentation";
     
     //General Constants
     public static final String BaseProp = "Diamond";
