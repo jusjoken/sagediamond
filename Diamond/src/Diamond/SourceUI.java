@@ -8,8 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import org.apache.log4j.Logger;
 import sagex.phoenix.factory.ConfigurableOption.ListValue;
-import sagex.phoenix.vfs.groups.Grouper;
-import sagex.phoenix.vfs.sorters.Sorter;
+import sagex.phoenix.factory.IConfigurable;
 
 /**
  *
@@ -21,6 +20,7 @@ public class SourceUI {
     private Boolean thisHasPresentation = Boolean.FALSE;
     private Integer thisLevels = 0;
     private HashSet<UI> thisUIList = new HashSet<UI>();
+    public static enum OrganizerType{GROUP,SORT};
     
     public SourceUI(String FlowName){
         this.thisFlowName = FlowName;
@@ -71,19 +71,27 @@ public class SourceUI {
     
     public class UI{
 
-        private GroupBy thisGroupBy = null;
-        private SortBy thisSortBy = null;
+        private Organizer thisGroupBy = null;
+        private Organizer thisSortBy = null;
         private Integer thisLevel = 0;
+        //HasContent is set to true if properties are found for this UI
+        private Boolean HasContent = Boolean.FALSE;
         
         public UI(Integer Level){
             this.thisLevel = Level;
-            this.thisGroupBy = new GroupBy(Level);
-            this.thisSortBy = new SortBy(Level);
+            this.thisGroupBy = new Organizer(Level,OrganizerType.GROUP);
+            this.thisSortBy = new Organizer(Level,OrganizerType.SORT);
+            if (thisGroupBy.HasContent() || thisSortBy.HasContent()){
+                HasContent = Boolean.TRUE;
+            }
         }
-        public GroupBy Group(){
+        public Boolean HasContent(){
+            return HasContent;
+        }
+        public Organizer Group(){
             return this.thisGroupBy;
         }
-        public SortBy Sort(){
+        public Organizer Sort(){
             return this.thisSortBy;
         }
         public Integer Level(){
@@ -95,7 +103,7 @@ public class SourceUI {
             return tMess;
         }
 
-        public class GroupBy{
+        public class Organizer{
 
             private String Name = "";
             private String optIgnoreAll = "";
@@ -103,35 +111,55 @@ public class SourceUI {
             private String optEmptyFoldername = "";
             private String optPruneSingleItemGroups = "";
             private HashMap<String,String> optList = new HashMap<String, String>();
+            private OrganizerType thisType = null;
+            //HasContent is set to true if properties are found for this organizer
+            private Boolean HasContent = Boolean.FALSE;
 
-            public GroupBy(Integer Level){
-                if (Level==0){
-                    this.Name = "show";
-                    optList.put("empty-foldername", "EMPTY");
-                    optList.put("prune-single-item-groups", "true");
+            public Organizer(Integer Level, OrganizerType Type){
+                thisType = Type;
+                IConfigurable tOrganizer = null;
+                if (Type.equals(OrganizerType.GROUP)){
+                    if (Level==0){
+                        this.Name = "show";
+                        this.HasContent = Boolean.TRUE;
+                        optList.put("empty-foldername", "EMPTY");
+                        optList.put("prune-single-item-groups", "true");
+                    }else{
+                        this.Name = "season";
+                        this.HasContent = Boolean.TRUE;
+                    }
+                    tOrganizer = phoenix.umb.CreateGrouper(this.Name);
                 }else{
-                    this.Name = "season";
+                    this.Name = "title";
+                    this.HasContent = Boolean.TRUE;
+                    optList.put("ignore-all", "true");
+                    tOrganizer = phoenix.umb.CreateSorter(this.Name);
                 }
-                Grouper tBundle = phoenix.umb.CreateGrouper(this.Name);
-                LOG.debug("Name: '" + this.Name + "' OptionsList '" + tBundle.getOptionNames() + "'");
-                for (String tOpt: tBundle.getOptionNames()){
-                    if (tBundle.getOption(tOpt).isList()){
-                        for (ListValue Item: tBundle.getOption(tOpt).getListValues()){
-                            LOG.debug("GroupBy: Option '" + tOpt + "' Name '" + Item.getName() + "' Value '" + Item.getValue() + "'");
+                LOG.debug(myType() + ": '" + this.Name + "' OptionsList '" + tOrganizer.getOptionNames() + "'");
+                for (String tOpt: tOrganizer.getOptionNames()){
+                    if (tOrganizer.getOption(tOpt).isList()){
+                        for (ListValue Item: tOrganizer.getOption(tOpt).getListValues()){
+                            LOG.debug(myType() + ": Option '" + tOpt + "' Name '" + Item.getName() + "' Value '" + Item.getValue() + "'");
                         }
                     }else{
-                        LOG.debug("GroupBy: Option '" + tOpt + "' Not a list");
+                        LOG.debug(myType() + ": Option '" + tOpt + "' Not a list");
                     }
                 }
             }
+            public Boolean HasContent(){
+                return HasContent;
+            }
             public String Name(){
                 return this.Name;
+            }
+            public String myType(){
+                return thisType.toString();
             }
             public HashMap<String,String> optList(){
                 return optList;
             }
             public String LogMessage(){
-                String tMess = "GroupBy-";
+                String tMess = myType() + "-";
                 tMess = tMess + Name;
                 for (String tOpt:optList().keySet()){
                     tMess = tMess + ":" + tOpt + "=" + optList.get(tOpt);
@@ -140,46 +168,6 @@ public class SourceUI {
             }
         }
 
-        public class SortBy{
-
-            private String Name = "";
-            private String optIgnoreAll = "";
-            private String optIgnoreThe = "";
-            private String optEmptyFoldername = "";
-            private String optPruneSingleItemGroups = "";
-            private HashMap<String,String> optList = new HashMap<String, String>();
-
-            public SortBy(Integer Level){
-                this.Name = "title";
-                optList.put("ignore-all", "true");
-                Sorter tBundle = phoenix.umb.CreateSorter(this.Name);
-                LOG.debug("Name: '" + this.Name + "' OptionsList '" + tBundle.getOptionNames() + "'");
-                for (String tOpt: tBundle.getOptionNames()){
-                    if (tBundle.getOption(tOpt).isList()){
-                        for (ListValue Item: tBundle.getOption(tOpt).getListValues()){
-                            LOG.debug("GroupBy: Option '" + tOpt + "' Name '" + Item.getName() + "' Value '" + Item.getValue() + "'");
-                        }
-                    }else{
-                        LOG.debug("GroupBy: Option '" + tOpt + "' Not a list");
-                    }
-                }
-            }
-            public String Name(){
-                return this.Name;
-            }
-            public HashMap<String,String> optList(){
-                return optList;
-            }
-            public String LogMessage(){
-                String tMess = "SortBy-";
-                tMess = tMess + Name;
-                for (String tOpt:optList().keySet()){
-                    tMess = tMess + ":" + tOpt + "=" + optList.get(tOpt);
-                }
-                return tMess;
-            }
-        }
     }
 
-    
 }
