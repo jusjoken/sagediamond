@@ -25,10 +25,16 @@ public class SourceUI {
     public SourceUI(String FlowName){
         this.thisFlowName = FlowName;
         //based on the FlowName load the settings into this class from the properties file
-        thisLevels = 2;
-        for (Integer i=0;i<thisLevels;i++){
-            thisUIList.add(new UI(i));
-        }
+        Integer counter = 0;
+        UI tUI = null;
+        do {
+            tUI = new UI(FlowName,counter);
+            counter++;
+            if (tUI.HasContent()){
+                thisUIList.add(tUI);
+            }
+        } while (tUI.HasContent());
+        thisLevels = thisUIList.size();
         thisHasPresentation = !thisUIList.isEmpty();
         LOG.debug(LogMessage());
     }
@@ -62,11 +68,23 @@ public class SourceUI {
         return thisUIList;
     }
     public String LogMessage(){
-        String tMess = Label() + "-'" + Source() + "'Flat'" + IsFlat() + "'Prune'" + PruneSingleItemFolders() + "'-";
+        String tMess = Label() + "-'" + Source() + "'Flat'" + IsFlat() + "'Prune'" + PruneSingleItemFolders() + "'Levels'" + thisLevels + "'-";
         for (SourceUI.UI tUI: UIList()){
             tMess = tMess + "[" + tUI.LogMessage() + "]";
         }
         return tMess;
+    }
+    
+    public static String GetPresentationProp(Integer Level){
+        return Const.FlowSourceUI + Const.PropDivider + Const.FlowPresentation + Const.PropDivider + Level.toString() + Const.PropDivider;
+    }
+    public static String GetOrgName(String FlowName, String OrgType, Integer Level){
+        String tProp = GetPresentationProp(Level) + OrgType + Const.PropDivider + "Name";
+        return Flow.GetOptionName(FlowName, tProp, util.OptionNotFound);
+    }
+    public static void SetOrgName(String FlowName, String OrgType, Integer Level, String NewValue){
+        String tProp = GetPresentationProp(Level) + OrgType + Const.PropDivider + "Name";
+        Flow.SetOption(FlowName, tProp, NewValue);
     }
     
     public class UI{
@@ -77,10 +95,10 @@ public class SourceUI {
         //HasContent is set to true if properties are found for this UI
         private Boolean HasContent = Boolean.FALSE;
         
-        public UI(Integer Level){
+        public UI(String FlowName, Integer Level){
             this.thisLevel = Level;
-            this.thisGroupBy = new Organizer(Level,OrganizerType.GROUP);
-            this.thisSortBy = new Organizer(Level,OrganizerType.SORT);
+            this.thisGroupBy = new Organizer(FlowName,Level,OrganizerType.GROUP);
+            this.thisSortBy = new Organizer(FlowName,Level,OrganizerType.SORT);
             if (thisGroupBy.HasContent() || thisSortBy.HasContent()){
                 HasContent = Boolean.TRUE;
             }
@@ -115,34 +133,52 @@ public class SourceUI {
             //HasContent is set to true if properties are found for this organizer
             private Boolean HasContent = Boolean.FALSE;
 
-            public Organizer(Integer Level, OrganizerType Type){
+            public Organizer(String FlowName, Integer Level, OrganizerType Type){
                 thisType = Type;
                 IConfigurable tOrganizer = null;
-                if (Type.equals(OrganizerType.GROUP)){
-                    if (Level==0){
-                        this.Name = "show";
-                        this.HasContent = Boolean.TRUE;
-                        optList.put("empty-foldername", "EMPTY");
-                        optList.put("prune-single-item-groups", "true");
-                    }else{
-                        this.Name = "season";
-                        this.HasContent = Boolean.TRUE;
-                    }
-                    tOrganizer = phoenix.umb.CreateGrouper(this.Name);
-                }else{
-                    this.Name = "title";
+                String tName = GetOrgName(FlowName, Type.toString(), Level);
+                if (!tName.equals(util.OptionNotFound)){
+                    this.Name = tName;
                     this.HasContent = Boolean.TRUE;
-                    optList.put("ignore-all", "true");
-                    tOrganizer = phoenix.umb.CreateSorter(this.Name);
-                }
-                LOG.debug(myType() + ": '" + this.Name + "' OptionsList '" + tOrganizer.getOptionNames() + "'");
-                for (String tOpt: tOrganizer.getOptionNames()){
-                    if (tOrganizer.getOption(tOpt).isList()){
-                        for (ListValue Item: tOrganizer.getOption(tOpt).getListValues()){
-                            LOG.debug(myType() + ": Option '" + tOpt + "' Name '" + Item.getName() + "' Value '" + Item.getValue() + "'");
-                        }
+                    if (Type.equals(OrganizerType.GROUP)){
+                        tOrganizer = phoenix.umb.CreateGrouper(this.Name);
                     }else{
-                        LOG.debug(myType() + ": Option '" + tOpt + "' Not a list");
+                        tOrganizer = phoenix.umb.CreateSorter(this.Name);
+                    }
+                }
+//                if (Type.equals(OrganizerType.GROUP)){
+//                    if (Level==0){
+//                        this.Name = "show";
+//                        this.HasContent = Boolean.TRUE;
+//                        optList.put("empty-foldername", "EMPTY");
+//                        optList.put("prune-single-item-groups", "true");
+//                    }else if (Level==1){
+//                        this.Name = "season";
+//                        this.HasContent = Boolean.TRUE;
+//                    }
+//                    if (this.HasContent){
+//                        tOrganizer = phoenix.umb.CreateGrouper(this.Name);
+//                    }
+//                }else{
+//                    if (Level==0 || Level==1){
+//                        this.Name = "title";
+//                        this.HasContent = Boolean.TRUE;
+//                        optList.put("ignore-all", "true");
+//                    }
+//                    if (this.HasContent){
+//                        tOrganizer = phoenix.umb.CreateSorter(this.Name);
+//                    }
+//                }
+                if (this.HasContent){
+                    LOG.debug(myType() + ": '" + this.Name + "' OptionsList '" + tOrganizer.getOptionNames() + "'");
+                    for (String tOpt: tOrganizer.getOptionNames()){
+                        if (tOrganizer.getOption(tOpt).isList()){
+                            for (ListValue Item: tOrganizer.getOption(tOpt).getListValues()){
+                                LOG.debug(myType() + ": Option '" + tOpt + "' Name '" + Item.getName() + "' Value '" + Item.getValue() + "'");
+                            }
+                        }else{
+                            LOG.debug(myType() + ": Option '" + tOpt + "' Not a list");
+                        }
                     }
                 }
             }
