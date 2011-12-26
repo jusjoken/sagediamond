@@ -4,8 +4,14 @@
  */
 package Diamond;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import org.apache.log4j.Logger;
 import sagex.phoenix.factory.ConfigurableOption.ListValue;
 import sagex.phoenix.factory.IConfigurable;
@@ -19,19 +25,24 @@ public class SourceUI {
     private String thisFlowName = "";
     private Boolean thisHasPresentation = Boolean.FALSE;
     private Integer thisLevels = 0;
-    private HashSet<UI> thisUIList = new HashSet<UI>();
+    private SortedMap<Integer,UI> thisUIList = new TreeMap<Integer,UI>();
     public static enum OrganizerType{GROUP,SORT};
     
     public SourceUI(String FlowName){
         this.thisFlowName = FlowName;
         //based on the FlowName load the settings into this class from the properties file
+        Refresh();
+    }
+    
+    public void Refresh(){
+        thisUIList.clear();
         Integer counter = 0;
         UI tUI = null;
         do {
-            tUI = new UI(FlowName,counter);
+            tUI = new UI(thisFlowName,counter);
             counter++;
             if (tUI.HasContent()){
-                thisUIList.add(tUI);
+                thisUIList.put(counter, tUI);
             }
         } while (tUI.HasContent());
         thisLevels = thisUIList.size();
@@ -61,11 +72,20 @@ public class SourceUI {
     public Boolean HasPresentation(){
         return thisHasPresentation;
     }
+    public void ClearPresentation(){
+        String tProp = Flow.GetFlowBaseProp(thisFlowName) + Const.PropDivider + Const.FlowSourceUI;
+        util.RemovePropertyAndChildren(tProp);
+        Refresh();
+    }
     public Integer Levels(){
         return thisLevels;
     }
     public HashSet<UI> UIList(){
-        return thisUIList;
+        LinkedHashSet<UI> tList = new LinkedHashSet<UI>();
+        for (UI tUI:thisUIList.values()){
+            tList.add(tUI);
+        }
+        return tList;
     }
     public String LogMessage(){
         String tMess = Label() + "-'" + Source() + "'Flat'" + IsFlat() + "'Prune'" + PruneSingleItemFolders() + "'Levels'" + thisLevels + "'-";
