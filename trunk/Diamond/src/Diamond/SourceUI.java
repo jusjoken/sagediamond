@@ -85,6 +85,7 @@ public class SourceUI {
         for (UI tUI:thisUIList.values()){
             tList.add(tUI);
         }
+        
         return tList;
     }
     public String LogMessage(){
@@ -105,6 +106,10 @@ public class SourceUI {
     public static void SetOrgValue(String FlowName, String OrgType, Integer Level, String Option, String NewValue){
         String tProp = GetPresentationProp(Level) + OrgType + Const.PropDivider + Option;
         Flow.SetOption(FlowName, tProp, NewValue);
+    }
+    //Expose UI functions to Sage
+    public static Integer GetUILevel(UI inUI){
+        return inUI.Level();
     }
     
     public class UI{
