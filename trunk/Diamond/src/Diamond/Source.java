@@ -369,7 +369,7 @@ public class Source {
             }
             vf.addViewSource((ViewFactory) source);
             //set presentations
-            for (SourceUI.UI tUI: mySource.UIList()){
+            for (PresentationUI tUI: mySource.UIList()){
                 ViewPresentation vp = new ViewPresentation(tUI.Level());
                 if (tUI.Group().HasContent()){
                     String tGroup = tUI.Group().Name();
