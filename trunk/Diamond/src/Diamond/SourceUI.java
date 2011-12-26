@@ -78,12 +78,12 @@ public class SourceUI {
     public static String GetPresentationProp(Integer Level){
         return Const.FlowSourceUI + Const.PropDivider + Const.FlowPresentation + Const.PropDivider + Level.toString() + Const.PropDivider;
     }
-    public static String GetOrgName(String FlowName, String OrgType, Integer Level){
-        String tProp = GetPresentationProp(Level) + OrgType + Const.PropDivider + "Name";
+    public static String GetOrgValue(String FlowName, String OrgType, Integer Level, String Option){
+        String tProp = GetPresentationProp(Level) + OrgType + Const.PropDivider + Option;
         return Flow.GetOptionName(FlowName, tProp, util.OptionNotFound);
     }
-    public static void SetOrgName(String FlowName, String OrgType, Integer Level, String NewValue){
-        String tProp = GetPresentationProp(Level) + OrgType + Const.PropDivider + "Name";
+    public static void SetOrgValue(String FlowName, String OrgType, Integer Level, String Option, String NewValue){
+        String tProp = GetPresentationProp(Level) + OrgType + Const.PropDivider + Option;
         Flow.SetOption(FlowName, tProp, NewValue);
     }
     
@@ -136,7 +136,7 @@ public class SourceUI {
             public Organizer(String FlowName, Integer Level, OrganizerType Type){
                 thisType = Type;
                 IConfigurable tOrganizer = null;
-                String tName = GetOrgName(FlowName, Type.toString(), Level);
+                String tName = GetOrgValue(FlowName, Type.toString(), Level, "Name");
                 if (!tName.equals(util.OptionNotFound)){
                     this.Name = tName;
                     this.HasContent = Boolean.TRUE;
@@ -144,6 +144,14 @@ public class SourceUI {
                         tOrganizer = phoenix.umb.CreateGrouper(this.Name);
                     }else{
                         tOrganizer = phoenix.umb.CreateSorter(this.Name);
+                    }
+                    //LOG.debug(myType() + ": '" + this.Name + "' OptionsList '" + tOrganizer.getOptionNames() + "'");
+                    for (String tOpt: tOrganizer.getOptionNames()){
+                        String tValue = GetOrgValue(FlowName, Type.toString(), Level, tOpt);
+                        if (!tValue.equals(util.OptionNotFound)){
+                            optList.put(tOpt, tValue);
+                        }
+                        
                     }
                 }
 //                if (Type.equals(OrganizerType.GROUP)){
