@@ -13,28 +13,35 @@ import sagex.phoenix.factory.ConfigurableOption;
  */
 public class ConfigOption extends ConfigurableOption {
 
-    public ConfigOption(String name, String value) {
+    private String thisFlowName = "";
+    public ConfigOption(String FlowName, String name, String value) {
         super(name, value);
+        thisFlowName = FlowName;
     }
 
-    public ConfigOption(String name, String label, String value, DataType dataType, boolean isList, ListSelection listSelection, String listValues) {
+    public ConfigOption(String FlowName, String name, String label, String value, DataType dataType, boolean isList, ListSelection listSelection, String listValues) {
         super(name, label, value, dataType, isList, listSelection, listValues);
+        thisFlowName = FlowName;
     }
 
-    public ConfigOption(String name, String label, String value, DataType dataType, boolean isList, ListSelection listSelection, List<ListValue> listValues) {
+    public ConfigOption(String FlowName, String name, String label, String value, DataType dataType, boolean isList, ListSelection listSelection, List<ListValue> listValues) {
         super(name, label, value, dataType, isList, listSelection, listValues);
+        thisFlowName = FlowName;
     }
 
-    public ConfigOption(String name, String label, String value, DataType dataType) {
+    public ConfigOption(String FlowName, String name, String label, String value, DataType dataType) {
         super(name, label, value, dataType);
+        thisFlowName = FlowName;
     }
 
-    public ConfigOption(String name) {
+    public ConfigOption(String FlowName, String name) {
         super(name);
+        thisFlowName = FlowName;
     }
 
-    public ConfigOption(ConfigurableOption inOpt) {
+    public ConfigOption(String FlowName, ConfigurableOption inOpt) {
         super(inOpt.getName(), inOpt.getLabel(), "", inOpt.getDataType(), inOpt.isList(), inOpt.getListSelection(), inOpt.getListValues());
+        thisFlowName = FlowName;
     }
 
     public String GetValue(){
