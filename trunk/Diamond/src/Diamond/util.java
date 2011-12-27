@@ -571,6 +571,7 @@ public class util {
         }else{
             tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
         }
+        //LOG.debug("GetOptionNameBase: property '" + tProp + "'");
         return util.GetProperty(tProp, DefaultValue);
     }
     public static void SetOption(String PropSection, String PropName, String NewValue){
