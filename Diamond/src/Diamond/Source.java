@@ -28,6 +28,7 @@ import sagex.phoenix.vfs.views.ViewFolder;
 import sagex.phoenix.vfs.views.ViewPresentation;
 import sagex.api.*;
 import sagex.phoenix.Phoenix;
+import sagex.phoenix.factory.ConfigurableOption.ListValue;
 import sagex.phoenix.util.PublicCloneable;
 import sagex.phoenix.vfs.IMediaFolder;
 import sagex.phoenix.vfs.groups.RegexTitleGrouper;
@@ -363,6 +364,18 @@ public class Source {
             if (SourceUI.IsSet(mySource.PruneSingleItemFolders())){
                 vf.getOption(ViewFactory.OPT_PRUNE_SINGLE_ITEM_FOLDERS).value().set(mySource.PruneSingleItemFolders());
             }
+            for (String tOpt: vf.getOptionNames()){
+                String PropLocation = "";
+                ConfigOption tConfig = new ConfigOption(PropLocation, vf.getOption(tOpt));
+                if (tConfig.isList()){
+                    for (ListValue Item: tConfig.getListValues()){
+                        LOG.debug("ViewFactory: Option '" + tOpt + "' Name '" + Item.getName() + "' Value '" + Item.getValue() + "' test '" + tConfig.GetValue() + "'");
+                    }
+                }else{
+                    LOG.debug("ViewFactory: Option '" + tOpt + "' Not a list - test '" + tConfig.GetValue() + "'");
+                }
+            }
+            
             //add the source to the view
             ViewFactory source = null;
             try {
@@ -379,8 +392,10 @@ public class Source {
                     String tGroup = tUI.Group().Name();
                     Grouper grpr = phoenix.umb.CreateGrouper(tGroup);
                     //process the options
-                    for (String tOpt:tUI.Group().optList().keySet()){
-                        grpr.getOption(tOpt).value().set(tUI.Group().optList().get(tOpt));
+                    for (ConfigOption tConfig: tUI.Group().ConfigOptions()){
+                        if (SourceUI.IsSet(tConfig.GetValue())){
+                            grpr.getOption(tConfig.getName()).value().set(tConfig.GetValue());
+                        }
                     }
                     vp.getGroupers().add(grpr);
                 }
@@ -388,8 +403,10 @@ public class Source {
                     String tSort = tUI.Sort().Name();
                     Sorter sort = phoenix.umb.CreateSorter(tSort);
                     //process the options
-                    for (String tOpt:tUI.Sort().optList().keySet()){
-                        sort.getOption(tOpt).value().set(tUI.Sort().optList().get(tOpt));
+                    for (ConfigOption tConfig: tUI.Sort().ConfigOptions()){
+                        if (SourceUI.IsSet(tConfig.GetValue())){
+                            sort.getOption(tConfig.getName()).value().set(tConfig.GetValue());
+                        }
                     }
                     vp.getSorters().add(sort);
                 }

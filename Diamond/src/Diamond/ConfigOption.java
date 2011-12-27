@@ -50,7 +50,41 @@ public class ConfigOption extends ConfigurableOption {
         //get the value from the properties file
         //if not found then use NotSet
         String tReturn = util.GetProperty(PropLocation + getName(), SourceUI.OptionNotSet);
-        LOG.debug("GetValue: PropLocation '" + PropLocation + "' getName() '" + getName() + "' GetValue '" + tReturn + "'");
+        if (isList() && !tReturn.equals(SourceUI.OptionNotSet)){
+            //check that this is a valid value
+            Boolean found = Boolean.FALSE;
+            for (ListValue tItem: getListValues()){
+                if (tItem.getValue().equals(tReturn)){
+                    found = Boolean.TRUE;
+                    break;
+                }
+            }
+            if (!found){
+                LOG.debug("GetValue: for '" + getName() + "' stored value '" + tReturn + "' is not a valid value. Returning NotSet. PropertyLocation '" + PropLocation + "'");
+                tReturn = SourceUI.OptionNotSet;
+            }
+        }
+        return tReturn;
+    }
+    public String GetValueLabel(){
+        //get the Label for the List Item
+        //if not found then use NotSet
+        String tReturn = util.GetProperty(PropLocation + getName(), SourceUI.OptionNotSet);
+        if (isList() && !tReturn.equals(SourceUI.OptionNotSet)){
+            //check that this is a valid value and get the Label
+            Boolean found = Boolean.FALSE;
+            for (ListValue tItem: getListValues()){
+                if (tItem.getValue().equals(tReturn)){
+                    found = Boolean.TRUE;
+                    tReturn = tItem.getName();
+                    break;
+                }
+            }
+            if (!found){
+                LOG.debug("GetValue: for '" + getName() + "' stored value '" + tReturn + "' is not a valid value. Returning NotSet. PropertyLocation '" + PropLocation + "'");
+                tReturn = SourceUI.OptionNotSet;
+            }
+        }
         return tReturn;
     }
     public void SetNext(){
