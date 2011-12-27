@@ -47,29 +47,6 @@ public class PresentationOrg {
 
             }
         }
-//                if (Type.equals(OrganizerType.GROUP)){
-//                    if (Level==0){
-//                        this.Name = "show";
-//                        this.HasContent = Boolean.TRUE;
-//                        optList.put("empty-foldername", "EMPTY");
-//                        optList.put("prune-single-item-groups", "true");
-//                    }else if (Level==1){
-//                        this.Name = "season";
-//                        this.HasContent = Boolean.TRUE;
-//                    }
-//                    if (this.HasContent){
-//                        tOrganizer = phoenix.umb.CreateGrouper(this.Name);
-//                    }
-//                }else{
-//                    if (Level==0 || Level==1){
-//                        this.Name = "title";
-//                        this.HasContent = Boolean.TRUE;
-//                        optList.put("ignore-all", "true");
-//                    }
-//                    if (this.HasContent){
-//                        tOrganizer = phoenix.umb.CreateSorter(this.Name);
-//                    }
-//                }
         if (this.HasContent){
             LOG.debug(myType() + ": '" + this.Name + "' OptionsList '" + tOrganizer.getOptionNames() + "'");
             for (String tOpt: tOrganizer.getOptionNames()){
