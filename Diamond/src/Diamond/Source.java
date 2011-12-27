@@ -357,8 +357,12 @@ public class Source {
             vf.getOption(ViewFactory.OPT_VISIBLE).value().set("false");
             //Optional attributes to set at the view level
             //TODO:need to get these from the Flow settings
-            vf.getOption(ViewFactory.OPT_FLAT).value().set(mySource.IsFlat());
-            vf.getOption(ViewFactory.OPT_PRUNE_SINGLE_ITEM_FOLDERS).value().set(mySource.PruneSingleItemFolders());
+            if (SourceUI.IsSet(mySource.IsFlat())){
+                vf.getOption(ViewFactory.OPT_FLAT).value().set(mySource.IsFlat());
+            }
+            if (SourceUI.IsSet(mySource.PruneSingleItemFolders())){
+                vf.getOption(ViewFactory.OPT_PRUNE_SINGLE_ITEM_FOLDERS).value().set(mySource.PruneSingleItemFolders());
+            }
             //add the source to the view
             ViewFactory source = null;
             try {
@@ -395,6 +399,13 @@ public class Source {
             view = vf.create(null);
         }else{
             view = phoenix.umb.CreateView(mySource.Source());
+            //TODO: test if these settings adjust an existing view
+            if (SourceUI.IsSet(mySource.IsFlat())){
+                view.getViewFactory().getOption(ViewFactory.OPT_FLAT).value().set(mySource.IsFlat());
+            }
+            if (SourceUI.IsSet(mySource.PruneSingleItemFolders())){
+                view.getViewFactory().getOption(ViewFactory.OPT_PRUNE_SINGLE_ITEM_FOLDERS).value().set(mySource.PruneSingleItemFolders());
+            }
         }
         //now apply the filters
         ApplyFilters(ViewName, view);
