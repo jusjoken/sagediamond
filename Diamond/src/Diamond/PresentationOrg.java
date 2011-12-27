@@ -30,7 +30,7 @@ public class PresentationOrg {
         thisType = Type;
         IConfigurable tOrganizer = null;
         String tName = SourceUI.GetOrgValue(FlowName, Type.toString(), Level, "Name");
-        if (!tName.equals(util.OptionNotFound)){
+        if (!tName.equals(SourceUI.OptionNotSet)){
             this.Name = tName;
             this.HasContent = Boolean.TRUE;
             if (Type.equals(OrganizerType.GROUP)){
@@ -41,7 +41,7 @@ public class PresentationOrg {
             //LOG.debug(myType() + ": '" + this.Name + "' OptionsList '" + tOrganizer.getOptionNames() + "'");
             for (String tOpt: tOrganizer.getOptionNames()){
                 String tValue = SourceUI.GetOrgValue(FlowName, Type.toString(), Level, tOpt);
-                if (!tValue.equals(util.OptionNotFound)){
+                if (!tValue.equals(SourceUI.OptionNotSet)){
                     optList.put(tOpt, tValue);
                 }
 
