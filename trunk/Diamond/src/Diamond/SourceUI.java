@@ -4,11 +4,15 @@
  */
 package Diamond;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import org.apache.log4j.Logger;
+import sagex.phoenix.factory.IConfigurable;
+import sagex.phoenix.vfs.views.ViewFactory;
 
 /**
  *
@@ -17,14 +21,28 @@ import org.apache.log4j.Logger;
 public class SourceUI {
     static private final Logger LOG = Logger.getLogger(SourceUI.class);
     private String thisFlowName = "";
+    private String PropLocation = "";
     private Integer thisLevels = 0;
     private SortedMap<Integer,PresentationUI> thisUIList = new TreeMap<Integer,PresentationUI>();
+    private HashSet<ConfigOption> ConfigOptions = new HashSet<ConfigOption>();
     public static enum OrganizerType{GROUP,SORT};
     public static final String OptionNotSet = "NotSet";
     
     public SourceUI(String FlowName){
         this.thisFlowName = FlowName;
+        PropLocation = GetPropertyLocation(FlowName);
         //based on the FlowName load the settings into this class from the properties file
+        IConfigurable tOrganizer = new ViewFactory();
+        for (String tOpt: tOrganizer.getOptionNames()){
+            //skip some options types that we don't want the user to set
+            String OptionsToSkip[] = { "name", "label", "description", "visible", "bookmark" };
+            ArrayList OptionsToSkipList = new ArrayList();
+            OptionsToSkipList.addAll(Arrays.asList(OptionsToSkip));
+            ConfigOption tConfig = new ConfigOption(PropLocation, tOrganizer.getOption(tOpt));
+            if (!OptionsToSkipList.contains(tConfig.getName())){
+                ConfigOptions.add(tConfig);
+            }
+        }
         Refresh();
     }
     
@@ -52,6 +70,9 @@ public class SourceUI {
     public String Label(){
         return Flow.GetFlowName(thisFlowName);
     }
+    public HashSet<ConfigOption> ConfigOptions(){
+        return ConfigOptions;
+    }
     public String IsFlat(){
         String tProp = Const.FlowSourceUI + Const.PropDivider + "IsFlat";
         return Flow.GetOptionName(thisFlowName, tProp, OptionNotSet);
@@ -66,6 +87,7 @@ public class SourceUI {
         if (!thisUIList.isEmpty()){
             return Boolean.TRUE;
         }else{
+            //TODO: change this to see if any of the ConfigOptions have been set
             if (IsSet(IsFlat()) || IsSet(PruneSingleItemFolders())){
                 return Boolean.TRUE;
             }
@@ -89,7 +111,10 @@ public class SourceUI {
         return tList;
     }
     public String LogMessage(){
-        String tMess = Label() + "-'" + Source() + "'Flat'" + IsFlat() + "'Prune'" + PruneSingleItemFolders() + "'Levels'" + thisLevels + "'-";
+        String tMess = Label() + "-'" + Source() + "'Levels'" + thisLevels + "'-";
+        for (ConfigOption tConfig: ConfigOptions){
+            tMess = tMess + ":" + tConfig.getName() + "=" + tConfig.GetValue() + "(" + tConfig.GetValueLabel() + ")";
+        }
         for (PresentationUI tUI: UIList()){
             tMess = tMess + "[" + tUI.LogMessage() + "]";
         }
@@ -98,6 +123,10 @@ public class SourceUI {
     
     public static String GetPresentationProp(Integer Level){
         return Const.FlowSourceUI + Const.PropDivider + Const.FlowPresentation + Const.PropDivider + Level.toString() + Const.PropDivider;
+    }
+    public static String GetPropertyLocation(String FlowName){
+        String tProp = Const.FlowSourceUI + Const.PropDivider;
+        return Flow.GetFlowBaseProp(FlowName) + Const.PropDivider +  tProp;
     }
     public static String GetPropertyLocation(String FlowName, String OrgType, Integer Level){
         String tProp = GetPresentationProp(Level) + OrgType + Const.PropDivider;

@@ -20,11 +20,6 @@ public class PresentationOrg {
     private String thisFlowName = "";
     private String PropLocation = "";
     private String Name = "";
-    private String optIgnoreAll = "";
-    private String optIgnoreThe = "";
-    private String optEmptyFoldername = "";
-    private String optPruneSingleItemGroups = "";
-    private HashMap<String,String> optList = new HashMap<String, String>();
     private HashSet<ConfigOption> ConfigOptions = new HashSet<ConfigOption>();
     private OrganizerType thisType = null;
     //HasContent is set to true if properties are found for this organizer
@@ -48,26 +43,21 @@ public class PresentationOrg {
             for (String tOpt: tOrganizer.getOptionNames()){
                 ConfigOption tConfig = new ConfigOption(PropLocation, tOrganizer.getOption(tOpt));
                 ConfigOptions.add(tConfig);
-//                String tValue = SourceUI.GetOrgValue(FlowName, Type.toString(), Level, tOpt);
-//                if (!tValue.equals(SourceUI.OptionNotSet)){
-//                    optList.put(tOpt, tValue);
+            }
+        }
+//        if (this.HasContent){
+//            LOG.debug(myType() + ": '" + this.Name + "' OptionsList '" + tOrganizer.getOptionNames() + "'");
+//            for (String tOpt: tOrganizer.getOptionNames()){
+//                ConfigOption tConfig = new ConfigOption(PropLocation, tOrganizer.getOption(tOpt));
+//                if (tConfig.isList()){
+//                    for (ListValue Item: tConfig.getListValues()){
+//                        LOG.debug(myType() + ": Option '" + tOpt + "' Name '" + Item.getName() + "' Value '" + Item.getValue() + "' test '" + tConfig.GetValue() + "'");
+//                    }
+//                }else{
+//                    LOG.debug(myType() + ": Option '" + tOpt + "' Not a list - test '" + tConfig.GetValue() + "'");
 //                }
-
-            }
-        }
-        if (this.HasContent){
-            LOG.debug(myType() + ": '" + this.Name + "' OptionsList '" + tOrganizer.getOptionNames() + "'");
-            for (String tOpt: tOrganizer.getOptionNames()){
-                ConfigOption tConfig = new ConfigOption(PropLocation, tOrganizer.getOption(tOpt));
-                if (tConfig.isList()){
-                    for (ListValue Item: tConfig.getListValues()){
-                        LOG.debug(myType() + ": Option '" + tOpt + "' Name '" + Item.getName() + "' Value '" + Item.getValue() + "' test '" + tConfig.GetValue() + "'");
-                    }
-                }else{
-                    LOG.debug(myType() + ": Option '" + tOpt + "' Not a list - test '" + tConfig.GetValue() + "'");
-                }
-            }
-        }
+//            }
+//        }
     }
     public Boolean HasContent(){
         return HasContent;
@@ -78,9 +68,6 @@ public class PresentationOrg {
     public String myType(){
         return thisType.toString();
     }
-    public HashMap<String,String> optList(){
-        return optList;
-    }
     public HashSet<ConfigOption> ConfigOptions(){
         return ConfigOptions;
     }
@@ -88,11 +75,8 @@ public class PresentationOrg {
         String tMess = myType() + "-";
         tMess = tMess + Name;
         for (ConfigOption tConfig: ConfigOptions){
-            tMess = tMess + ":" + tConfig.getName() + "=" + tConfig.GetValue();
+            tMess = tMess + ":" + tConfig.getName() + "=" + tConfig.GetValue() + "(" + tConfig.GetValueLabel() + ")";
         }
-//        for (String tOpt:optList().keySet()){
-//            tMess = tMess + ":" + tOpt + "=" + optList.get(tOpt);
-//        }
         return tMess;
     }
     
