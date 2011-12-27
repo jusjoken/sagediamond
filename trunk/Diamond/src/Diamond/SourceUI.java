@@ -101,7 +101,7 @@ public class SourceUI {
     }
     public static String GetOrgValue(String FlowName, String OrgType, Integer Level, String Option){
         String tProp = GetPresentationProp(Level) + OrgType + Const.PropDivider + Option;
-        return Flow.GetOptionName(FlowName, tProp, util.OptionNotFound);
+        return Flow.GetOptionName(FlowName, tProp, OptionNotSet);
     }
     public static void SetOrgValue(String FlowName, String OrgType, Integer Level, String Option, String NewValue){
         String tProp = GetPresentationProp(Level) + OrgType + Const.PropDivider + Option;
