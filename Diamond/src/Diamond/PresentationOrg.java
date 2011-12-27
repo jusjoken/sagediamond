@@ -16,6 +16,7 @@ import sagex.phoenix.factory.IConfigurable;
  */
 public class PresentationOrg {
     static private final Logger LOG = Logger.getLogger(PresentationOrg.class);
+    private String thisFlowName = "";
     private String Name = "";
     private String optIgnoreAll = "";
     private String optIgnoreThe = "";
@@ -27,6 +28,7 @@ public class PresentationOrg {
     private Boolean HasContent = Boolean.FALSE;
 
     public PresentationOrg(String FlowName, Integer Level, OrganizerType Type){
+        thisFlowName = FlowName;
         thisType = Type;
         IConfigurable tOrganizer = null;
         String tName = SourceUI.GetOrgValue(FlowName, Type.toString(), Level, "Name");
@@ -50,7 +52,7 @@ public class PresentationOrg {
         if (this.HasContent){
             LOG.debug(myType() + ": '" + this.Name + "' OptionsList '" + tOrganizer.getOptionNames() + "'");
             for (String tOpt: tOrganizer.getOptionNames()){
-                ConfigOption tConfig = new ConfigOption(tOrganizer.getOption(tOpt));
+                ConfigOption tConfig = new ConfigOption(thisFlowName, tOrganizer.getOption(tOpt));
                 if (tConfig.isList()){
                     for (ListValue Item: tConfig.getListValues()){
                         LOG.debug(myType() + ": Option '" + tOpt + "' Name '" + Item.getName() + "' Value '" + Item.getValue() + "' test '" + tConfig.GetValue() + "'");
