@@ -73,14 +73,6 @@ public class SourceUI {
     public HashSet<ConfigOption> ConfigOptions(){
         return ConfigOptions;
     }
-    public String IsFlat(){
-        String tProp = Const.FlowSourceUI + Const.PropDivider + "IsFlat";
-        return Flow.GetOptionName(thisFlowName, tProp, OptionNotSet);
-    }
-    public String PruneSingleItemFolders(){
-        String tProp = Const.FlowSourceUI + Const.PropDivider + "PruneSingleItemFolders";
-        return Flow.GetOptionName(thisFlowName, tProp, OptionNotSet);
-    }
     
     //Presentation specific settings
     public Boolean HasPresentation(){
@@ -88,8 +80,10 @@ public class SourceUI {
             return Boolean.TRUE;
         }else{
             //TODO: change this to see if any of the ConfigOptions have been set
-            if (IsSet(IsFlat()) || IsSet(PruneSingleItemFolders())){
-                return Boolean.TRUE;
+            for (ConfigOption tConfig: ConfigOptions){
+                if (tConfig.IsSet()){
+                    return Boolean.TRUE;
+                }
             }
         }
         return Boolean.FALSE;

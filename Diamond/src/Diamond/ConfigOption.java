@@ -46,6 +46,13 @@ public class ConfigOption extends ConfigurableOption {
         PropLocation = PropertyLocation;
     }
 
+    public Boolean IsSet(){
+        if (GetValue().equals(SourceUI.OptionNotSet)){
+            return Boolean.FALSE;
+        }else{
+            return Boolean.TRUE;
+        }
+    }
     public String GetValue(){
         //get the value from the properties file
         //if not found then use NotSet
@@ -90,7 +97,36 @@ public class ConfigOption extends ConfigurableOption {
     public void SetNext(){
         if (isList()){
             //change the value to the next value in the list or NotSet if at the last entry already
+            //List<String> FullList = ConvertStringtoList(OptionList);
+            String CurrentValue = GetValue();
+            LOG.debug("SetNext: for '" + getName() + "' CurrentValue '" + CurrentValue + "' Values '" + getListValues() + "'");
+            if (CurrentValue.equals(SourceUI.OptionNotSet)){
+                util.SetProperty(PropLocation + getName(), getListValues().get(0).getValue());  //default to the 1st item
+                LOG.debug("SetNext: for '" + getName() + "' CurrentValue '" + CurrentValue + "' Item 0 '" + getListValues().get(0).getValue() + "'");
+            }else{
+                Integer pos = ListValuesIndex(CurrentValue);
+                if (pos==-1){ //not found
+                    util.SetProperty(PropLocation + getName(), getListValues().get(0).getValue());
+                    LOG.debug("SetNext: for '" + getName() + "' CurrentValue '" + CurrentValue + "' Item " + pos + " = '" + getListValues().get(0).getValue() + "'");
+                }else if(pos==getListValues().size()-1){ //last item
+                    util.SetProperty(PropLocation + getName(), SourceUI.OptionNotSet);
+                    LOG.debug("SetNext: for '" + getName() + "' CurrentValue '" + CurrentValue + "' Last Item - setting to NotSet");
+                }else{ //get next item
+                    util.SetProperty(PropLocation + getName(), getListValues().get(pos+1).getValue());
+                    LOG.debug("SetNext: for '" + getName() + "' CurrentValue '" + CurrentValue + "' Item " + (pos+1) + " = '" + getListValues().get(pos+1).getValue() + "'");
+                }
+            }
         }
+    }
+    private Integer ListValuesIndex(String ItemValue){
+        Integer counter = 0;
+        for (ListValue tItem: getListValues()){
+            if (tItem.getValue().equals(ItemValue)){
+                return counter;
+            }
+            counter++;
+        }
+        return -1;
     }
     
 }

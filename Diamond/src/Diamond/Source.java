@@ -358,24 +358,12 @@ public class Source {
             vf.getOption(ViewFactory.OPT_VISIBLE).value().set("false");
             //Optional attributes to set at the view level
             //TODO:need to get these from the Flow settings
-            if (SourceUI.IsSet(mySource.IsFlat())){
-                vf.getOption(ViewFactory.OPT_FLAT).value().set(mySource.IsFlat());
-            }
-            if (SourceUI.IsSet(mySource.PruneSingleItemFolders())){
-                vf.getOption(ViewFactory.OPT_PRUNE_SINGLE_ITEM_FOLDERS).value().set(mySource.PruneSingleItemFolders());
-            }
-            for (String tOpt: vf.getOptionNames()){
-                String PropLocation = "";
-                ConfigOption tConfig = new ConfigOption(PropLocation, vf.getOption(tOpt));
-                if (tConfig.isList()){
-                    for (ListValue Item: tConfig.getListValues()){
-                        LOG.debug("ViewFactory: Option '" + tOpt + "' Name '" + Item.getName() + "' Value '" + Item.getValue() + "' test '" + tConfig.GetValue() + "'");
-                    }
-                }else{
-                    LOG.debug("ViewFactory: Option '" + tOpt + "' Not a list - test '" + tConfig.GetValue() + "'");
+            //process the options
+            for (ConfigOption tConfig: mySource.ConfigOptions()){
+                if (tConfig.IsSet()){
+                    vf.getOption(tConfig.getName()).value().set(tConfig.GetValue());
                 }
             }
-            
             //add the source to the view
             ViewFactory source = null;
             try {
@@ -393,7 +381,7 @@ public class Source {
                     Grouper grpr = phoenix.umb.CreateGrouper(tGroup);
                     //process the options
                     for (ConfigOption tConfig: tUI.Group().ConfigOptions()){
-                        if (SourceUI.IsSet(tConfig.GetValue())){
+                        if (tConfig.IsSet()){
                             grpr.getOption(tConfig.getName()).value().set(tConfig.GetValue());
                         }
                     }
@@ -404,7 +392,7 @@ public class Source {
                     Sorter sort = phoenix.umb.CreateSorter(tSort);
                     //process the options
                     for (ConfigOption tConfig: tUI.Sort().ConfigOptions()){
-                        if (SourceUI.IsSet(tConfig.GetValue())){
+                        if (tConfig.IsSet()){
                             sort.getOption(tConfig.getName()).value().set(tConfig.GetValue());
                         }
                     }
@@ -417,11 +405,10 @@ public class Source {
         }else{
             view = phoenix.umb.CreateView(mySource.Source());
             //TODO: test if these settings adjust an existing view
-            if (SourceUI.IsSet(mySource.IsFlat())){
-                view.getViewFactory().getOption(ViewFactory.OPT_FLAT).value().set(mySource.IsFlat());
-            }
-            if (SourceUI.IsSet(mySource.PruneSingleItemFolders())){
-                view.getViewFactory().getOption(ViewFactory.OPT_PRUNE_SINGLE_ITEM_FOLDERS).value().set(mySource.PruneSingleItemFolders());
+            for (ConfigOption tConfig: mySource.ConfigOptions()){
+                if (tConfig.IsSet()){
+                    view.getViewFactory().getOption(tConfig.getName()).value().set(tConfig.GetValue());
+                }
             }
         }
         //now apply the filters
