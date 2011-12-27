@@ -45,19 +45,6 @@ public class PresentationOrg {
                 ConfigOptions.add(tConfig);
             }
         }
-//        if (this.HasContent){
-//            LOG.debug(myType() + ": '" + this.Name + "' OptionsList '" + tOrganizer.getOptionNames() + "'");
-//            for (String tOpt: tOrganizer.getOptionNames()){
-//                ConfigOption tConfig = new ConfigOption(PropLocation, tOrganizer.getOption(tOpt));
-//                if (tConfig.isList()){
-//                    for (ListValue Item: tConfig.getListValues()){
-//                        LOG.debug(myType() + ": Option '" + tOpt + "' Name '" + Item.getName() + "' Value '" + Item.getValue() + "' test '" + tConfig.GetValue() + "'");
-//                    }
-//                }else{
-//                    LOG.debug(myType() + ": Option '" + tOpt + "' Not a list - test '" + tConfig.GetValue() + "'");
-//                }
-//            }
-//        }
     }
     public Boolean HasContent(){
         return HasContent;
@@ -69,6 +56,7 @@ public class PresentationOrg {
         return thisType.toString();
     }
     public HashSet<ConfigOption> ConfigOptions(){
+        //TODO: needs to be sorted by the Label
         return ConfigOptions;
     }
     public String LogMessage(){

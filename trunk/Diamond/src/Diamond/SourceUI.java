@@ -71,6 +71,7 @@ public class SourceUI {
         return Flow.GetFlowName(thisFlowName);
     }
     public HashSet<ConfigOption> ConfigOptions(){
+        //TODO: needs to be sorted by the Label
         return ConfigOptions;
     }
     
