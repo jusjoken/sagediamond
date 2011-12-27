@@ -50,12 +50,13 @@ public class PresentationOrg {
         if (this.HasContent){
             LOG.debug(myType() + ": '" + this.Name + "' OptionsList '" + tOrganizer.getOptionNames() + "'");
             for (String tOpt: tOrganizer.getOptionNames()){
-                if (tOrganizer.getOption(tOpt).isList()){
-                    for (ListValue Item: tOrganizer.getOption(tOpt).getListValues()){
-                        LOG.debug(myType() + ": Option '" + tOpt + "' Name '" + Item.getName() + "' Value '" + Item.getValue() + "'");
+                ConfigOption tConfig = new ConfigOption(tOrganizer.getOption(tOpt));
+                if (tConfig.isList()){
+                    for (ListValue Item: tConfig.getListValues()){
+                        LOG.debug(myType() + ": Option '" + tOpt + "' Name '" + Item.getName() + "' Value '" + Item.getValue() + "' test '" + tConfig.GetValue() + "'");
                     }
                 }else{
-                    LOG.debug(myType() + ": Option '" + tOpt + "' Not a list");
+                    LOG.debug(myType() + ": Option '" + tOpt + "' Not a list - test '" + tConfig.GetValue() + "'");
                 }
             }
         }
