@@ -5,6 +5,7 @@
 package Diamond;
 
 import java.util.List;
+import org.apache.log4j.Logger;
 import sagex.phoenix.factory.ConfigurableOption;
 
 /**
@@ -13,41 +14,44 @@ import sagex.phoenix.factory.ConfigurableOption;
  */
 public class ConfigOption extends ConfigurableOption {
 
-    private String thisFlowName = "";
-    public ConfigOption(String FlowName, String name, String value) {
+    private String PropLocation = "";
+    static private final Logger LOG = Logger.getLogger(ConfigOption.class);
+    public ConfigOption(String PropertyLocation, String name, String value) {
         super(name, value);
-        thisFlowName = FlowName;
+        PropLocation = PropertyLocation;
     }
 
-    public ConfigOption(String FlowName, String name, String label, String value, DataType dataType, boolean isList, ListSelection listSelection, String listValues) {
+    public ConfigOption(String PropertyLocation, String name, String label, String value, DataType dataType, boolean isList, ListSelection listSelection, String listValues) {
         super(name, label, value, dataType, isList, listSelection, listValues);
-        thisFlowName = FlowName;
+        PropLocation = PropertyLocation;
     }
 
-    public ConfigOption(String FlowName, String name, String label, String value, DataType dataType, boolean isList, ListSelection listSelection, List<ListValue> listValues) {
+    public ConfigOption(String PropertyLocation, String name, String label, String value, DataType dataType, boolean isList, ListSelection listSelection, List<ListValue> listValues) {
         super(name, label, value, dataType, isList, listSelection, listValues);
-        thisFlowName = FlowName;
+        PropLocation = PropertyLocation;
     }
 
-    public ConfigOption(String FlowName, String name, String label, String value, DataType dataType) {
+    public ConfigOption(String PropertyLocation, String name, String label, String value, DataType dataType) {
         super(name, label, value, dataType);
-        thisFlowName = FlowName;
+        PropLocation = PropertyLocation;
     }
 
-    public ConfigOption(String FlowName, String name) {
+    public ConfigOption(String PropertyLocation, String name) {
         super(name);
-        thisFlowName = FlowName;
+        PropLocation = PropertyLocation;
     }
 
-    public ConfigOption(String FlowName, ConfigurableOption inOpt) {
-        super(inOpt.getName(), inOpt.getLabel(), "", inOpt.getDataType(), inOpt.isList(), inOpt.getListSelection(), inOpt.getListValues());
-        thisFlowName = FlowName;
+    public ConfigOption(String PropertyLocation, ConfigurableOption inOpt) {
+        super(inOpt.getName(), inOpt.getLabel(), inOpt.value().getValue(), inOpt.getDataType(), inOpt.isList(), inOpt.getListSelection(), inOpt.getListValues());
+        PropLocation = PropertyLocation;
     }
 
     public String GetValue(){
         //get the value from the properties file
         //if not found then use NotSet
-        return "testing";
+        String tReturn = util.GetProperty(PropLocation + getName(), SourceUI.OptionNotSet);
+        LOG.debug("GetValue: PropLocation '" + PropLocation + "' getName() '" + getName() + "' GetValue '" + tReturn + "'");
+        return tReturn;
     }
     public void SetNext(){
         if (isList()){

@@ -6,6 +6,7 @@ package Diamond;
 
 import Diamond.SourceUI.OrganizerType;
 import java.util.HashMap;
+import java.util.HashSet;
 import org.apache.log4j.Logger;
 import sagex.phoenix.factory.ConfigurableOption.ListValue;
 import sagex.phoenix.factory.IConfigurable;
@@ -17,12 +18,14 @@ import sagex.phoenix.factory.IConfigurable;
 public class PresentationOrg {
     static private final Logger LOG = Logger.getLogger(PresentationOrg.class);
     private String thisFlowName = "";
+    private String PropLocation = "";
     private String Name = "";
     private String optIgnoreAll = "";
     private String optIgnoreThe = "";
     private String optEmptyFoldername = "";
     private String optPruneSingleItemGroups = "";
     private HashMap<String,String> optList = new HashMap<String, String>();
+    private HashSet<ConfigOption> ConfigOptions = new HashSet<ConfigOption>();
     private OrganizerType thisType = null;
     //HasContent is set to true if properties are found for this organizer
     private Boolean HasContent = Boolean.FALSE;
@@ -31,6 +34,7 @@ public class PresentationOrg {
         thisFlowName = FlowName;
         thisType = Type;
         IConfigurable tOrganizer = null;
+        PropLocation = SourceUI.GetPropertyLocation(FlowName, Type.toString(), Level);
         String tName = SourceUI.GetOrgValue(FlowName, Type.toString(), Level, "Name");
         if (!tName.equals(SourceUI.OptionNotSet)){
             this.Name = tName;
@@ -42,17 +46,19 @@ public class PresentationOrg {
             }
             //LOG.debug(myType() + ": '" + this.Name + "' OptionsList '" + tOrganizer.getOptionNames() + "'");
             for (String tOpt: tOrganizer.getOptionNames()){
-                String tValue = SourceUI.GetOrgValue(FlowName, Type.toString(), Level, tOpt);
-                if (!tValue.equals(SourceUI.OptionNotSet)){
-                    optList.put(tOpt, tValue);
-                }
+                ConfigOption tConfig = new ConfigOption(PropLocation, tOrganizer.getOption(tOpt));
+                ConfigOptions.add(tConfig);
+//                String tValue = SourceUI.GetOrgValue(FlowName, Type.toString(), Level, tOpt);
+//                if (!tValue.equals(SourceUI.OptionNotSet)){
+//                    optList.put(tOpt, tValue);
+//                }
 
             }
         }
         if (this.HasContent){
             LOG.debug(myType() + ": '" + this.Name + "' OptionsList '" + tOrganizer.getOptionNames() + "'");
             for (String tOpt: tOrganizer.getOptionNames()){
-                ConfigOption tConfig = new ConfigOption(thisFlowName, tOrganizer.getOption(tOpt));
+                ConfigOption tConfig = new ConfigOption(PropLocation, tOrganizer.getOption(tOpt));
                 if (tConfig.isList()){
                     for (ListValue Item: tConfig.getListValues()){
                         LOG.debug(myType() + ": Option '" + tOpt + "' Name '" + Item.getName() + "' Value '" + Item.getValue() + "' test '" + tConfig.GetValue() + "'");
@@ -75,12 +81,18 @@ public class PresentationOrg {
     public HashMap<String,String> optList(){
         return optList;
     }
+    public HashSet<ConfigOption> ConfigOptions(){
+        return ConfigOptions;
+    }
     public String LogMessage(){
         String tMess = myType() + "-";
         tMess = tMess + Name;
-        for (String tOpt:optList().keySet()){
-            tMess = tMess + ":" + tOpt + "=" + optList.get(tOpt);
+        for (ConfigOption tConfig: ConfigOptions){
+            tMess = tMess + ":" + tConfig.getName() + "=" + tConfig.GetValue();
         }
+//        for (String tOpt:optList().keySet()){
+//            tMess = tMess + ":" + tOpt + "=" + optList.get(tOpt);
+//        }
         return tMess;
     }
     

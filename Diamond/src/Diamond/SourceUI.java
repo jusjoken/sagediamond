@@ -99,6 +99,10 @@ public class SourceUI {
     public static String GetPresentationProp(Integer Level){
         return Const.FlowSourceUI + Const.PropDivider + Const.FlowPresentation + Const.PropDivider + Level.toString() + Const.PropDivider;
     }
+    public static String GetPropertyLocation(String FlowName, String OrgType, Integer Level){
+        String tProp = GetPresentationProp(Level) + OrgType + Const.PropDivider;
+        return Flow.GetFlowBaseProp(FlowName) + Const.PropDivider +  tProp;
+    }
     public static String GetOrgValue(String FlowName, String OrgType, Integer Level, String Option){
         String tProp = GetPresentationProp(Level) + OrgType + Const.PropDivider + Option;
         return Flow.GetOptionName(FlowName, tProp, OptionNotSet);
