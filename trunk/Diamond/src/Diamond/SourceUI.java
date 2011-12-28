@@ -70,12 +70,7 @@ public class SourceUI {
     public String Label(){
         return Flow.GetFlowName(thisFlowName);
     }
-//    public HashSet<ConfigOption> ConfigOptions(){
-//        //TODO: needs to be sorted by the Label
-//        return ConfigOptions;
-//    }
     public HashSet<ConfigOption> ConfigOptions(){
-        //TODO: needs to be sorted by the Label
         LinkedHashSet<ConfigOption> tList = new LinkedHashSet<ConfigOption>();
         for (ConfigOption tConfig:ConfigOptionsList.values()){
             tList.add(tConfig);
@@ -88,7 +83,6 @@ public class SourceUI {
         if (!thisUIList.isEmpty()){
             return Boolean.TRUE;
         }else{
-            //TODO: change this to see if any of the ConfigOptions have been set
             for (ConfigOption tConfig: ConfigOptionsList.values()){
                 if (tConfig.IsSet()){
                     return Boolean.TRUE;

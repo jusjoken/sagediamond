@@ -5,10 +5,11 @@
 package Diamond;
 
 import Diamond.SourceUI.OrganizerType;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import org.apache.log4j.Logger;
-import sagex.phoenix.factory.ConfigurableOption.ListValue;
 import sagex.phoenix.factory.IConfigurable;
 
 /**
@@ -20,7 +21,7 @@ public class PresentationOrg {
     private String thisFlowName = "";
     private String PropLocation = "";
     private String Name = "";
-    private HashSet<ConfigOption> ConfigOptions = new HashSet<ConfigOption>();
+    private SortedMap<String,ConfigOption> ConfigOptionsList = new TreeMap<String,ConfigOption>();
     private OrganizerType thisType = null;
     //HasContent is set to true if properties are found for this organizer
     private Boolean HasContent = Boolean.FALSE;
@@ -42,7 +43,7 @@ public class PresentationOrg {
             //LOG.debug(myType() + ": '" + this.Name + "' OptionsList '" + tOrganizer.getOptionNames() + "'");
             for (String tOpt: tOrganizer.getOptionNames()){
                 ConfigOption tConfig = new ConfigOption(PropLocation, tOrganizer.getOption(tOpt));
-                ConfigOptions.add(tConfig);
+                ConfigOptionsList.put(tConfig.getLabel(), tConfig);
             }
         }
     }
@@ -56,13 +57,16 @@ public class PresentationOrg {
         return thisType.toString();
     }
     public HashSet<ConfigOption> ConfigOptions(){
-        //TODO: needs to be sorted by the Label
-        return ConfigOptions;
+        LinkedHashSet<ConfigOption> tList = new LinkedHashSet<ConfigOption>();
+        for (ConfigOption tConfig:ConfigOptionsList.values()){
+            tList.add(tConfig);
+        }
+        return tList;
     }
     public String LogMessage(){
         String tMess = myType() + "-";
         tMess = tMess + Name;
-        for (ConfigOption tConfig: ConfigOptions){
+        for (ConfigOption tConfig: ConfigOptionsList.values()){
             tMess = tMess + ":" + tConfig.getName() + "=" + tConfig.GetValue() + "(" + tConfig.GetValueLabel() + ")";
         }
         return tMess;
