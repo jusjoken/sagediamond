@@ -24,7 +24,7 @@ public class SourceUI {
     private String PropLocation = "";
     private Integer thisLevels = 0;
     private SortedMap<Integer,PresentationUI> thisUIList = new TreeMap<Integer,PresentationUI>();
-    private HashSet<ConfigOption> ConfigOptions = new HashSet<ConfigOption>();
+    private SortedMap<String,ConfigOption> ConfigOptionsList = new TreeMap<String,ConfigOption>();
     public static enum OrganizerType{GROUP,SORT};
     public static final String OptionNotSet = "NotSet";
     
@@ -40,7 +40,7 @@ public class SourceUI {
             OptionsToSkipList.addAll(Arrays.asList(OptionsToSkip));
             ConfigOption tConfig = new ConfigOption(PropLocation, tOrganizer.getOption(tOpt));
             if (!OptionsToSkipList.contains(tConfig.getName())){
-                ConfigOptions.add(tConfig);
+                ConfigOptionsList.put(tConfig.getLabel(), tConfig);
             }
         }
         Refresh();
@@ -70,9 +70,17 @@ public class SourceUI {
     public String Label(){
         return Flow.GetFlowName(thisFlowName);
     }
+//    public HashSet<ConfigOption> ConfigOptions(){
+//        //TODO: needs to be sorted by the Label
+//        return ConfigOptions;
+//    }
     public HashSet<ConfigOption> ConfigOptions(){
         //TODO: needs to be sorted by the Label
-        return ConfigOptions;
+        LinkedHashSet<ConfigOption> tList = new LinkedHashSet<ConfigOption>();
+        for (ConfigOption tConfig:ConfigOptionsList.values()){
+            tList.add(tConfig);
+        }
+        return tList;
     }
     
     //Presentation specific settings
@@ -81,7 +89,7 @@ public class SourceUI {
             return Boolean.TRUE;
         }else{
             //TODO: change this to see if any of the ConfigOptions have been set
-            for (ConfigOption tConfig: ConfigOptions){
+            for (ConfigOption tConfig: ConfigOptionsList.values()){
                 if (tConfig.IsSet()){
                     return Boolean.TRUE;
                 }
@@ -107,7 +115,7 @@ public class SourceUI {
     }
     public String LogMessage(){
         String tMess = Label() + "-'" + Source() + "'Levels'" + thisLevels + "'-";
-        for (ConfigOption tConfig: ConfigOptions){
+        for (ConfigOption tConfig: ConfigOptionsList.values()){
             tMess = tMess + ":" + tConfig.getName() + "=" + tConfig.GetValue() + "(" + tConfig.GetValueLabel() + ")";
         }
         for (PresentationUI tUI: UIList()){
