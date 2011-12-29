@@ -56,6 +56,17 @@ public class PresentationOrg {
     public String myType(){
         return thisType.toString();
     }
+    public Boolean HasConfigOptions(){
+        return !ConfigOptionsList.isEmpty();
+    }
+    public Boolean HasConfigOptionsSet(){
+        for (ConfigOption tConfig: ConfigOptionsList.values()){
+            if (tConfig.IsSet()){
+                return Boolean.TRUE;
+            }
+        }
+        return Boolean.FALSE;
+    }
     public HashSet<ConfigOption> ConfigOptions(){
         LinkedHashSet<ConfigOption> tList = new LinkedHashSet<ConfigOption>();
         for (ConfigOption tConfig:ConfigOptionsList.values()){

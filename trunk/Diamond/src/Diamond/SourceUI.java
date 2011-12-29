@@ -70,6 +70,9 @@ public class SourceUI {
     public String Label(){
         return Flow.GetFlowName(thisFlowName);
     }
+    public Boolean HasConfigOptions(){
+        return !ConfigOptionsList.isEmpty();
+    }
     public HashSet<ConfigOption> ConfigOptions(){
         LinkedHashSet<ConfigOption> tList = new LinkedHashSet<ConfigOption>();
         for (ConfigOption tConfig:ConfigOptionsList.values()){
@@ -82,11 +85,15 @@ public class SourceUI {
     public Boolean HasPresentation(){
         if (!thisUIList.isEmpty()){
             return Boolean.TRUE;
-        }else{
-            for (ConfigOption tConfig: ConfigOptionsList.values()){
-                if (tConfig.IsSet()){
-                    return Boolean.TRUE;
-                }
+        }else if (HasConfigOptionsSet()){
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
+    }
+    public Boolean HasConfigOptionsSet(){
+        for (ConfigOption tConfig: ConfigOptionsList.values()){
+            if (tConfig.IsSet()){
+                return Boolean.TRUE;
             }
         }
         return Boolean.FALSE;
