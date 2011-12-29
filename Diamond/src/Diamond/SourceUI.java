@@ -12,6 +12,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import org.apache.log4j.Logger;
 import sagex.phoenix.factory.IConfigurable;
+import sagex.phoenix.vfs.groups.GroupingFactory;
 import sagex.phoenix.vfs.views.ViewFactory;
 
 /**
