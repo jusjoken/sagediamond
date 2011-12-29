@@ -4,7 +4,6 @@
  */
 package Diamond;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,12 +12,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
-import sagex.phoenix.configuration.Group;
 import sagex.phoenix.factory.ConfigurableOption;
 import sagex.phoenix.factory.Factory;
-import sagex.phoenix.vfs.IMediaResource;
 import sagex.phoenix.vfs.MediaResourceType;
 import sagex.phoenix.vfs.filters.*;
 import sagex.phoenix.vfs.groups.Grouper;
@@ -26,12 +22,9 @@ import sagex.phoenix.vfs.sorters.Sorter;
 import sagex.phoenix.vfs.views.ViewFactory;
 import sagex.phoenix.vfs.views.ViewFolder;
 import sagex.phoenix.vfs.views.ViewPresentation;
-import sagex.api.*;
 import sagex.phoenix.Phoenix;
-import sagex.phoenix.factory.ConfigurableOption.ListValue;
-import sagex.phoenix.util.PublicCloneable;
+import sagex.phoenix.factory.IConfigurable;
 import sagex.phoenix.vfs.IMediaFolder;
-import sagex.phoenix.vfs.groups.RegexTitleGrouper;
 
 /**
  *
@@ -41,7 +34,79 @@ public class Source {
     static private final Logger LOG = Logger.getLogger(Source.class);
     public static HashMap<String,String> InternalFilterTypes = new HashMap<String,String>();
     public static HashMap<String,String> InternalMediaTypeFilters = new HashMap<String,String>();
+    public static HashMap<String,String> InternalGroupsList = new HashMap<String,String>();
+    public static HashMap<String,String> InternalSortsList = new HashMap<String,String>();
     
+    //add a SORT or GROUP including the Label to use optionally (internal Label will be used otherwise)
+    public static void AddOrganizerType(String OrgName, String OrgType){
+        AddOrganizerType(OrgName, OrgType, "");
+    }
+    public static void AddOrganizerType(String OrgName, String OrgType, String OrgLabel){
+        IConfigurable thisOrganizer = null;
+        SourceUI.OrganizerType thisType = null;
+        if (OrgType.equals(SourceUI.OrganizerType.GROUP.toString())){
+            thisOrganizer = phoenix.umb.CreateGrouper(OrgName);
+            thisType = SourceUI.OrganizerType.GROUP;
+        }else if (OrgType.equals(SourceUI.OrganizerType.SORT.toString())){
+            thisOrganizer = phoenix.umb.CreateSorter(OrgName);
+            thisType = SourceUI.OrganizerType.SORT;
+        }
+        if (thisOrganizer==null){
+            //don't add the organizer as it is not valid
+        }else{
+            if (OrgLabel.equals("")){
+                if (thisType.equals(SourceUI.OrganizerType.GROUP)){
+                    Grouper tOrg = (Grouper) thisOrganizer;
+                    OrgLabel = tOrg.getLabel();
+                }else if (thisType.equals(SourceUI.OrganizerType.SORT)){
+                    Sorter tOrg = (Sorter) thisOrganizer;
+                    OrgLabel = tOrg.getLabel();
+                }
+            }
+            if (thisType.equals(SourceUI.OrganizerType.GROUP)){
+                InternalGroupsList.put(OrgName, OrgLabel);
+            }else if (thisType.equals(SourceUI.OrganizerType.SORT)){
+                InternalSortsList.put(OrgName, OrgLabel);
+            }
+        }
+    }
+    public static ArrayList<String> GetOrganizerGroups(){
+        TreeMap<String,String> OrganizerTypesList = new TreeMap<String,String>();
+        for (String tKey: InternalGroupsList.keySet()){
+            OrganizerTypesList.put(InternalGroupsList.get(tKey), tKey);
+        }
+        return new ArrayList<String>(OrganizerTypesList.values());
+    }
+    public static String GetOrganizerName(String OrgName, String OrgType){
+        //LOG.debug("GetOrganizerName: OrgName '" + OrgName + "' OrgType '" + OrgType + "'" );
+        if (OrgType.equals(SourceUI.OrganizerType.GROUP.toString())){
+            return GetOrganizerGroupName(OrgName);
+        }else if (OrgType.equals(SourceUI.OrganizerType.SORT.toString())){
+            return GetOrganizerSortName(OrgName);
+        }else{
+            return util.OptionNotFound;
+        }
+    }
+    public static String GetOrganizerGroupName(String OrgName){
+        if (InternalGroupsList.containsKey(OrgName)){
+            return InternalGroupsList.get(OrgName);
+        }
+        return util.OptionNotFound;
+    }
+    public static ArrayList<String> GetOrganizerSorts(){
+        TreeMap<String,String> OrganizerTypesList = new TreeMap<String,String>();
+        for (String tKey: InternalSortsList.keySet()){
+            OrganizerTypesList.put(InternalSortsList.get(tKey), tKey);
+        }
+        return new ArrayList<String>(OrganizerTypesList.values());
+    }
+    public static String GetOrganizerSortName(String OrgName){
+        if (InternalSortsList.containsKey(OrgName)){
+            return InternalSortsList.get(OrgName);
+        }
+        return util.OptionNotFound;
+    }
+
     public static void AddMediaTypeFilter(String MediaType, String MediaTypeName){
         if (IsMediaTypeValid(MediaType)){
             InternalMediaTypeFilters.put(MediaType, MediaTypeName);

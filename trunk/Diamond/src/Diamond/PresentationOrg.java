@@ -20,7 +20,10 @@ public class PresentationOrg {
     static private final Logger LOG = Logger.getLogger(PresentationOrg.class);
     private String thisFlowName = "";
     private String PropLocation = "";
-    private String Name = "";
+    private String Name = SourceUI.OptionNotSet;
+    private String Label = SourceUI.OptionNotSet;
+    private Integer thisLevel = 0;
+    private IConfigurable thisOrganizer = null;
     private SortedMap<String,ConfigOption> ConfigOptionsList = new TreeMap<String,ConfigOption>();
     private OrganizerType thisType = null;
     //HasContent is set to true if properties are found for this organizer
@@ -29,29 +32,36 @@ public class PresentationOrg {
     public PresentationOrg(String FlowName, Integer Level, OrganizerType Type){
         thisFlowName = FlowName;
         thisType = Type;
-        IConfigurable tOrganizer = null;
+        thisLevel = Level;
         PropLocation = SourceUI.GetPropertyLocation(FlowName, Type.toString(), Level);
         String tName = SourceUI.GetOrgValue(FlowName, Type.toString(), Level, "Name");
         if (!tName.equals(SourceUI.OptionNotSet)){
             this.Name = tName;
             this.HasContent = Boolean.TRUE;
             if (Type.equals(OrganizerType.GROUP)){
-                tOrganizer = phoenix.umb.CreateGrouper(this.Name);
+                thisOrganizer = phoenix.umb.CreateGrouper(this.Name);
             }else{
-                tOrganizer = phoenix.umb.CreateSorter(this.Name);
+                thisOrganizer = phoenix.umb.CreateSorter(this.Name);
             }
-            //LOG.debug(myType() + ": '" + this.Name + "' OptionsList '" + tOrganizer.getOptionNames() + "'");
-            for (String tOpt: tOrganizer.getOptionNames()){
-                ConfigOption tConfig = new ConfigOption(PropLocation, tOrganizer.getOption(tOpt));
+            this.Label = Source.GetOrganizerName(this.Name, thisType.toString());
+            LOG.debug(myType() + ": '" + this.Name + "' after label '" + this.Label + "'");
+            for (String tOpt: thisOrganizer.getOptionNames()){
+                ConfigOption tConfig = new ConfigOption(PropLocation, thisOrganizer.getOption(tOpt));
                 ConfigOptionsList.put(tConfig.getLabel(), tConfig);
             }
         }
+    }
+    public void SetOrg(String NewName){
+        SourceUI.SetOrgValue(thisFlowName, thisType.toString(), thisLevel, "Name", NewName);
     }
     public Boolean HasContent(){
         return HasContent;
     }
     public String Name(){
         return this.Name;
+    }
+    public String Label(){
+        return this.Label;
     }
     public String myType(){
         return thisType.toString();
