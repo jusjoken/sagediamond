@@ -55,10 +55,18 @@ public class PresentationOrg {
         }
     }
     public void SetOrg(String NewName){
-        //TODO: may want to clear old properties for this Org based on the old Name before changing it
+        Clear();
         SourceUI.SetOrgValue(thisFlowName, thisType.toString(), thisLevel, "Name", NewName);
         this.Name = NewName;
         Refresh();
+    }
+    public void Clear(){
+        this.Name = SourceUI.OptionNotSet;
+        this.Label = SourceUI.OptionNotSet;
+        this.HasContent = Boolean.FALSE;
+        ConfigOptionsList.clear();
+        String tProp = Const.BaseProp + Const.PropDivider + PropLocation;
+        util.RemovePropertyAndChildren(tProp);
     }
     public Boolean HasContent(){
         return HasContent;

@@ -12,7 +12,6 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import org.apache.log4j.Logger;
 import sagex.phoenix.factory.IConfigurable;
-import sagex.phoenix.vfs.groups.GroupingFactory;
 import sagex.phoenix.vfs.views.ViewFactory;
 
 /**
@@ -112,6 +111,18 @@ public class SourceUI {
         for (PresentationUI tUI:thisUIList.values()){
             tList.add(tUI);
         }
+        
+        return tList;
+    }
+    public HashSet<PresentationUI> UIListPlusOne(){
+        LinkedHashSet<PresentationUI> tList = new LinkedHashSet<PresentationUI>();
+        for (PresentationUI tUI:thisUIList.values()){
+            tList.add(tUI);
+        }
+        //Add one more to be used if needed for adding a Level
+        PresentationUI tUI = null;
+        tUI = new PresentationUI(thisFlowName,thisLevels);
+        tList.add(tUI);
         
         return tList;
     }
