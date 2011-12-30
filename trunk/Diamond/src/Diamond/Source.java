@@ -657,4 +657,17 @@ public class Source {
     public static String GetFilterTypeProp(String FilterName){
         return Const.FlowFilters + Const.PropDivider + FilterName;
     }
+    
+    public static ArrayList<String> GetTags(){
+        phoenix.umb.GetTags(false);
+        TreeMap<String,String> TagList = new TreeMap<String,String>();
+        for (String tKey: phoenix.umb.GetTags(false)){
+            //see if the tag is valid for a ViewFactory
+            if (!phoenix.umb.GetViewFactories (tKey).isEmpty()){
+                TagList.put(phoenix.umb.GetTagLabel(tKey), tKey);
+                LOG.debug("GetTags: Tag '" + tKey + "' Label '" + phoenix.umb.GetTagLabel(tKey) + "'");
+            }
+        }
+        return new ArrayList<String>(TagList.values());
+    }
 }
