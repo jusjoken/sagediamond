@@ -46,6 +46,9 @@ public class ConfigOption extends ConfigurableOption {
         PropLocation = PropertyLocation;
     }
 
+    public String GetPropertyLocation(){
+        return PropLocation;
+    }
     public Boolean IsSet(){
         if (GetValue().equals(SourceUI.OptionNotSet)){
             return Boolean.FALSE;
@@ -56,7 +59,7 @@ public class ConfigOption extends ConfigurableOption {
     public String GetValue(){
         //get the value from the properties file
         //if not found then use NotSet
-        String tReturn = util.GetProperty(PropLocation + getName(), SourceUI.OptionNotSet);
+        String tReturn = util.GetOptionName(PropLocation, getName(), SourceUI.OptionNotSet);
         if (isList() && !tReturn.equals(SourceUI.OptionNotSet)){
             //check that this is a valid value
             Boolean found = Boolean.FALSE;
@@ -76,7 +79,7 @@ public class ConfigOption extends ConfigurableOption {
     public String GetValueLabel(){
         //get the Label for the List Item
         //if not found then use NotSet
-        String tReturn = util.GetProperty(PropLocation + getName(), SourceUI.OptionNotSet);
+        String tReturn = util.GetOptionName(PropLocation, getName(), SourceUI.OptionNotSet);
         if (isList() && !tReturn.equals(SourceUI.OptionNotSet)){
             //check that this is a valid value and get the Label
             Boolean found = Boolean.FALSE;
@@ -94,26 +97,30 @@ public class ConfigOption extends ConfigurableOption {
         }
         return tReturn;
     }
+    public void SetValue(String NewValue){
+        if (!isList()){
+            util.SetOption(PropLocation, getName(), NewValue);
+        }
+    }
     public void SetNext(){
         if (isList()){
             //change the value to the next value in the list or NotSet if at the last entry already
-            //List<String> FullList = ConvertStringtoList(OptionList);
             String CurrentValue = GetValue();
-            LOG.debug("SetNext: for '" + getName() + "' CurrentValue '" + CurrentValue + "' Values '" + getListValues() + "'");
+            //LOG.debug("SetNext: for '" + getName() + "' CurrentValue '" + CurrentValue + "' Values '" + getListValues() + "'");
             if (CurrentValue.equals(SourceUI.OptionNotSet)){
-                util.SetProperty(PropLocation + getName(), getListValues().get(0).getValue());  //default to the 1st item
-                LOG.debug("SetNext: for '" + getName() + "' CurrentValue '" + CurrentValue + "' Item 0 '" + getListValues().get(0).getValue() + "'");
+                util.SetOption(PropLocation, getName(), getListValues().get(0).getValue());  //default to the 1st item
+                //LOG.debug("SetNext: for '" + getName() + "' CurrentValue '" + CurrentValue + "' Item 0 '" + getListValues().get(0).getValue() + "'");
             }else{
                 Integer pos = ListValuesIndex(CurrentValue);
                 if (pos==-1){ //not found
-                    util.SetProperty(PropLocation + getName(), getListValues().get(0).getValue());
-                    LOG.debug("SetNext: for '" + getName() + "' CurrentValue '" + CurrentValue + "' Item " + pos + " = '" + getListValues().get(0).getValue() + "'");
+                    util.SetOption(PropLocation, getName(), getListValues().get(0).getValue());
+                    //LOG.debug("SetNext: for '" + getName() + "' CurrentValue '" + CurrentValue + "' Item " + pos + " = '" + getListValues().get(0).getValue() + "'");
                 }else if(pos==getListValues().size()-1){ //last item
-                    util.SetProperty(PropLocation + getName(), SourceUI.OptionNotSet);
-                    LOG.debug("SetNext: for '" + getName() + "' CurrentValue '" + CurrentValue + "' Last Item - setting to NotSet");
+                    util.SetOption(PropLocation, getName(), SourceUI.OptionNotSet);
+                    //LOG.debug("SetNext: for '" + getName() + "' CurrentValue '" + CurrentValue + "' Last Item - setting to NotSet");
                 }else{ //get next item
-                    util.SetProperty(PropLocation + getName(), getListValues().get(pos+1).getValue());
-                    LOG.debug("SetNext: for '" + getName() + "' CurrentValue '" + CurrentValue + "' Item " + (pos+1) + " = '" + getListValues().get(pos+1).getValue() + "'");
+                    util.SetOption(PropLocation, getName(), getListValues().get(pos+1).getValue());
+                    //LOG.debug("SetNext: for '" + getName() + "' CurrentValue '" + CurrentValue + "' Item " + (pos+1) + " = '" + getListValues().get(pos+1).getValue() + "'");
                 }
             }
         }
