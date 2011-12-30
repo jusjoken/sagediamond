@@ -37,22 +37,28 @@ public class PresentationOrg {
         String tName = SourceUI.GetOrgValue(FlowName, Type.toString(), Level, "Name");
         if (!tName.equals(SourceUI.OptionNotSet)){
             this.Name = tName;
-            this.HasContent = Boolean.TRUE;
-            if (Type.equals(OrganizerType.GROUP)){
-                thisOrganizer = phoenix.umb.CreateGrouper(this.Name);
-            }else{
-                thisOrganizer = phoenix.umb.CreateSorter(this.Name);
-            }
-            this.Label = Source.GetOrganizerName(this.Name, thisType.toString());
-            LOG.debug(myType() + ": '" + this.Name + "' after label '" + this.Label + "'");
-            for (String tOpt: thisOrganizer.getOptionNames()){
-                ConfigOption tConfig = new ConfigOption(PropLocation, thisOrganizer.getOption(tOpt));
-                ConfigOptionsList.put(tConfig.getLabel(), tConfig);
-            }
+            Refresh();
+        }
+    }
+    public void Refresh(){
+        this.HasContent = Boolean.TRUE;
+        if (thisType.equals(OrganizerType.GROUP)){
+            thisOrganizer = phoenix.umb.CreateGrouper(this.Name);
+        }else{
+            thisOrganizer = phoenix.umb.CreateSorter(this.Name);
+        }
+        this.Label = Source.GetOrganizerName(this.Name, thisType.toString());
+        ConfigOptionsList.clear();
+        for (String tOpt: thisOrganizer.getOptionNames()){
+            ConfigOption tConfig = new ConfigOption(PropLocation, thisOrganizer.getOption(tOpt));
+            ConfigOptionsList.put(tConfig.getLabel(), tConfig);
         }
     }
     public void SetOrg(String NewName){
+        //TODO: may want to clear old properties for this Org based on the old Name before changing it
         SourceUI.SetOrgValue(thisFlowName, thisType.toString(), thisLevel, "Name", NewName);
+        this.Name = NewName;
+        Refresh();
     }
     public Boolean HasContent(){
         return HasContent;

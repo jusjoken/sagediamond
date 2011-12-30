@@ -130,12 +130,12 @@ public class SourceUI {
         return Const.FlowSourceUI + Const.PropDivider + Const.FlowPresentation + Const.PropDivider + Level.toString() + Const.PropDivider;
     }
     public static String GetPropertyLocation(String FlowName){
-        String tProp = Const.FlowSourceUI + Const.PropDivider;
-        return Flow.GetFlowBaseProp(FlowName) + Const.PropDivider +  tProp;
+        String tProp = Const.FlowSourceUI;
+        return Const.FlowProp + Const.PropDivider + FlowName + Const.PropDivider +  tProp;
     }
     public static String GetPropertyLocation(String FlowName, String OrgType, Integer Level){
-        String tProp = GetPresentationProp(Level) + OrgType + Const.PropDivider;
-        return Flow.GetFlowBaseProp(FlowName) + Const.PropDivider +  tProp;
+        String tProp = GetPresentationProp(Level) + OrgType;
+        return Const.FlowProp + Const.PropDivider + FlowName + Const.PropDivider +  tProp;
     }
     public static String GetOrgValue(String FlowName, String OrgType, Integer Level, String Option){
         String tProp = GetPresentationProp(Level) + OrgType + Const.PropDivider + Option;
