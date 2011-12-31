@@ -62,16 +62,16 @@ public class api {
         InstantSearchExecuteModes.put(InstantSearchExecuteMode.AUTO.toString(), new Property(InstantSearchExecuteMode.AUTO.toString(), "Auto Filter as you type"));
         InstantSearchExecuteModes.put(InstantSearchExecuteMode.SELECT.toString(), new Property(InstantSearchExecuteMode.SELECT.toString(), "Press Select to Filter",Boolean.TRUE));
         
-//        //see if we need to convert any of the Custom Flows to the new structure
-//        String FlowsConvertedProp = Const.BaseProp + Const.PropDivider + "FlowsConverted3_4";
-//        if (!util.GetPropertyAsBoolean(FlowsConvertedProp, Boolean.FALSE)){
-//            String[] AllViews= (String[]) CustomViews.GetCustomViews();
-//            LOG.debug("Converting " + AllViews.length + " Flows to new format");
-//            for (String OldName:AllViews){
-//                CustomViews.ConvertFlowNames(OldName, Boolean.FALSE);
-//            }
-//            util.SetProperty(FlowsConvertedProp, Boolean.TRUE.toString());
-//        }
+        //ensure the gemstone file location exists
+        try{
+            boolean success = (new File(util.UserDataLocation())).mkdirs();
+            if (success) {
+                LOG.debug("Load: Directories created for '" + util.UserDataLocation() + "'");
+               }
+
+            }catch (Exception ex){//Catch exception if any
+                LOG.debug("Load: - error creating '" + util.UserDataLocation() + "'" + ex.getMessage());
+            }
         
    }
 
@@ -103,7 +103,7 @@ public class api {
             log4jProps.put("log4j.appender.Sage", "org.apache.log4j.ConsoleAppender");
             log4jProps.put("log4j.appender.Sage.layout", "org.apache.log4j.PatternLayout");
             log4jProps.put("log4j.appender.Sage.layout.ConversionPattern", "%d{EEE M/d HH:mm:ss.SSS} [%t] %-5p %c - %m%n");
-            log4jProps.put("log4j.appender.Sage.Threshold", "info");
+            log4jProps.put("log4j.appender.Sage.Threshold", "debug");
             //log4jProps.put("log4j.logger.SDGroup", "debug,Diamond,Sage");
             log4jProps.put("log4j.logger.Diamond", "debug,Diamond,Sage");
             PropertyConfigurator.configure(log4jProps);
