@@ -4,6 +4,10 @@
  */
 package Diamond;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -13,6 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Random;
 import java.util.TreeSet;
 import org.apache.log4j.Logger;
@@ -39,8 +44,10 @@ public class util {
     public static void main(String[] args){
 
         //String test = StringNumberFormat("27.96903", 0, 2);
-        String test = StringNumberFormat("27.1", 0, 2);
-        LOG.debug(test);
+        //String test = StringNumberFormat("27.1", 0, 2);
+        //LOG.debug(test);
+        api.InitLogger();
+        
     }
 
     //pass in a String that contains a number and this will format it to a specific number of decimal places
@@ -763,6 +770,64 @@ public class util {
         }
         return OutList;
     }
+    
+    public static void ExportTest(){
+        //Export("ExportTest1.txt", "Diamond/Flow/sd5osqk1vijs");
+        Export("ExportTest1.txt", "Diamond/Flow");
+    }
+    
+    //Export/Import functions
+    public static void Export(String ExportFile, String PropLocation){
+        //Diamond/Flow/sd5osqk1vijs
+        String ExportFilePath = UserDataLocation() + File.separator + ExportFile;
+        LOG.info("Export: Full Path = '" + ExportFilePath + "' for Properties '" + PropLocation + "'");
+        
+        //iterate through all the Properties and Children and save to a Property Collection
+        Properties ExportProps = new Properties();
+
+        //Get all base properties first
+        LoadProperties(PropLocation, ExportProps);
+        
+        //Now get all subproperties
+        LoadSubProperties(PropLocation, ExportProps);
+
+        //write the properties to the properties file
+        try {
+            FileOutputStream out = new FileOutputStream(ExportFilePath);
+            try {
+                ExportProps.store(out, Const.PropertyComment);
+                out.close();
+            } catch (IOException ex) {
+                LOG.debug("Export: error exporting properties " + util.class.getName() + ex);
+            }
+        } catch (FileNotFoundException ex) {
+            LOG.debug("Export: error exporting properties " + util.class.getName() + ex);
+        }
+        
+    }
+    
+    public static void LoadProperties(String PropLocation, Properties PropContainer){
+        String[] PropNames = sagex.api.Configuration.GetSubpropertiesThatAreLeaves(new UIContext(sagex.api.Global.GetUIContextName()),PropLocation);
+        for (String PropItem: PropNames){
+            String tProp = PropLocation + Const.PropDivider + PropItem;
+            String tValue = GetProperty(tProp, OptionNotFound);
+            PropContainer.put(tProp, tValue);
+            LOG.debug("LoadProperties: '" + tProp + "' = '" + tValue + "'");
+        }
+    }
+    public static void LoadSubProperties(String PropLocation, Properties PropContainer){
+        String[] PropNames = sagex.api.Configuration.GetSubpropertiesThatAreBranches(new UIContext(sagex.api.Global.GetUIContextName()),PropLocation);
+        for (String PropItem: PropNames){
+            String tProp = PropLocation + Const.PropDivider + PropItem;
+            LoadProperties(tProp, PropContainer);
+            LoadSubProperties(tProp, PropContainer);
+        }
+    }
+    
+    public static String UserDataLocation(){
+        return sagex.api.Utility.GetWorkingDirectory(new UIContext(sagex.api.Global.GetUIContextName())) + File.separator + "userdata" + File.separator + "gemstone";
+    }
+
     
 }
 
