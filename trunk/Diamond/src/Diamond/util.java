@@ -9,10 +9,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.RoundingMode;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,6 +42,7 @@ public class util {
     private static final Random random = new Random();
     public static final String OptionNotFound = "Option not Found";
     public static enum TriState{YES,NO,OTHER};
+    public static enum ExportType{ALL,WIDGETS,FLOWS,FLOW,GENERIC};
     public static final String ListToken = ":&&:";
     
     public static void main(String[] args){
@@ -771,19 +775,30 @@ public class util {
         return OutList;
     }
     
-    public static void ExportTest(){
-        //Export("ExportTest1.txt", "Diamond/Flow/sd5osqk1vijs");
-        Export("ExportTest1.txt", "Diamond/Flow");
+    public static void ExportAll(String FileName){
+        Export(FileName, Const.BaseProp, ExportType.ALL);
     }
     
     //Export/Import functions
-    public static void Export(String ExportFile, String PropLocation){
+//    public static void Export(String ExportFile, String PropLocation){
+//        Export(ExportFile, PropLocation, ExportType.GENERIC);
+//    }
+    public static void Export(String ExportFile, String PropLocation, ExportType eType){
+        Export(ExportFile, PropLocation, eType, "");
+    }
+    public static void Export(String ExportFile, String PropLocation, ExportType eType, String Name){
         //Diamond/Flow/sd5osqk1vijs
-        String ExportFilePath = UserDataLocation() + File.separator + ExportFile;
+        String ExportFilePath = UserDataLocation() + File.separator + ExportFile + ".properties";
         LOG.info("Export: Full Path = '" + ExportFilePath + "' for Properties '" + PropLocation + "'");
         
         //iterate through all the Properties and Children and save to a Property Collection
         Properties ExportProps = new Properties();
+        //Add the Export Type to aid in the Import
+        ExportProps.put(Const.ExportTypeKey, eType.toString());
+        ExportProps.put(Const.ExportPropKey, PropLocation);
+        if (!Name.equals("")){
+            ExportProps.put(Const.ExportPropName, Name);
+        }
 
         //Get all base properties first
         LoadProperties(PropLocation, ExportProps);
@@ -812,7 +827,7 @@ public class util {
             String tProp = PropLocation + Const.PropDivider + PropItem;
             String tValue = GetProperty(tProp, OptionNotFound);
             PropContainer.put(tProp, tValue);
-            LOG.debug("LoadProperties: '" + tProp + "' = '" + tValue + "'");
+            //LOG.debug("LoadProperties: '" + tProp + "' = '" + tValue + "'");
         }
     }
     public static void LoadSubProperties(String PropLocation, Properties PropContainer){
@@ -828,7 +843,10 @@ public class util {
         return sagex.api.Utility.GetWorkingDirectory(new UIContext(sagex.api.Global.GetUIContextName())) + File.separator + "userdata" + File.separator + "gemstone";
     }
 
-    
+    public static String PrintDateSortable(){  
+        DateFormat df = new SimpleDateFormat("yyyyMMdd-hhmm");  
+        return df.format(new Date());  
+    }      
 }
 
 
