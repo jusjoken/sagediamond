@@ -839,14 +839,19 @@ public class util {
         }
     }
     
-    public static String UserDataLocation(){
-        return sagex.api.Utility.GetWorkingDirectory(new UIContext(sagex.api.Global.GetUIContextName())) + File.separator + "userdata" + File.separator + "gemstone";
-    }
-
     public static String PrintDateSortable(){  
         DateFormat df = new SimpleDateFormat("yyyyMMdd-hhmm");  
         return df.format(new Date());  
     }      
+
+    public static String UserDataLocation(){
+        return GetSageTVRootDir() + File.separator + "userdata" + File.separator + "gemstone";
+    }
+
+    public static String GetSageTVRootDir(){
+        return sagex.phoenix.Phoenix.getInstance().getSageTVRootDir().toString();
+    }
+
 }
 
 

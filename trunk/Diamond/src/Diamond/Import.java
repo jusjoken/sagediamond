@@ -47,7 +47,7 @@ public class Import {
             }
         }
         if (KeepProcessing){
-            String tType = Props.getProperty(Const.ExportTypeKey, util.ExportType.GENERIC.toString());
+            String tType = Props.getProperty(Const.ExportTypeKey, util.OptionNotFound);
             if (tType.equals(util.ExportType.ALL.toString())){
                 IsValid = Boolean.TRUE;
                 eType = util.ExportType.ALL;
@@ -76,17 +76,20 @@ public class Import {
             }else{ //block this as it is not a valid import
                 IsValid = Boolean.FALSE;
                 this.Name = "Invalid Import";
-                this.Description = "This import file was not recognized so the import will not proceed. File '" + FilePath + "'.";
+                this.Description = "This import file was not recognized so the import will not proceed.";
             }
         }else{
             this.Name = "Failed";
-            this.Description = "Import for '" + FilePath + "' failed. Check the logs for more details.";
+            this.Description = "Import failed. Check the logs for more details.";
         }
         
     }
     
     public String GetName(){
         return this.Name;
+    }
+    public String GetFilePath(){
+        return this.FilePath;
     }
     public String GetDescription(){
         return this.Description;
