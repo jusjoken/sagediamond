@@ -852,6 +852,18 @@ public class util {
         return sagex.phoenix.Phoenix.getInstance().getSageTVRootDir().toString();
     }
 
+    public static Boolean IsADM(){
+        String ADMPluginID = "jusjokenADM";
+        String ADMWidgetSymbol = "JUSJOKEN-469564";
+        // check to see if the Diamond Plugin is installed
+        Object[] FoundWidget = new Object[1];
+        FoundWidget[0] = sagex.api.WidgetAPI.FindWidgetBySymbol(new UIContext(sagex.api.Global.GetUIContextName()), ADMWidgetSymbol);
+        if (sagex.api.PluginAPI.IsPluginEnabled(sagex.api.PluginAPI.GetAvailablePluginForID(ADMPluginID)) || FoundWidget[0]!=null){
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
+    }
+
 }
 
 
