@@ -855,7 +855,7 @@ public class util {
     public static Boolean IsADM(){
         String ADMPluginID = "jusjokenADM";
         String ADMWidgetSymbol = "JUSJOKEN-469564";
-        // check to see if the Diamond Plugin is installed
+        // check to see if the ADM Plugin is installed
         Object[] FoundWidget = new Object[1];
         FoundWidget[0] = sagex.api.WidgetAPI.FindWidgetBySymbol(new UIContext(sagex.api.Global.GetUIContextName()), ADMWidgetSymbol);
         if (sagex.api.PluginAPI.IsPluginEnabled(sagex.api.PluginAPI.GetAvailablePluginForID(ADMPluginID)) || FoundWidget[0]!=null){
