@@ -35,7 +35,7 @@ public class SourceUI {
         IConfigurable tOrganizer = new ViewFactory();
         for (String tOpt: tOrganizer.getOptionNames()){
             //skip some options types that we don't want the user to set
-            String OptionsToSkip[] = { "name", "label", "description", "visible", "bookmark" };
+            String OptionsToSkip[] = { "name", "label", "description", "visible" };
             ArrayList OptionsToSkipList = new ArrayList();
             OptionsToSkipList.addAll(Arrays.asList(OptionsToSkip));
             ConfigOption tConfig = new ConfigOption(PropLocation, tOrganizer.getOption(tOpt));
