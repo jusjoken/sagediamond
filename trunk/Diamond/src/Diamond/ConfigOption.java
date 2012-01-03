@@ -97,6 +97,9 @@ public class ConfigOption extends ConfigurableOption {
         }
         return tReturn;
     }
+    public void Clear(){
+        util.SetOption(PropLocation, getName(), SourceUI.OptionNotSet);
+    }
     public void SetValue(String NewValue){
         if (!isList()){
             util.SetOption(PropLocation, getName(), NewValue);

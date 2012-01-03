@@ -83,9 +83,15 @@ public class SourceUI {
     
     //Presentation specific settings
     public Boolean HasPresentation(){
-        if (!thisUIList.isEmpty()){
+        if (HasUI()){
             return Boolean.TRUE;
         }else if (HasConfigOptionsSet()){
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
+    }
+    public Boolean HasUI(){
+        if (!thisUIList.isEmpty()){
             return Boolean.TRUE;
         }
         return Boolean.FALSE;
@@ -162,6 +168,23 @@ public class SourceUI {
         }else{
             return Boolean.TRUE;
         }
+    }
+    //helper function to clear any list of ConfigOption objects
+    public static void ClearConfigOptions(HashSet<ConfigOption> ConfigList){
+        for (ConfigOption tConfig:ConfigList){
+            tConfig.Clear();
+        }
+    }
+    public static Boolean IsDefaultConfigOption(HashSet<ConfigOption> ConfigList, ConfigOption CheckItem){
+        LinkedHashSet<ConfigOption> tList = new LinkedHashSet<ConfigOption>();
+        for (ConfigOption tConfig:ConfigList){
+            if (tConfig.equals(CheckItem)){
+                return Boolean.TRUE;
+            }else{
+                return Boolean.FALSE;
+            }
+        }
+        return Boolean.FALSE;
     }
 
 }
