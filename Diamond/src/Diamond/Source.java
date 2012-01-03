@@ -229,6 +229,85 @@ public class Source {
         //LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' After Count = '" + phoenix.media.GetAllChildren(Folder).size() + "'");
     }
 
+    public static Filter ApplyFilters(String ViewName){
+        //LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' Before Count = '" + phoenix.media.GetAllChildren(Folder).size() + "' Types '" + InternalFilterTypes + "'");
+        Set<Filter> AllFilters = new HashSet<Filter>();
+        //Apply genre filter if any
+        if (HasGenreFilter(ViewName)){
+            AllFilters.add(GetGenreFilter(ViewName));
+        }
+        //Apply Folder filter if any
+        if (HasFolderFilter(ViewName)){
+            AllFilters.add(GetFolderFilter(ViewName));
+        }
+        //Apply other filters passed in 
+        for (String FilterName: InternalFilterTypes.keySet()){
+            String FilterType = InternalFilterTypes.get(FilterName);
+            String FilterValue = "";
+            if (IsFilterTypeValid(FilterType)){
+                if (HasTriFilter(ViewName, FilterName)){
+                    String FilterTypeforCreate = FilterName;
+                    //grab the value from the filtername if passed in - example "mediatype:tv"
+                    //the filtername remains the same to differentiate the different filters in the properties
+                    if (FilterName.contains(":")){
+                        //LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' filter '" + FilterValue + "'");
+                        FilterValue = FilterName.split(":")[1];
+                        FilterTypeforCreate = FilterName.split(":")[0];
+                        LOG.debug("ApplyFilters 1: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' filter '" + FilterValue + "'");
+                    }
+                    if (FilterType.equals("pql")){
+                        FilterTypeforCreate = "pql";
+                    }
+                    Filter NewFilter = phoenix.umb.CreateFilter(FilterTypeforCreate);
+                    ConfigurableOption tOption = phoenix.umb.GetOption(NewFilter, "scope");
+                    if (TriFilterInclude(ViewName, FilterName)){
+                        phoenix.opt.SetValue(tOption, "include");
+                        LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' include");
+                    }else{
+                        phoenix.opt.SetValue(tOption, "exclude");
+                        LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' exclude");
+                    }
+                    if (FilterType.equals("List")){
+                        //get the list contents if any and set it to the value
+                        FilterValue = Flow.PropertyListasString(ViewName, Const.FlowFilters + Const.PropDivider + FilterName + "FilterList");
+                    }
+                    if (FilterType.equals("pql")){  //custom handling for these
+                        if (FilterName.equals("rating")){
+                            if (Flow.PropertyListCount(ViewName, GetFilterListProp(FilterName))>0){
+                                FilterValue = BuildPQL(ViewName, FilterName, "Rated", "=", Boolean.FALSE);
+                                FilterValue = FilterValue + " or " + BuildPQL(ViewName, FilterName, "ParentalRating", "=", Boolean.FALSE);
+                            }
+                        }else if (FilterName.equals("title")){
+                            if (Flow.PropertyListCount(ViewName, GetFilterListProp(FilterName))>0){
+                                FilterValue = BuildPQL(ViewName, FilterName, "Title", "=", Boolean.FALSE);
+                            }
+                        }
+                    }
+                    if (!FilterValue.equals("")){
+                        LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' filter '" + FilterValue + "'");
+                        tOption = phoenix.umb.GetOption(NewFilter, "value");
+                        phoenix.opt.SetValue(tOption, FilterValue);
+                    }
+                    phoenix.umb.SetChanged(NewFilter);
+                    AllFilters.add(NewFilter);
+                }else{
+                    LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' Filter is turned Off");
+                }
+            }else{
+                LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' invalid filtertype passed '" + FilterName + "' FilterType '" + FilterType + "'");
+            }
+        }
+        AndResourceFilter andFilter = new AndResourceFilter();
+        for (Filter thisFilter: AllFilters){
+            andFilter.addFilter(thisFilter);
+        }
+        WrappedResourceFilter filter = new WrappedResourceFilter(andFilter);
+        return filter;
+        //phoenix.umb.SetFilter(Folder, filter);
+        //phoenix.umb.Refresh(Folder);
+        //LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' After Count = '" + phoenix.media.GetAllChildren(Folder).size() + "'");
+    }
+    
     public static String BuildPQL(String ViewName, String FilterName, String FieldName, String FieldVerb, Boolean AndValues){
         String tFilterString = "";
         for (String Item: Flow.PropertyList(ViewName, GetFilterListProp(FilterName))){
@@ -415,7 +494,7 @@ public class Source {
         //check if the flow has a presentation saved
         // - if a presentation then build the view from the saved source plus apply the presentation and filters
         // - if no presentation - load the view and apply any filters
-        if (mySource.HasPresentation()){
+        if (mySource.HasUI()){
             ViewFactory vf = new ViewFactory();
             //set base view options
             vf.setName(mySource.Name());
@@ -441,6 +520,9 @@ public class Source {
             //set presentations
             for (PresentationUI tUI: mySource.UIList()){
                 ViewPresentation vp = new ViewPresentation(tUI.Level());
+                if (HasFilter(ViewName)){
+                    vp.getFilters().add(ApplyFilters(ViewName));
+                }
                 if (tUI.Group().HasContent()){
                     String tGroup = tUI.Group().Name();
                     Grouper grpr = phoenix.umb.CreateGrouper(tGroup);
@@ -469,6 +551,10 @@ public class Source {
             view = vf.create(null);
         }else{
             view = phoenix.umb.CreateView(mySource.Source());
+            if (HasFilter(ViewName)){
+                view.getFilters().add(ApplyFilters(ViewName));
+                //ApplyFilters(ViewName, view);
+            }
             //TODO: test if these settings adjust an existing view
             for (ConfigOption tConfig: mySource.ConfigOptions()){
                 if (tConfig.IsSet()){
@@ -477,7 +563,6 @@ public class Source {
             }
         }
         //now apply the filters
-        ApplyFilters(ViewName, view);
         return view;
     }
     
