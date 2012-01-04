@@ -864,6 +864,12 @@ public class util {
         return Boolean.FALSE;
     }
 
+    public static String repeat(String str, int times){
+       StringBuilder ret = new StringBuilder();
+       for(int i = 0;i < times;i++) ret.append(str);
+       return ret.toString();
+    }
+
 }
 
 

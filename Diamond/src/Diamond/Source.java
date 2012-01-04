@@ -566,49 +566,79 @@ public class Source {
             //Refresh if required
             if (HasFilter(ViewName) || mySource.HasConfigOptionsSet()){
                 phoenix.umb.Refresh(view);
-                LOG.debug("LoadView: Refreshing view");
             }
             
             
         }
-        //now apply the filters
-        DescribeView(view);
+        LOG.debug("LoadView: View Created as follows....");
+        DescribeViewToLog(view);
         return view;
     }
     
-    public static void DescribeView(ViewFolder view){
+    private static HashSet<String> CreateDescribeView(ViewFolder view){
         LinkedHashSet<String> dd = new LinkedHashSet<String>();
         ViewFactory vf = view.getViewFactory();
-        DescribeAddConfigurable(vf, dd, "ViewFactory");
+        DescribeAddFactory(vf, dd, "ViewFactory",0);
 //        dd.add("getName '" + vf.getName() + "' getLabel '" + vf.getLabel() + "' getDescription '" + vf.getDescription() + "'");
 //
 //        for (String opt:vf.getOptionNames()){
 //            dd.add(" - Option '" + opt + "' getName '" + vf.getOption(opt).getName() + "' getLabel '" + vf.getOption(opt).getLabel() + "' getString '" + vf.getOption(opt).getString(SourceUI.OptionNotSet) + "'");
 //        }
         for (Factory<IMediaFolder> fs:vf.getFolderSources()){
-            DescribeAddConfigurable(fs, dd, " - FolderSource");
+            DescribeAddFactory(fs, dd, "FolderSource",1);
         }
         for (Factory f:vf.getViewSources()){
-            DescribeAddConfigurable(f, dd, " - ViewSource");
+            DescribeAddFactory(f, dd, "ViewSource",1);
         }
         
         for (ViewPresentation vp:vf.getViewPresentations()){
-            //vp.
+            dd.add(" ViewPresentation" + " Level '" + vp.getLevel() + "'");
+            for (Grouper g:vp.getGroupers()){
+                DescribeAddConfigurable(g, SourceUI.OrganizerType.GROUP, dd, "Grouper",2);
+            }
+            for (Sorter s:vp.getSorters()){
+                DescribeAddConfigurable(s, SourceUI.OrganizerType.SORT, dd, "Sorter",2);
+            }
         }
+        return dd;
+    }
+
+    private static void DescribeViewToLog(ViewFolder view){
         //output the DescribeDetails to the log
-        for (String d: dd){
+        for (String d: CreateDescribeView(view)){
             LOG.debug("DescribeView: " + d);
         }
-        
     }
-    private static void DescribeAddConfigurable(Factory ci, LinkedHashSet<String> dl, String Label){
-        
-        dl.add(Label + " getName '" + ci.getName() + "' getLabel '" + ci.getLabel() + "' getDescription '" + ci.getDescription() + "'");
-
-        for (String opt:ci.getOptionNames()){
-            dl.add("  - Option - getName '" + ci.getOption(opt).getName() + "' getLabel '" + ci.getOption(opt).getLabel() + "' getString '" + ci.getOption(opt).getString(SourceUI.OptionNotSet) + "'");
+    public static String DescribeView(ViewFolder view){
+        //output the DescribeDetails to a string for Sage
+        String s = "";
+        for (String d: CreateDescribeView(view)){
+            s = s + d + "/n";
         }
-        
+        return s;
+    }
+    private static void DescribeAddFactory(Factory ci, LinkedHashSet<String> dl, String Label, Integer Indent){
+        dl.add(util.repeat(" ", Indent) + Label + " '" + ci.getLabel() + "'");
+        for (String opt:ci.getOptionNames()){
+            dl.add(util.repeat(" ", Indent) + " - Option - '" + ci.getOption(opt).getLabel() + "' (" + ci.getOption(opt).getName() + ") = '" + ci.getOption(opt).getString(SourceUI.OptionNotSet) + "'");
+        }
+    }
+    private static void DescribeAddConfigurable(IConfigurable ci, SourceUI.OrganizerType ot, LinkedHashSet<String> dl, String Label, Integer Indent){
+        String cName = "";
+        String cLabel = "";
+        if (ot.equals(SourceUI.OrganizerType.GROUP)){
+            Grouper tg = (Grouper) ci;
+            cName = tg.getName();
+            cLabel = tg.getLabel();
+        }else if (ot.equals(SourceUI.OrganizerType.SORT)){
+            Sorter tg = (Sorter) ci;
+            cName = tg.getName();
+            cLabel = tg.getLabel();
+        }
+        dl.add(util.repeat(" ", Indent) + Label + " '" + cLabel + "' (" + cName + ")");
+        for (String opt:ci.getOptionNames()){
+            dl.add(util.repeat(" ", Indent) + " - Option - '" + ci.getOption(opt).getLabel() + "' (" + ci.getOption(opt).getName() + ") = '" + ci.getOption(opt).getString(SourceUI.OptionNotSet) + "'");
+        }
     }
     
     public static void BuildView(ViewFolder Folder) throws CloneNotSupportedException{
