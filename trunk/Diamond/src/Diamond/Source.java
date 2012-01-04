@@ -613,14 +613,14 @@ public class Source {
         //output the DescribeDetails to a string for Sage
         String s = "";
         for (String d: CreateDescribeView(view)){
-            s = s + d + "/n";
+            s = s + d + "\n";
         }
         return s;
     }
     private static void DescribeAddFactory(Factory ci, LinkedHashSet<String> dl, String Label, Integer Indent){
         dl.add(util.repeat(" ", Indent) + Label + " '" + ci.getLabel() + "'");
         for (String opt:ci.getOptionNames()){
-            dl.add(util.repeat(" ", Indent) + " - Option - '" + ci.getOption(opt).getLabel() + "' (" + ci.getOption(opt).getName() + ") = '" + ci.getOption(opt).getString(SourceUI.OptionNotSet) + "'");
+            dl.add(util.repeat(" ", Indent) + " - " + ci.getOption(opt).getLabel() + " (" + ci.getOption(opt).getName() + ") = '" + ci.getOption(opt).getString(SourceUI.OptionNotSet) + "'");
         }
     }
     private static void DescribeAddConfigurable(IConfigurable ci, SourceUI.OrganizerType ot, LinkedHashSet<String> dl, String Label, Integer Indent){
@@ -637,7 +637,7 @@ public class Source {
         }
         dl.add(util.repeat(" ", Indent) + Label + " '" + cLabel + "' (" + cName + ")");
         for (String opt:ci.getOptionNames()){
-            dl.add(util.repeat(" ", Indent) + " - Option - '" + ci.getOption(opt).getLabel() + "' (" + ci.getOption(opt).getName() + ") = '" + ci.getOption(opt).getString(SourceUI.OptionNotSet) + "'");
+            dl.add(util.repeat(" ", Indent) + " - " + ci.getOption(opt).getLabel() + " (" + ci.getOption(opt).getName() + ") = '" + ci.getOption(opt).getString(SourceUI.OptionNotSet) + "'");
         }
     }
     
