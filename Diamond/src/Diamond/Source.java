@@ -7,6 +7,7 @@ package Diamond;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -571,7 +572,43 @@ public class Source {
             
         }
         //now apply the filters
+        DescribeView(view);
         return view;
+    }
+    
+    public static void DescribeView(ViewFolder view){
+        LinkedHashSet<String> dd = new LinkedHashSet<String>();
+        ViewFactory vf = view.getViewFactory();
+        DescribeAddConfigurable(vf, dd, "ViewFactory");
+//        dd.add("getName '" + vf.getName() + "' getLabel '" + vf.getLabel() + "' getDescription '" + vf.getDescription() + "'");
+//
+//        for (String opt:vf.getOptionNames()){
+//            dd.add(" - Option '" + opt + "' getName '" + vf.getOption(opt).getName() + "' getLabel '" + vf.getOption(opt).getLabel() + "' getString '" + vf.getOption(opt).getString(SourceUI.OptionNotSet) + "'");
+//        }
+        for (Factory<IMediaFolder> fs:vf.getFolderSources()){
+            DescribeAddConfigurable(fs, dd, " - FolderSource");
+        }
+        for (Factory f:vf.getViewSources()){
+            DescribeAddConfigurable(f, dd, " - ViewSource");
+        }
+        
+        for (ViewPresentation vp:vf.getViewPresentations()){
+            //vp.
+        }
+        //output the DescribeDetails to the log
+        for (String d: dd){
+            LOG.debug("DescribeView: " + d);
+        }
+        
+    }
+    private static void DescribeAddConfigurable(Factory ci, LinkedHashSet<String> dl, String Label){
+        
+        dl.add(Label + " getName '" + ci.getName() + "' getLabel '" + ci.getLabel() + "' getDescription '" + ci.getDescription() + "'");
+
+        for (String opt:ci.getOptionNames()){
+            dl.add("  - Option - getName '" + ci.getOption(opt).getName() + "' getLabel '" + ci.getOption(opt).getLabel() + "' getString '" + ci.getOption(opt).getString(SourceUI.OptionNotSet) + "'");
+        }
+        
     }
     
     public static void BuildView(ViewFolder Folder) throws CloneNotSupportedException{
