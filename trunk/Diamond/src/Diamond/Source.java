@@ -554,6 +554,7 @@ public class Source {
             if (HasFilter(ViewName)){
                 view.getFilters().add(ApplyFilters(ViewName));
                 //ApplyFilters(ViewName, view);
+                LOG.debug("LoadView: Aplying filters");
             }
             //TODO: test if these settings adjust an existing view
             for (ConfigOption tConfig: mySource.ConfigOptions()){
@@ -561,6 +562,13 @@ public class Source {
                     view.getViewFactory().getOption(tConfig.getName()).value().set(tConfig.GetValue());
                 }
             }
+            //Refresh if required
+            if (HasFilter(ViewName) || mySource.HasConfigOptionsSet()){
+                phoenix.umb.Refresh(view);
+                LOG.debug("LoadView: Refreshing view");
+            }
+            
+            
         }
         //now apply the filters
         return view;
