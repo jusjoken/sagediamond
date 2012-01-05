@@ -24,7 +24,9 @@ import sagex.phoenix.vfs.views.ViewFactory;
 import sagex.phoenix.vfs.views.ViewFolder;
 import sagex.phoenix.vfs.views.ViewPresentation;
 import sagex.phoenix.Phoenix;
+import sagex.phoenix.factory.BaseConfigurable;
 import sagex.phoenix.factory.IConfigurable;
+import sagex.phoenix.util.HasName;
 import sagex.phoenix.vfs.IMediaFile;
 import sagex.phoenix.vfs.IMediaFolder;
 
@@ -580,25 +582,36 @@ public class Source {
         LinkedHashSet<String> dd = new LinkedHashSet<String>();
         ViewFactory vf = view.getViewFactory();
         DescribeAddFactory(vf, dd, "ViewFactory",0);
-//        dd.add("getName '" + vf.getName() + "' getLabel '" + vf.getLabel() + "' getDescription '" + vf.getDescription() + "'");
-//
-//        for (String opt:vf.getOptionNames()){
-//            dd.add(" - Option '" + opt + "' getName '" + vf.getOption(opt).getName() + "' getLabel '" + vf.getOption(opt).getLabel() + "' getString '" + vf.getOption(opt).getString(SourceUI.OptionNotSet) + "'");
-//        }
+        for (String t:vf.getTags()){
+            dd.add("Tag = '" + t + "'");
+        }
         for (Factory<IMediaFolder> fs:vf.getFolderSources()){
             DescribeAddFactory(fs, dd, "FolderSource",1);
         }
         for (Factory f:vf.getViewSources()){
             DescribeAddFactory(f, dd, "ViewSource",1);
         }
+        for ( IResourceFilter f:vf.getRootFilters()){
+            if (f instanceof BaseConfigurable) {
+                BaseConfigurable bf = (BaseConfigurable) f;
+                dd.add("  Filter" + " '" + ((HasName)bf).getName() + "' (" + ((HasName)bf).getName() + ")");
+                DescribeAddConfigurable(bf, dd, 1);
+            }
+        }
         
         for (ViewPresentation vp:vf.getViewPresentations()){
             dd.add(" ViewPresentation" + " Level '" + vp.getLevel() + "'");
             for (Grouper g:vp.getGroupers()){
-                DescribeAddConfigurable(g, SourceUI.OrganizerType.GROUP, dd, "Grouper",2);
+                dd.add("  Grouper" + " '" + g.getLabel() + "' (" + g.getName() + ")");
+                DescribeAddConfigurable(g, dd, 2);
             }
             for (Sorter s:vp.getSorters()){
-                DescribeAddConfigurable(s, SourceUI.OrganizerType.SORT, dd, "Sorter",2);
+                dd.add("  Sorter" + " '" + s.getLabel() + "' (" + s.getName() + ")");
+                DescribeAddConfigurable(s, dd, 2);
+            }
+            for (Filter f:vp.getFilters()){
+                dd.add("  Filter" + " '" + f.getLabel() + "' (" + f.getName() + ")");
+                DescribeAddConfigurable(f, dd, 2);
             }
         }
         return dd;
@@ -624,19 +637,7 @@ public class Source {
             dl.add(util.repeat(" ", Indent) + " - " + ci.getOption(opt).getLabel() + " (" + ci.getOption(opt).getName() + ") = '" + ci.getOption(opt).getString(SourceUI.OptionNotSet) + "'");
         }
     }
-    private static void DescribeAddConfigurable(IConfigurable ci, SourceUI.OrganizerType ot, LinkedHashSet<String> dl, String Label, Integer Indent){
-        String cName = "";
-        String cLabel = "";
-        if (ot.equals(SourceUI.OrganizerType.GROUP)){
-            Grouper tg = (Grouper) ci;
-            cName = tg.getName();
-            cLabel = tg.getLabel();
-        }else if (ot.equals(SourceUI.OrganizerType.SORT)){
-            Sorter tg = (Sorter) ci;
-            cName = tg.getName();
-            cLabel = tg.getLabel();
-        }
-        dl.add(util.repeat(" ", Indent) + Label + " '" + cLabel + "' (" + cName + ")");
+    private static void DescribeAddConfigurable(BaseConfigurable ci, LinkedHashSet<String> dl, Integer Indent){
         for (String opt:ci.getOptionNames()){
             dl.add(util.repeat(" ", Indent) + " - " + ci.getOption(opt).getLabel() + " (" + ci.getOption(opt).getName() + ") = '" + ci.getOption(opt).getString(SourceUI.OptionNotSet) + "'");
         }
