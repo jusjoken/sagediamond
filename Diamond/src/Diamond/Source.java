@@ -25,6 +25,7 @@ import sagex.phoenix.vfs.views.ViewFolder;
 import sagex.phoenix.vfs.views.ViewPresentation;
 import sagex.phoenix.Phoenix;
 import sagex.phoenix.factory.IConfigurable;
+import sagex.phoenix.vfs.IMediaFile;
 import sagex.phoenix.vfs.IMediaFolder;
 
 /**
@@ -829,5 +830,9 @@ public class Source {
             }
         }
         return new ArrayList<String>(TagList.values());
+    }
+    
+    public static Boolean IsFileCurrentlyRecording(IMediaFile res){
+        return sagex.api.MediaFileAPI.IsFileCurrentlyRecording(((IMediaFile)res).getMediaObject());
     }
 }
