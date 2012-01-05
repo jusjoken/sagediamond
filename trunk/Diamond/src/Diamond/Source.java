@@ -573,12 +573,6 @@ public class Source {
         // - if no presentation - load the view and apply any filters
         if (mySource.HasUI()){
             ViewFactory vf = new ViewFactory();
-            //set base view options
-            vf.setName(mySource.Name());
-            vf.getOption(ViewFactory.OPT_LABEL).value().set(mySource.Label());
-            vf.getOption(ViewFactory.OPT_VISIBLE).value().set("false");
-            //Optional attributes to set at the view level
-            //TODO:need to get these from the Flow settings
             //process the options
             for (ConfigOption tConfig: mySource.ConfigOptions()){
                 if (tConfig.IsSet()){
@@ -594,6 +588,12 @@ public class Source {
                 return null;
             }
             vf.addViewSource((ViewFactory) source);
+
+            //set base view options
+            vf.setName(source.getName()+".custom");
+            vf.getOption(ViewFactory.OPT_LABEL).value().set(source.getLabel()+"(custom)");
+            vf.getOption(ViewFactory.OPT_VISIBLE).value().set("false");
+            
             //set presentations
             for (PresentationUI tUI: mySource.UIList()){
                 ViewPresentation vp = new ViewPresentation(tUI.Level());
@@ -650,6 +650,7 @@ public class Source {
                 andFilter.addFilter(thisFilter);
             }
             WrappedResourceFilter f = new WrappedResourceFilter(andFilter);
+            f.setLabel(Const.WrappedFilter);
             if (HasValidPresentation(view.getViewFactory().getViewPresentation(0))){
                 LOG.debug("LoadView: adding filters to Presentation level 0");
                 view.getViewFactory().getViewPresentation(0).getFilters().add(f);
@@ -659,11 +660,11 @@ public class Source {
             }
         }
         LOG.debug("LoadView: View Created as follows....");
-        DescribeViewToLog(view);
+        DescribeViewToLog(view, ViewName);
         return view;
     }
     
-    private static HashSet<String> CreateDescribeView(ViewFolder view){
+    private static HashSet<String> CreateDescribeView(ViewFolder view, String ViewName){
         LinkedHashSet<String> dd = new LinkedHashSet<String>();
         ViewFactory vf = view.getViewFactory();
         DescribeAddFactory(vf, dd, "View",0);
@@ -679,11 +680,11 @@ public class Source {
         for ( IResourceFilter f:vf.getRootFilters()){
             if (f instanceof BaseConfigurable) {
                 BaseConfigurable bf = (BaseConfigurable) f;
-                dd.add("  Filter" + " '" + ((HasName)bf).getName() + "' (" + ((HasName)bf).getName() + ")");
+                dd.add("  RootFilter" + " '" + ((HasName)bf).getName() + "' (" + ((HasName)bf).getName() + ")");
                 DescribeAddConfigurable(bf, dd, 1);
             }
         }
-        if (vf.getViewPresentations()!=null){
+        if (HasValidPresentation(vf.getViewPresentation(0))){
             for (ViewPresentation vp:vf.getViewPresentations()){
                 dd.add(" ViewPresentation" + " Level '" + (vp.getLevel()+1) + "'");
                 for (Grouper g:vp.getGroupers()){
@@ -695,24 +696,32 @@ public class Source {
                     DescribeAddConfigurable(s, dd, 2);
                 }
                 for (Filter f:vp.getFilters()){
-                    dd.add("  Filter" + " '" + f.getLabel() + "' (" + f.getName() + ")");
-                    DescribeAddConfigurable(f, dd, 2);
+                    if (f instanceof WrappedResourceFilter && f.getLabel().equals(Const.WrappedFilter)) {
+                        dd.add("  FilterGroup");
+                        for (Filter thisFilter: ApplyFilters(ViewName)){
+                            dd.add("   Filter" + " '" + thisFilter.getLabel() + "' (" + thisFilter.getName() + ")");
+                            DescribeAddConfigurable(thisFilter, dd, 3);
+                        }
+                    }else{
+                        dd.add("  Filter" + " '" + f.getLabel() + "' (" + f.getName() + ")");
+                        DescribeAddConfigurable(f, dd, 2);
+                    }
                 }
             }
         }
         return dd;
     }
 
-    private static void DescribeViewToLog(ViewFolder view){
+    private static void DescribeViewToLog(ViewFolder view, String ViewName){
         //output the DescribeDetails to the log
-        for (String d: CreateDescribeView(view)){
+        for (String d: CreateDescribeView(view, ViewName)){
             LOG.debug("DescribeView: " + d);
         }
     }
-    public static String DescribeView(ViewFolder view){
+    public static String DescribeView(ViewFolder view, String ViewName){
         //output the DescribeDetails to a string for Sage
         String s = "";
-        for (String d: CreateDescribeView(view)){
+        for (String d: CreateDescribeView(view, ViewName)){
             s = s + d + "\n";
         }
         return s;
