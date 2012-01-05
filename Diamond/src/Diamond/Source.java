@@ -155,85 +155,163 @@ public class Source {
         }
     }
    
-    public static void ApplyFilters(String ViewName, ViewFolder Folder){
-        //LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' Before Count = '" + phoenix.media.GetAllChildren(Folder).size() + "' Types '" + InternalFilterTypes + "'");
-        Set<Filter> AllFilters = new HashSet<Filter>();
-        //Apply genre filter if any
-        if (HasGenreFilter(ViewName)){
-            AllFilters.add(GetGenreFilter(ViewName));
-        }
-        //Apply Folder filter if any
-        if (HasFolderFilter(ViewName)){
-            AllFilters.add(GetFolderFilter(ViewName));
-        }
-        //Apply other filters passed in 
-        for (String FilterName: InternalFilterTypes.keySet()){
-            String FilterType = InternalFilterTypes.get(FilterName);
-            String FilterValue = "";
-            if (IsFilterTypeValid(FilterType)){
-                if (HasTriFilter(ViewName, FilterName)){
-                    String FilterTypeforCreate = FilterName;
-                    //grab the value from the filtername if passed in - example "mediatype:tv"
-                    //the filtername remains the same to differentiate the different filters in the properties
-                    if (FilterName.contains(":")){
-                        //LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' filter '" + FilterValue + "'");
-                        FilterValue = FilterName.split(":")[1];
-                        FilterTypeforCreate = FilterName.split(":")[0];
-                        LOG.debug("ApplyFilters 1: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' filter '" + FilterValue + "'");
-                    }
-                    if (FilterType.equals("pql")){
-                        FilterTypeforCreate = "pql";
-                    }
-                    Filter NewFilter = phoenix.umb.CreateFilter(FilterTypeforCreate);
-                    ConfigurableOption tOption = phoenix.umb.GetOption(NewFilter, "scope");
-                    if (TriFilterInclude(ViewName, FilterName)){
-                        phoenix.opt.SetValue(tOption, "include");
-                        LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' include");
-                    }else{
-                        phoenix.opt.SetValue(tOption, "exclude");
-                        LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' exclude");
-                    }
-                    if (FilterType.equals("List")){
-                        //get the list contents if any and set it to the value
-                        FilterValue = Flow.PropertyListasString(ViewName, Const.FlowFilters + Const.PropDivider + FilterName + "FilterList");
-                    }
-                    if (FilterType.equals("pql")){  //custom handling for these
-                        if (FilterName.equals("rating")){
-                            if (Flow.PropertyListCount(ViewName, GetFilterListProp(FilterName))>0){
-                                FilterValue = BuildPQL(ViewName, FilterName, "Rated", "=", Boolean.FALSE);
-                                FilterValue = FilterValue + " or " + BuildPQL(ViewName, FilterName, "ParentalRating", "=", Boolean.FALSE);
-                            }
-                        }else if (FilterName.equals("title")){
-                            if (Flow.PropertyListCount(ViewName, GetFilterListProp(FilterName))>0){
-                                FilterValue = BuildPQL(ViewName, FilterName, "Title", "=", Boolean.FALSE);
-                            }
-                        }
-                    }
-                    if (!FilterValue.equals("")){
-                        LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' filter '" + FilterValue + "'");
-                        tOption = phoenix.umb.GetOption(NewFilter, "value");
-                        phoenix.opt.SetValue(tOption, FilterValue);
-                    }
-                    phoenix.umb.SetChanged(NewFilter);
-                    AllFilters.add(NewFilter);
-                }else{
-                    LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' Filter is turned Off");
-                }
-            }else{
-                LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' invalid filtertype passed '" + FilterName + "' FilterType '" + FilterType + "'");
-            }
-        }
-        AndResourceFilter andFilter = new AndResourceFilter();
-        for (Filter thisFilter: AllFilters){
-            andFilter.addFilter(thisFilter);
-        }
-        WrappedResourceFilter filter = new WrappedResourceFilter(andFilter);
-        phoenix.umb.SetFilter(Folder, filter);
-        phoenix.umb.Refresh(Folder);
-        //LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' After Count = '" + phoenix.media.GetAllChildren(Folder).size() + "'");
-    }
+//    public static void ApplyFilters(String ViewName, ViewFolder Folder){
+//        //LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' Before Count = '" + phoenix.media.GetAllChildren(Folder).size() + "' Types '" + InternalFilterTypes + "'");
+//        Set<Filter> AllFilters = new HashSet<Filter>();
+//        //Apply genre filter if any
+//        if (HasGenreFilter(ViewName)){
+//            AllFilters.add(GetGenreFilter(ViewName));
+//        }
+//        //Apply Folder filter if any
+//        if (HasFolderFilter(ViewName)){
+//            AllFilters.add(GetFolderFilter(ViewName));
+//        }
+//        //Apply other filters passed in 
+//        for (String FilterName: InternalFilterTypes.keySet()){
+//            String FilterType = InternalFilterTypes.get(FilterName);
+//            String FilterValue = "";
+//            if (IsFilterTypeValid(FilterType)){
+//                if (HasTriFilter(ViewName, FilterName)){
+//                    String FilterTypeforCreate = FilterName;
+//                    //grab the value from the filtername if passed in - example "mediatype:tv"
+//                    //the filtername remains the same to differentiate the different filters in the properties
+//                    if (FilterName.contains(":")){
+//                        //LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' filter '" + FilterValue + "'");
+//                        FilterValue = FilterName.split(":")[1];
+//                        FilterTypeforCreate = FilterName.split(":")[0];
+//                        LOG.debug("ApplyFilters 1: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' filter '" + FilterValue + "'");
+//                    }
+//                    if (FilterType.equals("pql")){
+//                        FilterTypeforCreate = "pql";
+//                    }
+//                    Filter NewFilter = phoenix.umb.CreateFilter(FilterTypeforCreate);
+//                    ConfigurableOption tOption = phoenix.umb.GetOption(NewFilter, "scope");
+//                    if (TriFilterInclude(ViewName, FilterName)){
+//                        phoenix.opt.SetValue(tOption, "include");
+//                        LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' include");
+//                    }else{
+//                        phoenix.opt.SetValue(tOption, "exclude");
+//                        LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' exclude");
+//                    }
+//                    if (FilterType.equals("List")){
+//                        //get the list contents if any and set it to the value
+//                        FilterValue = Flow.PropertyListasString(ViewName, Const.FlowFilters + Const.PropDivider + FilterName + "FilterList");
+//                    }
+//                    if (FilterType.equals("pql")){  //custom handling for these
+//                        if (FilterName.equals("rating")){
+//                            if (Flow.PropertyListCount(ViewName, GetFilterListProp(FilterName))>0){
+//                                FilterValue = BuildPQL(ViewName, FilterName, "Rated", "=", Boolean.FALSE);
+//                                FilterValue = FilterValue + " or " + BuildPQL(ViewName, FilterName, "ParentalRating", "=", Boolean.FALSE);
+//                            }
+//                        }else if (FilterName.equals("title")){
+//                            if (Flow.PropertyListCount(ViewName, GetFilterListProp(FilterName))>0){
+//                                FilterValue = BuildPQL(ViewName, FilterName, "Title", "=", Boolean.FALSE);
+//                            }
+//                        }
+//                    }
+//                    if (!FilterValue.equals("")){
+//                        LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' filter '" + FilterValue + "'");
+//                        tOption = phoenix.umb.GetOption(NewFilter, "value");
+//                        phoenix.opt.SetValue(tOption, FilterValue);
+//                    }
+//                    phoenix.umb.SetChanged(NewFilter);
+//                    AllFilters.add(NewFilter);
+//                }else{
+//                    LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' Filter is turned Off");
+//                }
+//            }else{
+//                LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' invalid filtertype passed '" + FilterName + "' FilterType '" + FilterType + "'");
+//            }
+//        }
+//        AndResourceFilter andFilter = new AndResourceFilter();
+//        for (Filter thisFilter: AllFilters){
+//            andFilter.addFilter(thisFilter);
+//        }
+//        WrappedResourceFilter filter = new WrappedResourceFilter(andFilter);
+//        phoenix.umb.SetFilter(Folder, filter);
+//        phoenix.umb.Refresh(Folder);
+//        //LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' After Count = '" + phoenix.media.GetAllChildren(Folder).size() + "'");
+//    }
 
-    public static Filter ApplyFilters(String ViewName){
+//    public static Filter ApplyFilters(String ViewName){
+//        //LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' Before Count = '" + phoenix.media.GetAllChildren(Folder).size() + "' Types '" + InternalFilterTypes + "'");
+//        Set<Filter> AllFilters = new HashSet<Filter>();
+//        //Apply genre filter if any
+//        if (HasGenreFilter(ViewName)){
+//            AllFilters.add(GetGenreFilter(ViewName));
+//        }
+//        //Apply Folder filter if any
+//        if (HasFolderFilter(ViewName)){
+//            AllFilters.add(GetFolderFilter(ViewName));
+//        }
+//        //Apply other filters passed in 
+//        for (String FilterName: InternalFilterTypes.keySet()){
+//            String FilterType = InternalFilterTypes.get(FilterName);
+//            String FilterValue = "";
+//            if (IsFilterTypeValid(FilterType)){
+//                if (HasTriFilter(ViewName, FilterName)){
+//                    String FilterTypeforCreate = FilterName;
+//                    //grab the value from the filtername if passed in - example "mediatype:tv"
+//                    //the filtername remains the same to differentiate the different filters in the properties
+//                    if (FilterName.contains(":")){
+//                        //LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' filter '" + FilterValue + "'");
+//                        FilterValue = FilterName.split(":")[1];
+//                        FilterTypeforCreate = FilterName.split(":")[0];
+//                        LOG.debug("ApplyFilters 1: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' filter '" + FilterValue + "'");
+//                    }
+//                    if (FilterType.equals("pql")){
+//                        FilterTypeforCreate = "pql";
+//                    }
+//                    Filter NewFilter = phoenix.umb.CreateFilter(FilterTypeforCreate);
+//                    ConfigurableOption tOption = phoenix.umb.GetOption(NewFilter, "scope");
+//                    if (TriFilterInclude(ViewName, FilterName)){
+//                        phoenix.opt.SetValue(tOption, "include");
+//                        LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' include");
+//                    }else{
+//                        phoenix.opt.SetValue(tOption, "exclude");
+//                        LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' exclude");
+//                    }
+//                    if (FilterType.equals("List")){
+//                        //get the list contents if any and set it to the value
+//                        FilterValue = Flow.PropertyListasString(ViewName, Const.FlowFilters + Const.PropDivider + FilterName + "FilterList");
+//                    }
+//                    if (FilterType.equals("pql")){  //custom handling for these
+//                        if (FilterName.equals("rating")){
+//                            if (Flow.PropertyListCount(ViewName, GetFilterListProp(FilterName))>0){
+//                                FilterValue = BuildPQL(ViewName, FilterName, "Rated", "=", Boolean.FALSE);
+//                                FilterValue = FilterValue + " or " + BuildPQL(ViewName, FilterName, "ParentalRating", "=", Boolean.FALSE);
+//                            }
+//                        }else if (FilterName.equals("title")){
+//                            if (Flow.PropertyListCount(ViewName, GetFilterListProp(FilterName))>0){
+//                                FilterValue = BuildPQL(ViewName, FilterName, "Title", "=", Boolean.FALSE);
+//                            }
+//                        }
+//                    }
+//                    if (!FilterValue.equals("")){
+//                        LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' filter '" + FilterValue + "'");
+//                        tOption = phoenix.umb.GetOption(NewFilter, "value");
+//                        phoenix.opt.SetValue(tOption, FilterValue);
+//                    }
+//                    phoenix.umb.SetChanged(NewFilter);
+//                    AllFilters.add(NewFilter);
+//                }else{
+//                    LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' processing filter '" + FilterName + "' FilterType '" + FilterType + "' Filter is turned Off");
+//                }
+//            }else{
+//                LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' invalid filtertype passed '" + FilterName + "' FilterType '" + FilterType + "'");
+//            }
+//        }
+//        AndResourceFilter andFilter = new AndResourceFilter();
+//        for (Filter thisFilter: AllFilters){
+//            andFilter.addFilter(thisFilter);
+//        }
+//        WrappedResourceFilter filter = new WrappedResourceFilter(andFilter);
+//        return filter;
+//        //phoenix.umb.SetFilter(Folder, filter);
+//        //phoenix.umb.Refresh(Folder);
+//        //LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' After Count = '" + phoenix.media.GetAllChildren(Folder).size() + "'");
+//    }
+    public static Set<Filter> ApplyFilters(String ViewName){
         //LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' Before Count = '" + phoenix.media.GetAllChildren(Folder).size() + "' Types '" + InternalFilterTypes + "'");
         Set<Filter> AllFilters = new HashSet<Filter>();
         //Apply genre filter if any
@@ -301,12 +379,7 @@ public class Source {
                 LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' invalid filtertype passed '" + FilterName + "' FilterType '" + FilterType + "'");
             }
         }
-        AndResourceFilter andFilter = new AndResourceFilter();
-        for (Filter thisFilter: AllFilters){
-            andFilter.addFilter(thisFilter);
-        }
-        WrappedResourceFilter filter = new WrappedResourceFilter(andFilter);
-        return filter;
+        return AllFilters;
         //phoenix.umb.SetFilter(Folder, filter);
         //phoenix.umb.Refresh(Folder);
         //LOG.debug("ApplyFilters: '" + Flow.GetFlowName(ViewName) + "' After Count = '" + phoenix.media.GetAllChildren(Folder).size() + "'");
@@ -524,9 +597,12 @@ public class Source {
             //set presentations
             for (PresentationUI tUI: mySource.UIList()){
                 ViewPresentation vp = new ViewPresentation(tUI.Level());
-                if (HasFilter(ViewName)){
-                    vp.getFilters().add(ApplyFilters(ViewName));
-                }
+//                if (HasFilter(ViewName) && tUI.Level()==0){  //only add filter to the first presentation level
+//                    LOG.debug("LoadView: adding filters within presentation level '" + tUI.Level() + "'");
+//                    for (Filter f:ApplyFilters(ViewName)){
+//                        vp.getFilters().add(f);
+//                    }
+//                }
                 if (tUI.Group().HasContent()){
                     String tGroup = tUI.Group().Name();
                     Grouper grpr = phoenix.umb.CreateGrouper(tGroup);
@@ -555,11 +631,6 @@ public class Source {
             view = vf.create(null);
         }else{
             view = phoenix.umb.CreateView(mySource.Source());
-            if (HasFilter(ViewName)){
-                view.getFilters().add(ApplyFilters(ViewName));
-                //ApplyFilters(ViewName, view);
-                LOG.debug("LoadView: Aplying filters");
-            }
             //TODO: test if these settings adjust an existing view
             for (ConfigOption tConfig: mySource.ConfigOptions()){
                 if (tConfig.IsSet()){
@@ -567,11 +638,25 @@ public class Source {
                 }
             }
             //Refresh if required
-            if (HasFilter(ViewName) || mySource.HasConfigOptionsSet()){
-                phoenix.umb.Refresh(view);
+//            if (HasFilter(ViewName) || mySource.HasConfigOptionsSet()){
+//                phoenix.umb.Refresh(view);
+//            }
+            
+            
+        }
+        if (HasFilter(ViewName)){
+            AndResourceFilter andFilter = new AndResourceFilter();
+            for (Filter thisFilter: ApplyFilters(ViewName)){
+                andFilter.addFilter(thisFilter);
             }
-            
-            
+            WrappedResourceFilter f = new WrappedResourceFilter(andFilter);
+            if (HasValidPresentation(view.getViewFactory().getViewPresentation(0))){
+                LOG.debug("LoadView: adding filters to Presentation level 0");
+                view.getViewFactory().getViewPresentation(0).getFilters().add(f);
+            }else{
+                LOG.debug("LoadView: adding filters direct to the view");
+                view.getFilters().add(f);
+            }
         }
         LOG.debug("LoadView: View Created as follows....");
         DescribeViewToLog(view);
@@ -581,9 +666,9 @@ public class Source {
     private static HashSet<String> CreateDescribeView(ViewFolder view){
         LinkedHashSet<String> dd = new LinkedHashSet<String>();
         ViewFactory vf = view.getViewFactory();
-        DescribeAddFactory(vf, dd, "ViewFactory",0);
+        DescribeAddFactory(vf, dd, "View",0);
         for (String t:vf.getTags()){
-            dd.add("Tag = '" + t + "'");
+            dd.add(" - Tag = '" + t + "'");
         }
         for (Factory<IMediaFolder> fs:vf.getFolderSources()){
             DescribeAddFactory(fs, dd, "FolderSource",1);
@@ -598,20 +683,21 @@ public class Source {
                 DescribeAddConfigurable(bf, dd, 1);
             }
         }
-        
-        for (ViewPresentation vp:vf.getViewPresentations()){
-            dd.add(" ViewPresentation" + " Level '" + vp.getLevel() + "'");
-            for (Grouper g:vp.getGroupers()){
-                dd.add("  Grouper" + " '" + g.getLabel() + "' (" + g.getName() + ")");
-                DescribeAddConfigurable(g, dd, 2);
-            }
-            for (Sorter s:vp.getSorters()){
-                dd.add("  Sorter" + " '" + s.getLabel() + "' (" + s.getName() + ")");
-                DescribeAddConfigurable(s, dd, 2);
-            }
-            for (Filter f:vp.getFilters()){
-                dd.add("  Filter" + " '" + f.getLabel() + "' (" + f.getName() + ")");
-                DescribeAddConfigurable(f, dd, 2);
+        if (vf.getViewPresentations()!=null){
+            for (ViewPresentation vp:vf.getViewPresentations()){
+                dd.add(" ViewPresentation" + " Level '" + (vp.getLevel()+1) + "'");
+                for (Grouper g:vp.getGroupers()){
+                    dd.add("  Grouper" + " '" + g.getLabel() + "' (" + g.getName() + ")");
+                    DescribeAddConfigurable(g, dd, 2);
+                }
+                for (Sorter s:vp.getSorters()){
+                    dd.add("  Sorter" + " '" + s.getLabel() + "' (" + s.getName() + ")");
+                    DescribeAddConfigurable(s, dd, 2);
+                }
+                for (Filter f:vp.getFilters()){
+                    dd.add("  Filter" + " '" + f.getLabel() + "' (" + f.getName() + ")");
+                    DescribeAddConfigurable(f, dd, 2);
+                }
             }
         }
         return dd;
@@ -639,7 +725,13 @@ public class Source {
     }
     private static void DescribeAddConfigurable(BaseConfigurable ci, LinkedHashSet<String> dl, Integer Indent){
         for (String opt:ci.getOptionNames()){
-            dl.add(util.repeat(" ", Indent) + " - " + ci.getOption(opt).getLabel() + " (" + ci.getOption(opt).getName() + ") = '" + ci.getOption(opt).getString(SourceUI.OptionNotSet) + "'");
+            String preFormat = "";
+            if (ci.getOption(opt).getLabel()==null){
+                preFormat = ci.getOption(opt).getName();
+            }else{
+                preFormat = ci.getOption(opt).getLabel() + " (" + ci.getOption(opt).getName() + ")";
+            }
+            dl.add(util.repeat(" ", Indent) + " - " + preFormat + " = '" + ci.getOption(opt).getString(SourceUI.OptionNotSet) + "'");
         }
     }
     
@@ -832,6 +924,19 @@ public class Source {
         }
         return new ArrayList<String>(TagList.values());
     }
+    
+    public static Boolean HasValidPresentation(ViewPresentation vp){
+        if (vp==null){
+            return Boolean.FALSE;
+        }else{
+            if (vp.hasGroupers() || vp.hasSorters() || vp.getFilters().size()>0){
+                return Boolean.TRUE;
+            }else{
+                return Boolean.FALSE;
+            }
+        }
+    }
+    
     //<editor-fold defaultstate="collapsed" desc="phoenix api additions">
     public static Boolean IsFileCurrentlyRecording(IMediaFile res){
         return sagex.api.MediaFileAPI.IsFileCurrentlyRecording(((IMediaFile)res).getMediaObject());
