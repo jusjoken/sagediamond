@@ -831,8 +831,9 @@ public class Source {
         }
         return new ArrayList<String>(TagList.values());
     }
-    
+    //<editor-fold defaultstate="collapsed" desc="phoenix api additions">
     public static Boolean IsFileCurrentlyRecording(IMediaFile res){
         return sagex.api.MediaFileAPI.IsFileCurrentlyRecording(((IMediaFile)res).getMediaObject());
     }
+    //</editor-fold>
 }
