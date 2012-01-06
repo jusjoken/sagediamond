@@ -728,7 +728,7 @@ public class Source {
             //see if the tag is valid for a ViewFactory
             if (!phoenix.umb.GetViewFactories (tKey).isEmpty()){
                 TagList.put(phoenix.umb.GetTagLabel(tKey), tKey);
-                LOG.debug("GetTags: Tag '" + tKey + "' Label '" + phoenix.umb.GetTagLabel(tKey) + "'");
+                //LOG.debug("GetTags: Tag '" + tKey + "' Label '" + phoenix.umb.GetTagLabel(tKey) + "'");
             }
         }
         return new ArrayList<String>(TagList.values());
