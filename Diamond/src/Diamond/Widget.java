@@ -120,6 +120,17 @@ public class Widget {
         }
     }
     
+    public static Boolean UseTabStyle(){
+        if (util.GetPropertyAsBoolean(WidgetProps + "UseTabStyle", Boolean.FALSE)){
+            return Boolean.TRUE;
+        }else{
+            return Boolean.FALSE;
+        }
+    }
+
+    public static Integer GetWidgetsWidth(){
+        return util.GetPropertyAsInteger(WidgetProps + "WidgetWidth", 7);
+    }
     public static Integer GetWidgetSort(String WidgetType){
         return util.GetPropertyAsInteger(WidgetProps + WidgetType + Const.PropDivider + "Sort", 0);
     }
