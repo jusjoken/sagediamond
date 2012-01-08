@@ -307,7 +307,7 @@ public class Flow {
    
     public static String GetFlowType(String name){
         if (name==null){
-            LOG.debug("GetFlowType: request for null name returned NotFound");
+            //LOG.debug("GetFlowType: request for null name returned NotFound");
             return util.OptionNotFound;
         }
         String FlowTypeProp = Flow.GetFlowBaseProp(name) + Const.PropDivider + Const.FlowType;
