@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,6 +54,59 @@ public class util {
         api.InitLogger();
         
     }
+    
+    private static void print(Map map) {
+        LOG.debug("One=" + map.get("One"));
+        LOG.debug("Two=" + map.get("Two"));
+        LOG.debug("Three=" + map.get("Three"));
+        LOG.debug("Four=" + map.get("Four"));
+        LOG.debug("Five=" + map.get("Five"));
+    }
+    private static void print2(Map map, Integer items) {
+        for(int i=1; i<=items; i++){
+            LOG.debug("TEST " + map.getClass() + " ITEMS '" + items + "' - " + TempName(i) + "=" + map.get(TempName(i)) + " Mem = '" + FreeMem() + "'");
+        }
+    }
+    private static void testMap(Map map, Integer Multiplier) {
+        LOG.debug("Testing " + map.getClass());
+        for(int i=1; i<=Multiplier; i++){
+            map.put(TempName(i), new byte[10*1024*1024]);
+            print2(map,i);
+        }
+//        LOG.debug("Adding 10MB * " + Multiplier);
+////        for(int i=1; i<=Multiplier; i++){
+//        byte[] block = new byte[10*1024*1024*Multiplier]; // 10 MB
+////        }
+//        print(map);
+    }
+    private static String FreeMem() {
+        Long total = Runtime.getRuntime().totalMemory();
+        Long free = Runtime.getRuntime().freeMemory();
+        String InfoText = Math.round((total-free)/1000000.0) + "MB/";
+        return InfoText;
+    }
+    private static String TempName(Integer i) {
+        return "Item_" + i;
+    }
+    
+//    private static void testMap(Map map, Integer Multiplier) {
+//        LOG.debug("Testing " + map.getClass());
+//        map.put("One", new Integer(1));
+//        map.put("Two", new Integer(2));
+//        map.put("Three", new Integer(3));
+//        map.put("Four", new Integer(4));
+//        map.put("Five", new Integer(5));
+//        print(map);
+//        LOG.debug("Adding 10MB * " + Multiplier);
+////        for(int i=1; i<=Multiplier; i++){
+//        byte[] block = new byte[10*1024*1024*Multiplier]; // 10 MB
+////        }
+//        print(map);
+//    }
+    public static void test1(Integer Min, Integer Multiplier) {
+        testMap(new SoftHashMap(Min), Multiplier);
+        //testMap(new HashMap(), Multiplier);
+    }    
 
     //pass in a String that contains a number and this will format it to a specific number of decimal places
     public static String StringNumberFormat(String Input, Integer DecimalPlaces){
