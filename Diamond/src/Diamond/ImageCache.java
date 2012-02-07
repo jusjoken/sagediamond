@@ -5,6 +5,7 @@
 package Diamond;
 
 import java.util.LinkedList;
+import sagex.phoenix.metadata.MediaArtifactType;
 import sagex.phoenix.vfs.IMediaResource;
 
 /**
@@ -44,7 +45,22 @@ public class ImageCache {
     public static void ClearQueue(){
         IQueue.clear();
     }
-    
+
+    //This will return an image from Cache or direct or add to the Queue depending on the settings
+    public static Object GetImage(IMediaResource imediaresource){
+        if (imediaresource == null) {
+            return null;
+        }
+        Object tImage = null;
+        
+//        Object mediaObject = phoenix.media.GetMediaObject(imediaresource);
+//        phoenix.fanart.GetFanartArtifact(mediaObject, null, null, sagex.phoenix.metadata.MediaArtifactType.BACKGROUND, null, null);
+//        phoenix.fanart.GetFanartArtifact(mediaObject, null, null, MediaArtifactType.BANNER, null, null);
+//        phoenix.fanart.GetFanartArtifact(mediaObject, null, null, MediaArtifactType.POSTER, null, null);
+
+        
+        return tImage;
+    }
     //Convenience method that will convert the incoming object parameter to a IMediaResource type 
     public static Object GetImage(Object imediaresource){
         if (imediaresource == null) {
@@ -55,14 +71,6 @@ public class ImageCache {
             return null; // do nothing
         }
         return GetImage(proxy);
-    }
-    public static Object GetImage(IMediaResource imediaresource){
-        if (imediaresource == null) {
-            return null;
-        }
-        Object tImage = null;
-        
-        return tImage;
     }
     
     public static Integer GetMinSize(){
