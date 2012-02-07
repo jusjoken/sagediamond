@@ -43,7 +43,7 @@ public class Const {
     public static final String ExportTypeKey = "ExportType";
     public static final String ExportPropKey = "ExportProp";
     public static final String ExportPropName = "ExportPropName";
-    
+    public static final String ImageCacheMinSize = "ImageCacheMinSize";
     
     //General Constants
     public static final String BaseProp = "Diamond";
@@ -56,5 +56,6 @@ public class Const {
     public static final String BaseSource = "gemstone.source.Base";
     public static final String PropertyComment = "---gemstone Export Properties - Do Not Manually Edit---";
     public static final String WrappedFilter = "WrappedFilter";
+    public static final String ImageCacheProp = "ImageCache";
     
 }
