@@ -57,6 +57,9 @@ public class ImageCache {
         return GetImage(proxy);
     }
     public static Object GetImage(IMediaResource imediaresource){
+        if (imediaresource == null) {
+            return null;
+        }
         Object tImage = null;
         
         return tImage;
