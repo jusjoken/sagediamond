@@ -21,6 +21,7 @@ public class ImageCache {
     //Global Functions/Variables
     // - CacheType - Background - items get added to Queue for background processing
     // - CacheType - Immediate - items get added to the Cache and returned
+    // - CacheType - ByImageType - 
     // - CacheType - Off - items get returned and NOT added to Queue NOR Cache
     
 }
