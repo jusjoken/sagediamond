@@ -5,6 +5,7 @@
 package Diamond;
 
 import java.util.LinkedList;
+import sagex.phoenix.vfs.IMediaResource;
 
 /**
  *
@@ -29,6 +30,37 @@ public class ImageCache {
     private static LinkedList IQueue = new LinkedList();
     private static SoftHashMap ICache = new SoftHashMap(GetMinSize());
     
+    //Initialize the Cache and the Queue
+    public static void Init(){
+        Clear();
+    }
+    
+    //Clear all lists - Queue and Cache
+    public static void Clear(){
+        IQueue.clear();
+        ICache.clear();
+    }
+    
+    public static void ClearQueue(){
+        IQueue.clear();
+    }
+    
+    //Convenience method that will convert the incoming object parameter to a IMediaResource type 
+    public static Object GetImage(Object imediaresource){
+        if (imediaresource == null) {
+            return null;
+        }
+        IMediaResource proxy = phoenix.media.GetMediaResource(imediaresource);
+        if (proxy==null) {
+            return null; // do nothing
+        }
+        return GetImage(proxy);
+    }
+    public static Object GetImage(IMediaResource imediaresource){
+        Object tImage = null;
+        
+        return tImage;
+    }
     
     public static Integer GetMinSize(){
         String tProp = ICacheProps + Const.PropDivider + Const.ImageCacheMinSize;
