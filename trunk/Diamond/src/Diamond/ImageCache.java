@@ -47,22 +47,28 @@ public class ImageCache {
     }
 
     //This will return an image from Cache or direct or add to the Queue depending on the settings
-    public static Object GetImage(IMediaResource imediaresource){
+    public static Object GetImage(IMediaResource imediaresource, String resourcetype){
         if (imediaresource == null) {
             return null;
         }
         Object tImage = null;
-        
-//        Object mediaObject = phoenix.media.GetMediaObject(imediaresource);
-//        phoenix.fanart.GetFanartArtifact(mediaObject, null, null, sagex.phoenix.metadata.MediaArtifactType.BACKGROUND, null, null);
-//        phoenix.fanart.GetFanartArtifact(mediaObject, null, null, MediaArtifactType.BANNER, null, null);
-//        phoenix.fanart.GetFanartArtifact(mediaObject, null, null, MediaArtifactType.POSTER, null, null);
+        String tImageString = "";
 
+        //see if this is a playable media item - if not then it must be a folder so use a child
+        if (!phoenix.umb.IsPlayable(imediaresource)){
+            
+        }
+        
+        Object mediaObject = phoenix.media.GetMediaObject(imediaresource);
+        tImageString = phoenix.fanart.GetFanartArtifact(mediaObject, null, null, resourcetype, null, null);
+        if (tImageString.equals("")){
+            return tImage;
+        }
         
         return tImage;
     }
     //Convenience method that will convert the incoming object parameter to a IMediaResource type 
-    public static Object GetImage(Object imediaresource){
+    public static Object GetImage(Object imediaresource, String resourcetype){
         if (imediaresource == null) {
             return null;
         }
@@ -70,7 +76,7 @@ public class ImageCache {
         if (proxy==null) {
             return null; // do nothing
         }
-        return GetImage(proxy);
+        return GetImage(proxy, resourcetype);
     }
     
     public static Integer GetMinSize(){
