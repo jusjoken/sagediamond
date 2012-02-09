@@ -7,6 +7,7 @@ package Diamond;
 import java.util.LinkedList;
 import sagex.phoenix.metadata.MediaArtifactType;
 import sagex.phoenix.vfs.IMediaResource;
+import sagex.phoenix.vfs.views.ViewFolder;
 
 /**
  *
@@ -47,7 +48,7 @@ public class ImageCache {
     }
 
     //This will return an image from Cache or direct or add to the Queue depending on the settings
-    public static Object GetImage(IMediaResource imediaresource, String resourcetype){
+    public static Object GetImage(IMediaResource imediaresource, String resourcetype, ViewFolder Folder){
         if (imediaresource == null) {
             return null;
         }
@@ -55,12 +56,16 @@ public class ImageCache {
         String tImageString = "";
 
         //see if this is a FOLDER item - if so use a child and adjust image source depending on grouping
-        if (phoenix.media.IsMediaType( imediaresource , "FOLDER" )){
-            //if (Size( phoenix_umb_GetGroupers( Folder ) ) > 0)
-                //gemstoneInfoMediaGroup = phoenix_umb_GetName( GetElement( phoenix_umb_GetGroupers( Folder ) , 0 ) )
-                //"show"
-                //"season"
-                //"genre"
+        if (phoenix.media.IsMediaType( imediaresource , "FOLDER" ) && Folder!=null){
+            
+            if (phoenix.umb.GetGroupers(Folder).size() > 0){
+                String thisGroup = phoenix.umb.GetName( phoenix.umb.GetGroupers(Folder).get(0) );
+                //"genre" - get genre specific images
+                //"season" - for banners or posters get Season Specific ones if available
+                //"show" - get the first item in the group and use it for the image
+                //else - get the first item in the group and use it for the image
+                
+            }
             
         }
         
