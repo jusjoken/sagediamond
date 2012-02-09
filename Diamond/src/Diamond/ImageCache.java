@@ -48,7 +48,8 @@ public class ImageCache {
     }
 
     //This will return an image from Cache or direct or add to the Queue depending on the settings
-    public static Object GetImage(IMediaResource imediaresource, String resourcetype, ViewFolder Folder){
+    public static Object GetImage(IMediaResource imediaresource, String resourcetype, String defaultImage, ViewFolder Folder){
+        //return the default image passed in when none found or waiting for background processing from the queue
         if (imediaresource == null) {
             return null;
         }
@@ -57,14 +58,17 @@ public class ImageCache {
 
         //see if this is a FOLDER item - if so use a child and adjust image source depending on grouping
         if (phoenix.media.IsMediaType( imediaresource , "FOLDER" ) && Folder!=null){
-            
-            if (phoenix.umb.GetGroupers(Folder).size() > 0){
-                String thisGroup = phoenix.umb.GetName( phoenix.umb.GetGroupers(Folder).get(0) );
-                //"genre" - get genre specific images
-                //"season" - for banners or posters get Season Specific ones if available
+            if (Folder!=null){
+                if (phoenix.umb.GetGroupers(Folder).size() > 0){
+                    String thisGroup = phoenix.umb.GetName( phoenix.umb.GetGroupers(Folder).get(0) );
+                    //tImageString = 
+                    //"genre" - get genre specific images
+                    //"season" - for banners or posters get Season Specific ones if available
+                }
+            }
+            if (tImageString.equals("")){
                 //"show" - get the first item in the group and use it for the image
                 //else - get the first item in the group and use it for the image
-                
             }
             
         }
