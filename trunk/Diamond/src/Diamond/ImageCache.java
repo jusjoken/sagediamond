@@ -54,8 +54,13 @@ public class ImageCache {
         Object tImage = null;
         String tImageString = "";
 
-        //see if this is a playable media item - if not then it must be a folder so use a child
-        if (!phoenix.umb.IsPlayable(imediaresource)){
+        //see if this is a FOLDER item - if so use a child and adjust image source depending on grouping
+        if (phoenix.media.IsMediaType( imediaresource , "FOLDER" )){
+            //if (Size( phoenix_umb_GetGroupers( Folder ) ) > 0)
+                //gemstoneInfoMediaGroup = phoenix_umb_GetName( GetElement( phoenix_umb_GetGroupers( Folder ) , 0 ) )
+                //"show"
+                //"season"
+                //"genre"
             
         }
         
