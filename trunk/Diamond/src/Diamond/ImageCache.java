@@ -5,6 +5,8 @@
 package Diamond;
 
 import java.util.LinkedList;
+import org.apache.log4j.Logger;
+import sagex.UIContext;
 import sagex.phoenix.vfs.IMediaResource;
 import sagex.phoenix.vfs.views.ViewFolder;
 
@@ -27,6 +29,7 @@ public class ImageCache {
     // - CacheType - NoQueue - items get added to the Cache and returned
     // - CacheType - Off - items get returned and NOT added to Queue NOR Cache
     // - CacheType - ByImageType - 
+    static private final Logger LOG = Logger.getLogger(ImageCache.class);
     private static final String ICacheProps = Const.BaseProp + Const.PropDivider + Const.ImageCacheProp;
     private static LinkedList IQueue = new LinkedList();
     private static SoftHashMap ICache = null;
@@ -51,9 +54,11 @@ public class ImageCache {
     }
 
     //This will return an image from Cache or direct or add to the Queue depending on the settings
-    public static Object GetImage(IMediaResource imediaresource, String resourcetype, String defaultImage, ViewFolder Folder){
+    public static Object GetImage(IMediaResource imediaresource, String resourcetype, String defaultImage, Object tFolder){
         //return the default image passed in when none found or waiting for background processing from the queue
+        LOG.debug("GetImage: imediaresource '" + imediaresource + "' resourcetype '" + resourcetype + "' defaultImage '" + defaultImage + "'");
         if (imediaresource == null) {
+            LOG.debug("GetImage: imediaresource is NULL so returning NULL");
             return null;
         }
         resourcetype = resourcetype.toLowerCase();
@@ -64,7 +69,9 @@ public class ImageCache {
         String Grouping = "NoGroup";
 
         //see if this is a FOLDER item
-        if (phoenix.media.IsMediaType( imediaresource , "FOLDER" ) && Folder!=null){
+        if (phoenix.media.IsMediaType( imediaresource , "FOLDER" ) && tFolder!=null){
+            ViewFolder Folder = (ViewFolder) imediaresource;
+            LOG.debug("GetImage: FOLDER found");
             //get the first child item if any from the Folder
             if (phoenix.media.GetAllChildren(Folder, 1).size()>0){
                 //TODO: may want to introduce some random selection of a child record here!!!
@@ -80,39 +87,48 @@ public class ImageCache {
                 //else - get the first item in the group and use it for the image
             }
         }
+        LOG.debug("GetImage: Grouping = '" + Grouping + "'");
         //we will need a MediaObject to get any fanart so get it from the passed in resource OR the child if any
         if (childmediaresource!=null){
             mediaObject = phoenix.media.GetMediaObject(childmediaresource);
+            LOG.debug("GetImage: mediaObject set using child");
         }else{
             mediaObject = phoenix.media.GetMediaObject(imediaresource);
+            LOG.debug("GetImage: mediaObject set using imediaresource");
         }
         
         if (tImageString.equals("")){
             tImageString = phoenix.fanart.GetFanartArtifact(mediaObject, null, null, resourcetype, null, null);
+            LOG.debug("GetImage: GetFanartArtifact returned '" + tImageString + "'");
         }
-        if (tImageString.equals("")){
-            return tImage;
+        if (tImageString==null || tImageString.equals("")){
+            LOG.debug("GetImage: tImageString blank or NULL so returning defaultImage");
+            return defaultImage;
         }
         //see if we are caching or just returning an image
         if (UseCache(resourcetype)){
             //see if the image is in the cache and if so return it
             if (ICache.containsKey(tImageString)){
+                LOG.debug("GetImage: found Image in Cache and return it based on '" + tImageString + "'");
                 return ICache.get(tImageString);
             }else{
                 if (UseQueue(resourcetype)){
                     //add the imagestring to the queue for background processing later
                     IQueue.add(tImageString);
+                    LOG.debug("GetImage: adding to Queue '" + tImageString + "' defaultImage returned '" + defaultImage + "'");
                     return defaultImage;
                 }else{
                     //get the image and add it to the cache then return it
                     tImage = CreateImage(tImageString, resourcetype);
                     ICache.put(tImageString, tImage);
+                    LOG.debug("GetImage: adding to Cache '" + tImageString + "'");
                     return tImage;
                 }
             }
         }else{
             //get the image and return it
             tImage = CreateImage(tImageString, resourcetype);
+            LOG.debug("GetImage: cache off so returning image for '" + tImageString + "'");
             return tImage;
         }
     }
@@ -133,7 +149,7 @@ public class ImageCache {
             return null;
         }
         //based on the ImageType determine the scalewidth to use
-        Integer UIWidth = sagex.api.Global.GetFullUIWidth();
+        Integer UIWidth = sagex.api.Global.GetFullUIWidth(new UIContext(sagex.api.Global.GetUIContextName()));
         Double scalewidth = 0.2;
         if (ImageType.equals("poster")){
             scalewidth = 0.2;
@@ -145,6 +161,7 @@ public class ImageCache {
             //use default
         }
         Double finalscalewidth = scalewidth * UIWidth;
+        LOG.debug("CreateImage: scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + ImageType + "' Image = '" + ImageString + "'");
         Object ThisImage = phoenix.image.CreateImage("gemstone-"+ImageType, ImageString, "{name: scale, width: " + finalscalewidth + ", height: -1}", false);
         return ThisImage;
     }
