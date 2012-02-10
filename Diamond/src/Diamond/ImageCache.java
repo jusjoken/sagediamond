@@ -5,6 +5,7 @@
 package Diamond;
 
 import java.util.LinkedList;
+import java.util.List;
 import org.apache.log4j.Logger;
 import sagex.UIContext;
 import sagex.phoenix.vfs.IMediaResource;
@@ -54,7 +55,7 @@ public class ImageCache {
     }
 
     //This will return an image from Cache or direct or add to the Queue depending on the settings
-    public static Object GetImage(IMediaResource imediaresource, String resourcetype, String defaultImage, Object tFolder){
+    public static Object GetImage(IMediaResource imediaresource, String resourcetype, String defaultImage){
         //return the default image passed in when none found or waiting for background processing from the queue
         LOG.debug("GetImage: imediaresource '" + imediaresource + "' resourcetype '" + resourcetype + "' defaultImage '" + defaultImage + "'");
         if (imediaresource == null) {
@@ -69,7 +70,7 @@ public class ImageCache {
         String Grouping = "NoGroup";
 
         //see if this is a FOLDER item
-        if (phoenix.media.IsMediaType( imediaresource , "FOLDER" ) && tFolder!=null){
+        if (phoenix.media.IsMediaType( imediaresource , "FOLDER" )){
             ViewFolder Folder = (ViewFolder) imediaresource;
             LOG.debug("GetImage: FOLDER found");
             //get the first child item if any from the Folder
@@ -114,7 +115,7 @@ public class ImageCache {
             }else{
                 if (UseQueue(resourcetype)){
                     //add the imagestring to the queue for background processing later
-                    IQueue.add(tImageString);
+                    IQueue.add(GetQueueKey(tImageString, resourcetype));
                     LOG.debug("GetImage: adding to Queue '" + tImageString + "' defaultImage returned '" + defaultImage + "'");
                     return defaultImage;
                 }else{
@@ -144,12 +145,46 @@ public class ImageCache {
         return GetImage(proxy, resourcetype);
     }
     
+    public static void GetImageFromQueue(){
+        if (IQueue.size()>0){
+            String tItem = IQueue.pop().toString();
+            String tImageString = GetPathFromKey(tItem);
+            String resourcetype = GetTypeFromKey(tItem);
+            //get the image and add it to the cache then return it
+            Object tImage = CreateImage(tImageString, resourcetype);
+            ICache.put(tImageString, tImage);
+            LOG.debug("GetImageFromQueue: adding to Cache '" + tImageString + "'");
+        }
+    }
+    
+    private static String GetQueueKey(String ImageString, String ImageType){
+        return ImageString + util.ListToken + ImageType;
+    }
+    
+    private static String GetPathFromKey(String Key){
+        List<String> tList = util.ConvertStringtoList(Key);
+        if (tList.size()>0){
+            return tList.get(0);
+        }else{
+            return "";
+        }
+    }
+    private static String GetTypeFromKey(String Key){
+        List<String> tList = util.ConvertStringtoList(Key);
+        if (tList.size()>1){
+            return tList.get(1);
+        }else{
+            return "poster";
+        }
+    }
+
     public static Object CreateImage(String ImageString, String ImageType){
         if (ImageString.equals("")){
             return null;
         }
+        UIContext UIc = new UIContext(sagex.api.Global.GetUIContextName());
         //based on the ImageType determine the scalewidth to use
-        Integer UIWidth = sagex.api.Global.GetFullUIWidth(new UIContext(sagex.api.Global.GetUIContextName()));
+        Integer UIWidth = sagex.api.Global.GetFullUIWidth(UIc);
         Double scalewidth = 0.2;
         if (ImageType.equals("poster")){
             scalewidth = 0.2;
@@ -161,8 +196,13 @@ public class ImageCache {
             //use default
         }
         Double finalscalewidth = scalewidth * UIWidth;
-        LOG.debug("CreateImage: scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + ImageType + "' Image = '" + ImageString + "'");
         Object ThisImage = phoenix.image.CreateImage("gemstone-"+ImageType, ImageString, "{name: scale, width: " + finalscalewidth + ", height: -1}", false);
+        if (!sagex.api.Utility.IsImageLoaded(UIc, ThisImage)){
+            LOG.debug("CreateImage: Loaded using LoagImage(loadImage)) - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + ImageType + "' Image = '" + ImageString + "'");
+            sagex.api.Utility.LoadImage(UIc, sagex.api.Utility.LoadImage(UIc, ThisImage));
+        }else{
+            LOG.debug("CreateImage: already Loaded - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + ImageType + "' Image = '" + ImageString + "'");
+        }
         return ThisImage;
     }
     
