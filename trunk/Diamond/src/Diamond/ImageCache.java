@@ -5,7 +5,6 @@
 package Diamond;
 
 import java.util.LinkedList;
-import sagex.phoenix.metadata.MediaArtifactType;
 import sagex.phoenix.vfs.IMediaResource;
 import sagex.phoenix.vfs.views.ViewFolder;
 
@@ -19,9 +18,9 @@ public class ImageCache {
 //    }
     
     //a ImageCache object needs
-    // - Cache - SoftHashMap - this is the Cache itself
+    // - ICache - SoftHashMap - this is the Cache itself
     //   - MinCacheItems - keep this number of items in the Cache when Memory is cleaned
-    // - Queue - HashMap - list of MediaObjects to get a specific ImageType to add to the Cache
+    // - IQueue - LinkedList - list of MediaObject Image strings to get a specific ImageType to add to the Cache
     // - 
     //Global Functions/Variables
     // - CacheType - Background - items get added to Queue for background processing
@@ -30,11 +29,15 @@ public class ImageCache {
     // - CacheType - ByImageType - 
     private static final String ICacheProps = Const.BaseProp + Const.PropDivider + Const.ImageCacheProp;
     private static LinkedList IQueue = new LinkedList();
-    private static SoftHashMap ICache = new SoftHashMap(GetMinSize());
+    private static SoftHashMap ICache = null;
+    public static enum ImageCacheTypes{OFF,BACKGROUND,NOQUEUE,BYIMAGETYPE};
+    private static final String ImageCacheTypesList = ImageCacheTypes.OFF + util.ListToken + ImageCacheTypes.BACKGROUND + util.ListToken + ImageCacheTypes.NOQUEUE + util.ListToken + ImageCacheTypes.BYIMAGETYPE;
+    private static final String ImageCacheTypesListByImageType = ImageCacheTypes.OFF + util.ListToken + ImageCacheTypes.BACKGROUND + util.ListToken + ImageCacheTypes.NOQUEUE;
     
     //Initialize the Cache and the Queue
     public static void Init(){
-        Clear();
+        SoftHashMap ICache = new SoftHashMap(GetMinSize());
+        ClearQueue();
     }
     
     //Clear all lists - Queue and Cache
@@ -53,33 +56,65 @@ public class ImageCache {
         if (imediaresource == null) {
             return null;
         }
+        resourcetype = resourcetype.toLowerCase();
         Object tImage = null;
+        Object mediaObject = null;
         String tImageString = "";
+        IMediaResource childmediaresource = null;
+        String Grouping = "NoGroup";
 
-        //see if this is a FOLDER item - if so use a child and adjust image source depending on grouping
+        //see if this is a FOLDER item
         if (phoenix.media.IsMediaType( imediaresource , "FOLDER" ) && Folder!=null){
-            if (Folder!=null){
-                if (phoenix.umb.GetGroupers(Folder).size() > 0){
-                    String thisGroup = phoenix.umb.GetName( phoenix.umb.GetGroupers(Folder).get(0) );
-                    //tImageString = 
-                    //"genre" - get genre specific images
-                    //"season" - for banners or posters get Season Specific ones if available
-                }
+            //get the first child item if any from the Folder
+            if (phoenix.media.GetAllChildren(Folder, 1).size()>0){
+                //TODO: may want to introduce some random selection of a child record here!!!
+                childmediaresource = (IMediaResource) phoenix.media.GetAllChildren(Folder, 1).get(0);
             }
-            if (tImageString.equals("")){
+            //see how the folder is grouped
+            if (phoenix.umb.GetGroupers(Folder).size() > 0){
+                Grouping = phoenix.umb.GetName( phoenix.umb.GetGroupers(Folder).get(0) );
+                //tImageString = 
+                //"genre" - get genre specific images
+                //"season" - for banners or posters get Season Specific ones if available
                 //"show" - get the first item in the group and use it for the image
                 //else - get the first item in the group and use it for the image
             }
-            
+        }
+        //we will need a MediaObject to get any fanart so get it from the passed in resource OR the child if any
+        if (childmediaresource!=null){
+            mediaObject = phoenix.media.GetMediaObject(childmediaresource);
+        }else{
+            mediaObject = phoenix.media.GetMediaObject(imediaresource);
         }
         
-        Object mediaObject = phoenix.media.GetMediaObject(imediaresource);
-        tImageString = phoenix.fanart.GetFanartArtifact(mediaObject, null, null, resourcetype, null, null);
+        if (tImageString.equals("")){
+            tImageString = phoenix.fanart.GetFanartArtifact(mediaObject, null, null, resourcetype, null, null);
+        }
         if (tImageString.equals("")){
             return tImage;
         }
-        
-        return tImage;
+        //see if we are caching or just returning an image
+        if (UseCache(resourcetype)){
+            //see if the image is in the cache and if so return it
+            if (ICache.containsKey(tImageString)){
+                return ICache.get(tImageString);
+            }else{
+                if (UseQueue(resourcetype)){
+                    //add the imagestring to the queue for background processing later
+                    IQueue.add(tImageString);
+                    return defaultImage;
+                }else{
+                    //get the image and add it to the cache then return it
+                    tImage = CreateImage(tImageString, resourcetype);
+                    ICache.put(tImageString, tImage);
+                    return tImage;
+                }
+            }
+        }else{
+            //get the image and return it
+            tImage = CreateImage(tImageString, resourcetype);
+            return tImage;
+        }
     }
     //Convenience method that will convert the incoming object parameter to a IMediaResource type 
     public static Object GetImage(Object imediaresource, String resourcetype){
@@ -93,6 +128,27 @@ public class ImageCache {
         return GetImage(proxy, resourcetype);
     }
     
+    public static Object CreateImage(String ImageString, String ImageType){
+        if (ImageString.equals("")){
+            return null;
+        }
+        //based on the ImageType determine the scalewidth to use
+        Integer UIWidth = sagex.api.Global.GetFullUIWidth();
+        Double scalewidth = 0.2;
+        if (ImageType.equals("poster")){
+            scalewidth = 0.2;
+        }else if (ImageType.equals("banner")){
+            scalewidth = 0.6;
+        }else if (ImageType.equals("background")){
+            scalewidth = 0.4;
+        }else{
+            //use default
+        }
+        Double finalscalewidth = scalewidth * UIWidth;
+        Object ThisImage = phoenix.image.CreateImage("gemstone-"+ImageType, ImageString, "{name: scale, width: " + finalscalewidth + ", height: -1}", false);
+        return ThisImage;
+    }
+    
     public static Integer GetMinSize(){
         String tProp = ICacheProps + Const.PropDivider + Const.ImageCacheMinSize;
         return util.GetPropertyAsInteger(tProp, 100);
@@ -100,6 +156,44 @@ public class ImageCache {
     public static void SetMinSize(Integer Value){
         String tProp = ICacheProps + Const.PropDivider + Const.ImageCacheMinSize;
         util.SetProperty(tProp, Value.toString());
+    }
+
+    public static String GetCacheType(){
+        return util.GetListOptionName(ICacheProps, Const.ImageCacheType, ImageCacheTypesList, ImageCacheTypes.OFF.toString());
+    }
+    public static void SetCacheTypeNext(){
+        util.SetListOptionNext(ICacheProps, Const.ImageCacheType, ImageCacheTypesList);
+    }
+
+    public static String GetCacheType(String ImageType){
+        if (GetCacheType().equals(ImageCacheTypes.BYIMAGETYPE.toString())){
+            String tProp = ICacheProps + Const.PropDivider + Const.ImageCacheType;
+            return util.GetListOptionName(tProp, ImageType, ImageCacheTypesListByImageType, ImageCacheTypes.OFF.toString());
+        }else{
+            return GetCacheType();
+        }
+    }
+    public static void SetCacheTypeNext(String ImageType){
+        if (GetCacheType().equals(ImageCacheTypes.BYIMAGETYPE.toString())){
+            String tProp = ICacheProps + Const.PropDivider + Const.ImageCacheType;
+            util.SetListOptionNext(tProp, ImageType, ImageCacheTypesListByImageType);
+        }
+    }
+    
+    public static Boolean UseQueue(String ImageType){
+        if (GetCacheType(ImageType).equals(ImageCacheTypes.BACKGROUND.toString())){
+            return Boolean.TRUE;
+        }else{
+            return Boolean.FALSE;
+        }
+    }
+
+    public static Boolean UseCache(String ImageType){
+        if (GetCacheType(ImageType).equals(ImageCacheTypes.OFF.toString())){
+            return Boolean.FALSE;
+        }else{
+            return Boolean.TRUE;
+        }
     }
     
 }

@@ -44,6 +44,7 @@ public class Const {
     public static final String ExportPropKey = "ExportProp";
     public static final String ExportPropName = "ExportPropName";
     public static final String ImageCacheMinSize = "ImageCacheMinSize";
+    public static final String ImageCacheType = "ImageCacheType";
     
     //General Constants
     public static final String BaseProp = "Diamond";
