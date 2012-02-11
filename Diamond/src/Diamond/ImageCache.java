@@ -6,6 +6,7 @@ package Diamond;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import org.apache.log4j.Logger;
 import sagex.UIContext;
 import sagex.phoenix.vfs.IMediaResource;
@@ -68,6 +69,12 @@ public class ImageCache {
         String tImageString = "";
         IMediaResource childmediaresource = null;
         String Grouping = "NoGroup";
+        Object faMediaObject = null;
+        String faMediaType = null;
+        String faMediaTitle = null;
+        String faArtifactType = resourcetype;
+        String faArtifiactTitle = null;
+        Map<String,String> faMetadata = null;
 
         //see if this is a FOLDER item
         if (phoenix.media.IsMediaType( imediaresource , "FOLDER" )){
@@ -91,15 +98,15 @@ public class ImageCache {
         LOG.debug("GetImage: Grouping = '" + Grouping + "'");
         //we will need a MediaObject to get any fanart so get it from the passed in resource OR the child if any
         if (childmediaresource!=null){
-            mediaObject = phoenix.media.GetMediaObject(childmediaresource);
+            faMediaObject = phoenix.media.GetMediaObject(childmediaresource);
             LOG.debug("GetImage: mediaObject set using child");
         }else{
-            mediaObject = phoenix.media.GetMediaObject(imediaresource);
+            faMediaObject = phoenix.media.GetMediaObject(imediaresource);
             LOG.debug("GetImage: mediaObject set using imediaresource");
         }
         
         if (tImageString.equals("")){
-            tImageString = phoenix.fanart.GetFanartArtifact(mediaObject, null, null, resourcetype, null, null);
+            tImageString = phoenix.fanart.GetFanartArtifact(faMediaObject, faMediaType, faMediaTitle, faArtifactType, faArtifiactTitle, faMetadata);
             LOG.debug("GetImage: GetFanartArtifact returned '" + tImageString + "'");
         }
         if (tImageString==null || tImageString.equals("")){
