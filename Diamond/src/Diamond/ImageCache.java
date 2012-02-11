@@ -69,6 +69,7 @@ public class ImageCache {
         String tImageString = "";
         IMediaResource childmediaresource = null;
         String Grouping = "NoGroup";
+        Boolean UseChildMediaObject = Boolean.FALSE;
         Object faMediaObject = null;
         String faMediaType = null;
         String faMediaTitle = null;
@@ -94,10 +95,23 @@ public class ImageCache {
                 //"show" - get the first item in the group and use it for the image
                 //else - get the first item in the group and use it for the image
             }
+            if (Grouping.equals("show")){
+                UseChildMediaObject = Boolean.TRUE;
+                
+            }else if (Grouping.equals("genre")){
+                UseChildMediaObject = Boolean.TRUE;
+                
+            }else if (Grouping.equals("season")){
+                UseChildMediaObject = Boolean.TRUE;
+                
+            }else{
+                UseChildMediaObject = Boolean.TRUE;
+                
+            }
         }
         LOG.debug("GetImage: Grouping = '" + Grouping + "'");
         //we will need a MediaObject to get any fanart so get it from the passed in resource OR the child if any
-        if (childmediaresource!=null){
+        if (UseChildMediaObject){
             faMediaObject = phoenix.media.GetMediaObject(childmediaresource);
             LOG.debug("GetImage: mediaObject set using child");
         }else{
