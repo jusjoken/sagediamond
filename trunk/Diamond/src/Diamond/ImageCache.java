@@ -4,11 +4,13 @@
  */
 package Diamond;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
 import sagex.UIContext;
+import sagex.phoenix.metadata.MediaType;
 import sagex.phoenix.vfs.IMediaResource;
 import sagex.phoenix.vfs.views.ViewFolder;
 
@@ -78,17 +80,18 @@ public class ImageCache {
         Map<String,String> faMetadata = null;
 
         //see if this is a FOLDER item
+        //we will need a MediaObject to get any fanart so get it from the passed in resource OR the child if any
         if (phoenix.media.IsMediaType( imediaresource , "FOLDER" )){
             ViewFolder Folder = (ViewFolder) imediaresource;
-            LOG.debug("GetImage: FOLDER found");
+            ViewFolder Parent = (ViewFolder) phoenix.media.GetParent(imediaresource);
             //get the first child item if any from the Folder
             if (phoenix.media.GetAllChildren(Folder, 1).size()>0){
                 //TODO: may want to introduce some random selection of a child record here!!!
                 childmediaresource = (IMediaResource) phoenix.media.GetAllChildren(Folder, 1).get(0);
             }
             //see how the folder is grouped
-            if (phoenix.umb.GetGroupers(Folder).size() > 0){
-                Grouping = phoenix.umb.GetName( phoenix.umb.GetGroupers(Folder).get(0) );
+            if (phoenix.umb.GetGroupers(Parent).size() > 0){
+                Grouping = phoenix.umb.GetName( phoenix.umb.GetGroupers(Parent).get(0) );
                 //tImageString = 
                 //"genre" - get genre specific images
                 //"season" - for banners or posters get Season Specific ones if available
@@ -96,27 +99,58 @@ public class ImageCache {
                 //else - get the first item in the group and use it for the image
             }
             if (Grouping.equals("show")){
-                UseChildMediaObject = Boolean.TRUE;
-                
+                //need to know if this is a TV show grouping to get a Series fanart item
+                if (phoenix.media.IsMediaType( childmediaresource , "TV" )){
+                    LOG.debug("GetImage: TV show found '" + phoenix.media.GetTitle(imediaresource) + "' using Series Fanart");
+                    //use Series type fanart
+                    UseChildMediaObject = Boolean.FALSE;
+                    faMediaObject = phoenix.media.GetMediaObject(childmediaresource);
+                    faMetadata = Collections.emptyMap();
+                    faMediaType = MediaType.TV.toString();
+                }else{
+                    LOG.debug("GetImage: Other show found '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
+                    //use a child for the show fanart
+                    UseChildMediaObject = Boolean.TRUE;
+                    faMediaObject = phoenix.media.GetMediaObject(childmediaresource);
+                }
             }else if (Grouping.equals("genre")){
+                LOG.debug("GetImage: genre group found '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
                 UseChildMediaObject = Boolean.TRUE;
+                faMediaObject = phoenix.media.GetMediaObject(childmediaresource);
+                //TODO:SPECIAL handling to get GENRE images
                 
             }else if (Grouping.equals("season")){
+                LOG.debug("GetImage: season group found '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
+                //just use a child item so you get fanart for the specific season
                 UseChildMediaObject = Boolean.TRUE;
-                
+                faMediaObject = phoenix.media.GetMediaObject(childmediaresource);
+            }else if (Grouping.equals("NoGroup")){
+                LOG.debug("GetImage: Folder found but no grouping for '" + phoenix.media.GetTitle(imediaresource) + "' using passed in object for Fanart");
+                UseChildMediaObject = Boolean.FALSE;
+                faMediaObject = phoenix.media.GetMediaObject(imediaresource);
             }else{
+                LOG.debug("GetImage: unhandled grouping found '" + Grouping + "' for Title '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
                 UseChildMediaObject = Boolean.TRUE;
-                
+                faMediaObject = phoenix.media.GetMediaObject(childmediaresource);
             }
-        }
-        LOG.debug("GetImage: Grouping = '" + Grouping + "'");
-        //we will need a MediaObject to get any fanart so get it from the passed in resource OR the child if any
-        if (UseChildMediaObject){
-            faMediaObject = phoenix.media.GetMediaObject(childmediaresource);
-            LOG.debug("GetImage: mediaObject set using child");
         }else{
-            faMediaObject = phoenix.media.GetMediaObject(imediaresource);
-            LOG.debug("GetImage: mediaObject set using imediaresource");
+            //not a FOLDER
+            if (phoenix.media.IsMediaType( imediaresource , "TV" )){
+                //for TV items we need to get an Episode Fanart
+                //no need to cache these so just return the image object
+                faMediaObject = phoenix.media.GetMediaObject(imediaresource);
+                tImageString = phoenix.fanart.GetEpisode(faMediaObject);
+                if (tImageString==null || tImageString.equals("")){
+                    LOG.debug("GetImage: Episode '" + phoenix.media.GetTitle(imediaresource) + "' returning Fanart based on GetDefaultEpisode");
+                    return phoenix.fanart.GetDefaultEpisode(faMediaObject);
+                }else{
+                    LOG.debug("GetImage: Episode '" + phoenix.media.GetTitle(imediaresource) + "' Fanart found '" + tImageString + "'");
+                }
+            }else{
+                faMediaObject = phoenix.media.GetMediaObject(imediaresource);
+                LOG.debug("GetImage: Title '" + phoenix.media.GetTitle(imediaresource) + "' using passed in object for Fanart");
+            }
+                
         }
         
         if (tImageString.equals("")){
@@ -155,15 +189,17 @@ public class ImageCache {
         }
     }
     //Convenience method that will convert the incoming object parameter to a IMediaResource type 
-    public static Object GetImage(Object imediaresource, String resourcetype){
+    public static Object GetImage(Object imediaresource, String resourcetype, String defaultImage){
         if (imediaresource == null) {
             return null;
         }
+        LOG.debug("GetImage: Convenience method called with Class = '" + imediaresource.getClass() + "'");
         IMediaResource proxy = phoenix.media.GetMediaResource(imediaresource);
         if (proxy==null) {
+            LOG.debug("GetImage: GetMediaResource failed to convert '" + imediaresource + "'");
             return null; // do nothing
         }
-        return GetImage(proxy, resourcetype);
+        return GetImage(proxy, resourcetype, defaultImage);
     }
     
     public static void GetImageFromQueue(){
@@ -217,7 +253,13 @@ public class ImageCache {
             //use default
         }
         Double finalscalewidth = scalewidth * UIWidth;
-        Object ThisImage = phoenix.image.CreateImage("gemstone-"+ImageType, ImageString, "{name: scale, width: " + finalscalewidth + ", height: -1}", false);
+        Object ThisImage = null;
+        try {
+            ThisImage = phoenix.image.CreateImage("gemstone-"+ImageType, ImageString, "{name: scale, width: " + finalscalewidth + ", height: -1}", false);
+        } catch (Exception e) {
+            LOG.debug("CreateImage: phoenix.image.CreateImage FAILED using LoagImage(loadImage)) - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + ImageType + "' Image = '" + ImageString + "' Error: '" + e + "'");
+            return null;
+        }
         if (!sagex.api.Utility.IsImageLoaded(UIc, ThisImage)){
             LOG.debug("CreateImage: Loaded using LoagImage(loadImage)) - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + ImageType + "' Image = '" + ImageString + "'");
             sagex.api.Utility.LoadImage(UIc, sagex.api.Utility.LoadImage(UIc, ThisImage));
