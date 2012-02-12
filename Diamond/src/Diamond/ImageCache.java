@@ -58,7 +58,16 @@ public class ImageCache {
     }
 
     //This will return an image from Cache or direct or add to the Queue depending on the settings
+    public static Object GetImage(IMediaResource imediaresource, String resourcetype){
+        return GetImage(imediaresource, resourcetype, Boolean.FALSE, "");
+    }
     public static Object GetImage(IMediaResource imediaresource, String resourcetype, String defaultImage){
+        return GetImage(imediaresource, resourcetype, Boolean.FALSE, defaultImage);
+    }
+    public static Object GetImage(IMediaResource imediaresource, String resourcetype, Boolean originalSize){
+        return GetImage(imediaresource, resourcetype, originalSize, "");
+    }
+    public static Object GetImage(IMediaResource imediaresource, String resourcetype, Boolean originalSize, String defaultImage){
         //return the default image passed in when none found or waiting for background processing from the queue
         LOG.debug("GetImage: imediaresource '" + imediaresource + "' resourcetype '" + resourcetype + "' defaultImage '" + defaultImage + "'");
         if (imediaresource == null) {
@@ -78,7 +87,7 @@ public class ImageCache {
         String faArtifactType = resourcetype;
         String faArtifiactTitle = null;
         Map<String,String> faMetadata = null;
-
+        
         //see if this is a FOLDER item
         //we will need a MediaObject to get any fanart so get it from the passed in resource OR the child if any
         if (phoenix.media.IsMediaType( imediaresource , "FOLDER" )){
@@ -87,6 +96,9 @@ public class ImageCache {
             //get the first child item if any from the Folder
             if (phoenix.media.GetAllChildren(Folder, 1).size()>0){
                 //TODO: may want to introduce some random selection of a child record here!!!
+                //RandomElement = phoenix_util_GetRandomNumber(Size(phoenix_media_GetChildren(gemstoneBackgroundVideoCell)))
+                //gemstoneBackgroundVideoCell = GetElement(phoenix_media_GetChildren(gemstoneBackgroundVideoCell),RandomElement)
+                
                 childmediaresource = (IMediaResource) phoenix.media.GetAllChildren(Folder, 1).get(0);
             }
             //see how the folder is grouped
@@ -170,12 +182,12 @@ public class ImageCache {
             }else{
                 if (UseQueue(resourcetype)){
                     //add the imagestring to the queue for background processing later
-                    IQueue.add(GetQueueKey(tImageString, resourcetype));
+                    IQueue.add(GetQueueKey(tImageString, resourcetype, originalSize));
                     LOG.debug("GetImage: adding to Queue '" + tImageString + "' defaultImage returned '" + defaultImage + "'");
                     return defaultImage;
                 }else{
                     //get the image and add it to the cache then return it
-                    tImage = CreateImage(tImageString, resourcetype);
+                    tImage = CreateImage(tImageString, resourcetype, originalSize);
                     ICache.put(tImageString, tImage);
                     LOG.debug("GetImage: adding to Cache '" + tImageString + "'");
                     return tImage;
@@ -183,13 +195,22 @@ public class ImageCache {
             }
         }else{
             //get the image and return it
-            tImage = CreateImage(tImageString, resourcetype);
+            tImage = CreateImage(tImageString, resourcetype, originalSize);
             LOG.debug("GetImage: cache off so returning image for '" + tImageString + "'");
             return tImage;
         }
     }
     //Convenience method that will convert the incoming object parameter to a IMediaResource type 
+    public static Object GetImage(Object imediaresource, String resourcetype){
+        return GetImage(imediaresource, resourcetype, Boolean.FALSE, "");
+    }
     public static Object GetImage(Object imediaresource, String resourcetype, String defaultImage){
+        return GetImage(imediaresource, resourcetype, Boolean.FALSE, defaultImage);
+    }
+    public static Object GetImage(Object imediaresource, String resourcetype, Boolean originalSize){
+        return GetImage(imediaresource, resourcetype, originalSize, "");
+    }
+    public static Object GetImage(Object imediaresource, String resourcetype, Boolean originalSize, String defaultImage){
         if (imediaresource == null) {
             return null;
         }
@@ -199,7 +220,7 @@ public class ImageCache {
             LOG.debug("GetImage: GetMediaResource failed to convert '" + imediaresource + "'");
             return null; // do nothing
         }
-        return GetImage(proxy, resourcetype, defaultImage);
+        return GetImage(proxy, resourcetype, originalSize, defaultImage);
     }
     
     public static void GetImageFromQueue(){
@@ -207,15 +228,16 @@ public class ImageCache {
             String tItem = IQueue.pop().toString();
             String tImageString = GetPathFromKey(tItem);
             String resourcetype = GetTypeFromKey(tItem);
+            Boolean originalSize = GetOriginalSizeFromKey(tItem);
             //get the image and add it to the cache then return it
-            Object tImage = CreateImage(tImageString, resourcetype);
+            Object tImage = CreateImage(tImageString, resourcetype, originalSize);
             ICache.put(tImageString, tImage);
             LOG.debug("GetImageFromQueue: adding to Cache '" + tImageString + "'");
         }
     }
     
-    private static String GetQueueKey(String ImageString, String ImageType){
-        return ImageString + util.ListToken + ImageType;
+    private static String GetQueueKey(String ImageString, String ImageType, Boolean originalSize){
+        return ImageString + util.ListToken + ImageType + util.ListToken + originalSize.toString();
     }
     
     private static String GetPathFromKey(String Key){
@@ -234,8 +256,16 @@ public class ImageCache {
             return "poster";
         }
     }
+    private static Boolean GetOriginalSizeFromKey(String Key){
+        List<String> tList = util.ConvertStringtoList(Key);
+        if (tList.size()>2){
+            return Boolean.parseBoolean(tList.get(2));
+        }else{
+            return Boolean.FALSE;
+        }
+    }
 
-    public static Object CreateImage(String ImageString, String ImageType){
+    public static Object CreateImage(String ImageString, String ImageType, Boolean originalSize){
         if (ImageString.equals("")){
             return null;
         }
@@ -243,14 +273,18 @@ public class ImageCache {
         //based on the ImageType determine the scalewidth to use
         Integer UIWidth = sagex.api.Global.GetFullUIWidth(UIc);
         Double scalewidth = 0.2;
-        if (ImageType.equals("poster")){
-            scalewidth = 0.2;
-        }else if (ImageType.equals("banner")){
-            scalewidth = 0.6;
-        }else if (ImageType.equals("background")){
-            scalewidth = 0.4;
+        if (originalSize){
+            scalewidth = 1.0;
         }else{
-            //use default
+            if (ImageType.equals("poster")){
+                scalewidth = 0.2;
+            }else if (ImageType.equals("banner")){
+                scalewidth = 0.6;
+            }else if (ImageType.equals("background")){
+                scalewidth = 0.4;
+            }else{
+                //use default
+            }
         }
         Double finalscalewidth = scalewidth * UIWidth;
         Object ThisImage = null;
