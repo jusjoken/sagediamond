@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
 import sagex.UIContext;
+import sagex.phoenix.metadata.MediaArtifactType;
 import sagex.phoenix.metadata.MediaType;
 import sagex.phoenix.vfs.IMediaResource;
 import sagex.phoenix.vfs.views.ViewFolder;
@@ -36,10 +37,11 @@ public class ImageCache {
     static private final Logger LOG = Logger.getLogger(ImageCache.class);
     private static final String ICacheProps = Const.BaseProp + Const.PropDivider + Const.ImageCacheProp;
     private static LinkedList IQueue = new LinkedList();
-    private static SoftHashMap ICache = null;
+    private static SoftHashMap ICache = new SoftHashMap(GetMinSize());
     public static enum ImageCacheTypes{OFF,BACKGROUND,NOQUEUE,BYIMAGETYPE};
     private static final String ImageCacheTypesList = ImageCacheTypes.OFF + util.ListToken + ImageCacheTypes.BACKGROUND + util.ListToken + ImageCacheTypes.NOQUEUE + util.ListToken + ImageCacheTypes.BYIMAGETYPE;
     private static final String ImageCacheTypesListByImageType = ImageCacheTypes.OFF + util.ListToken + ImageCacheTypes.BACKGROUND + util.ListToken + ImageCacheTypes.NOQUEUE;
+    public static final String ImageTag = "GemstoneImages";
     
     //Initialize the Cache and the Queue
     public static void Init(){
@@ -82,9 +84,9 @@ public class ImageCache {
         String Grouping = "NoGroup";
         Boolean UseChildMediaObject = Boolean.FALSE;
         Object faMediaObject = null;
-        String faMediaType = null;
+        MediaType faMediaType = null;
         String faMediaTitle = null;
-        String faArtifactType = resourcetype;
+        MediaArtifactType faArtifactType = ConvertStringtoMediaArtifactType(resourcetype);
         String faArtifiactTitle = null;
         Map<String,String> faMetadata = null;
         
@@ -118,7 +120,7 @@ public class ImageCache {
                     UseChildMediaObject = Boolean.FALSE;
                     faMediaObject = phoenix.media.GetMediaObject(childmediaresource);
                     faMetadata = Collections.emptyMap();
-                    faMediaType = MediaType.TV.toString();
+                    faMediaType = MediaType.TV;
                 }else{
                     LOG.debug("GetImage: Other show found '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
                     //use a child for the show fanart
@@ -166,28 +168,31 @@ public class ImageCache {
         }
         
         if (tImageString.equals("")){
-            tImageString = phoenix.fanart.GetFanartArtifact(faMediaObject, faMediaType, faMediaTitle, faArtifactType, faArtifiactTitle, faMetadata);
+            tImageString = phoenix.fanart.GetFanartArtifact(faMediaObject, faMediaType.toString(), faMediaTitle, faArtifactType.toString(), faArtifiactTitle, faMetadata);
             LOG.debug("GetImage: GetFanartArtifact returned '" + tImageString + "'");
         }
         if (tImageString==null || tImageString.equals("")){
             LOG.debug("GetImage: tImageString blank or NULL so returning defaultImage");
             return defaultImage;
         }
+        String ImageID = phoenix.fanart.ImageKey(faMediaObject, faMediaType, faMediaTitle, faArtifactType, faArtifiactTitle, faMetadata);
+        LOG.debug("GetImage: ImageID created '" + ImageID + "'");
+        
         //see if we are caching or just returning an image
-        if (UseCache(resourcetype)){
+        if (UseCache(faArtifactType)){
             //see if the image is in the cache and if so return it
             if (ICache.containsKey(tImageString)){
                 LOG.debug("GetImage: found Image in Cache and return it based on '" + tImageString + "'");
                 return ICache.get(tImageString);
             }else{
-                if (UseQueue(resourcetype)){
+                if (UseQueue(faArtifactType)){
                     //add the imagestring to the queue for background processing later
-                    IQueue.add(GetQueueKey(tImageString, resourcetype, originalSize));
+                    IQueue.add(GetQueueKey(tImageString, faArtifactType, originalSize, ImageID));
                     LOG.debug("GetImage: adding to Queue '" + tImageString + "' defaultImage returned '" + defaultImage + "'");
                     return defaultImage;
                 }else{
                     //get the image and add it to the cache then return it
-                    tImage = CreateImage(tImageString, resourcetype, originalSize);
+                    tImage = CreateImage(tImageString, faArtifactType, originalSize, ImageID);
                     ICache.put(tImageString, tImage);
                     LOG.debug("GetImage: adding to Cache '" + tImageString + "'");
                     return tImage;
@@ -195,7 +200,7 @@ public class ImageCache {
             }
         }else{
             //get the image and return it
-            tImage = CreateImage(tImageString, resourcetype, originalSize);
+            tImage = CreateImage(tImageString, faArtifactType, originalSize, ImageID);
             LOG.debug("GetImage: cache off so returning image for '" + tImageString + "'");
             return tImage;
         }
@@ -227,17 +232,30 @@ public class ImageCache {
         if (IQueue.size()>0){
             String tItem = IQueue.pop().toString();
             String tImageString = GetPathFromKey(tItem);
-            String resourcetype = GetTypeFromKey(tItem);
+            MediaArtifactType resourcetype = GetTypeFromKey(tItem);
             Boolean originalSize = GetOriginalSizeFromKey(tItem);
+            String ImageID = GetIDFromKey(tItem);
             //get the image and add it to the cache then return it
-            Object tImage = CreateImage(tImageString, resourcetype, originalSize);
+            Object tImage = CreateImage(tImageString, resourcetype, originalSize, ImageID);
             ICache.put(tImageString, tImage);
             LOG.debug("GetImageFromQueue: adding to Cache '" + tImageString + "'");
         }
     }
     
-    private static String GetQueueKey(String ImageString, String ImageType, Boolean originalSize){
-        return ImageString + util.ListToken + ImageType + util.ListToken + originalSize.toString();
+    private static String GetQueueKey(String ImageString, MediaArtifactType ImageType, Boolean originalSize, String ImageID){
+        return ImageString + util.ListToken + ImageType + util.ListToken + originalSize.toString() + util.ListToken + ImageID;
+    }
+    
+    private static MediaArtifactType ConvertStringtoMediaArtifactType(String ImageType){
+        if (ImageType.equals("poster")){
+            return MediaArtifactType.POSTER;
+        }else if (ImageType.equals("banner")){
+            return MediaArtifactType.BANNER;
+        }else if (ImageType.equals("background")){
+            return MediaArtifactType.BACKGROUND;
+        }else{
+            return MediaArtifactType.POSTER;
+        }
     }
     
     private static String GetPathFromKey(String Key){
@@ -248,12 +266,12 @@ public class ImageCache {
             return "";
         }
     }
-    private static String GetTypeFromKey(String Key){
+    private static MediaArtifactType GetTypeFromKey(String Key){
         List<String> tList = util.ConvertStringtoList(Key);
         if (tList.size()>1){
-            return tList.get(1);
+            return ConvertStringtoMediaArtifactType(tList.get(1));
         }else{
-            return "poster";
+            return MediaArtifactType.POSTER;
         }
     }
     private static Boolean GetOriginalSizeFromKey(String Key){
@@ -264,11 +282,27 @@ public class ImageCache {
             return Boolean.FALSE;
         }
     }
+    private static String GetIDFromKey(String Key){
+        List<String> tList = util.ConvertStringtoList(Key);
+        if (tList.size()>3){
+            return tList.get(3);
+        }else{
+            return "";
+        }
+    }
 
-    public static Object CreateImage(String ImageString, String ImageType, Boolean originalSize){
+    public static Object CreateImage(String ImageString, MediaArtifactType ImageType, Boolean originalSize, String ImageID){
         if (ImageString.equals("")){
             return null;
         }
+        Object ThisImage = null;
+        //See if the image is already cached in the filesystem by a previous CreateImage call
+        ThisImage = phoenix.image.GetImage(ImageID, ImageTag);
+        if (ThisImage!=null){
+            LOG.debug("CreateImage: Filesystem cached item found for Tag '" + ImageTag + "' ID '" + ImageID + "'");
+            return ThisImage;
+        }
+        
         UIContext UIc = new UIContext(sagex.api.Global.GetUIContextName());
         //based on the ImageType determine the scalewidth to use
         Integer UIWidth = sagex.api.Global.GetFullUIWidth(UIc);
@@ -276,20 +310,19 @@ public class ImageCache {
         if (originalSize){
             scalewidth = 1.0;
         }else{
-            if (ImageType.equals("poster")){
+            if (ImageType.equals(MediaArtifactType.POSTER)){
                 scalewidth = 0.2;
-            }else if (ImageType.equals("banner")){
+            }else if (ImageType.equals(MediaArtifactType.BANNER)){
                 scalewidth = 0.6;
-            }else if (ImageType.equals("background")){
+            }else if (ImageType.equals(MediaArtifactType.BACKGROUND)){
                 scalewidth = 0.4;
             }else{
                 //use default
             }
         }
         Double finalscalewidth = scalewidth * UIWidth;
-        Object ThisImage = null;
         try {
-            ThisImage = phoenix.image.CreateImage("gemstone-"+ImageType, ImageString, "{name: scale, width: " + finalscalewidth + ", height: -1}", false);
+            ThisImage = phoenix.image.CreateImage(ImageID, ImageTag, ImageString, "{name: scale, width: " + finalscalewidth + ", height: -1}", false);
         } catch (Exception e) {
             LOG.debug("CreateImage: phoenix.image.CreateImage FAILED using LoagImage(loadImage)) - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + ImageType + "' Image = '" + ImageString + "' Error: '" + e + "'");
             return null;
@@ -319,22 +352,22 @@ public class ImageCache {
         util.SetListOptionNext(ICacheProps, Const.ImageCacheType, ImageCacheTypesList);
     }
 
-    public static String GetCacheType(String ImageType){
+    public static String GetCacheType(MediaArtifactType ImageType){
         if (GetCacheType().equals(ImageCacheTypes.BYIMAGETYPE.toString())){
             String tProp = ICacheProps + Const.PropDivider + Const.ImageCacheType;
-            return util.GetListOptionName(tProp, ImageType, ImageCacheTypesListByImageType, ImageCacheTypes.OFF.toString());
+            return util.GetListOptionName(tProp, ImageType.toString(), ImageCacheTypesListByImageType, ImageCacheTypes.OFF.toString());
         }else{
             return GetCacheType();
         }
     }
-    public static void SetCacheTypeNext(String ImageType){
+    public static void SetCacheTypeNext(MediaArtifactType ImageType){
         if (GetCacheType().equals(ImageCacheTypes.BYIMAGETYPE.toString())){
             String tProp = ICacheProps + Const.PropDivider + Const.ImageCacheType;
-            util.SetListOptionNext(tProp, ImageType, ImageCacheTypesListByImageType);
+            util.SetListOptionNext(tProp, ImageType.toString(), ImageCacheTypesListByImageType);
         }
     }
     
-    public static Boolean UseQueue(String ImageType){
+    public static Boolean UseQueue(MediaArtifactType ImageType){
         if (GetCacheType(ImageType).equals(ImageCacheTypes.BACKGROUND.toString())){
             return Boolean.TRUE;
         }else{
@@ -342,7 +375,7 @@ public class ImageCache {
         }
     }
 
-    public static Boolean UseCache(String ImageType){
+    public static Boolean UseCache(MediaArtifactType ImageType){
         if (GetCacheType(ImageType).equals(ImageCacheTypes.OFF.toString())){
             return Boolean.FALSE;
         }else{
