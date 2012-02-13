@@ -82,7 +82,6 @@ public class ImageCache {
         String tImageString = "";
         IMediaResource childmediaresource = null;
         String Grouping = "NoGroup";
-        Boolean UseChildMediaObject = Boolean.FALSE;
         Object faMediaObject = null;
         MediaType faMediaType = null;
         String faMediaTitle = null;
@@ -95,13 +94,10 @@ public class ImageCache {
         if (phoenix.media.IsMediaType( imediaresource , "FOLDER" )){
             ViewFolder Folder = (ViewFolder) imediaresource;
             ViewFolder Parent = (ViewFolder) phoenix.media.GetParent(imediaresource);
-            //get the first child item if any from the Folder
+            //get a child item (if any) from the Folder
             if (phoenix.media.GetAllChildren(Folder, 1).size()>0){
-                //TODO: may want to introduce some random selection of a child record here!!!
-                //RandomElement = phoenix_util_GetRandomNumber(Size(phoenix_media_GetChildren(gemstoneBackgroundVideoCell)))
-                //gemstoneBackgroundVideoCell = GetElement(phoenix_media_GetChildren(gemstoneBackgroundVideoCell),RandomElement)
-                
-                childmediaresource = (IMediaResource) phoenix.media.GetAllChildren(Folder, 1).get(0);
+                Integer RandomElement = phoenix.util.GetRandomNumber(phoenix.media.GetAllChildren(Folder).size());
+                childmediaresource = (IMediaResource) phoenix.media.GetAllChildren(Folder).get(RandomElement);
             }
             //see how the folder is grouped
             if (phoenix.umb.GetGroupers(Parent).size() > 0){
@@ -117,34 +113,28 @@ public class ImageCache {
                 if (phoenix.media.IsMediaType( childmediaresource , "TV" )){
                     LOG.debug("GetImage: TV show found '" + phoenix.media.GetTitle(imediaresource) + "' using Series Fanart");
                     //use Series type fanart
-                    UseChildMediaObject = Boolean.FALSE;
                     faMediaObject = phoenix.media.GetMediaObject(childmediaresource);
                     faMetadata = Collections.emptyMap();
                     faMediaType = MediaType.TV;
                 }else{
                     LOG.debug("GetImage: Other show found '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
                     //use a child for the show fanart
-                    UseChildMediaObject = Boolean.TRUE;
                     faMediaObject = phoenix.media.GetMediaObject(childmediaresource);
                 }
             }else if (Grouping.equals("genre")){
                 LOG.debug("GetImage: genre group found '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
-                UseChildMediaObject = Boolean.TRUE;
                 faMediaObject = phoenix.media.GetMediaObject(childmediaresource);
                 //TODO:SPECIAL handling to get GENRE images
                 
             }else if (Grouping.equals("season")){
                 LOG.debug("GetImage: season group found '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
                 //just use a child item so you get fanart for the specific season
-                UseChildMediaObject = Boolean.TRUE;
                 faMediaObject = phoenix.media.GetMediaObject(childmediaresource);
             }else if (Grouping.equals("NoGroup")){
                 LOG.debug("GetImage: Folder found but no grouping for '" + phoenix.media.GetTitle(imediaresource) + "' using passed in object for Fanart");
-                UseChildMediaObject = Boolean.FALSE;
                 faMediaObject = phoenix.media.GetMediaObject(imediaresource);
             }else{
                 LOG.debug("GetImage: unhandled grouping found '" + Grouping + "' for Title '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
-                UseChildMediaObject = Boolean.TRUE;
                 faMediaObject = phoenix.media.GetMediaObject(childmediaresource);
             }
         }else{
@@ -162,13 +152,18 @@ public class ImageCache {
                 }
             }else{
                 faMediaObject = phoenix.media.GetMediaObject(imediaresource);
+                //faMediaType = MediaType.MOVIE;
                 LOG.debug("GetImage: Title '" + phoenix.media.GetTitle(imediaresource) + "' using passed in object for Fanart");
             }
                 
         }
         
         if (tImageString.equals("")){
-            tImageString = phoenix.fanart.GetFanartArtifact(faMediaObject, faMediaType.toString(), faMediaTitle, faArtifactType.toString(), faArtifiactTitle, faMetadata);
+            String tMediaType = null;
+            if (faMediaType!=null){
+                tMediaType = faMediaType.toString();
+            }
+            tImageString = phoenix.fanart.GetFanartArtifact(faMediaObject, tMediaType, faMediaTitle, faArtifactType.toString(), faArtifiactTitle, faMetadata);
             LOG.debug("GetImage: GetFanartArtifact returned '" + tImageString + "'");
         }
         if (tImageString==null || tImageString.equals("")){
@@ -181,9 +176,10 @@ public class ImageCache {
         //see if we are caching or just returning an image
         if (UseCache(faArtifactType)){
             //see if the image is in the cache and if so return it
-            if (ICache.containsKey(tImageString)){
+            mediaObject = ICache.get(tImageString);
+            if (mediaObject!=null){
                 LOG.debug("GetImage: found Image in Cache and return it based on '" + tImageString + "'");
-                return ICache.get(tImageString);
+                return mediaObject;
             }else{
                 if (UseQueue(faArtifactType)){
                     //add the imagestring to the queue for background processing later
@@ -238,8 +234,15 @@ public class ImageCache {
             //get the image and add it to the cache then return it
             Object tImage = CreateImage(tImageString, resourcetype, originalSize, ImageID);
             ICache.put(tImageString, tImage);
-            LOG.debug("GetImageFromQueue: adding to Cache '" + tImageString + "'");
+            LOG.debug("GetImageFromQueue: remaining(" + IQueue.size() + ") adding to Cache '" + tImageString + "'");
+        }else{
+            LOG.debug("GetImageFromQueue: EMPTY QUEUE");
         }
+    }
+    
+    public static Integer GetQueueSize(){
+        LOG.debug("GetQueueSize: '" + IQueue.size() + "'");
+        return IQueue.size();
     }
     
     private static String GetQueueKey(String ImageString, MediaArtifactType ImageType, Boolean originalSize, String ImageID){
@@ -346,7 +349,7 @@ public class ImageCache {
     }
 
     public static String GetCacheType(){
-        return util.GetListOptionName(ICacheProps, Const.ImageCacheType, ImageCacheTypesList, ImageCacheTypes.OFF.toString());
+        return util.GetListOptionName(ICacheProps, Const.ImageCacheType, ImageCacheTypesList, ImageCacheTypes.BACKGROUND.toString());
     }
     public static void SetCacheTypeNext(){
         util.SetListOptionNext(ICacheProps, Const.ImageCacheType, ImageCacheTypesList);
@@ -367,6 +370,15 @@ public class ImageCache {
         }
     }
     
+    public static Boolean UseQueue(){
+        if (GetCacheType().equals(ImageCacheTypes.BACKGROUND.toString())){
+            return Boolean.TRUE;
+        }else if (GetCacheType().equals(ImageCacheTypes.BYIMAGETYPE.toString())){
+            return Boolean.TRUE;
+        }else{
+            return Boolean.FALSE;
+        }
+    }
     public static Boolean UseQueue(MediaArtifactType ImageType){
         if (GetCacheType(ImageType).equals(ImageCacheTypes.BACKGROUND.toString())){
             return Boolean.TRUE;
