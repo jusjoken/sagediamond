@@ -72,6 +72,7 @@ public class api {
             }catch (Exception ex){//Catch exception if any
                 LOG.debug("Load: - error creating '" + util.UserDataLocation() + "'" + ex.getMessage());
             }
+        ImageCache.Init();
         
    }
 
