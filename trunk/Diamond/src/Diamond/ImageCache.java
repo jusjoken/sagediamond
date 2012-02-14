@@ -81,7 +81,7 @@ public class ImageCache {
             return null;
         }
 
-        Object tKey = BuildImageKey(imediaresource, resourcetype, originalSize, defaultImage);
+        ImageCacheKey tKey = GetImageKey(imediaresource, resourcetype, originalSize, defaultImage);
         if (!IsValidKey(tKey)){
             //this must already be a Image Object or other return key
             LOG.debug("GetImage: Not a valid Key so returning key directly '" + tKey.toString() + "'");
@@ -157,7 +157,7 @@ public class ImageCache {
         return GetImage(proxy, resourcetype, originalSize, defaultImage);
     }
 
-    public static Object BuildImageKey(IMediaResource imediaresource, String resourcetype, Boolean originalSize, String defaultImage){
+    public static ImageCacheKey GetImageKey(IMediaResource imediaresource, String resourcetype, Boolean originalSize, String defaultImage){
         resourcetype = resourcetype.toLowerCase();
         Object tImage = null;
         Object mediaObject = null;
@@ -167,9 +167,10 @@ public class ImageCache {
         Object faMediaObject = null;
         MediaType faMediaType = null;
         String faMediaTitle = null;
-        MediaArtifactType faArtifactType = ConvertStringtoMediaArtifactType(resourcetype);
+        MediaArtifactType faArtifactType = ImageCacheKey.ConvertStringtoMediaArtifactType(resourcetype);
         String faArtifiactTitle = null;
         Map<String,String> faMetadata = null;
+        Object DefaultEpisodeImage = null;
         
         //see if this is a FOLDER item
         //we will need a MediaObject to get any fanart so get it from the passed in resource OR the child if any
@@ -193,30 +194,30 @@ public class ImageCache {
             if (Grouping.equals("show")){
                 //need to know if this is a TV show grouping to get a Series fanart item
                 if (phoenix.media.IsMediaType( childmediaresource , "TV" )){
-                    LOG.debug("BuildImageKey: TV show found '" + phoenix.media.GetTitle(imediaresource) + "' using Series Fanart");
+                    LOG.debug("GetImageKey: TV show found '" + phoenix.media.GetTitle(imediaresource) + "' using Series Fanart");
                     //use Series type fanart
                     faMediaObject = phoenix.media.GetMediaObject(childmediaresource);
                     faMetadata = Collections.emptyMap();
                     faMediaType = MediaType.TV;
                 }else{
-                    LOG.debug("BuildImageKey: Other show found '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
+                    LOG.debug("GetImageKey: Other show found '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
                     //use a child for the show fanart
                     faMediaObject = phoenix.media.GetMediaObject(childmediaresource);
                 }
             }else if (Grouping.equals("genre")){
-                LOG.debug("BuildImageKey: genre group found '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
+                LOG.debug("GetImageKey: genre group found '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
                 faMediaObject = phoenix.media.GetMediaObject(childmediaresource);
                 //TODO:SPECIAL handling to get GENRE images
                 
             }else if (Grouping.equals("season")){
-                LOG.debug("BuildImageKey: season group found '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
+                LOG.debug("GetImageKey: season group found '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
                 //just use a child item so you get fanart for the specific season
                 faMediaObject = phoenix.media.GetMediaObject(childmediaresource);
             }else if (Grouping.equals("NoGroup")){
-                LOG.debug("BuildImageKey: Folder found but no grouping for '" + phoenix.media.GetTitle(imediaresource) + "' using passed in object for Fanart");
+                LOG.debug("GetImageKey: Folder found but no grouping for '" + phoenix.media.GetTitle(imediaresource) + "' using passed in object for Fanart");
                 faMediaObject = phoenix.media.GetMediaObject(imediaresource);
             }else{
-                LOG.debug("BuildImageKey: unhandled grouping found '" + Grouping + "' for Title '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
+                LOG.debug("GetImageKey: unhandled grouping found '" + Grouping + "' for Title '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
                 faMediaObject = phoenix.media.GetMediaObject(childmediaresource);
             }
         }else{
@@ -227,15 +228,20 @@ public class ImageCache {
                 faMediaObject = phoenix.media.GetMediaObject(imediaresource);
                 tImageString = phoenix.fanart.GetEpisode(faMediaObject);
                 if (tImageString==null || tImageString.equals("")){
-                    LOG.debug("BuildImageKey: Episode '" + phoenix.media.GetTitle(imediaresource) + "' returning Fanart based on GetDefaultEpisode");
-                    return phoenix.fanart.GetDefaultEpisode(faMediaObject);
+                    LOG.debug("GetImageKey: Episode '" + phoenix.media.GetTitle(imediaresource) + "' using Fanart based on GetDefaultEpisode");
+                    DefaultEpisodeImage = phoenix.fanart.GetDefaultEpisode(faMediaObject);
+                    ImageCacheKey tICK = new ImageCacheKey();
+                    tICK.setDefaultEpisodeImage(DefaultEpisodeImage);
+                    tICK.setDefaultImage(defaultImage);
+                    return tICK;
+                    
                 }else{
-                    LOG.debug("BuildImageKey: Episode '" + phoenix.media.GetTitle(imediaresource) + "' Fanart found '" + tImageString + "'");
+                    LOG.debug("GetImageKey: Episode '" + phoenix.media.GetTitle(imediaresource) + "' Fanart found '" + tImageString + "'");
                 }
             }else{
                 faMediaObject = phoenix.media.GetMediaObject(imediaresource);
                 //faMediaType = MediaType.MOVIE;
-                LOG.debug("BuildImageKey: Title '" + phoenix.media.GetTitle(imediaresource) + "' using passed in object for Fanart");
+                LOG.debug("GetImageKey: Title '" + phoenix.media.GetTitle(imediaresource) + "' using passed in object for Fanart");
             }
                 
         }
@@ -246,17 +252,21 @@ public class ImageCache {
                 tMediaType = faMediaType.toString();
             }
             tImageString = phoenix.fanart.GetFanartArtifact(faMediaObject, tMediaType, faMediaTitle, faArtifactType.toString(), faArtifiactTitle, faMetadata);
-            LOG.debug("BuildImageKey: GetFanartArtifact returned '" + tImageString + "'");
+            LOG.debug("GetImageKey: GetFanartArtifact returned '" + tImageString + "'");
         }
         if (tImageString==null || tImageString.equals("")){
-            LOG.debug("BuildImageKey: tImageString blank or NULL so returning defaultImage");
-            return defaultImage;
+            LOG.debug("GetImageKey: tImageString blank or NULL so returning defaultImage");
+            ImageCacheKey tICK = new ImageCacheKey();
+            tICK.setDefaultImage(defaultImage);
+            return tICK;
         }
         String ImageID = phoenix.fanart.ImageKey(faMediaObject, faMediaType, faMediaTitle, faArtifactType, faArtifiactTitle, faMetadata);
-        LOG.debug("BuildImageKey: ImageID created '" + ImageID + "'");
-        String tKey = GetQueueKey(tImageString, faArtifactType, originalSize, ImageID);
-        LOG.debug("BuildImageKey: Key '" + tKey.toString() + "'");
-        return tKey;
+        LOG.debug("GetImageKey: ImageID created '" + ImageID + "'");
+        //String tKey = GetQueueKey(tImageString, faArtifactType, originalSize, ImageID);
+        ImageCacheKey tICK = new ImageCacheKey(tImageString,originalSize,faArtifactType,ImageID);
+        tICK.setDefaultImage(defaultImage);
+        LOG.debug("GetImageKey: Key '" + tICK + "'");
+        return tICK;
     }
     
 //    public static Object GetImage(IMediaResource imediaresource, String resourcetype, Boolean originalSize, String defaultImage){
@@ -425,18 +435,6 @@ public class ImageCache {
     
     private static String GetQueueKey(String ImageString, MediaArtifactType ImageType, Boolean originalSize, String ImageID){
         return CreateImageTag + util.ListToken + ImageString + util.ListToken + ImageType + util.ListToken + originalSize.toString() + util.ListToken + ImageID;
-    }
-    
-    private static MediaArtifactType ConvertStringtoMediaArtifactType(String ImageType){
-        if (ImageType.equals("poster")){
-            return MediaArtifactType.POSTER;
-        }else if (ImageType.equals("banner")){
-            return MediaArtifactType.BANNER;
-        }else if (ImageType.equals("background")){
-            return MediaArtifactType.BACKGROUND;
-        }else{
-            return MediaArtifactType.POSTER;
-        }
     }
     
     private static Boolean IsValidKey(Object Key){
