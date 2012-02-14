@@ -37,6 +37,10 @@ public class ImageCache {
     static private final Logger LOG = Logger.getLogger(ImageCache.class);
     private static final String ICacheProps = Const.BaseProp + Const.PropDivider + Const.ImageCacheProp;
     private static LinkedList IQueue = new LinkedList();
+    private static LinkedList<String> IQueue2 = new LinkedList<String>();
+    //TODO: try creating an object to use in the LinkedList <QueueItem> so we can store each part of the Key
+    //TODO: OR keep an extra list with the objects in it and sync them
+    //TODO: OR use a MAP of some type that may mimic a QUEUE - need contains, add to bottom - get from top and remove.
     private static SoftHashMap ICache = new SoftHashMap(GetMinSize());
     public static enum ImageCacheTypes{OFF,BACKGROUND,NOQUEUE,BYIMAGETYPE};
     private static final String ImageCacheTypesList = ImageCacheTypes.OFF + util.ListToken + ImageCacheTypes.BACKGROUND + util.ListToken + ImageCacheTypes.NOQUEUE + util.ListToken + ImageCacheTypes.BYIMAGETYPE;
@@ -80,6 +84,7 @@ public class ImageCache {
         Object tKey = BuildImageKey(imediaresource, resourcetype, originalSize, defaultImage);
         if (!IsValidKey(tKey)){
             //this must already be a Image Object or other return key
+            LOG.debug("GetImage: Not a valid Key so returning key directly '" + tKey.toString() + "'");
             return tKey;
         }
         return GetImageFromKey(tKey, defaultImage);
@@ -93,37 +98,38 @@ public class ImageCache {
         String ImageID = GetIDFromKey(tKey.toString());
         Boolean originalSize = GetOriginalSizeFromKey(tKey.toString());
         
+        LOG.debug("GetImageFromKey: Key '" + tKey.toString() + "'");
         //see if we are caching or just returning an image
         if (UseCache(faArtifactType)){
             //see if the image is in the cache and if so return it
             mediaObject = ICache.get(tImageString);
             if (mediaObject!=null){
-                LOG.debug("GetImage: found Image in Cache and return it based on '" + tImageString + "'");
+                LOG.debug("GetImageFromKey: found Image in Cache and return it based on '" + tImageString + "'");
                 return mediaObject;
             }else{
                 if (UseQueue(faArtifactType)){
                     //see if the item is already in the queue
-                    if (IQueue.contains(tKey)){
-                        LOG.debug("GetImage: already in the Queue '" + tImageString + "' defaultImage returned '" + defaultImage + "'");
+                    if (IQueue.contains(tKey.toString())){
+                        LOG.debug("GetImageFromKey: already in the Queue '" + tImageString + "' defaultImage returned '" + defaultImage + "'");
                         return defaultImage;
                     }else{
                         //add the imagestring to the queue for background processing later
-                        IQueue.add(tKey);
-                        LOG.debug("GetImage: adding to Queue '" + tImageString + "' defaultImage returned '" + defaultImage + "'");
+                        IQueue.add(tKey.toString());
+                        LOG.debug("GetImageFromKey: adding to Queue '" + tImageString + "' defaultImage returned '" + defaultImage + "'");
                         return defaultImage;
                     }
                 }else{
                     //get the image and add it to the cache then return it
                     tImage = CreateImage(tImageString, faArtifactType, originalSize, ImageID);
                     ICache.put(tImageString, tImage);
-                    LOG.debug("GetImage: adding to Cache '" + tImageString + "'");
+                    LOG.debug("GetImageFromKey: adding to Cache '" + tImageString + "'");
                     return tImage;
                 }
             }
         }else{
             //get the image and return it
             tImage = CreateImage(tImageString, faArtifactType, originalSize, ImageID);
-            LOG.debug("GetImage: cache off so returning image for '" + tImageString + "'");
+            LOG.debug("GetImageFromKey: cache off so returning image for '" + tImageString + "'");
             return tImage;
         }
     }
@@ -187,30 +193,30 @@ public class ImageCache {
             if (Grouping.equals("show")){
                 //need to know if this is a TV show grouping to get a Series fanart item
                 if (phoenix.media.IsMediaType( childmediaresource , "TV" )){
-                    LOG.debug("GetImage: TV show found '" + phoenix.media.GetTitle(imediaresource) + "' using Series Fanart");
+                    LOG.debug("BuildImageKey: TV show found '" + phoenix.media.GetTitle(imediaresource) + "' using Series Fanart");
                     //use Series type fanart
                     faMediaObject = phoenix.media.GetMediaObject(childmediaresource);
                     faMetadata = Collections.emptyMap();
                     faMediaType = MediaType.TV;
                 }else{
-                    LOG.debug("GetImage: Other show found '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
+                    LOG.debug("BuildImageKey: Other show found '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
                     //use a child for the show fanart
                     faMediaObject = phoenix.media.GetMediaObject(childmediaresource);
                 }
             }else if (Grouping.equals("genre")){
-                LOG.debug("GetImage: genre group found '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
+                LOG.debug("BuildImageKey: genre group found '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
                 faMediaObject = phoenix.media.GetMediaObject(childmediaresource);
                 //TODO:SPECIAL handling to get GENRE images
                 
             }else if (Grouping.equals("season")){
-                LOG.debug("GetImage: season group found '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
+                LOG.debug("BuildImageKey: season group found '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
                 //just use a child item so you get fanart for the specific season
                 faMediaObject = phoenix.media.GetMediaObject(childmediaresource);
             }else if (Grouping.equals("NoGroup")){
-                LOG.debug("GetImage: Folder found but no grouping for '" + phoenix.media.GetTitle(imediaresource) + "' using passed in object for Fanart");
+                LOG.debug("BuildImageKey: Folder found but no grouping for '" + phoenix.media.GetTitle(imediaresource) + "' using passed in object for Fanart");
                 faMediaObject = phoenix.media.GetMediaObject(imediaresource);
             }else{
-                LOG.debug("GetImage: unhandled grouping found '" + Grouping + "' for Title '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
+                LOG.debug("BuildImageKey: unhandled grouping found '" + Grouping + "' for Title '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
                 faMediaObject = phoenix.media.GetMediaObject(childmediaresource);
             }
         }else{
@@ -221,15 +227,15 @@ public class ImageCache {
                 faMediaObject = phoenix.media.GetMediaObject(imediaresource);
                 tImageString = phoenix.fanart.GetEpisode(faMediaObject);
                 if (tImageString==null || tImageString.equals("")){
-                    LOG.debug("GetImage: Episode '" + phoenix.media.GetTitle(imediaresource) + "' returning Fanart based on GetDefaultEpisode");
+                    LOG.debug("BuildImageKey: Episode '" + phoenix.media.GetTitle(imediaresource) + "' returning Fanart based on GetDefaultEpisode");
                     return phoenix.fanart.GetDefaultEpisode(faMediaObject);
                 }else{
-                    LOG.debug("GetImage: Episode '" + phoenix.media.GetTitle(imediaresource) + "' Fanart found '" + tImageString + "'");
+                    LOG.debug("BuildImageKey: Episode '" + phoenix.media.GetTitle(imediaresource) + "' Fanart found '" + tImageString + "'");
                 }
             }else{
                 faMediaObject = phoenix.media.GetMediaObject(imediaresource);
                 //faMediaType = MediaType.MOVIE;
-                LOG.debug("GetImage: Title '" + phoenix.media.GetTitle(imediaresource) + "' using passed in object for Fanart");
+                LOG.debug("BuildImageKey: Title '" + phoenix.media.GetTitle(imediaresource) + "' using passed in object for Fanart");
             }
                 
         }
@@ -240,15 +246,16 @@ public class ImageCache {
                 tMediaType = faMediaType.toString();
             }
             tImageString = phoenix.fanart.GetFanartArtifact(faMediaObject, tMediaType, faMediaTitle, faArtifactType.toString(), faArtifiactTitle, faMetadata);
-            LOG.debug("GetImage: GetFanartArtifact returned '" + tImageString + "'");
+            LOG.debug("BuildImageKey: GetFanartArtifact returned '" + tImageString + "'");
         }
         if (tImageString==null || tImageString.equals("")){
-            LOG.debug("GetImage: tImageString blank or NULL so returning defaultImage");
+            LOG.debug("BuildImageKey: tImageString blank or NULL so returning defaultImage");
             return defaultImage;
         }
         String ImageID = phoenix.fanart.ImageKey(faMediaObject, faMediaType, faMediaTitle, faArtifactType, faArtifiactTitle, faMetadata);
-        LOG.debug("GetImage: ImageID created '" + ImageID + "'");
+        LOG.debug("BuildImageKey: ImageID created '" + ImageID + "'");
         String tKey = GetQueueKey(tImageString, faArtifactType, originalSize, ImageID);
+        LOG.debug("BuildImageKey: Key '" + tKey.toString() + "'");
         return tKey;
     }
     
