@@ -5,6 +5,7 @@
 package Diamond;
 
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -36,8 +37,7 @@ public class ImageCache {
     // - CacheType - ByImageType - 
     static private final Logger LOG = Logger.getLogger(ImageCache.class);
     private static final String ICacheProps = Const.BaseProp + Const.PropDivider + Const.ImageCacheProp;
-    private static LinkedList IQueue = new LinkedList();
-    private static LinkedList<String> IQueue2 = new LinkedList<String>();
+    private static LinkedHashMap<String,ImageCacheKey> IQueue = new LinkedHashMap<String,ImageCacheKey>();
     //TODO: try creating an object to use in the LinkedList <QueueItem> so we can store each part of the Key
     //TODO: OR keep an extra list with the objects in it and sync them
     //TODO: OR use a MAP of some type that may mimic a QUEUE - need contains, add to bottom - get from top and remove.
@@ -82,54 +82,53 @@ public class ImageCache {
         }
 
         ImageCacheKey tKey = GetImageKey(imediaresource, resourcetype, originalSize, defaultImage);
-        if (!IsValidKey(tKey)){
-            //this must already be a Image Object or other return key
-            LOG.debug("GetImage: Not a valid Key so returning key directly '" + tKey.toString() + "'");
-            return tKey;
+        if (!tKey.IsValidKey()){
+            LOG.debug("GetImage: Not a valid Key so returning defaultimage '" + tKey.getDefaultImage() + "'");
+            return tKey.getDefaultImage();
         }
-        return GetImageFromKey(tKey, defaultImage);
+        return GetImage(tKey);
     }
 
-    public static Object GetImageFromKey(Object tKey, String defaultImage){
-        MediaArtifactType faArtifactType = GetTypeFromKey(tKey.toString());
+    public static Object GetImage(ImageCacheKey Key){
+        MediaArtifactType faArtifactType = Key.getArtifactType();
         Object mediaObject = null;
-        String tImageString = GetPathFromKey(tKey.toString());
+        String tImageString = Key.getImagePath();
         Object tImage = null;
-        String ImageID = GetIDFromKey(tKey.toString());
-        Boolean originalSize = GetOriginalSizeFromKey(tKey.toString());
+        String ImageID = Key.getImageID();
+        Boolean originalSize = Key.getOriginalSize();
         
-        LOG.debug("GetImageFromKey: Key '" + tKey.toString() + "'");
+        LOG.debug("GetImage: FromKey: '" + Key.getKey() + "'");
         //see if we are caching or just returning an image
         if (UseCache(faArtifactType)){
             //see if the image is in the cache and if so return it
-            mediaObject = ICache.get(tImageString);
+            mediaObject = ICache.get(Key.getKey());
             if (mediaObject!=null){
-                LOG.debug("GetImageFromKey: found Image in Cache and return it based on '" + tImageString + "'");
+                LOG.debug("GetImage: FromKey: found Image in Cache and return it based on '" + tImageString + "'");
                 return mediaObject;
             }else{
                 if (UseQueue(faArtifactType)){
                     //see if the item is already in the queue
-                    if (IQueue.contains(tKey.toString())){
-                        LOG.debug("GetImageFromKey: already in the Queue '" + tImageString + "' defaultImage returned '" + defaultImage + "'");
-                        return defaultImage;
+                    if (IQueue.containsKey(Key.getKey())){
+                        LOG.debug("GetImage: FromKey: already in the Queue '" + Key.getKey() + "' defaultImage returned '" + Key.getDefaultImage() + "'");
+                        return Key.getDefaultImage();
                     }else{
                         //add the imagestring to the queue for background processing later
-                        IQueue.add(tKey.toString());
-                        LOG.debug("GetImageFromKey: adding to Queue '" + tImageString + "' defaultImage returned '" + defaultImage + "'");
-                        return defaultImage;
+                        IQueue.put(Key.getKey(),Key);
+                        LOG.debug("GetImage: FromKey: adding to Queue '" + tImageString + "' defaultImage returned '" + Key.getDefaultImage() + "'");
+                        return Key.getDefaultImage();
                     }
                 }else{
                     //get the image and add it to the cache then return it
-                    tImage = CreateImage(tImageString, faArtifactType, originalSize, ImageID);
-                    ICache.put(tImageString, tImage);
-                    LOG.debug("GetImageFromKey: adding to Cache '" + tImageString + "'");
+                    tImage = CreateImage(Key);
+                    ICache.put(Key.getKey(), tImage);
+                    LOG.debug("GetImage: FromKey: adding to Cache '" + Key.getKey() + "'");
                     return tImage;
                 }
             }
         }else{
             //get the image and return it
-            tImage = CreateImage(tImageString, faArtifactType, originalSize, ImageID);
-            LOG.debug("GetImageFromKey: cache off so returning image for '" + tImageString + "'");
+            tImage = CreateImage(Key);
+            LOG.debug("GetImage: FromKey: cache off so returning image for '" + Key.getKey() + "'");
             return tImage;
         }
     }
@@ -157,6 +156,12 @@ public class ImageCache {
         return GetImage(proxy, resourcetype, originalSize, defaultImage);
     }
 
+    public static ImageCacheKey GetImageKey(IMediaResource imediaresource, String resourcetype){
+        return GetImageKey(imediaresource, resourcetype, Boolean.FALSE, "");
+    }
+    public static ImageCacheKey GetImageKey(IMediaResource imediaresource, String resourcetype, Boolean originalSize){
+        return GetImageKey(imediaresource, resourcetype, originalSize, "");
+    }
     public static ImageCacheKey GetImageKey(IMediaResource imediaresource, String resourcetype, Boolean originalSize, String defaultImage){
         resourcetype = resourcetype.toLowerCase();
         Object tImage = null;
@@ -224,17 +229,15 @@ public class ImageCache {
             //not a FOLDER
             if (phoenix.media.IsMediaType( imediaresource , "TV" )){
                 //for TV items we need to get an Episode Fanart
-                //no need to cache these so just return the image object
+                //the resourcetype changes to a background as poster and banner fanaet are not available
                 faMediaObject = phoenix.media.GetMediaObject(imediaresource);
                 tImageString = phoenix.fanart.GetEpisode(faMediaObject);
+                faArtifactType = MediaArtifactType.BACKGROUND;
                 if (tImageString==null || tImageString.equals("")){
                     LOG.debug("GetImageKey: Episode '" + phoenix.media.GetTitle(imediaresource) + "' using Fanart based on GetDefaultEpisode");
                     DefaultEpisodeImage = phoenix.fanart.GetDefaultEpisode(faMediaObject);
-                    ImageCacheKey tICK = new ImageCacheKey();
-                    tICK.setDefaultEpisodeImage(DefaultEpisodeImage);
-                    tICK.setDefaultImage(defaultImage);
-                    return tICK;
-                    
+                    //use the title for the ImageString
+                    tImageString = phoenix.media.GetTitle(imediaresource);
                 }else{
                     LOG.debug("GetImageKey: Episode '" + phoenix.media.GetTitle(imediaresource) + "' Fanart found '" + tImageString + "'");
                 }
@@ -264,6 +267,7 @@ public class ImageCache {
         LOG.debug("GetImageKey: ImageID created '" + ImageID + "'");
         //String tKey = GetQueueKey(tImageString, faArtifactType, originalSize, ImageID);
         ImageCacheKey tICK = new ImageCacheKey(tImageString,originalSize,faArtifactType,ImageID);
+        tICK.setDefaultEpisodeImage(DefaultEpisodeImage);
         tICK.setDefaultImage(defaultImage);
         LOG.debug("GetImageKey: Key '" + tICK + "'");
         return tICK;
@@ -412,85 +416,34 @@ public class ImageCache {
     public static void GetImageFromQueue(){
         if (IQueue.size()>0){
             UIContext UIc = new UIContext(sagex.api.Global.GetUIContextName());
-            String tItem = IQueue.pop().toString();
-            String tImageString = GetPathFromKey(tItem);
-            MediaArtifactType resourcetype = GetTypeFromKey(tItem);
-            Boolean originalSize = GetOriginalSizeFromKey(tItem);
-            String ImageID = GetIDFromKey(tItem);
+            String tItemKey = IQueue.entrySet().iterator().next().getKey();
+            ImageCacheKey tItem = IQueue.get(tItemKey);
+            IQueue.remove(tItemKey);
             //get the image and add it to the cache then return it
-            Object tImage = CreateImage(tImageString, resourcetype, originalSize, ImageID);
+            Object tImage = CreateImage(tItem);
             sagex.api.Global.RefreshAreaForVariable(UIc, "PreloadTag", tItem);
             //RefreshAreaForVariable("PreloadTag",CurPreloadItem)
-            ICache.put(tImageString, tImage);
-            LOG.debug("GetImageFromQueue: remaining(" + IQueue.size() + ") adding to Cache '" + tImageString + "'");
+            ICache.put(tItem.getKey(), tImage);
+            LOG.debug("GetImageFromQueue: remaining(" + IQueue.size() + ") adding to Cache '" + tItem.getKey() + "'");
         }else{
             LOG.debug("GetImageFromQueue: EMPTY QUEUE");
         }
     }
     
     public static Integer GetQueueSize(){
-        LOG.debug("GetQueueSize: '" + IQueue.size() + "'");
+        //LOG.debug("GetQueueSize: '" + IQueue.size() + "'");
         return IQueue.size();
     }
-    
-    private static String GetQueueKey(String ImageString, MediaArtifactType ImageType, Boolean originalSize, String ImageID){
-        return CreateImageTag + util.ListToken + ImageString + util.ListToken + ImageType + util.ListToken + originalSize.toString() + util.ListToken + ImageID;
-    }
-    
-    private static Boolean IsValidKey(Object Key){
-        List<String> tList = util.ConvertStringtoList(Key.toString());
-        if (tList.size()>0){
-            if (tList.get(0).equals(CreateImageTag)){
-                return Boolean.TRUE;
-            }else{
-                return Boolean.FALSE;
-            }
-        }else{
-            return Boolean.FALSE;
-        }
-    }
-    private static String GetPathFromKey(String Key){
-        List<String> tList = util.ConvertStringtoList(Key);
-        if (tList.size()>1){
-            return tList.get(1);
-        }else{
-            return "";
-        }
-    }
-    private static MediaArtifactType GetTypeFromKey(String Key){
-        List<String> tList = util.ConvertStringtoList(Key);
-        if (tList.size()>2){
-            return ConvertStringtoMediaArtifactType(tList.get(2));
-        }else{
-            return MediaArtifactType.POSTER;
-        }
-    }
-    private static Boolean GetOriginalSizeFromKey(String Key){
-        List<String> tList = util.ConvertStringtoList(Key);
-        if (tList.size()>3){
-            return Boolean.parseBoolean(tList.get(3));
-        }else{
-            return Boolean.FALSE;
-        }
-    }
-    private static String GetIDFromKey(String Key){
-        List<String> tList = util.ConvertStringtoList(Key);
-        if (tList.size()>4){
-            return tList.get(4);
-        }else{
-            return "";
-        }
-    }
 
-    public static Object CreateImage(String ImageString, MediaArtifactType ImageType, Boolean originalSize, String ImageID){
-        if (ImageString.equals("")){
+    public static Object CreateImage(ImageCacheKey Key){
+        if (!Key.IsValidKey()){
             return null;
         }
         Object ThisImage = null;
         //See if the image is already cached in the filesystem by a previous CreateImage call
-        ThisImage = phoenix.image.GetImage(ImageID, CreateImageTag);
+        ThisImage = phoenix.image.GetImage(Key.getImageID(), CreateImageTag);
         if (ThisImage!=null){
-            LOG.debug("CreateImage: Filesystem cached item found for Tag '" + CreateImageTag + "' ID '" + ImageID + "'");
+            LOG.debug("CreateImage: Filesystem cached item found for Tag '" + CreateImageTag + "' ID '" + Key.getImageID() + "'");
             return ThisImage;
         }
         
@@ -498,31 +451,40 @@ public class ImageCache {
         //based on the ImageType determine the scalewidth to use
         Integer UIWidth = sagex.api.Global.GetFullUIWidth(UIc);
         Double scalewidth = 0.2;
-        if (originalSize){
+        if (Key.getOriginalSize()){
             scalewidth = 1.0;
         }else{
-            if (ImageType.equals(MediaArtifactType.POSTER)){
+            if (Key.getArtifactType().equals(MediaArtifactType.POSTER)){
                 scalewidth = 0.2;
-            }else if (ImageType.equals(MediaArtifactType.BANNER)){
+            }else if (Key.getArtifactType().equals(MediaArtifactType.BANNER)){
                 scalewidth = 0.6;
-            }else if (ImageType.equals(MediaArtifactType.BACKGROUND)){
+            }else if (Key.getArtifactType().equals(MediaArtifactType.BACKGROUND)){
                 scalewidth = 0.4;
             }else{
                 //use default
             }
         }
         Double finalscalewidth = scalewidth * UIWidth;
-        try {
-            ThisImage = phoenix.image.CreateImage(ImageID, CreateImageTag, ImageString, "{name: scale, width: " + finalscalewidth + ", height: -1}", false);
-        } catch (Exception e) {
-            LOG.debug("CreateImage: phoenix.image.CreateImage FAILED using LoagImage(loadImage)) - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + ImageType + "' Image = '" + ImageString + "' Error: '" + e + "'");
-            return null;
+        if (Key.HasDefaultEpisodeImage()){
+            try {
+                ThisImage = phoenix.image.CreateImage(Key.getImageID(), CreateImageTag, Key.getDefaultEpisodeImage(), "{name: scale, width: " + finalscalewidth + ", height: -1}", false);
+            } catch (Exception e) {
+                LOG.debug("CreateImage: phoenix.image.CreateImage FAILED for DefaultEpisodeImage - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + Key.getArtifactType().toString() + "' Image = '" + Key.getImagePath() + "' Error: '" + e + "'");
+                return null;
+            }
+        }else{
+            try {
+                ThisImage = phoenix.image.CreateImage(Key.getImageID(), CreateImageTag, Key.getImagePath(), "{name: scale, width: " + finalscalewidth + ", height: -1}", false);
+            } catch (Exception e) {
+                LOG.debug("CreateImage: phoenix.image.CreateImage FAILED - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + Key.getArtifactType().toString() + "' Image = '" + Key.getImagePath() + "' Error: '" + e + "'");
+                return null;
+            }
         }
         if (!sagex.api.Utility.IsImageLoaded(UIc, ThisImage)){
-            LOG.debug("CreateImage: Loaded using LoagImage(loadImage)) - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + ImageType + "' Image = '" + ImageString + "'");
+            LOG.debug("CreateImage: Loaded using LoagImage(loadImage)) - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + Key.getArtifactType().toString() + "' Image = '" + Key.getImagePath() + "'");
             sagex.api.Utility.LoadImage(UIc, sagex.api.Utility.LoadImage(UIc, ThisImage));
         }else{
-            LOG.debug("CreateImage: already Loaded - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + ImageType + "' Image = '" + ImageString + "'");
+            LOG.debug("CreateImage: already Loaded - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + Key.getArtifactType().toString() + "' Image = '" + Key.getImagePath() + "'");
         }
         return ThisImage;
     }
