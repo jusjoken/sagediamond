@@ -52,6 +52,10 @@ public class ImageCacheKey {
         this.ArtifactType = ConvertStringtoMediaArtifactType(ArtifactType);
         this.ImageID = ImageID;
     }
+    
+    public String getKey(){
+        return this.ImagePath + util.ListToken + this.OriginalSize.toString();
+    }
 
     public MediaArtifactType getArtifactType() {
         return ArtifactType;
@@ -104,6 +108,22 @@ public class ImageCacheKey {
         this.defaultImage = defaultImage;
     }
     
+    public Boolean IsValidKey(){
+        if (this.ImagePath.isEmpty()){
+            return Boolean.FALSE;
+        }else{
+            return Boolean.TRUE;
+        }
+    }
+    
+    public Boolean HasDefaultEpisodeImage(){
+        if (this.DefaultEpisodeImage==null){
+            return Boolean.FALSE;
+        }else{
+            return Boolean.TRUE;
+        }
+    }
+
     public static MediaArtifactType ConvertStringtoMediaArtifactType(String ImageType){
         if (ImageType.equals("poster")){
             return MediaArtifactType.POSTER;
