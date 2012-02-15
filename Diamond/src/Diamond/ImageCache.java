@@ -272,6 +272,19 @@ public class ImageCache {
         LOG.debug("GetImageKey: Key '" + tICK + "'");
         return tICK;
     }
+    //Convenience method that will convert the incoming object parameter to a IMediaResource type 
+    public static ImageCacheKey GetImageKey(Object imediaresource, String resourcetype, Boolean originalSize, String defaultImage){
+        if (imediaresource == null || imediaresource.toString().contains("BlankItem")) {
+            return null;
+        }
+        LOG.debug("GetImageKey: Convenience method called with Class = '" + imediaresource.getClass() + "'");
+        IMediaResource proxy = phoenix.media.GetMediaResource(imediaresource);
+        if (proxy==null) {
+            LOG.debug("GetImageKey: GetMediaResource failed to convert '" + imediaresource + "'");
+            return null; // do nothing
+        }
+        return GetImageKey(proxy, resourcetype, originalSize, defaultImage);
+    }
     
 //    public static Object GetImage(IMediaResource imediaresource, String resourcetype, Boolean originalSize, String defaultImage){
 //        //return the default image passed in when none found or waiting for background processing from the queue
