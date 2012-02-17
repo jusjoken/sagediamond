@@ -251,6 +251,7 @@ public class ImageCache {
                 LOG.debug("GetImageKey: genre group found '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
                 faMediaObject = phoenix.media.GetMediaObject(childmediaresource);
                 //TODO:SPECIAL handling to get GENRE images
+                //genreImage ="Themes\\Diamond\\GenreImages\\"+phoenix_media_GetTitle(ThumbFile)+".png"
                 
             }else if (Grouping.equals("season")){
                 LOG.debug("GetImageKey: season group found '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
