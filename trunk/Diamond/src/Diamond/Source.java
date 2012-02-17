@@ -757,24 +757,29 @@ public class Source {
         String tType = "other";
         String Grouping = "NoGroup";
         if (phoenix.media.IsMediaType( imediaresource , "FOLDER" )){
-            ViewFolder Folder = (ViewFolder) imediaresource;
             ViewFolder Parent = (ViewFolder) phoenix.media.GetParent(imediaresource);
             //see how the folder is grouped
             if (phoenix.umb.GetGroupers(Parent).size() > 0){
                 Grouping = phoenix.umb.GetName( phoenix.umb.GetGroupers(Parent).get(0) );
-                if (Grouping.equals("genre")){
-                    return "genre";
-                }else{
-                    return "other";
-                }
+                LOG.debug("GetSpecialType: Group '" + Grouping + "' found");
+                return Grouping;
             }
         }else{
             if (phoenix.media.IsMediaType( imediaresource , "TV" )){
-                return "episode";
-            }else{
-                return "other";
+                LOG.debug("GetSpecialType: tv found");
+                return "tv";
+            }else if (phoenix.media.IsMediaType( imediaresource , "VIDEO" )){
+                LOG.debug("GetSpecialType: video found");
+                return "video";
+            }else if (phoenix.media.IsMediaType( imediaresource , "DVD" )){
+                LOG.debug("GetSpecialType: dvd found");
+                return "dvd";
+            }else if (phoenix.media.IsMediaType( imediaresource , "BLURAY" )){
+                LOG.debug("GetSpecialType: bluray found");
+                return "bluray";
             }
         }
+        LOG.debug("GetSpecialType: Nothing found - returning 'other'");
         return "other";
     }
     //Convenience method that will convert the incoming object parameter to a IMediaResource type 
