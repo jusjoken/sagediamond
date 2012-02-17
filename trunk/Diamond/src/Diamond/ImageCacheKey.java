@@ -52,6 +52,11 @@ public class ImageCacheKey {
         this.ArtifactType = ConvertStringtoMediaArtifactType(ArtifactType);
         this.ImageID = ImageID;
     }
+
+    @Override
+    public String toString() {
+        return "ImageCacheKey{" + "ImagePath=" + ImagePath + ", OriginalSize=" + OriginalSize + ", ArtifactType=" + ArtifactType + ", ImageID=" + ImageID + ", DefaultEpisodeImage=" + DefaultEpisodeImage + ", defaultImage=" + defaultImage + '}';
+    }
     
     public String getKey(){
         return this.ImagePath + util.ListToken + this.OriginalSize.toString();

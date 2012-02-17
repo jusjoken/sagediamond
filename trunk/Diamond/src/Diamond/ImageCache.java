@@ -91,19 +91,19 @@ public class ImageCache {
         Object mediaObject = null;
         String tImageString = Key.getImagePath();
         Object tImage = null;
-        
-        LOG.debug("GetImage: FromKey: '" + Key.getKey() + "'");
-        //see if we are caching or just returning an image
-        if (UseCache(faArtifactType)){
-            //see if the image is in the cache and if so return it
-            mediaObject = ICache.get(Key.getKey());
-            if (mediaObject!=null){
-                LOG.debug("GetImage: FromKey: found Image in Cache and return it based on '" + tImageString + "'");
-                return mediaObject;
-            }else{
-                if (UseQueue(faArtifactType)){
-                    //make sure there is a valid key available
-                    if (Key.IsValidKey()){
+
+        //make sure there is a valid key available
+        if (Key.IsValidKey()){
+            LOG.debug("GetImage: FromKey: '" + Key + "'");
+            //see if we are caching or just returning an image
+            if (UseCache(faArtifactType)){
+                //see if the image is in the cache and if so return it
+                mediaObject = ICache.get(Key.getKey());
+                if (mediaObject!=null){
+                    LOG.debug("GetImage: FromKey: found Image in Cache and return it based on '" + tImageString + "'");
+                    return mediaObject;
+                }else{
+                    if (UseQueue(faArtifactType)){
                         //see if the item is already in the queue
                         if (IQueue.containsKey(Key.getKey())){
                             LOG.debug("GetImage: FromKey: already in the Queue '" + Key.getKey() + "' defaultImage returned '" + Key.getDefaultImage() + "'");
@@ -115,22 +115,22 @@ public class ImageCache {
                             return Key.getDefaultImage();
                         }
                     }else{
-                        LOG.debug("GetImage: FromKey: Key is invalid so returning null for '" + Key + "'");
-                        return Key.getDefaultImage();
+                        //get the image and add it to the cache then return it
+                        tImage = CreateImage(Key);
+                        ICache.put(Key.getKey(), tImage);
+                        LOG.debug("GetImage: FromKey: adding to Cache '" + Key.getKey() + "'");
+                        return tImage;
                     }
-                }else{
-                    //get the image and add it to the cache then return it
-                    tImage = CreateImage(Key);
-                    ICache.put(Key.getKey(), tImage);
-                    LOG.debug("GetImage: FromKey: adding to Cache '" + Key.getKey() + "'");
-                    return tImage;
                 }
+            }else{
+                //get the image and return it
+                tImage = CreateImage(Key);
+                LOG.debug("GetImage: FromKey: cache off so returning image for '" + Key.getKey() + "'");
+                return tImage;
             }
         }else{
-            //get the image and return it
-            tImage = CreateImage(Key);
-            LOG.debug("GetImage: FromKey: cache off so returning image for '" + Key.getKey() + "'");
-            return tImage;
+            LOG.debug("GetImage: FromKey: Key is invalid '" + Key + "' defaultImage returned '" + Key.getDefaultImage() + "'");
+            return Key.getDefaultImage();
         }
     }
     
@@ -438,7 +438,7 @@ public class ImageCache {
             sagex.api.Global.RefreshAreaForVariable(UIc, "PreloadTag", tItem);
             //RefreshAreaForVariable("PreloadTag",CurPreloadItem)
             ICache.put(tItem.getKey(), tImage);
-            LOG.debug("GetImageFromQueue: remaining(" + IQueue.size() + ") adding to Cache '" + tItem.getKey() + "'");
+            LOG.debug("GetImageFromQueue: remaining(" + IQueue.size() + ") adding to Cache '" + tItem + "'");
         }else{
             LOG.debug("GetImageFromQueue: EMPTY QUEUE");
         }
@@ -451,6 +451,7 @@ public class ImageCache {
 
     public static Object CreateImage(ImageCacheKey Key){
         if (!Key.IsValidKey()){
+            LOG.debug("CreateImage: called with invalid Key '" + Key + "'");
             return null;
         }
         Object ThisImage = null;
