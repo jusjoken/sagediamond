@@ -29,6 +29,7 @@ import sagex.phoenix.factory.IConfigurable;
 import sagex.phoenix.util.HasName;
 import sagex.phoenix.vfs.IMediaFile;
 import sagex.phoenix.vfs.IMediaFolder;
+import sagex.phoenix.vfs.IMediaResource;
 
 /**
  *
@@ -750,5 +751,45 @@ public class Source {
     public static Boolean IsFileCurrentlyRecording(IMediaFile res){
         return sagex.api.MediaFileAPI.IsFileCurrentlyRecording(((IMediaFile)res).getMediaObject());
     }
+
+    //check for special handling types - genre, episode or other
+    public static String GetSpecialType(IMediaResource imediaresource){
+        String tType = "other";
+        String Grouping = "NoGroup";
+        if (phoenix.media.IsMediaType( imediaresource , "FOLDER" )){
+            ViewFolder Folder = (ViewFolder) imediaresource;
+            ViewFolder Parent = (ViewFolder) phoenix.media.GetParent(imediaresource);
+            //see how the folder is grouped
+            if (phoenix.umb.GetGroupers(Parent).size() > 0){
+                Grouping = phoenix.umb.GetName( phoenix.umb.GetGroupers(Parent).get(0) );
+                if (Grouping.equals("genre")){
+                    return "genre";
+                }else{
+                    return "other";
+                }
+            }
+        }else{
+            if (phoenix.media.IsMediaType( imediaresource , "TV" )){
+                return "episode";
+            }else{
+                return "other";
+            }
+        }
+        return "other";
+    }
+    //Convenience method that will convert the incoming object parameter to a IMediaResource type 
+    public static String GetSpecialType(Object imediaresource){
+        if (imediaresource == null || imediaresource.toString().isEmpty() || imediaresource.toString().contains("BlankItem")) {
+            return "other";
+        }
+        LOG.debug("GetSpecialType: Convenience method called with Class = '" + imediaresource.getClass() + "'");
+        IMediaResource proxy = phoenix.media.GetMediaResource(imediaresource);
+        if (proxy==null) {
+            LOG.debug("GetSpecialType: GetMediaResource failed to convert '" + imediaresource + "'");
+            return "other"; // do nothing
+        }
+        return GetSpecialType(proxy);
+    }
+    
     //</editor-fold>
 }
