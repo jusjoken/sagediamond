@@ -17,7 +17,8 @@ public class ImageCacheKey {
     private MediaArtifactType ArtifactType = null;
     private String ImageID = "";
     private Object DefaultEpisodeImage = null;
-    private String defaultImage = "";
+    private String defaultImage = null;
+    private String RefreshArea = null;
 
     public ImageCacheKey() {
     }
@@ -111,6 +112,22 @@ public class ImageCacheKey {
 
     public void setDefaultImage(String defaultImage) {
         this.defaultImage = defaultImage;
+    }
+
+    public String getRefreshArea() {
+        return RefreshArea;
+    }
+
+    public void setRefreshArea(String RefreshArea) {
+        this.RefreshArea = RefreshArea;
+    }
+    
+    public Boolean HasRefreshArea(){
+        if (this.RefreshArea==null){
+            return Boolean.FALSE;
+        }else{
+            return Boolean.TRUE;
+        }
     }
     
     public Boolean IsValidKey(){
