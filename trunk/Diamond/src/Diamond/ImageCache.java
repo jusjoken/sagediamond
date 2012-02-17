@@ -38,9 +38,6 @@ public class ImageCache {
     static private final Logger LOG = Logger.getLogger(ImageCache.class);
     private static final String ICacheProps = Const.BaseProp + Const.PropDivider + Const.ImageCacheProp;
     private static LinkedHashMap<String,ImageCacheKey> IQueue = new LinkedHashMap<String,ImageCacheKey>();
-    //TODO: try creating an object to use in the LinkedList <QueueItem> so we can store each part of the Key
-    //TODO: OR keep an extra list with the objects in it and sync them
-    //TODO: OR use a MAP of some type that may mimic a QUEUE - need contains, add to bottom - get from top and remove.
     private static SoftHashMap ICache = new SoftHashMap(GetMinSize());
     public static enum ImageCacheTypes{OFF,BACKGROUND,NOQUEUE,BYIMAGETYPE};
     private static final String ImageCacheTypesList = ImageCacheTypes.OFF + util.ListToken + ImageCacheTypes.BACKGROUND + util.ListToken + ImageCacheTypes.NOQUEUE + util.ListToken + ImageCacheTypes.BYIMAGETYPE;
@@ -94,8 +91,6 @@ public class ImageCache {
         Object mediaObject = null;
         String tImageString = Key.getImagePath();
         Object tImage = null;
-        String ImageID = Key.getImageID();
-        Boolean originalSize = Key.getOriginalSize();
         
         LOG.debug("GetImage: FromKey: '" + Key.getKey() + "'");
         //see if we are caching or just returning an image
@@ -107,14 +102,20 @@ public class ImageCache {
                 return mediaObject;
             }else{
                 if (UseQueue(faArtifactType)){
-                    //see if the item is already in the queue
-                    if (IQueue.containsKey(Key.getKey())){
-                        LOG.debug("GetImage: FromKey: already in the Queue '" + Key.getKey() + "' defaultImage returned '" + Key.getDefaultImage() + "'");
-                        return Key.getDefaultImage();
+                    //make sure there is a valid key available
+                    if (Key.IsValidKey()){
+                        //see if the item is already in the queue
+                        if (IQueue.containsKey(Key.getKey())){
+                            LOG.debug("GetImage: FromKey: already in the Queue '" + Key.getKey() + "' defaultImage returned '" + Key.getDefaultImage() + "'");
+                            return Key.getDefaultImage();
+                        }else{
+                            //add the imagestring to the queue for background processing later
+                            IQueue.put(Key.getKey(),Key);
+                            LOG.debug("GetImage: FromKey: adding to Queue '" + Key.getKey() + "' defaultImage returned '" + Key.getDefaultImage() + "'");
+                            return Key.getDefaultImage();
+                        }
                     }else{
-                        //add the imagestring to the queue for background processing later
-                        IQueue.put(Key.getKey(),Key);
-                        LOG.debug("GetImage: FromKey: adding to Queue '" + tImageString + "' defaultImage returned '" + Key.getDefaultImage() + "'");
+                        LOG.debug("GetImage: FromKey: Key is invalid so returning null for '" + Key + "'");
                         return Key.getDefaultImage();
                     }
                 }else{
