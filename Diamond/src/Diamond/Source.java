@@ -784,17 +784,23 @@ public class Source {
     }
     //Convenience method that will convert the incoming object parameter to a IMediaResource type 
     public static String GetSpecialType(Object imediaresource){
+        return GetSpecialType(ConvertToIMR(imediaresource));
+    }
+
+    public static IMediaResource ConvertToIMR(Object imediaresource){
         if (imediaresource == null || imediaresource.toString().isEmpty() || imediaresource.toString().contains("BlankItem")) {
-            return "other";
+            return null;
         }
-        LOG.debug("GetSpecialType: Convenience method called with Class = '" + imediaresource.getClass() + "'");
+        LOG.debug("ConvertToIMR: Convenience method called with Class = '" + imediaresource.getClass() + "'");
         IMediaResource proxy = phoenix.media.GetMediaResource(imediaresource);
         if (proxy==null) {
-            LOG.debug("GetSpecialType: GetMediaResource failed to convert '" + imediaresource + "'");
-            return "other"; // do nothing
+            LOG.debug("ConvertToIMR: GetMediaResource failed to convert '" + imediaresource + "'");
+            return null; // do nothing
         }
-        return GetSpecialType(proxy);
+        return proxy;
     }
+            
+            
     
     //</editor-fold>
 }
