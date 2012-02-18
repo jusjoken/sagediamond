@@ -182,16 +182,7 @@ public class ImageCache {
         return GetImage(imediaresource, resourcetype, originalSize, "");
     }
     public static Object GetImage(Object imediaresource, String resourcetype, Boolean originalSize, String defaultImage){
-        if (imediaresource == null || imediaresource.toString().isEmpty() || imediaresource.toString().contains("BlankItem")) {
-            return null;
-        }
-        LOG.debug("GetImage: Convenience method called with Class = '" + imediaresource.getClass() + "'");
-        IMediaResource proxy = phoenix.media.GetMediaResource(imediaresource);
-        if (proxy==null) {
-            LOG.debug("GetImage: GetMediaResource failed to convert '" + imediaresource + "'");
-            return null; // do nothing
-        }
-        return GetImage(proxy, resourcetype, originalSize, defaultImage);
+        return GetImage(Source.ConvertToIMR(imediaresource), resourcetype, originalSize, defaultImage);
     }
 
     public static ImageCacheKey GetImageKey(IMediaResource imediaresource, String resourcetype){
@@ -319,16 +310,7 @@ public class ImageCache {
         return GetImageKey(imediaresource, resourcetype, originalSize, "");
     }
     public static ImageCacheKey GetImageKey(Object imediaresource, String resourcetype, Boolean originalSize, String defaultImage){
-        if (imediaresource == null || imediaresource.toString().isEmpty() || imediaresource.toString().contains("BlankItem")) {
-            return null;
-        }
-        LOG.debug("GetImageKey: Convenience method called with Class = '" + imediaresource.getClass() + "'");
-        IMediaResource proxy = phoenix.media.GetMediaResource(imediaresource);
-        if (proxy==null) {
-            LOG.debug("GetImageKey: GetMediaResource failed to convert '" + imediaresource + "'");
-            return null; // do nothing
-        }
-        return GetImageKey(proxy, resourcetype, originalSize, defaultImage);
+        return GetImageKey(Source.ConvertToIMR(imediaresource), resourcetype, originalSize, defaultImage);
     }
     
     public static void GetImageFromQueue(){

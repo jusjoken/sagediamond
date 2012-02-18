@@ -404,6 +404,11 @@ public class MetadataCalls {
         }
         return Value;
     }
+    //Convenience method that will convert the incoming object parameter to a IMediaResource type 
+    public static String GetGenresasString(Object MediaObject, String Separator){
+        return GetGenresasString(Source.ConvertToIMR(MediaObject), Separator);
+    }
+
     
     //get a list of all the categories with Movies/Film removed and unknown assigned if no category exists
     public static ArrayList<String> GetAllShowCategories(Object MediaObject) {
