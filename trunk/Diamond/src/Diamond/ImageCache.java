@@ -5,6 +5,7 @@
 package Diamond;
 
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,6 +14,7 @@ import org.apache.log4j.Logger;
 import sagex.UIContext;
 import sagex.phoenix.metadata.MediaArtifactType;
 import sagex.phoenix.metadata.MediaType;
+import sagex.phoenix.vfs.IMediaFolder;
 import sagex.phoenix.vfs.IMediaResource;
 import sagex.phoenix.vfs.views.ViewFolder;
 
@@ -63,38 +65,64 @@ public class ImageCache {
     //This will return a background and refresh that specific area
     //Check for null in the STV to not change the background if that is desired
     public static Object GetBackground(IMediaResource imediaresource, String RefreshArea){
-        return GetBackground(imediaresource, RefreshArea, Boolean.FALSE);
+        return GetArtifact(imediaresource, "background", RefreshArea, Boolean.FALSE);
     }
     public static Object GetBackground(IMediaResource imediaresource, String RefreshArea, Boolean originalSize){
-        //return the default image passed in when none found or waiting for background processing from the queue
-        LOG.debug("GetBackground: imediaresource '" + imediaresource + "' RefreshArea '" + RefreshArea + "' originalSize '" + originalSize + "'");
-        if (imediaresource == null) {
-            LOG.debug("GetBackground: imediaresource is NULL so returning NULL");
-            return null;
-        }
-
-        ImageCacheKey tKey = GetImageKey(imediaresource, "background", originalSize, null);
-        if (!tKey.IsValidKey()){
-            LOG.debug("GetBackground: Not a valid Key so returning defaultimage '" + tKey + "'");
-            return tKey.getDefaultImage();
-        }
-        tKey.setRefreshArea(RefreshArea);
-        return GetImage(tKey);
+        return GetArtifact(imediaresource, "background", RefreshArea, originalSize);
     }
     public static Object GetBackground(Object imediaresource, String RefreshArea){
         return GetBackground(imediaresource, RefreshArea, Boolean.FALSE);
     }
     public static Object GetBackground(Object imediaresource, String RefreshArea, Boolean originalSize){
-        if (imediaresource == null || imediaresource.toString().isEmpty() || imediaresource.toString().contains("BlankItem")) {
+        return GetBackground(Source.ConvertToIMR(imediaresource), RefreshArea, originalSize);
+    }
+
+    //This will return a poster and refresh that specific area
+    //Check for null in the STV to not change the poster if that is desired
+    public static Object GetPoster(IMediaResource imediaresource, String RefreshArea){
+        return GetArtifact(imediaresource, "poster", RefreshArea, Boolean.FALSE);
+    }
+    public static Object GetPoster(IMediaResource imediaresource, String RefreshArea, Boolean originalSize){
+        return GetArtifact(imediaresource, "poster", RefreshArea, originalSize);
+    }
+    public static Object GetPoster(Object imediaresource, String RefreshArea){
+        return GetPoster(imediaresource, RefreshArea, Boolean.FALSE);
+    }
+    public static Object GetPoster(Object imediaresource, String RefreshArea, Boolean originalSize){
+        return GetPoster(Source.ConvertToIMR(imediaresource), RefreshArea, originalSize);
+    }
+
+    //This will return a banner and refresh that specific area
+    //Check for null in the STV to not change the banner if that is desired
+    public static Object GetBanner(IMediaResource imediaresource, String RefreshArea){
+        return GetArtifact(imediaresource, "banner", RefreshArea, Boolean.FALSE);
+    }
+    public static Object GetBanner(IMediaResource imediaresource, String RefreshArea, Boolean originalSize){
+        return GetArtifact(imediaresource, "banner", RefreshArea, originalSize);
+    }
+    public static Object GetBanner(Object imediaresource, String RefreshArea){
+        return GetBanner(imediaresource, RefreshArea, Boolean.FALSE);
+    }
+    public static Object GetBanner(Object imediaresource, String RefreshArea, Boolean originalSize){
+        return GetBanner(Source.ConvertToIMR(imediaresource), RefreshArea, originalSize);
+    }
+
+    //used to handle a specific refresh after the image is loaded in the cache
+    public static Object GetArtifact(IMediaResource imediaresource, String resourcetype, String RefreshArea, Boolean originalSize){
+        //return the default image passed in when none found or waiting for background processing from the queue
+        LOG.debug("GetArtifact: imediaresource '" + imediaresource + "' resourcetype '" + resourcetype + "' RefreshArea '" + RefreshArea + "' originalSize '" + originalSize + "'");
+        if (imediaresource == null) {
+            LOG.debug("GetArtifact: imediaresource is NULL so returning NULL");
             return null;
         }
-        LOG.debug("GetBackground: Convenience method called with Class = '" + imediaresource.getClass() + "'");
-        IMediaResource proxy = phoenix.media.GetMediaResource(imediaresource);
-        if (proxy==null) {
-            LOG.debug("GetBackground: GetMediaResource failed to convert '" + imediaresource + "'");
-            return null; // do nothing
+
+        ImageCacheKey tKey = GetImageKey(imediaresource, resourcetype, originalSize, null);
+        if (!tKey.IsValidKey()){
+            LOG.debug("GetArtifact: Not a valid Key so returning defaultimage '" + tKey + "'");
+            return tKey.getDefaultImage();
         }
-        return GetBackground(proxy, RefreshArea, originalSize);
+        tKey.setRefreshArea(RefreshArea);
+        return GetImage(tKey);
     }
     
     //This will return an image from Cache or direct or add to the Queue depending on the settings
@@ -313,6 +341,10 @@ public class ImageCache {
         return GetImageKey(Source.ConvertToIMR(imediaresource), resourcetype, originalSize, defaultImage);
     }
     
+    public static String GetKeyFromImageKey(ImageCacheKey Key){
+        return Key.getKey();
+    }
+    
     public static void GetImageFromQueue(){
         if (IQueue.size()>0){
             UIContext UIc = new UIContext(sagex.api.Global.GetUIContextName());
@@ -324,7 +356,7 @@ public class ImageCache {
             if (tItem.HasRefreshArea()){
                 sagex.api.Global.RefreshArea(UIc, tItem.getRefreshArea());
             }else{
-                sagex.api.Global.RefreshAreaForVariable(UIc, "PreloadTag", tItem);
+                sagex.api.Global.RefreshAreaForVariable(UIc, "PreloadTagKey", tItem.getKey());
             }
             ICache.put(tItem.getKey(), tImage);
             LOG.debug("GetImageFromQueue: remaining(" + IQueue.size() + ") adding to Cache '" + tItem + "'");
@@ -332,7 +364,7 @@ public class ImageCache {
             LOG.debug("GetImageFromQueue: EMPTY QUEUE");
         }
     }
-    
+
     public static Integer GetQueueSize(){
         //LOG.debug("GetQueueSize: '" + IQueue.size() + "'");
         return IQueue.size();
@@ -446,6 +478,23 @@ public class ImageCache {
             return Boolean.FALSE;
         }else{
             return Boolean.TRUE;
+        }
+    }
+    
+    public static void PreFetchPosters(List<IMediaResource> Children){
+        LOG.debug("PreFetchPosters: Started '" + Children + "'");
+        for (IMediaResource Child: Children){
+            LOG.debug("PreFetchPosters: processing Child '" + Child + "'");
+            GetImage(Child, "poster");
+        }
+    }
+    public static void PreFetchPosters2(IMediaFolder Folder){
+        LOG.debug("PreFetchPosters: Started '" + Folder + "'");
+        List<IMediaResource> Children = phoenix.media.GetChildren(Folder);
+        LOG.debug("PreFetchPosters: retrieved Children '" + Children + "'");
+        for (IMediaResource Child: Children){
+            LOG.debug("PreFetchPosters: processing Child '" + Child + "'");
+            GetImage(Child, "poster");
         }
     }
     

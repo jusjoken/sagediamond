@@ -791,7 +791,7 @@ public class Source {
         if (imediaresource == null || imediaresource.toString().isEmpty() || imediaresource.toString().contains("BlankItem")) {
             return null;
         }
-        LOG.debug("ConvertToIMR: Convenience method called with Class = '" + imediaresource.getClass() + "'");
+        //LOG.debug("ConvertToIMR: Convenience method called with Class = '" + imediaresource.getClass() + "'");
         IMediaResource proxy = phoenix.media.GetMediaResource(imediaresource);
         if (proxy==null) {
             LOG.debug("ConvertToIMR: GetMediaResource failed to convert '" + imediaresource + "'");
