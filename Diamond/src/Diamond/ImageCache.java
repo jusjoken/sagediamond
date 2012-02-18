@@ -481,17 +481,9 @@ public class ImageCache {
         }
     }
     
+    //still testing if there is value add to this prefetch approach
     public static void PreFetchPosters(List<IMediaResource> Children){
         LOG.debug("PreFetchPosters: Started '" + Children + "'");
-        for (IMediaResource Child: Children){
-            LOG.debug("PreFetchPosters: processing Child '" + Child + "'");
-            GetImage(Child, "poster");
-        }
-    }
-    public static void PreFetchPosters2(IMediaFolder Folder){
-        LOG.debug("PreFetchPosters: Started '" + Folder + "'");
-        List<IMediaResource> Children = phoenix.media.GetChildren(Folder);
-        LOG.debug("PreFetchPosters: retrieved Children '" + Children + "'");
         for (IMediaResource Child: Children){
             LOG.debug("PreFetchPosters: processing Child '" + Child + "'");
             GetImage(Child, "poster");
