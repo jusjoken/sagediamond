@@ -41,69 +41,6 @@ public class FanartCaching {
     public static boolean IsCachingActive = false;
     public static int CurrentFanartVersion = 4;
 
-    public static Object GetTVThumbnail(Object MediaFile, Boolean UseBackNotThumb){
-        UIContext uIContext = new UIContext(sagex.api.Global.GetUIContextName());
-        Object FinalThumb = null;
-        if(MediaFile==null){
-            //find some sort of image to display
-            LOG.debug("GetTVThumbnail: null MediaFile");
-        }else{
-            //check if Sage has a Thumb for this MediaFile - xShowImage
-            Boolean ImageFound = Boolean.FALSE;
-            String[] ImageTypeList = {"PosterWide", "PosterTall", "PhotoWide", "PhotoTall"};
-            for (String ImageType:ImageTypeList){
-                if (sagex.api.ShowAPI.GetShowImageCount( uIContext, MediaFile, ImageType )>0){
-                    FinalThumb = sagex.api.ShowAPI.GetShowImage( uIContext, MediaFile, ImageType, 0, 2 );
-                    LOG.debug("GetTVThumbnail: Using ShowAPI.GetShowImage");
-                    ImageFound = Boolean.TRUE;
-                    break;
-                }
-            }
-            if (!ImageFound){
-                //No Zap2it-provided show images; try thumbnail
-                if (sagex.api.MediaFileAPI.HasAnyThumbnail(uIContext,MediaFile)){
-                    //xNormal
-                    if (MetadataCalls.IsMediaTypeTV(MediaFile)  &&  sagex.api.ShowAPI.GetShowCategory(uIContext,MediaFile).indexOf("Movie") == -1){
-                        //Check if we want to display Backgrounds rather than Thumbs
-                        if (UseBackNotThumb){
-                            FinalThumb = FanartCaching.GetCachedFanart(MediaFile,false,"episode");
-                            LOG.debug("GetTVThumbnail: trying SD episode");
-                            if (FinalThumb==null){
-                                FinalThumb = FanartCaching.GetCachedFanart(MediaFile,false,"background");
-                                LOG.debug("GetTVThumbnail: Using SD background");
-                            }
-                        }else{
-                            FinalThumb = sagex.api.MediaFileAPI.GetThumbnail(uIContext,MediaFile);
-                            LOG.debug("GetTVThumbnail: Using MediaFileAPI.GetThumbnail");
-                        }
-                    }
-                }else{
-                    //try Series
-                    Object SeriesInfo = sagex.api.ShowAPI.GetShowSeriesInfo(uIContext,MediaFile);
-                    if (sagex.api.SeriesInfoAPI.HasSeriesImage(uIContext,SeriesInfo)){
-                        //xSeriesInfo
-                        FinalThumb = sagex.api.SeriesInfoAPI.GetSeriesImage(uIContext,MediaFile);
-                        LOG.debug("GetTVThumbnail: Using SeriesInfoAPI.GetSeriesImage");
-                    }else{
-                        //try Channel Logo
-                        FinalThumb = sagex.api.ChannelAPI.GetChannelLogo( uIContext, MediaFile, "Large", 1, true );
-                        LOG.debug("GetTVThumbnail: Using ChannelAPI.GetChannelLogo");
-                    }
-                            
-                }
-            }
-        }
-        if (FinalThumb==null){
-            //last try to get an image
-            if (MediaFile!=null){
-                FinalThumb = FanartCaching.GetCachedFanart(MediaFile,false,"episode");
-                LOG.debug("GetTVThumbnail: Trying SD episode as last resort");
-            }
-        }
-        return FinalThumb;
-    }
-    
-    
     public static int GetCurrentFanartVersion() {
         return CurrentFanartVersion;
     }
