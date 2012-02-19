@@ -761,25 +761,25 @@ public class Source {
             //see how the folder is grouped
             if (phoenix.umb.GetGroupers(Parent).size() > 0){
                 Grouping = phoenix.umb.GetName( phoenix.umb.GetGroupers(Parent).get(0) );
-                LOG.debug("GetSpecialType: Group '" + Grouping + "' found");
+                //LOG.debug("GetSpecialType: Group '" + Grouping + "' found");
                 return Grouping;
             }
         }else{
             if (phoenix.media.IsMediaType( imediaresource , "TV" )){
-                LOG.debug("GetSpecialType: tv found");
+                //LOG.debug("GetSpecialType: tv found");
                 return "tv";
             }else if (phoenix.media.IsMediaType( imediaresource , "VIDEO" )){
-                LOG.debug("GetSpecialType: video found");
+                //LOG.debug("GetSpecialType: video found");
                 return "video";
             }else if (phoenix.media.IsMediaType( imediaresource , "DVD" )){
-                LOG.debug("GetSpecialType: dvd found");
+                //LOG.debug("GetSpecialType: dvd found");
                 return "dvd";
             }else if (phoenix.media.IsMediaType( imediaresource , "BLURAY" )){
-                LOG.debug("GetSpecialType: bluray found");
+                //LOG.debug("GetSpecialType: bluray found");
                 return "bluray";
             }
         }
-        LOG.debug("GetSpecialType: Nothing found - returning 'other'");
+        //LOG.debug("GetSpecialType: Nothing found - returning 'other'");
         return "other";
     }
     //Convenience method that will convert the incoming object parameter to a IMediaResource type 
