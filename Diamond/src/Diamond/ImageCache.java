@@ -213,6 +213,20 @@ public class ImageCache {
         return GetImage(Source.ConvertToIMR(imediaresource), resourcetype, originalSize, defaultImage);
     }
 
+    private static IMediaResource GetChild(IMediaResource imediaresource, Boolean UseRandom){
+        IMediaResource childmediaresource = null;
+        ViewFolder Folder = (ViewFolder) imediaresource;
+        //get a child item (if any) from the Folder
+        if (phoenix.media.GetAllChildren(Folder, 1).size()>0){
+            Integer Element = 0;
+            if (UseRandom){
+                Element = phoenix.util.GetRandomNumber(phoenix.media.GetAllChildren(Folder).size());
+            }
+            childmediaresource = (IMediaResource) phoenix.media.GetAllChildren(Folder).get(Element);
+        }
+        return childmediaresource;
+    }
+    
     public static ImageCacheKey GetImageKey(IMediaResource imediaresource, String resourcetype){
         return GetImageKey(imediaresource, resourcetype, Boolean.FALSE, "");
     }
@@ -237,13 +251,7 @@ public class ImageCache {
         //see if this is a FOLDER item
         //we will need a MediaObject to get any fanart so get it from the passed in resource OR the child if any
         if (phoenix.media.IsMediaType( imediaresource , "FOLDER" )){
-            ViewFolder Folder = (ViewFolder) imediaresource;
             ViewFolder Parent = (ViewFolder) phoenix.media.GetParent(imediaresource);
-            //get a child item (if any) from the Folder
-            if (phoenix.media.GetAllChildren(Folder, 1).size()>0){
-                Integer RandomElement = phoenix.util.GetRandomNumber(phoenix.media.GetAllChildren(Folder).size());
-                childmediaresource = (IMediaResource) phoenix.media.GetAllChildren(Folder).get(RandomElement);
-            }
             //see how the folder is grouped
             if (phoenix.umb.GetGroupers(Parent).size() > 0){
                 Grouping = phoenix.umb.GetName( phoenix.umb.GetGroupers(Parent).get(0) );
@@ -255,6 +263,7 @@ public class ImageCache {
             }
             if (Grouping.equals("show")){
                 //need to know if this is a TV show grouping to get a Series fanart item
+                childmediaresource = GetChild(imediaresource, Boolean.FALSE);
                 if (phoenix.media.IsMediaType( childmediaresource , "TV" )){
                     LOG.debug("GetImageKey: TV show found '" + phoenix.media.GetTitle(imediaresource) + "' using Series Fanart");
                     //use Series type fanart
@@ -264,10 +273,15 @@ public class ImageCache {
                 }else{
                     LOG.debug("GetImageKey: Other show found '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
                     //use a child for the show fanart
+                    if (resourcetype.equals("background")){
+                        //only for backgrounds get a random child so the backgrounds vary
+                        childmediaresource = GetChild(imediaresource, Boolean.TRUE);
+                    }
                     faMediaObject = phoenix.media.GetMediaObject(childmediaresource);
                 }
             }else if (Grouping.equals("genre")){
                 LOG.debug("GetImageKey: genre group found '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
+                childmediaresource = GetChild(imediaresource, Boolean.FALSE);
                 faMediaObject = phoenix.media.GetMediaObject(childmediaresource);
                 //TODO:SPECIAL handling to get GENRE images
                 //genreImage ="Themes\\Diamond\\GenreImages\\"+phoenix_media_GetTitle(ThumbFile)+".png"
@@ -275,12 +289,25 @@ public class ImageCache {
             }else if (Grouping.equals("season")){
                 LOG.debug("GetImageKey: season group found '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
                 //just use a child item so you get fanart for the specific season
+                //TODO: use the first child so a seasons always has the same ImageID for POSTER and BANNER
+                if (resourcetype.equals("background")){
+                    //only for backgrounds get a random child so the backgrounds vary
+                    childmediaresource = GetChild(imediaresource, Boolean.TRUE);
+                }else{
+                    childmediaresource = GetChild(imediaresource, Boolean.FALSE);
+                }
                 faMediaObject = phoenix.media.GetMediaObject(childmediaresource);
             }else if (Grouping.equals("NoGroup")){
                 LOG.debug("GetImageKey: Folder found but no grouping for '" + phoenix.media.GetTitle(imediaresource) + "' using passed in object for Fanart");
                 faMediaObject = phoenix.media.GetMediaObject(imediaresource);
             }else{
                 LOG.debug("GetImageKey: unhandled grouping found '" + Grouping + "' for Title '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
+                if (resourcetype.equals("background")){
+                    //only for backgrounds get a random child so the backgrounds vary
+                    childmediaresource = GetChild(imediaresource, Boolean.TRUE);
+                }else{
+                    childmediaresource = GetChild(imediaresource, Boolean.FALSE);
+                }
                 faMediaObject = phoenix.media.GetMediaObject(childmediaresource);
             }
         }else{
