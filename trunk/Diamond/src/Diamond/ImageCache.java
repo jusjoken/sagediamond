@@ -224,7 +224,7 @@ public class ImageCache {
         return GetImage(Source.ConvertToIMR(imediaresource), resourcetype, originalSize, defaultImage);
     }
 
-    private static IMediaResource GetChild(IMediaResource imediaresource, Boolean UseRandom){
+    public static IMediaResource GetChild(IMediaResource imediaresource, Boolean UseRandom){
         IMediaResource childmediaresource = null;
         ViewFolder Folder = (ViewFolder) imediaresource;
         //get a child item (if any) from the Folder
