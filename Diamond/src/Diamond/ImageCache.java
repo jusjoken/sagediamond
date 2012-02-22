@@ -4,6 +4,7 @@
  */
 package Diamond;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -296,6 +297,8 @@ public class ImageCache {
                 faMediaObject = phoenix.media.GetMediaObject(childmediaresource);
                 //TODO:SPECIAL handling to get GENRE images
                 //genreImage ="Themes\\Diamond\\GenreImages\\"+phoenix_media_GetTitle(ThumbFile)+".png"
+                // File[] Files = phoenix.util.GetFiles("Path", new String[] {"jpg","gif","png"}, Boolean.FALSE);
+                // File[] Files = phoenix.util.GetImages("Path");
                 
             }else if (Grouping.equals("season")){
                 LOG.debug("GetImageKey: season group found '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
