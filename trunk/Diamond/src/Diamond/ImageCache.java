@@ -415,18 +415,24 @@ public class ImageCache {
     }
 
     public static Object CreateImage(ImageCacheKey Key){
+        return CreateImage(Key, Boolean.FALSE);
+    }
+    public static Object CreateImage(ImageCacheKey Key, Boolean OverWrite){
         if (!Key.IsValidKey()){
             LOG.debug("CreateImage: called with invalid Key '" + Key + "'");
             return null;
         }
         Object ThisImage = null;
-        //See if the image is already cached in the filesystem by a previous CreateImage call
-        ThisImage = phoenix.image.GetImage(Key.getImageID(), CreateImageTag);
-        if (ThisImage!=null){
-            LOG.debug("CreateImage: Filesystem cached item found for Tag '" + CreateImageTag + "' ID '" + Key.getImageID() + "'");
-            return ThisImage;
+        if (!OverWrite){
+            //See if the image is already cached in the filesystem by a previous CreateImage call
+            ThisImage = phoenix.image.GetImage(Key.getImageID(), CreateImageTag);
+            if (ThisImage!=null){
+                LOG.debug("CreateImage: Filesystem cached item found for Tag '" + CreateImageTag + "' ID '" + Key.getImageID() + "'");
+                return ThisImage;
+            }
         }
         
+        //if we got this far then an OverWrite was either FORCED or the Image was not in the FileSystem Cache
         UIContext UIc = new UIContext(sagex.api.Global.GetUIContextName());
         //based on the ImageType determine the scalewidth to use
         Integer UIWidth = sagex.api.Global.GetFullUIWidth(UIc);
@@ -447,14 +453,14 @@ public class ImageCache {
         Double finalscalewidth = scalewidth * UIWidth;
         if (Key.HasDefaultEpisodeImage()){
             try {
-                ThisImage = phoenix.image.CreateImage(Key.getImageID(), CreateImageTag, Key.getDefaultEpisodeImage(), "{name: scale, width: " + finalscalewidth + ", height: -1}", false);
+                ThisImage = phoenix.image.CreateImage(Key.getImageID(), CreateImageTag, Key.getDefaultEpisodeImage(), "{name: scale, width: " + finalscalewidth + ", height: -1}", true);
             } catch (Exception e) {
                 LOG.debug("CreateImage: phoenix.image.CreateImage FAILED for DefaultEpisodeImage - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + Key.getArtifactType().toString() + "' Image = '" + Key.getImagePath() + "' Error: '" + e + "'");
                 return null;
             }
         }else{
             try {
-                ThisImage = phoenix.image.CreateImage(Key.getImageID(), CreateImageTag, Key.getImagePath(), "{name: scale, width: " + finalscalewidth + ", height: -1}", false);
+                ThisImage = phoenix.image.CreateImage(Key.getImageID(), CreateImageTag, Key.getImagePath(), "{name: scale, width: " + finalscalewidth + ", height: -1}", true);
             } catch (Exception e) {
                 LOG.debug("CreateImage: phoenix.image.CreateImage FAILED - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + Key.getArtifactType().toString() + "' Image = '" + Key.getImagePath() + "' Error: '" + e + "'");
                 return null;
@@ -604,7 +610,7 @@ public class ImageCache {
     //UnloadImage(Diamond_FanartCaching_GetCachedFanart(VideoCell,false,"Poster"))
     //Delete from Phoenix Image FileSystem Cache
     //Delete from the SoftHashMap Cache - ICache
-    //Force a reload of the new Image
+    //Force a reload of the new Image - need to call CreateImage with an Overwrite flag so it forces the new image to be used
     
     //TODO: handle user set backgrounds and posters and banners located with the media files
     //use similar settings as Diamond settings so user can specific the name of the file for the fanart
