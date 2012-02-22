@@ -17,6 +17,7 @@ public class FanartManager {
     private IMediaResource PrimaryMediaResource = null;
     public static enum FanartManagerTypes{TV,MOVIE,NONE};
     private FanartManagerTypes FanartManagerType = FanartManagerTypes.NONE;
+    private String FanartType = "Poster";
     
     public FanartManager(IMediaResource MediaResource){
         this.MediaResource = MediaResource;
@@ -47,6 +48,14 @@ public class FanartManager {
         }
     }
 
+    public String getFanartType() {
+        return FanartType;
+    }
+
+    public void setFanartType(String FanartType) {
+        this.FanartType = FanartType;
+    }
+
     public Boolean IsTV(){
         if (this.FanartManagerType.equals(FanartManagerTypes.TV)){
             return Boolean.TRUE;
@@ -66,6 +75,16 @@ public class FanartManager {
             return Boolean.FALSE;
         }else{
             return Boolean.TRUE;
+        }
+    }
+    
+    public String[] GetFanartTypes(){
+        if (IsMovie()){
+            return new String[] {"Poster","Background"};
+        }else if (IsTV()){
+            return new String[] {"Poster","Banner","Background"};
+        }else{
+            return new String[0];
         }
     }
     
