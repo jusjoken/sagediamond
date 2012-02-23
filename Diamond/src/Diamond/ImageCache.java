@@ -617,9 +617,47 @@ public class ImageCache {
         return FinalThumb;
     }
 
+    public static Boolean IsDefaultArtifact(Object imediaresource, String resourcetype, String FanartToCheck){
+        return IsDefaultArtifact(Source.ConvertToIMR(imediaresource), resourcetype, FanartToCheck);
+    }
+    public static Boolean IsDefaultArtifact(IMediaResource imediaresource, String resourcetype, String FanartToCheck){
+        if (imediaresource==null){
+            LOG.debug("IsDefaultArtifact: null resource passed in - returning FALSE");
+            return Boolean.FALSE;
+        }
+        //check for a default artifact
+        String Default = GetDefaultArtifact(imediaresource, resourcetype);
+        if (Default==null){
+            LOG.debug("IsDefaultArtifact: no default set - returning FALSE");
+            return Boolean.FALSE;
+        }
+        if (Default.equals(FanartToCheck)){
+            return Boolean.TRUE;
+        }else{
+            return Boolean.FALSE;
+        }
+    }
+    
+    public static String GetDefaultArtifact(Object imediaresource, String resourcetype){
+        return GetDefaultArtifact(Source.ConvertToIMR(imediaresource), resourcetype);
+    }
+    public static String GetDefaultArtifact(IMediaResource imediaresource, String resourcetype){
+        if (imediaresource==null){
+            LOG.debug("GetDefaultArtifact: null resource passed in - returning null");
+            return null;
+        }
+        IMediaFile mf = phoenix.media.GetMediaFile(imediaresource.getMediaObject());
+        if (mf==null){
+            LOG.debug("GetDefaultArtifact: resource could not be converted to a MediaFile '" + imediaresource + "'");
+            return null;
+        }
+        String tArtifact = getDefaultArtifact(mf, ImageCacheKey.ConvertStringtoMediaArtifactType(resourcetype)).toString();
+        return tArtifact;
+    }
+    
     //phoenix does not expose this as public so recreate this here
     private static final String STORE_SERIES_FANART = "phoenix.seriesfanart";
-    private File getDefaultArtifact(IMediaFile file, MediaArtifactType artifactType) {
+    private static File getDefaultArtifact(IMediaFile file, MediaArtifactType artifactType) {
 
         if (file==null||artifactType==null) return null;
 
@@ -655,7 +693,7 @@ public class ImageCache {
         return null;
     }
 
-    private String resolveMediaTitle(String mediaTitle, IMediaFile mf) {
+    private static String resolveMediaTitle(String mediaTitle, IMediaFile mf) {
         if (mf==null) return mediaTitle;
         if (!mediaTitle.isEmpty()) return mediaTitle;
 
