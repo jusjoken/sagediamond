@@ -617,66 +617,66 @@ public class ImageCache {
         return FinalThumb;
     }
 
-//    //phoenix does not expose this as public so recreate this here
-//    public static final String STORE_SERIES_FANART = "phoenix.seriesfanart";
-//    private File getDefaultArtifact(IMediaFile file, MediaArtifactType artifactType) {
-//
-//        if (file==null||artifactType==null) return null;
-//
-//        String key = null;
-//        if (artifactType == MediaArtifactType.POSTER) {
-//                key=ISageCustomMetadataRW.FieldName.DEFAULT_POSTER;
-//        } else if (artifactType == MediaArtifactType.BACKGROUND) {
-//                key=ISageCustomMetadataRW.FieldName.DEFAULT_BACKGROUND;
-//        } else if (artifactType == MediaArtifactType.BANNER) {
-//                key=ISageCustomMetadataRW.FieldName.DEFAULT_BANNER;
-//        }
-//
-//        String def = MediaFileAPI.GetMediaFileMetadata(file.getMediaObject(), key);
-//        if (phoenix.util.StringUtils.isEmpty(def) && file.isType(MediaResourceType.TV.value())) {
-//                // defaults for TV shows need to be stored against the seriesname
-//                String title = resolveMediaTitle(file.getTitle(), file);
-//                def = UserRecordUtil.getField(STORE_SERIES_FANART, title, artifactType.name());
-//        }
-//
-//        if (!StringUtils.isEmpty(def)) {
-//                File f = null;
-//                if (phoenix.fanart.GetFanartCentralFolder()!=null) {
-//                        f = new File(phoenix.fanart.GetFanartCentralFolder(), def);
-//                } else {
-//                        f = new File(def);
-//                }
-//
-//                if (f.exists() && f.isFile()) {
-//                        return f;
-//                }
-//        }
-//
-//        return null;
-//    }
-//
-//    private String resolveMediaTitle(String mediaTitle, IMediaFile mf) {
-//        if (mf==null) return mediaTitle;
-//        if (!StringUtils.isEmpty(mediaTitle)) return mediaTitle;
-//
-//        // check for music
-//        if (mf.isType(MediaResourceType.MUSIC.value())) {
-//                IAlbumInfo info = mf.getAlbumInfo();
-//                if (info!=null) {
-//                        mediaTitle = info.getArtist();
-//                }
-//                if (!StringUtils.isEmpty(mediaTitle)) return mediaTitle;
-//        }
-//
-//        IMetadata md = mf.getMetadata();
-//        if (md != null) {
-//                mediaTitle = md.getMediaTitle();
-//                if (StringUtils.isEmpty(mediaTitle)) mediaTitle=null;
-//        }
-//
-//        return Utils.returnNonNull(mediaTitle, mf.getTitle());
-//    }
-//
+    //phoenix does not expose this as public so recreate this here
+    public static final String STORE_SERIES_FANART = "phoenix.seriesfanart";
+    private File getDefaultArtifact(IMediaFile file, MediaArtifactType artifactType) {
+
+        if (file==null||artifactType==null) return null;
+
+        String key = null;
+        if (artifactType == MediaArtifactType.POSTER) {
+                key=ISageCustomMetadataRW.FieldName.DEFAULT_POSTER;
+        } else if (artifactType == MediaArtifactType.BACKGROUND) {
+                key=ISageCustomMetadataRW.FieldName.DEFAULT_BACKGROUND;
+        } else if (artifactType == MediaArtifactType.BANNER) {
+                key=ISageCustomMetadataRW.FieldName.DEFAULT_BANNER;
+        }
+
+        String def = MediaFileAPI.GetMediaFileMetadata(file.getMediaObject(), key);
+        if (def.isEmpty() && file.isType(MediaResourceType.TV.value())) {
+                // defaults for TV shows need to be stored against the seriesname
+                String title = resolveMediaTitle(file.getTitle(), file);
+                def = UserRecordUtil.getField(STORE_SERIES_FANART, title, artifactType.name());
+        }
+
+        if (!def.isEmpty()) {
+                File f = null;
+                if (phoenix.fanart.GetFanartCentralFolder()!=null) {
+                        f = new File(phoenix.fanart.GetFanartCentralFolder(), def);
+                } else {
+                        f = new File(def);
+                }
+
+                if (f.exists() && f.isFile()) {
+                        return f;
+                }
+        }
+
+        return null;
+    }
+
+    private String resolveMediaTitle(String mediaTitle, IMediaFile mf) {
+        if (mf==null) return mediaTitle;
+        if (!mediaTitle.isEmpty()) return mediaTitle;
+
+        // check for music
+        if (mf.isType(MediaResourceType.MUSIC.value())) {
+                IAlbumInfo info = mf.getAlbumInfo();
+                if (info!=null) {
+                        mediaTitle = info.getArtist();
+                }
+                if (!mediaTitle.isEmpty()) return mediaTitle;
+        }
+
+        IMetadata md = mf.getMetadata();
+        if (md != null) {
+                mediaTitle = md.getMediaTitle();
+                if (mediaTitle.isEmpty()) mediaTitle=null;
+        }
+
+        return Utils.returnNonNull(mediaTitle, mf.getTitle());
+    }
+
 
     
     
