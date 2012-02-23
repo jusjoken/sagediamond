@@ -618,7 +618,7 @@ public class ImageCache {
     }
 
     //phoenix does not expose this as public so recreate this here
-    public static final String STORE_SERIES_FANART = "phoenix.seriesfanart";
+    private static final String STORE_SERIES_FANART = "phoenix.seriesfanart";
     private File getDefaultArtifact(IMediaFile file, MediaArtifactType artifactType) {
 
         if (file==null||artifactType==null) return null;
