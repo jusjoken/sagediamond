@@ -4,8 +4,11 @@
  */
 package Diamond;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
 import sagex.phoenix.metadata.MediaType;
@@ -27,6 +30,7 @@ public class FanartManager {
     private FanartManagerTypes FanartManagerType = FanartManagerTypes.NONE;
     private String FanartType = ""; //set within Init to poster as a default
     private String[] FanartList = new String[0];
+    private String[] FanartSeasons = new String[0];
     private String DefaultFanart = "";
     
     public FanartManager(IMediaResource MediaResource){
@@ -47,6 +51,7 @@ public class FanartManager {
         //Now determine the Primary Media Resource Type
         if (phoenix.media.IsMediaType( this.PrimaryMediaResource , "TV" )){
             this.FanartManagerType = FanartManagerTypes.TV;
+            FanartSeasons = GetFanartSeasons();
         }else if (phoenix.media.IsMediaType( this.PrimaryMediaResource , "VIDEO" )){
             this.FanartManagerType = FanartManagerTypes.MOVIE;
         }else if (phoenix.media.IsMediaType( this.PrimaryMediaResource , "DVD" )){
@@ -62,9 +67,9 @@ public class FanartManager {
 
     public String getTitle() {
         String Title = "No Fanart Found";
-        if (this.FanartManagerType.equals(FanartManagerType.MOVIE)){
+        if (this.FanartManagerType.equals(FanartManagerTypes.MOVIE)){
             Title = PrimaryMediaResource.getTitle();
-        }else if (this.FanartManagerType.equals(FanartManagerType.TV)){
+        }else if (this.FanartManagerType.equals(FanartManagerTypes.TV)){
             Title = PrimaryMediaResource.getTitle();
             //append the Current Season if selected
         }
@@ -73,6 +78,10 @@ public class FanartManager {
 
     public String[] getFanartList() {
         return FanartList;
+    }
+
+    public String[] getFanartSeasons() {
+        return FanartSeasons;
     }
 
     public String getFanartType() {
@@ -87,6 +96,11 @@ public class FanartManager {
     }
     public Boolean IsFanartTypeBackground(){
         return this.FanartType.toLowerCase().equals("background");
+    }
+
+    public void setTVMode(String NewMode) {
+        //get a string from the STV code to indicate Series or a specific Season
+        //this.TVMode = TVMode;
     }
 
     public void setFanartType(String FanartType) {
@@ -131,7 +145,50 @@ public class FanartManager {
         }
     }
     
+    private String[] GetFanartSeasons(){
+        if (!IsTV()){
+            LOG.debug("GetFanartSeasons: not valid for non TV Media File '" + PrimaryMediaResource.getTitle() + "'");
+            return new String[0];
+        }
+        List tFanartSeasons = new LinkedList();
+        String faMediaTitle = null;
+        Object faMediaObject = PrimaryMediaResource.getMediaObject();
+        MediaType faMediaType = MediaType.TV;
+        Map<String,String> faMetadata = Collections.emptyMap();
+        String FanartFolder = null;
 
+        //Get a Series Folder and then get it's parent
+        FanartFolder = phoenix.fanart.GetFanartArtifactDir(faMediaObject, faMediaType.toString(), null, "poster", null, faMetadata, Boolean.FALSE);
+        if (FanartFolder==null){
+            LOG.debug("GetFanartSeasons: no Fanart available for '" + PrimaryMediaResource.getTitle() + "'");
+            return new String[0];
+        }
+        File FanartFile = new File(FanartFolder);
+        if (!FanartFile.exists()){
+            LOG.debug("GetFanartSeasons: Fanart Dir not found '" + FanartFolder + "'");
+            return new String[0];
+        }
+        FanartFile = FanartFile.getParentFile();
+        if (FanartFile==null){
+            LOG.debug("GetFanartSeasons: Parent not found for '" + FanartFolder + "'");
+            return new String[0];
+        }
+        //find all the Season Folders
+        File[] listOfFiles = FanartFile.listFiles();
+
+        for (int i = 0; i < listOfFiles.length; i++) {
+          if (listOfFiles[i].isDirectory()) {
+            if (listOfFiles[i].getName().startsWith("Season")){
+                String tSeason = listOfFiles[i].getName().substring(7);
+                LOG.debug("GetFanartSeasons: Adding Season '" + tSeason + "' for '" + PrimaryMediaResource.getTitle() + "'");
+                tFanartSeasons.add(tSeason);
+            }
+          }
+        }
+        LOG.debug("GetFanartSeasons: Seasons found '" + tFanartSeasons + "' for '" + PrimaryMediaResource.getTitle() + "'");
+        return (String[]) tFanartSeasons.toArray();
+    }
+    
     public Integer getTableCols() {
         if (IsFanartTypePoster()){
             return 4;
