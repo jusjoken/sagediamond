@@ -312,7 +312,6 @@ public class ImageCache {
             }else if (Grouping.equals("season")){
                 LOG.debug("GetImageKey: season group found '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
                 //just use a child item so you get fanart for the specific season
-                //TODO: use the first child so a seasons always has the same ImageID for POSTER and BANNER
                 if (resourcetype.equals("background")){
                     //only for backgrounds get a random child so the backgrounds vary
                     childmediaresource = GetChild(imediaresource, Boolean.TRUE);

@@ -4,6 +4,10 @@
  */
 package Diamond;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import sagex.phoenix.metadata.MediaType;
 import sagex.phoenix.vfs.IMediaResource;
 
 /**
@@ -16,8 +20,11 @@ public class FanartManager {
     private IMediaResource MediaResource = null;
     private IMediaResource PrimaryMediaResource = null;
     public static enum FanartManagerTypes{TV,MOVIE,NONE};
+    public static enum TVModes{SERIES,SEASON};
+    private TVModes TVMode = TVModes.SERIES; 
     private FanartManagerTypes FanartManagerType = FanartManagerTypes.NONE;
     private String FanartType = "poster";
+    private String[] FanartList = new String[0];
     
     public FanartManager(IMediaResource MediaResource){
         this.MediaResource = MediaResource;
@@ -59,6 +66,10 @@ public class FanartManager {
         return Title;
     }
 
+    public String[] getFanartList() {
+        return FanartList;
+    }
+
     public String getFanartType() {
         return FanartType;
     }
@@ -74,8 +85,43 @@ public class FanartManager {
     }
 
     public void setFanartType(String FanartType) {
-        this.FanartType = FanartType.toLowerCase();
+        //change the fanart type and then set specific settings related to this change
+        if (!this.FanartType.equals(FanartType)){
+            this.FanartType = FanartType.toLowerCase();
+            //load the list of this fanart type
+            LoadFanartList();
+            
+            
+        }
     }
+    
+    private void LoadFanartList(){
+        FanartList = new String[0];
+        Map<String,String> faMetadata = null;
+        MediaType faMediaType = null;
+        Object faMediaObject = null;
+        String faMediaTitle = null;
+       
+        if (IsTV()){
+            if (TVMode.equals(TVModes.SERIES)){
+                faMediaObject = PrimaryMediaResource.getMediaObject();
+                faMediaType = MediaType.TV;
+                faMetadata = Collections.emptyMap();
+            }else{ //must be SEASON
+                faMediaObject = null;
+                faMediaType = MediaType.TV;
+                faMediaTitle = PrimaryMediaResource.getTitle();
+                faMetadata = new HashMap<String,String>();
+                faMetadata.put("SeasonNumber","1");
+            }
+        }else if (IsMovie()){
+            faMediaObject = PrimaryMediaResource.getMediaObject();
+        }else{ //must be invalid
+            return;
+        }
+        FanartList = phoenix.fanart.GetFanartArtifacts(faMediaObject, faMediaType.toString(), faMediaTitle, FanartType, null, faMetadata);
+    }
+    
 
     public Integer getTableCols() {
         if (IsFanartTypePoster()){
