@@ -7,6 +7,7 @@ package Diamond;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.log4j.Logger;
 import sagex.phoenix.metadata.MediaType;
 import sagex.phoenix.vfs.IMediaResource;
 
@@ -17,14 +18,16 @@ import sagex.phoenix.vfs.IMediaResource;
 public class FanartManager {
     //based on the passed in MediaResource determine if a TV Series or Movie Fanart Object
     
+    static private final Logger LOG = Logger.getLogger(FanartManager.class);
     private IMediaResource MediaResource = null;
     private IMediaResource PrimaryMediaResource = null;
     public static enum FanartManagerTypes{TV,MOVIE,NONE};
     public static enum TVModes{SERIES,SEASON};
     private TVModes TVMode = TVModes.SERIES; 
     private FanartManagerTypes FanartManagerType = FanartManagerTypes.NONE;
-    private String FanartType = "poster";
+    private String FanartType = ""; //set within Init to poster as a default
     private String[] FanartList = new String[0];
+    private String DefaultFanart = "";
     
     public FanartManager(IMediaResource MediaResource){
         this.MediaResource = MediaResource;
@@ -53,6 +56,8 @@ public class FanartManager {
         }else{
             this.FanartManagerType = FanartManagerTypes.NONE;
         }
+        //default to poster
+        setFanartType("poster");
     }
 
     public String getTitle() {
@@ -120,6 +125,10 @@ public class FanartManager {
             return;
         }
         FanartList = phoenix.fanart.GetFanartArtifacts(faMediaObject, faMediaType.toString(), faMediaTitle, FanartType, null, faMetadata);
+        //Set the default fanart item if there are any fanart items
+        if (FanartList.length>0){
+            DefaultFanart = ImageCache.GetDefaultArtifact(PrimaryMediaResource, FanartType);
+        }
     }
     
 
@@ -167,6 +176,17 @@ public class FanartManager {
         }else{
             return Boolean.TRUE;
         }
+    }
+    
+    public Boolean IsDefault(String FanartItem){
+        if (this.DefaultFanart.isEmpty()){
+            return Boolean.FALSE;
+        }
+        if (this.DefaultFanart.equals(FanartItem)){
+            return Boolean.TRUE;
+        }
+        LOG.debug("IsDefault: no match found: CurrentItem '" + FanartItem + "' Default '" + this.DefaultFanart + "'");
+        return Boolean.FALSE;
     }
     
     public String[] GetFanartTypes(){
