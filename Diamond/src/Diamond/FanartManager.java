@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
+import sagex.UIContext;
 import sagex.phoenix.metadata.MediaType;
 import sagex.phoenix.vfs.IMediaResource;
 
@@ -298,7 +299,30 @@ public class FanartManager {
     
     //return a CreateImage object for the specific Fanart Item
     public Object GetImage(String FanartItem){
-        return phoenix.image.CreateImage("GemstoneFanartManager", FanartItem, "{name: scale, width: " + finalscalewidth + ", height: -1}", false);
+        if (FanartItem==null){
+            LOG.debug("GetImage: null FanartItem passed in - returning null");
+            return null;
+        }
+        UIContext UIc = new UIContext(sagex.api.Global.GetUIContextName());
+        //based on the ImageType determine the scalewidth to use
+        Integer UIWidth = sagex.api.Global.GetFullUIWidth(UIc);
+        Double scalewidth = 0.2;
+        if (IsFanartTypePoster()){
+            scalewidth = 0.2;
+        }else if (IsFanartTypeBanner()){
+            scalewidth = 0.6;
+        }else if (IsFanartTypeBackground()){
+            scalewidth = 0.4;
+        }else{
+            //use default
+        }
+        Double finalscalewidth = scalewidth * UIWidth;
+        Object tImage = phoenix.image.CreateImage("GemstoneFanartManager", FanartItem, "{name: scale, width: " + finalscalewidth + ", height: -1}", false);
+        if (tImage==null){
+            LOG.debug("GetImage: CreateImage returned null for FanartItem '" + FanartItem + "'");
+            return null;
+        }
+        return tImage;
     }
     
     public String[] GetFanartTypes(){
