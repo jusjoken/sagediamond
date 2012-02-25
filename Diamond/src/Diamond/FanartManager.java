@@ -336,7 +336,7 @@ public class FanartManager {
         if (this.DefaultFanart.equals(FanartItem)){
             return Boolean.TRUE;
         }
-        LOG.debug("IsDefault: no match found: CurrentItem '" + FanartItem + "' Default '" + this.DefaultFanart + "'");
+        //LOG.debug("IsDefault: no match found: CurrentItem '" + FanartItem + "' Default '" + this.DefaultFanart + "'");
         return Boolean.FALSE;
     }
     
