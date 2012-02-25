@@ -658,7 +658,7 @@ public class ImageCache {
     private static final String STORE_SERIES_FANART = "phoenix.seriesfanart";
     private static File getDefaultArtifact(IMediaFile file, MediaArtifactType artifactType) {
 
-        LOG.debug("getDefaultArtifact: file '" + file + "' artifactType '" + artifactType + "'");
+        //LOG.debug("getDefaultArtifact: file '" + file + "' artifactType '" + artifactType + "'");
         if (file==null||artifactType==null){
             LOG.debug("getDefaultArtifact: called with null items");
             return null;
@@ -672,37 +672,26 @@ public class ImageCache {
         } else if (artifactType == MediaArtifactType.BANNER) {
                 key=ISageCustomMetadataRW.FieldName.DEFAULT_BANNER;
         }
-        LOG.debug("getDefaultArtifact: here 1");
 
         String def = MediaFileAPI.GetMediaFileMetadata(file.getMediaObject(), key);
-        LOG.debug("getDefaultArtifact: here 2");
         if (def.isEmpty() && file.isType(MediaResourceType.TV.value())) {
                 // defaults for TV shows need to be stored against the seriesname
-                LOG.debug("getDefaultArtifact: here 3");
                 String title = resolveMediaTitle(file.getTitle(), file);
-                LOG.debug("getDefaultArtifact: here 4 - title '" + title + "' def '" + def + "'");
                 def = UserRecordUtil.getField(STORE_SERIES_FANART, title, artifactType.name());
-                LOG.debug("getDefaultArtifact: here 5 = def '" + def + "'");
         }
 
         if (def !=null && !def.isEmpty()) {
-                LOG.debug("getDefaultArtifact: here 6");
                 File f = null;
                 if (phoenix.fanart.GetFanartCentralFolder()!=null) {
                         f = new File(phoenix.fanart.GetFanartCentralFolder(), def);
-                        LOG.debug("getDefaultArtifact: here 7");
                 } else {
                         f = new File(def);
-                        LOG.debug("getDefaultArtifact: here 8");
                 }
 
                 if (f.exists() && f.isFile()) {
-                        LOG.debug("getDefaultArtifact: here 9");
                         return f;
                 }
         }
-
-        LOG.debug("getDefaultArtifact: here 10");
         return null;
     }
 
