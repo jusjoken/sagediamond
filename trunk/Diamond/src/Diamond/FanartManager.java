@@ -5,16 +5,20 @@
 package Diamond;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import sagex.UIContext;
 import sagex.phoenix.metadata.MediaType;
+import sagex.phoenix.vfs.IMediaFile;
 import sagex.phoenix.vfs.IMediaResource;
+import sagex.phoenix.vfs.MediaResourceType;
 
 /**
  *
@@ -255,14 +259,14 @@ public class FanartManager {
         String faMediaTitle = null;
        
         if (IsTV()){
-            //LOG.debug("SetFanartAsDefault: TV item found");
+            LOG.debug("SetFanartAsDefault: TV item found");
             if (TVMode.equals(TVModes.SERIES)){
-                //LOG.debug("SetFanartAsDefault: TV SERIES item found");
+                LOG.debug("SetFanartAsDefault: TV SERIES item found");
                 faMediaObject = PrimaryMediaResource.getMediaObject();
                 faMediaType = MediaType.TV;
                 faMetadata = Collections.emptyMap();
             }else{ //must be SEASON
-                //LOG.debug("SetFanartAsDefault: TV SEASON item found");
+                LOG.debug("SetFanartAsDefault: TV SEASON item found");
                 faMediaObject = PrimaryMediaResource.getMediaObject();
                 faMediaType = MediaType.TV;
                 faMediaTitle = PrimaryMediaResource.getTitle();
@@ -271,15 +275,40 @@ public class FanartManager {
                 faMetadata.put("EpisodeNumber","1");
             }
         }else if (IsMovie()){
-            //LOG.debug("SetFanartAsDefault: MOVIE item found");
+            LOG.debug("SetFanartAsDefault: MOVIE item found");
             faMediaObject = PrimaryMediaResource.getMediaObject();
             faMediaType = MediaType.MOVIE;
         }else{ //must be invalid
             LOG.debug("LoadFanartList: Invalid - not TV nor MOVIE");
             return;
         }
-        LOG.debug("SetFanartAsDefault: calling SetFanartArtifact with FanartItem '" + FanartItem + "' faMediaObject'" + faMediaObject + "' faMediaType '" + faMediaType.toString() + "' faMediaTitle '" + faMediaTitle + "' FanartType '" + FanartType + "' faMetadata '" + faMetadata + "'");
-        phoenix.fanart.SetFanartArtifact(faMediaObject, new File(FanartItem), faMediaType.toString(), faMediaTitle, FanartType, null, faMetadata);
+        File FanartFile = new File(FanartItem);
+        String FanartPath = "";
+        try {
+            FanartPath = FanartFile.getCanonicalPath();
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(FanartManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+	
+	IMediaFile mf = phoenix.media.GetMediaFile(faMediaObject);
+	Object faMediaObject2 = phoenix.media.GetSageMediaFile(faMediaObject);
+	if (mf==null || faMediaObject2==null) {
+            LOG.debug("SetFanartAsDefault: null MF");
+            return;
+	}   
+        if (mf.isType(MediaResourceType.TV.value())) {
+            LOG.debug("SetFanartAsDefault: TV MF passed");
+        }
+        String title = ImageCache.resolveMediaTitle(mf.getTitle(), mf);
+        LOG.debug("SetFanartAsDefault: temp title returned '" + title + "'");
+        
+        LOG.debug("SetFanartAsDefault: calling SetFanartArtifact with FanartItem '" + FanartItem + "' FanartPath '" + FanartPath + "' faMediaObject'" + faMediaObject + "' faMediaType '" + faMediaType.toString() + "' faMediaTitle '" + faMediaTitle + "' FanartType '" + FanartType + "' faMetadata '" + faMetadata + "'");
+        phoenix.fanart.SetFanartArtifact(faMediaObject, FanartFile, faMediaType.toString(), faMediaTitle, FanartType, null, faMetadata);
+        //temp call of Get to see if Set was valid
+        String DefaultFanart2 = ImageCache.GetDefaultArtifact(PrimaryMediaResource, FanartType);
+        LOG.debug("SetFanartAsDefault: check default after SET '" + DefaultFanart2 + "'");
+        
         //reload the fanart list
         if (DefaultFanart!=null){
             RemoveFanartItem(DefaultFanart);
