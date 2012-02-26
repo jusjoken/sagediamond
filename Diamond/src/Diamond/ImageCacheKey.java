@@ -62,6 +62,9 @@ public class ImageCacheKey {
     public String getKey(){
         return this.ImagePath + util.ListToken + this.OriginalSize.toString();
     }
+    public static String BuildKey(String ImagePath, Boolean OriginalSize){
+        return ImagePath + util.ListToken + OriginalSize.toString();
+    }
 
     public MediaArtifactType getArtifactType() {
         return ArtifactType;

@@ -67,6 +67,16 @@ public class ImageCache {
     public static void ClearQueue(){
         IQueue.clear();
     }
+    
+    public static void RemoveItemFromCache(String Key){
+        LOG.debug("RemoveItemFromCache: checking Queue for '" + Key + "'");
+        if (IQueue.containsKey(Key)){
+            LOG.debug("RemoveItemFromCache: removing from Queue '" + Key + "'");
+            IQueue.remove(Key);
+        }
+        LOG.debug("RemoveItemFromCache: removing from Cache '" + Key + "'");
+        ICache.remove(Key);
+    }
 
     //This will return a background and refresh that specific area
     //Check for null in the STV to not change the background if that is desired
