@@ -87,6 +87,18 @@ public class FanartManager {
         }
         return Title;
     }
+    public String getTitleFull() {
+        String Title = "No Fanart Found";
+        if (this.FanartManagerType.equals(FanartManagerTypes.MOVIE)){
+            Title = PrimaryMediaResource.getTitle();
+        }else if (this.FanartManagerType.equals(FanartManagerTypes.TV)){
+            Title = PrimaryMediaResource.getTitle();
+            if (TVMode.equals(TVModes.SEASON)){
+                Title = Title + " (Season " + CurrentSeason + ")";
+            }
+        }
+        return Title;
+    }
 
     public List getFanartList() {
         return FanartList;
@@ -203,6 +215,78 @@ public class FanartManager {
                 }
             }
         }
+    }
+
+    public void DeleteFanartItem(String FanartItem){
+        //remove from the file system
+        File f1 = new File(FanartItem);
+        f1.delete();
+        RemoveFanartItem(FanartItem);
+        ReloadFanartItem();
+        //reload the fanart list
+        LoadFanartList();
+    }
+    
+    private void RemoveFanartItem(String FanartItem){
+        //clear caches
+        phoenix.fanart.ClearMemoryCaches();
+        //remove the fanart item from the cache for this media item
+        ImageCache.RemoveItemFromCache(ImageCacheKey.BuildKey(FanartItem, Boolean.FALSE));
+        ImageCache.RemoveItemFromCache(ImageCacheKey.BuildKey(FanartItem, Boolean.TRUE));
+        UIContext UIc = new UIContext(sagex.api.Global.GetUIContextName());
+        sagex.api.Utility.UnloadImage(UIc, FanartItem);
+    }
+
+    private void ReloadFanartItem(){
+        //reload the image
+        ImageCacheKey tKey = ImageCache.GetImageKey(MediaResource, FanartType, Boolean.FALSE);
+        ImageCache.CreateImage(tKey, Boolean.TRUE);
+        if (IsFanartTypeBackground()){
+            //reload any large background
+            tKey = ImageCache.GetImageKey(MediaResource, FanartType, Boolean.TRUE);
+            ImageCache.CreateImage(tKey, Boolean.TRUE);
+        }
+    }
+
+    public void SetFanartAsDefault(String FanartItem){
+        Map<String,String> faMetadata = null;
+        MediaType faMediaType = null;
+        Object faMediaObject = null;
+        String faMediaTitle = null;
+       
+        if (IsTV()){
+            //LOG.debug("SetFanartAsDefault: TV item found");
+            if (TVMode.equals(TVModes.SERIES)){
+                //LOG.debug("SetFanartAsDefault: TV SERIES item found");
+                faMediaObject = PrimaryMediaResource.getMediaObject();
+                faMediaType = MediaType.TV;
+                faMetadata = Collections.emptyMap();
+            }else{ //must be SEASON
+                //LOG.debug("SetFanartAsDefault: TV SEASON item found");
+                faMediaObject = PrimaryMediaResource.getMediaObject();
+                faMediaType = MediaType.TV;
+                faMediaTitle = PrimaryMediaResource.getTitle();
+                faMetadata = new HashMap<String,String>();
+                faMetadata.put("SeasonNumber",CurrentSeason);
+                faMetadata.put("EpisodeNumber","1");
+            }
+        }else if (IsMovie()){
+            //LOG.debug("SetFanartAsDefault: MOVIE item found");
+            faMediaObject = PrimaryMediaResource.getMediaObject();
+            faMediaType = MediaType.MOVIE;
+        }else{ //must be invalid
+            LOG.debug("LoadFanartList: Invalid - not TV nor MOVIE");
+            return;
+        }
+        LOG.debug("SetFanartAsDefault: calling SetFanartArtifact with FanartItem '" + FanartItem + "' faMediaObject'" + faMediaObject + "' faMediaType '" + faMediaType.toString() + "' faMediaTitle '" + faMediaTitle + "' FanartType '" + FanartType + "' faMetadata '" + faMetadata + "'");
+        phoenix.fanart.SetFanartArtifact(faMediaObject, new File(FanartItem), faMediaType.toString(), faMediaTitle, FanartType, null, faMetadata);
+        //reload the fanart list
+        if (DefaultFanart!=null){
+            RemoveFanartItem(DefaultFanart);
+        }
+        ReloadFanartItem();
+        //reload the fanart list
+        LoadFanartList();
     }
 
     //this will be a list of modes such as Series,1,2,3 - number representing the Seasons
