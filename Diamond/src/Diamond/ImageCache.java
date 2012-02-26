@@ -665,17 +665,23 @@ public class ImageCache {
         }
         Object tArtifact = getDefaultArtifact(mf, ImageCacheKey.ConvertStringtoMediaArtifactType(resourcetype));
         if (tArtifact==null){
+            LOG.debug("GetDefaultArtifact: tArtifact is null");
             return null;
         }else{
+            LOG.debug("GetDefaultArtifact: returning tArtifact as a string");
             return tArtifact.toString();
         }
     }
+    
+    //TODO: need to also copy the setDefault functions from phoenix
+    //add ability to get/set default for a SEASON - POSTER and BANNER
+    //Check GetImage as a default BACKGROUND is not being retrieved for TV (Movies work)
     
     //phoenix does not expose this as public so recreate this here
     private static final String STORE_SERIES_FANART = "phoenix.seriesfanart";
     private static File getDefaultArtifact(IMediaFile file, MediaArtifactType artifactType) {
 
-        //LOG.debug("getDefaultArtifact: file '" + file + "' artifactType '" + artifactType + "'");
+        LOG.debug("getDefaultArtifact: file '" + file + "' artifactType '" + artifactType + "'");
         if (file==null||artifactType==null){
             LOG.debug("getDefaultArtifact: called with null items");
             return null;
@@ -691,28 +697,42 @@ public class ImageCache {
         }
 
         String def = MediaFileAPI.GetMediaFileMetadata(file.getMediaObject(), key);
+        LOG.debug("getDefaultArtifact: key '" + key + "' def '" + def + "'");
         if (def.isEmpty() && file.isType(MediaResourceType.TV.value())) {
-                // defaults for TV shows need to be stored against the seriesname
-                String title = resolveMediaTitle(file.getTitle(), file);
-                def = UserRecordUtil.getField(STORE_SERIES_FANART, title, artifactType.name());
+            LOG.debug("getDefaultArtifact: testing for TV SERIES");
+            // defaults for TV shows need to be stored against the seriesname
+            String title = resolveMediaTitle(file.getTitle(), file);
+            LOG.debug("getDefaultArtifact: title '" + title + "'");
+            def = UserRecordUtil.getField(STORE_SERIES_FANART, title, artifactType.name());
+            LOG.debug("getDefaultArtifact: def '" + def + "'");
         }
 
         if (def !=null && !def.isEmpty()) {
+            LOG.debug("getDefaultArtifact: def2 '" + def + "'");
                 File f = null;
-                if (phoenix.fanart.GetFanartCentralFolder()!=null) {
-                        f = new File(phoenix.fanart.GetFanartCentralFolder(), def);
-                } else {
+                String central = phoenix.fanart.GetFanartCentralFolder();
+                if (central!=null) {
+                    if (def.startsWith(central)) {
                         f = new File(def);
+                        LOG.debug("getDefaultArtifact: 3 '" + f + "'");
+                    }else{
+                        f = new File(phoenix.fanart.GetFanartCentralFolder(), def);
+                        LOG.debug("getDefaultArtifact: 4 '" + f + "'");
+                    }
+                } else {
+                    f = new File(def);
+                    LOG.debug("getDefaultArtifact: 5 '" + f + "'");
                 }
 
                 if (f.exists() && f.isFile()) {
-                        return f;
+                    LOG.debug("getDefaultArtifact: 6 '" + f + "'");
+                    return f;
                 }
         }
         return null;
     }
 
-    private static String resolveMediaTitle(String mediaTitle, IMediaFile mf) {
+    public static String resolveMediaTitle(String mediaTitle, IMediaFile mf) {
         if (mf==null) return mediaTitle;
         if (!mediaTitle.isEmpty()) return mediaTitle;
 
