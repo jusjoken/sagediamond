@@ -76,6 +76,8 @@ public class ImageCache {
         }
         LOG.debug("RemoveItemFromCache: removing from Cache '" + Key + "'");
         ICache.remove(Key);
+        Object Test = ICache.get(Key);
+        LOG.debug("RemoveItemFromCache: Test get retrieved '" + Test + "'");
     }
 
     //This will return a background and refresh that specific area
@@ -483,11 +485,16 @@ public class ImageCache {
                 return null;
             }
         }
-        if (!sagex.api.Utility.IsImageLoaded(UIc, ThisImage)){
-            LOG.debug("CreateImage: Loaded using LoagImage(loadImage)) - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + Key.getArtifactType().toString() + "' Image = '" + Key.getImagePath() + "'");
+        if (OverWrite){
+            LOG.debug("CreateImage: Forced (OverWrite) load using LoagImage(loadImage)) - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + Key.getArtifactType().toString() + "' Image = '" + Key.getImagePath() + "'");
             sagex.api.Utility.LoadImage(UIc, sagex.api.Utility.LoadImage(UIc, ThisImage));
         }else{
-            LOG.debug("CreateImage: already Loaded - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + Key.getArtifactType().toString() + "' Image = '" + Key.getImagePath() + "'");
+            if (!sagex.api.Utility.IsImageLoaded(UIc, ThisImage)){
+                LOG.debug("CreateImage: Loaded using LoagImage(loadImage)) - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + Key.getArtifactType().toString() + "' Image = '" + Key.getImagePath() + "'");
+                sagex.api.Utility.LoadImage(UIc, sagex.api.Utility.LoadImage(UIc, ThisImage));
+            }else{
+                LOG.debug("CreateImage: already Loaded - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + Key.getArtifactType().toString() + "' Image = '" + Key.getImagePath() + "'");
+            }
         }
         return ThisImage;
     }
