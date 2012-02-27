@@ -209,7 +209,7 @@ public class FanartManager {
         LOG.debug("LoadFanartList: FanartList '" + FanartList + "' for '" + PrimaryMediaResource.getTitle() + "'");
         //Set the default fanart item if there are any fanart items
         if (!FanartList.isEmpty()){
-            DefaultFanart = ImageCache.GetDefaultArtifact(PrimaryMediaResource, FanartType);
+            DefaultFanart = ImageCache.GetDefaultArtifact(PrimaryMediaResource, FanartType, faMetadata);
             LOG.debug("LoadFanartList: DegaultFanart '" + DefaultFanart + "' for '" + PrimaryMediaResource.getTitle() + "'");
             //Add the default item (if any) to the TOP of the list - make sure it is also removed from the list
             if (DefaultFanart!=null){
@@ -303,10 +303,15 @@ public class FanartManager {
         String title = ImageCache.resolveMediaTitle(mf.getTitle(), mf);
         LOG.debug("SetFanartAsDefault: temp title returned '" + title + "'");
         
-        LOG.debug("SetFanartAsDefault: calling SetFanartArtifact with FanartItem '" + FanartItem + "' FanartPath '" + FanartPath + "' faMediaObject'" + faMediaObject + "' faMediaType '" + faMediaType.toString() + "' faMediaTitle '" + faMediaTitle + "' FanartType '" + FanartType + "' faMetadata '" + faMetadata + "'");
-        phoenix.fanart.SetFanartArtifact(faMediaObject, FanartFile, faMediaType.toString(), faMediaTitle, FanartType, null, faMetadata);
-        //temp call of Get to see if Set was valid
-        String DefaultFanart2 = ImageCache.GetDefaultArtifact(PrimaryMediaResource, FanartType);
+        if (TVMode.equals(TVModes.SEASON)){
+            //TODO: use a special SetSeasonArtifact method
+            LOG.debug("SetFanartAsDefault: calling SetSeasonFanartArtifact with FanartItem '" + FanartItem + "' FanartPath '" + FanartPath + "' faMediaObject'" + faMediaObject + "' faMediaType '" + faMediaType.toString() + "' faMediaTitle '" + faMediaTitle + "' FanartType '" + FanartType + "' faMetadata '" + faMetadata + "'");
+        }else{
+            LOG.debug("SetFanartAsDefault: calling SetFanartArtifact with FanartItem '" + FanartItem + "' FanartPath '" + FanartPath + "' faMediaObject'" + faMediaObject + "' faMediaType '" + faMediaType.toString() + "' faMediaTitle '" + faMediaTitle + "' FanartType '" + FanartType + "' faMetadata '" + faMetadata + "'");
+            phoenix.fanart.SetFanartArtifact(faMediaObject, FanartFile, faMediaType.toString(), faMediaTitle, FanartType, null, faMetadata);
+        }
+        //TODO: remove the following - temp call of Get to see if Set was valid
+        String DefaultFanart2 = ImageCache.GetDefaultArtifact(PrimaryMediaResource, FanartType, faMetadata);
         LOG.debug("SetFanartAsDefault: check default after SET '" + DefaultFanart2 + "'");
         
         //reload the fanart list
