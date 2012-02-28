@@ -724,9 +724,14 @@ public class ImageCache {
         }
 
         if (def !=null && !def.isEmpty()) {
-            LOG.debug("getDefaultArtifact: def2 '" + def + "'");
                 File f = null;
-                String central = phoenix.fanart.GetFanartCentralFolder();
+                String central = null;
+                try {
+                    central = (new File(phoenix.fanart.GetFanartCentralFolder())).getCanonicalPath();
+                } catch (IOException ex) {
+                    java.util.logging.Logger.getLogger(ImageCache.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                LOG.debug("getDefaultArtifact: central '" + central + "' def '" + def + "'");
                 if (central!=null) {
                     if (def.startsWith(central)) {
                         f = new File(def);
@@ -811,26 +816,39 @@ public class ImageCache {
         // if we are given a metadata map, then use use it, even if it's empty.
         // this allows us to bypass the season specific fanart by passing in an empty metadata map
         if (metaadata != null) return metaadata;
+        LOG.debug("resolveFanartMetadata: Here 1");
 
         //if we don't have a mediaObject then there is nothing more we can do
         if (mediaObject==null){
+            LOG.debug("resolveFanartMetadata: Here 2");
             return null;
         }
         
         //now based on the mediaObject see if we can determine SEASON based metadata for TV
         IMediaFile mf = null;
+        LOG.debug("resolveFanartMetadata: Here 3");
         if (mediaObject!=null){
+            LOG.debug("resolveFanartMetadata: Here 4 - mediaType '" + mediaType + "'");
             mf = phoenix.media.GetMediaFile(mediaObject);
-            if (mediaType.toLowerCase().equals("tv") || phoenix.media.IsMediaType( mediaObject , "TV" )) {
-                IMetadata md = mf.getMetadata();
-                Map<String, String> props = new HashMap<String, String>();
-                if (md.getEpisodeNumber()>0) {
-                    props.put(FanartUtil.SEASON_NUMBER, String.valueOf(md.getSeasonNumber()));
-                    props.put(FanartUtil.EPISODE_NUMBER, String.valueOf(md.getEpisodeNumber()));
+            if (mf!=null){
+                LOG.debug("resolveFanartMetadata: Here 5 - mediaObject '" + mf.getMediaObject() + "'");
+                if (phoenix.media.IsMediaType( mf.getMediaObject() , "TV" )) {
+                    LOG.debug("resolveFanartMetadata: Here 6");
+                    IMetadata md = mf.getMetadata();
+                    LOG.debug("resolveFanartMetadata: Here 7");
+                    Map<String, String> props = new HashMap<String, String>();
+                    LOG.debug("resolveFanartMetadata: Here 8");
+                    if (md.getEpisodeNumber()>0) {
+                        LOG.debug("resolveFanartMetadata: Here 9");
+                        props.put(FanartUtil.SEASON_NUMBER, String.valueOf(md.getSeasonNumber()));
+                        props.put(FanartUtil.EPISODE_NUMBER, String.valueOf(md.getEpisodeNumber()));
+                    }
+                    LOG.debug("resolveFanartMetadata: Here 10");
+                    return props;
                 }
-                return props;
             }
         }
+        LOG.debug("resolveFanartMetadata: Here 11");
         return null;
     }
 
