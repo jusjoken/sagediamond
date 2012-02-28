@@ -784,11 +784,20 @@ public class ImageCache {
         
         if (IsTVSeason){
             //check the default first and return it if any
-            
+            String Default = GetDefaultArtifact(mediaObject, artifactType, metadata);
             //if no default then get the first SEASON specific Fanart 
             //  - skipping the phoenix call as it will get a SERIES default if on exists
-            
-            return "";
+            if (Default.isEmpty()){
+                // grab first fanart artifact
+                String files[] = phoenix.fanart.GetFanartArtifacts(mediaObject, mediaType, mediaTitle, artifactType, artifactTitle, metadata);
+                if (files!=null && files.length>0) {
+                    // just use the first one
+                    Default = files[0];
+                }                
+                return Default;
+            }else{
+                return Default;
+            }
         }else{
             return phoenix.fanart.GetFanartArtifact(mediaObject, mediaType, mediaTitle, artifactType, artifactTitle, metadata);
         }
