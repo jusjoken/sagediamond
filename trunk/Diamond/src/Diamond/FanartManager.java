@@ -303,13 +303,14 @@ public class FanartManager {
         String title = ImageCache.resolveMediaTitle(mf.getTitle(), mf);
         LOG.debug("SetFanartAsDefault: temp title returned '" + title + "'");
         
-        if (TVMode.equals(TVModes.SEASON)){
-            //TODO: use a special SetSeasonArtifact method
-            LOG.debug("SetFanartAsDefault: calling SetSeasonFanartArtifact with FanartItem '" + FanartItem + "' FanartPath '" + FanartPath + "' faMediaObject'" + faMediaObject + "' faMediaType '" + faMediaType.toString() + "' faMediaTitle '" + faMediaTitle + "' FanartType '" + FanartType + "' faMetadata '" + faMetadata + "'");
-        }else{
-            LOG.debug("SetFanartAsDefault: calling SetFanartArtifact with FanartItem '" + FanartItem + "' FanartPath '" + FanartPath + "' faMediaObject'" + faMediaObject + "' faMediaType '" + faMediaType.toString() + "' faMediaTitle '" + faMediaTitle + "' FanartType '" + FanartType + "' faMetadata '" + faMetadata + "'");
-            phoenix.fanart.SetFanartArtifact(faMediaObject, FanartFile, faMediaType.toString(), faMediaTitle, FanartType, null, faMetadata);
-        }
+//        if (TVMode.equals(TVModes.SEASON)){
+//            LOG.debug("SetFanartAsDefault: calling SetSeasonFanartArtifact with FanartItem '" + FanartItem + "' FanartPath '" + FanartPath + "' faMediaObject'" + faMediaObject + "' faMediaType '" + faMediaType.toString() + "' faMediaTitle '" + faMediaTitle + "' FanartType '" + FanartType + "' faMetadata '" + faMetadata + "'");
+//        }else{
+//            LOG.debug("SetFanartAsDefault: calling SetFanartArtifact with FanartItem '" + FanartItem + "' FanartPath '" + FanartPath + "' faMediaObject'" + faMediaObject + "' faMediaType '" + faMediaType.toString() + "' faMediaTitle '" + faMediaTitle + "' FanartType '" + FanartType + "' faMetadata '" + faMetadata + "'");
+//            phoenix.fanart.SetFanartArtifact(faMediaObject, FanartFile, faMediaType.toString(), faMediaTitle, FanartType, null, faMetadata);
+//        }
+        //Add special SetFanartArtifact method to handle SEASON defaults
+        ImageCache.SetFanartArtifact(faMediaObject, FanartFile, faMediaType, faMediaTitle, FanartType, null, faMetadata);
         //TODO: remove the following - temp call of Get to see if Set was valid
         String DefaultFanart2 = ImageCache.GetDefaultArtifact(PrimaryMediaResource, FanartType, faMetadata);
         LOG.debug("SetFanartAsDefault: check default after SET '" + DefaultFanart2 + "'");
