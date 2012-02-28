@@ -205,8 +205,17 @@ public class FanartManager {
             return;
         }
         //LOG.debug("LoadFanartList: calling GetFanartArtifacts with faMediaObject'" + faMediaObject + "' faMediaType '" + faMediaType.toString() + "' faMediaTitle '" + faMediaTitle + "' FanartType '" + FanartType + "' faMetadata '" + faMetadata + "'");
-        FanartList = new ArrayList<String>(Arrays.asList(phoenix.fanart.GetFanartArtifacts(faMediaObject, faMediaType.toString(), faMediaTitle, FanartType, null, faMetadata)));
-        LOG.debug("LoadFanartList: FanartList '" + FanartList + "' for '" + PrimaryMediaResource.getTitle() + "'");
+        String tMediaType = null;
+        if (faMediaType!=null){
+            tMediaType = faMediaType.toString();
+        }
+        String[] tList = phoenix.fanart.GetFanartArtifacts(faMediaObject, tMediaType, faMediaTitle, FanartType, null, faMetadata);
+        if (tList!=null){
+            FanartList = new ArrayList<String>(Arrays.asList(tList));
+            LOG.debug("LoadFanartList: FanartList '" + FanartList + "' for '" + PrimaryMediaResource.getTitle() + "'");
+        }else{
+            LOG.debug("LoadFanartList: no '" + FanartType + "' Fanart Found for '" + PrimaryMediaResource.getTitle() + "'");
+        }
         //Set the default fanart item if there are any fanart items
         if (!FanartList.isEmpty()){
             DefaultFanart = ImageCache.GetDefaultArtifact(PrimaryMediaResource, FanartType, faMetadata);
