@@ -794,15 +794,18 @@ public class ImageCache {
             String Default = GetDefaultArtifact(mediaObject, artifactType, metadata);
             //if no default then get the first SEASON specific Fanart 
             //  - skipping the phoenix call as it will get a SERIES default if on exists
-            if (Default.isEmpty()){
+            if (Default==null || Default.isEmpty()){
                 // grab first fanart artifact
+                LOG.debug("GetFanartArtifact: no default found so getting the first Season based fanart item");
                 String files[] = phoenix.fanart.GetFanartArtifacts(mediaObject, mediaType, mediaTitle, artifactType, artifactTitle, metadata);
                 if (files!=null && files.length>0) {
                     // just use the first one
                     Default = files[0];
                 }                
+                LOG.debug("GetFanartArtifact: returning first Season fanart item '" + Default + "'");
                 return Default;
             }else{
+                LOG.debug("GetFanartArtifact: returning Default '" + Default + "'");
                 return Default;
             }
         }else{
@@ -875,7 +878,7 @@ public class ImageCache {
             String title = resolveMediaTitle(mf.getTitle(), mf);
             String SeasonNumber = metadata.get(FanartUtil.SEASON_NUMBER);
             String SeasonTitle = resolveMediaSeasonTitle(title, SeasonNumber);
-            LOG.debug("SetFanartArtifact: testing for TV SEASON for '" + SeasonTitle + "'");
+            LOG.debug("SetFanartArtifact: using special TV SEASON logic for '" + SeasonTitle + "'");
             String file = null;
             try {
                 file = fanart.getCanonicalPath();
@@ -883,9 +886,11 @@ public class ImageCache {
                 java.util.logging.Logger.getLogger(ImageCache.class.getName()).log(Level.SEVERE, null, ex);
             }
             if (file!=null){
-                UserRecordUtil.setField(STORE_SEASON_FANART, SeasonTitle, artifactType, file);
+                LOG.debug("SetFanartArtifact: calling UserRecordUtil with - SeasonTitle '" + SeasonTitle + "' artifactType '" + artifactType + "' file '" + file + "'");
+                UserRecordUtil.setField(STORE_SEASON_FANART, SeasonTitle, artifactType.toUpperCase(), file);
             }
         }else{
+            LOG.debug("SetFanartArtifact: using - phoenix.fanart.SetFanartArtifact");
             phoenix.fanart.SetFanartArtifact(mediaObject, fanart, mediaType.toString(), mediaTitle, artifactType, artifactTitle, metadata);
         }
         
