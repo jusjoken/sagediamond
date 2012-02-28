@@ -5,11 +5,13 @@
 package Diamond;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import sagex.UIContext;
 import sagex.api.MediaFileAPI;
@@ -836,14 +838,38 @@ public class ImageCache {
 			File fanart,
 			MediaType mediaType,
 			String mediaTitle,
-			MediaArtifactType artifactType,
+			String artifactType,
 			String artifactTitle,
 			Map<String, String> metadata) {
-        //TODO: 
-        //call this for all Sets
+        //TODO: SetFanartArtifact to handle SEASONS as a special case
+        //check if the Metadata has SEASON specific data and handle differently
+        Boolean IsTVSeason = Boolean.FALSE;
+        Map<String, String> SeasonMetadata = resolveFanartMetadata(metadata, mediaType.toString(), mediaObject);
+        if (SeasonMetadata!=null){
+            if (SeasonMetadata.containsKey(FanartUtil.SEASON_NUMBER)){
+                IsTVSeason = Boolean.TRUE;
+            }
+        }
         //check if this is a SEASON item and then handle as special
-        //if not then just pass to the phoenix call
-        phoenix.fanart.SetFanartArtifact(mediaObject, fanart, mediaType.toString(), mediaTitle, artifactType.toString(), artifactTitle, metadata);
+        if (IsTVSeason){
+            //special handling for SEASON Defaults
+            IMediaFile mf = phoenix.media.GetMediaFile(mediaObject);
+            String title = resolveMediaTitle(mf.getTitle(), mf);
+            String SeasonNumber = metadata.get(FanartUtil.SEASON_NUMBER);
+            String SeasonTitle = resolveMediaSeasonTitle(title, SeasonNumber);
+            LOG.debug("SetFanartArtifact: testing for TV SEASON for '" + SeasonTitle + "'");
+            String file = null;
+            try {
+                file = fanart.getCanonicalPath();
+            } catch (IOException ex) {
+                java.util.logging.Logger.getLogger(ImageCache.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            if (file!=null){
+                UserRecordUtil.setField(STORE_SEASON_FANART, SeasonTitle, artifactType, file);
+            }
+        }else{
+            phoenix.fanart.SetFanartArtifact(mediaObject, fanart, mediaType.toString(), mediaTitle, artifactType, artifactTitle, metadata);
+        }
         
     }
 
