@@ -286,6 +286,7 @@ public class FanartManager {
         String FanartPath = "";
         try {
             FanartPath = FanartFile.getCanonicalPath();
+            LOG.debug("SetFanartAsDefault: FanartPath '" + FanartPath + "'");
         } catch (IOException ex) {
             java.util.logging.Logger.getLogger(FanartManager.class.getName()).log(Level.SEVERE, null, ex);
         }
