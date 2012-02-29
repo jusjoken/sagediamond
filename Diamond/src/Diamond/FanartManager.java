@@ -78,6 +78,7 @@ public class FanartManager {
             this.FanartManagerType = FanartManagerTypes.NONE;
         }
         LOG.debug("Init: FanartManagerType '" + FanartManagerType + "' PrimaryMediaResource '" + PrimaryMediaResource + "'");
+        ImageCache.PrintUserRecord(PrimaryMediaResource.getTitle());
         //default to poster
         setFanartType("poster");
     }
