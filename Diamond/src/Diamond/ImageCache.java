@@ -711,12 +711,12 @@ public class ImageCache {
                 // defaults for TV shows need to be stored against the seriesname plus the SEASON number
                 String SeasonNumber = metadata.get(FanartUtil.SEASON_NUMBER);
                 String SeasonTitle = resolveMediaSeasonTitle(title, SeasonNumber);
-                LOG.debug("getDefaultArtifact: testing for TV SEASON for '" + SeasonTitle + "'");
+                LOG.debug("getDefaultArtifact: testing for TV SEASON for '" + SeasonTitle + "' artifactType.name() '" + artifactType.name() + "'");
                 def = UserRecordUtil.getField(STORE_SEASON_FANART, SeasonTitle, artifactType.name());
                 LOG.debug("getDefaultArtifact: def '" + def + "'");
             }else{
                 // defaults for TV shows need to be stored against the seriesname
-                LOG.debug("getDefaultArtifact: testing for TV SERIES for '" + title + "'");
+                LOG.debug("getDefaultArtifact: testing for TV SERIES for '" + title + "' artifactType.name() '" + artifactType.name() + "'");
                 def = UserRecordUtil.getField(STORE_SERIES_FANART, title, artifactType.name());
                 LOG.debug("getDefaultArtifact: def '" + def + "'");
             }
@@ -809,6 +809,7 @@ public class ImageCache {
                 return Default;
             }
         }else{
+            LOG.debug("GetFanartArtifact: using phoenix GetFanartArtifact - mediaObject '" + mediaObject + "' mediaType '" + mediaType + "' mediaTitle '" + mediaTitle + "' artifactType '" + artifactType + "' artifactTitle '" + artifactTitle + "' metadata '" + metadata + "'");
             return phoenix.fanart.GetFanartArtifact(mediaObject, mediaType, mediaTitle, artifactType, artifactTitle, metadata);
         }
     }
