@@ -150,6 +150,7 @@ public class ImageCacheKey {
     }
 
     public static MediaArtifactType ConvertStringtoMediaArtifactType(String ImageType){
+        ImageType = ImageType.toLowerCase();
         if (ImageType.equals("poster")){
             return MediaArtifactType.POSTER;
         }else if (ImageType.equals("banner")){
