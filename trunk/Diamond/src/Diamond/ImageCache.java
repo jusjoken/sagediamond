@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import sagex.UIContext;
 import sagex.api.MediaFileAPI;
+import sagex.api.UserRecordAPI;
 import sagex.phoenix.db.UserRecordUtil;
 import sagex.phoenix.fanart.FanartUtil;
 import sagex.phoenix.metadata.IMetadata;
@@ -378,6 +379,7 @@ public class ImageCache {
                 tMediaType = faMediaType.toString();
             }
             tImageString = GetFanartArtifact(faMediaObject, tMediaType, faMediaTitle, faArtifactType.toString(), faArtifiactTitle, faMetadata);
+            //tImageString = phoenix.fanart.GetFanartArtifact(faMediaObject, tMediaType, faMediaTitle, faArtifactType.toString(), faArtifiactTitle, faMetadata);
             //LOG.debug("GetImageKey: GetFanartArtifact returned '" + tImageString + "'");
         }
         if (tImageString==null || tImageString.equals("")){
@@ -702,7 +704,7 @@ public class ImageCache {
         }
 
         String def = MediaFileAPI.GetMediaFileMetadata(file.getMediaObject(), key);
-        LOG.debug("getDefaultArtifact: key '" + key + "' def '" + def + "'");
+        LOG.debug("getDefaultArtifact: based on GetMediaFileMetadata - key '" + key + "' def '" + def + "'");
         if (def.isEmpty() && file.isType(MediaResourceType.TV.value())) {
             //see if this TV item is a SERIES or a SEASON based on the metadata
             metadata = resolveFanartMetadata(metadata, "tv", file.getMediaObject());
@@ -782,14 +784,16 @@ public class ImageCache {
     public static String GetFanartArtifact(Object mediaObject, String mediaType, String mediaTitle, String artifactType, String artifactTitle,	Map<String, String> metadata) {
         //check if the Metadata has SEASON specific data and handle differently
         Boolean IsTVSeason = Boolean.FALSE;
+        Boolean IsTV = Boolean.FALSE;
         Map<String, String> SeasonMetadata = resolveFanartMetadata(metadata, mediaType, mediaObject);
         if (SeasonMetadata!=null){
+            IsTV = Boolean.TRUE;
             if (SeasonMetadata.containsKey(FanartUtil.SEASON_NUMBER)){
                 IsTVSeason = Boolean.TRUE;
             }
         }
         
-        if (IsTVSeason){
+        if (IsTV){
             //check the default first and return it if any
             String Default = GetDefaultArtifact(mediaObject, artifactType, metadata);
             //if no default then get the first SEASON specific Fanart 
@@ -863,7 +867,6 @@ public class ImageCache {
 			String artifactType,
 			String artifactTitle,
 			Map<String, String> metadata) {
-        //TODO: SetFanartArtifact to handle SEASONS as a special case
         //check if the Metadata has SEASON specific data and handle differently
         Boolean IsTVSeason = Boolean.FALSE;
         Map<String, String> SeasonMetadata = resolveFanartMetadata(metadata, mediaType.toString(), mediaObject);
@@ -897,6 +900,13 @@ public class ImageCache {
         
     }
 
+    public static void PrintUserRecord(String Title){
+        Object series = UserRecordAPI.GetUserRecord(STORE_SERIES_FANART, Title);
+        Object season = UserRecordAPI.GetUserRecord(STORE_SEASON_FANART, Title);
+        LOG.debug("GetUserRecord: '" + Title + "' SERIES '" + series + "'");
+        LOG.debug("GetUserRecord: '" + Title + "' SEASON '" + season + "'");
+
+    }
 
     
     //TODO: Delete Cached Fanart for specific Show
