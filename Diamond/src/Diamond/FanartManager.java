@@ -293,42 +293,33 @@ public class FanartManager {
             return;
         }
         File FanartFile = new File(FanartItem);
-        String FanartPath = "";
-        try {
-            FanartPath = FanartFile.getCanonicalPath();
-            LOG.debug("SetFanartAsDefault: FanartPath '" + FanartPath + "'");
-        } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(FanartManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        String FanartPath = "";
+//        try {
+//            FanartPath = FanartFile.getCanonicalPath();
+//            LOG.debug("SetFanartAsDefault: FanartPath '" + FanartPath + "'");
+//        } catch (IOException ex) {
+//            java.util.logging.Logger.getLogger(FanartManager.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         
 	
-	IMediaFile mf = phoenix.media.GetMediaFile(faMediaObject);
-	Object faMediaObject2 = phoenix.media.GetSageMediaFile(faMediaObject);
-	if (mf==null || faMediaObject2==null) {
-            LOG.debug("SetFanartAsDefault: null MF");
-            return;
-	}   
-        if (mf.isType(MediaResourceType.TV.value())) {
-            LOG.debug("SetFanartAsDefault: TV MF passed");
-        }
-        String title = ImageCache.resolveMediaTitle(mf.getTitle(), mf);
-        LOG.debug("SetFanartAsDefault: temp title returned '" + title + "'");
-        
-//        if (TVMode.equals(TVModes.SEASON)){
-//            LOG.debug("SetFanartAsDefault: calling SetSeasonFanartArtifact with FanartItem '" + FanartItem + "' FanartPath '" + FanartPath + "' faMediaObject'" + faMediaObject + "' faMediaType '" + faMediaType.toString() + "' faMediaTitle '" + faMediaTitle + "' FanartType '" + FanartType + "' faMetadata '" + faMetadata + "'");
-//        }else{
-//            LOG.debug("SetFanartAsDefault: calling SetFanartArtifact with FanartItem '" + FanartItem + "' FanartPath '" + FanartPath + "' faMediaObject'" + faMediaObject + "' faMediaType '" + faMediaType.toString() + "' faMediaTitle '" + faMediaTitle + "' FanartType '" + FanartType + "' faMetadata '" + faMetadata + "'");
-//            phoenix.fanart.SetFanartArtifact(faMediaObject, FanartFile, faMediaType.toString(), faMediaTitle, FanartType, null, faMetadata);
+//	IMediaFile mf = phoenix.media.GetMediaFile(faMediaObject);
+//	Object faMediaObject2 = phoenix.media.GetSageMediaFile(faMediaObject);
+//	if (mf==null || faMediaObject2==null) {
+//            LOG.debug("SetFanartAsDefault: null MF");
+//            return;
+//	}   
+//        if (mf.isType(MediaResourceType.TV.value())) {
+//            LOG.debug("SetFanartAsDefault: TV MF passed");
 //        }
+//        String title = ImageCache.resolveMediaTitle(mf.getTitle(), mf);
+//        LOG.debug("SetFanartAsDefault: temp title returned '" + title + "'");
+        
         //Add special SetFanartArtifact method to handle SEASON defaults
         ImageCache.SetFanartArtifact(faMediaObject, FanartFile, faMediaType, faMediaTitle, FanartType, null, faMetadata);
-        //TODO: remove the following - temp call of Get to see if Set was valid
-        String DefaultFanart2 = ImageCache.GetDefaultArtifact(PrimaryMediaResource, FanartType, faMetadata);
-        LOG.debug("SetFanartAsDefault: check default after SET '" + DefaultFanart2 + "'");
         
         //reload the fanart list
-        if (DefaultFanart!=null){
-            RemoveFanartItem(DefaultFanart);
+        if (this.DefaultFanart!=null){
+            RemoveFanartItem(this.DefaultFanart);
         }
         ReloadFanartItem();
         //reload the fanart list

@@ -497,11 +497,17 @@ public class ImageCache {
         }
         if (OverWrite){
             LOG.debug("CreateImage: Forced (OverWrite) load using LoagImage(loadImage)) - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + Key.getArtifactType().toString() + "' Image = '" + Key.getImagePath() + "'");
-            sagex.api.Utility.LoadImage(UIc, sagex.api.Utility.LoadImage(UIc, ThisImage));
+            //single LoadImage
+            sagex.api.Utility.LoadImage(UIc, ThisImage);
+            //double LoadImage
+            //sagex.api.Utility.LoadImage(UIc, sagex.api.Utility.LoadImage(UIc, ThisImage));
         }else{
             if (!sagex.api.Utility.IsImageLoaded(UIc, ThisImage)){
                 LOG.debug("CreateImage: Loaded using LoagImage(loadImage)) - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + Key.getArtifactType().toString() + "' Image = '" + Key.getImagePath() + "'");
-                sagex.api.Utility.LoadImage(UIc, sagex.api.Utility.LoadImage(UIc, ThisImage));
+                //single LoadImage
+                sagex.api.Utility.LoadImage(UIc, ThisImage);
+                //double LoadImage
+                //sagex.api.Utility.LoadImage(UIc, sagex.api.Utility.LoadImage(UIc, ThisImage));
             }else{
                 LOG.debug("CreateImage: already Loaded - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + Key.getArtifactType().toString() + "' Image = '" + Key.getImagePath() + "'");
             }
@@ -683,9 +689,7 @@ public class ImageCache {
         }
     }
     
-    //TODO: need to also copy the setDefault functions from phoenix
-    //add ability to get/set default for a SEASON - POSTER and BANNER
-    //Check GetImage as a default BACKGROUND is not being retrieved for TV (Movies work)
+    //TODO: Check GetImage as a default BACKGROUND is not being retrieved for TV (Movies work)
     
     //phoenix does not expose this as public so recreate this here
     private static final String STORE_SERIES_FANART = "phoenix.seriesfanart";
@@ -800,17 +804,17 @@ public class ImageCache {
         if (IsTV){
             //check the default first and return it if any
             String Default = GetDefaultArtifact(mediaObject, artifactType, metadata);
-            //if no default then get the first SEASON specific Fanart 
+            //if no default then get the first SEASON/SERIES specific Fanart 
             //  - skipping the phoenix call as it will get a SERIES default if on exists
             if (Default==null || Default.isEmpty()){
                 // grab first fanart artifact
-                LOG.debug("GetFanartArtifact: no default found so getting the first Season based fanart item");
+                LOG.debug("GetFanartArtifact: no default found so getting the first Season/Series based fanart item");
                 String files[] = phoenix.fanart.GetFanartArtifacts(mediaObject, mediaType, mediaTitle, artifactType, artifactTitle, metadata);
                 if (files!=null && files.length>0) {
                     // just use the first one
                     Default = files[0];
                 }                
-                LOG.debug("GetFanartArtifact: returning first Season fanart item '" + Default + "'");
+                LOG.debug("GetFanartArtifact: returning first Season/Series fanart item '" + Default + "'");
                 return Default;
             }else{
                 LOG.debug("GetFanartArtifact: returning Default '" + Default + "'");
