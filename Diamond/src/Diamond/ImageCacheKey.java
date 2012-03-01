@@ -19,6 +19,7 @@ public class ImageCacheKey {
     private Object DefaultEpisodeImage = null;
     private String defaultImage = null;
     private String RefreshArea = null;
+    private String RefreshKey = null;
 
     public ImageCacheKey() {
     }
@@ -124,7 +125,23 @@ public class ImageCacheKey {
     public void setRefreshArea(String RefreshArea) {
         this.RefreshArea = RefreshArea;
     }
-    
+
+    public String getRefreshKey() {
+        return RefreshKey;
+    }
+
+    public void setRefreshKey(String RefreshKey) {
+        this.RefreshKey = RefreshKey;
+    }
+
+    public Boolean HasRefreshKey(){
+        if (this.RefreshKey==null){
+            return Boolean.FALSE;
+        }else{
+            return Boolean.TRUE;
+        }
+    }
+
     public Boolean HasRefreshArea(){
         if (this.RefreshArea==null){
             return Boolean.FALSE;

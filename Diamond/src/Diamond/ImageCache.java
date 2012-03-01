@@ -167,10 +167,12 @@ public class ImageCache {
         }
 
         ImageCacheKey tKey = GetImageKey(imediaresource, resourcetype, originalSize, defaultImage);
+        //store the mediakey to be used for refresh
         if (!tKey.IsValidKey()){
             LOG.debug("GetImage: Not a valid Key so returning defaultimage '" + tKey + "'");
             return tKey.getDefaultImage();
         }
+        tKey.setRefreshKey(GetMediaKey(imediaresource));
         return GetImage(tKey);
     }
 
@@ -423,6 +425,8 @@ public class ImageCache {
             if (tImage!=null){
                 if (tItem.HasRefreshArea()){
                     sagex.api.Global.RefreshArea(UIc, tItem.getRefreshArea());
+                }else if (tItem.HasRefreshKey()){
+                    sagex.api.Global.RefreshAreaForVariable(UIc, "PreloadTagKey", tItem.getRefreshKey());
                 }else{
                     sagex.api.Global.RefreshAreaForVariable(UIc, "PreloadTagKey", tItem.getKey());
                 }
@@ -908,6 +912,36 @@ public class ImageCache {
 
     }
 
+    public static String GetMediaKey(Object imediaresource){
+        return GetMediaKey(Source.ConvertToIMR(imediaresource));
+    }
+    public static String GetMediaKey(IMediaResource imediaresource){
+        if (imediaresource==null){
+            return "InvalidMediaItem";
+        }
+        IMediaResource kMediaresource = imediaresource;
+        String kTitle = imediaresource.getTitle();
+        String kType = "ITEM";
+        String kMediaType = "MEDIA:TV";
+        if (phoenix.media.IsMediaType( imediaresource , "FOLDER" )){
+            kType = "FOLDER";
+            kMediaresource = GetChild(imediaresource, Boolean.FALSE);
+            kTitle = kMediaresource.getTitle();
+            if (phoenix.media.IsMediaType( kMediaresource , "TV" )){
+                kMediaType = "MEDIA:TV";
+            }else{
+                kMediaType = "MEDIA:OTHER";
+            }
+        }else{
+            kType = "ITEM";
+            if (phoenix.media.IsMediaType( imediaresource , "TV" )){
+                kMediaType = "MEDIA:TV";
+            }else{
+                kMediaType = "MEDIA:OTHER";
+            }
+        }
+        return "MEDIAKEY{" + kTitle + ":" + kType + ":" + kMediaType + "}";
+    }
     
     //TODO: Delete Cached Fanart for specific Show
     // remove it from memory in Sage using UnloadImage()
