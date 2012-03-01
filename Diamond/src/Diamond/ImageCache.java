@@ -940,7 +940,9 @@ public class ImageCache {
                 kMediaType = "MEDIA:OTHER";
             }
         }
-        return "MEDIAKEY{" + kTitle + ":" + kType + ":" + kMediaType + "}";
+        String tKey = "MEDIAKEY{" + kTitle + ":" + kType + ":" + kMediaType + "}";
+        LOG.debug("GetMediaKey: '" + tKey + "'");
+        return tKey;
     }
     
     //TODO: Delete Cached Fanart for specific Show
