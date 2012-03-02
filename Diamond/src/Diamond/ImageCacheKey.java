@@ -15,11 +15,11 @@ public class ImageCacheKey {
     private String ImagePath = "";
     private Boolean OriginalSize = Boolean.FALSE;
     private MediaArtifactType ArtifactType = null;
-    private String ImageID = "";
     private Object DefaultEpisodeImage = null;
     private String defaultImage = null;
     private String RefreshArea = null;
     private String RefreshKey = null;
+    private Boolean KeepFilenameOnKey = Boolean.FALSE;
 
     public ImageCacheKey() {
     }
@@ -42,26 +42,20 @@ public class ImageCacheKey {
         this.OriginalSize = OriginalSize;
         this.ArtifactType = ConvertStringtoMediaArtifactType(ArtifactType);
     }
-    public ImageCacheKey(String ImagePath, Boolean OriginalSize, MediaArtifactType ArtifactType, String ImageID) {
-        this.ImagePath = ImagePath;
-        this.OriginalSize = OriginalSize;
-        this.ArtifactType = ArtifactType;
-        this.ImageID = ImageID;
-    }
-    public ImageCacheKey(String ImagePath, Boolean OriginalSize, String ArtifactType, String ImageID) {
+    public ImageCacheKey(String ImagePath, Boolean OriginalSize, String ArtifactType, Boolean KeepFilenameOnKey) {
         this.ImagePath = ImagePath;
         this.OriginalSize = OriginalSize;
         this.ArtifactType = ConvertStringtoMediaArtifactType(ArtifactType);
-        this.ImageID = ImageID;
+        this.KeepFilenameOnKey = KeepFilenameOnKey;
     }
 
     @Override
     public String toString() {
-        return "ImageCacheKey{" + "ImagePath=" + ImagePath + ", OriginalSize=" + OriginalSize + ", ArtifactType=" + ArtifactType + ", ImageID=" + ImageID + ", DefaultEpisodeImage=" + DefaultEpisodeImage + ", defaultImage=" + defaultImage + '}';
+        return "ImageCacheKey{" + "ImagePath=" + ImagePath + ", OriginalSize=" + OriginalSize + ", ArtifactType=" + ArtifactType + ", Key=" + getKey() + ", DefaultEpisodeImage=" + DefaultEpisodeImage + ", defaultImage=" + defaultImage + '}';
     }
     
     public String getKey(){
-        return this.ImagePath + util.ListToken + this.OriginalSize.toString();
+        return ImageCache.GetFanartKey(this.ImagePath, this.OriginalSize, this.KeepFilenameOnKey);
     }
     public static String BuildKey(String ImagePath, Boolean OriginalSize){
         return ImagePath + util.ListToken + OriginalSize.toString();
@@ -76,14 +70,6 @@ public class ImageCacheKey {
     }
     public void setArtifactType(String ArtifactType) {
         this.ArtifactType = ConvertStringtoMediaArtifactType(ArtifactType);
-    }
-
-    public String getImageID() {
-        return ImageID;
-    }
-
-    public void setImageID(String ImageID) {
-        this.ImageID = ImageID;
     }
 
     public String getImagePath() {

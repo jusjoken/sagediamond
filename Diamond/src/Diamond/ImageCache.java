@@ -160,7 +160,7 @@ public class ImageCache {
     }
     public static Object GetImage(IMediaResource imediaresource, String resourcetype, Boolean originalSize, String defaultImage){
         //return the default image passed in when none found or waiting for background processing from the queue
-        LOG.debug("GetImage: imediaresource '" + imediaresource + "' resourcetype '" + resourcetype + "' defaultImage '" + defaultImage + "'");
+        //LOG.debug("GetImage: imediaresource '" + imediaresource + "' resourcetype '" + resourcetype + "' defaultImage '" + defaultImage + "'");
         if (imediaresource == null) {
             LOG.debug("GetImage: imediaresource is NULL so returning NULL");
             return null;
@@ -193,7 +193,7 @@ public class ImageCache {
                 //see if the image is in the cache and if so return it
                 mediaObject = ICache.get(Key.getKey());
                 if (mediaObject!=null){
-                    LOG.debug("GetImage: FromKey: found Image in Cache and return it based on '" + tImageString + "'");
+                    LOG.debug("GetImage: FromKey: found Image in Cache and return it based on '" + tImageString + "' and Key '" + Key.getKey() + "'");
                     return mediaObject;
                 }else{
                     if (UseQueue(faArtifactType) && !SkipQueue){
@@ -301,13 +301,13 @@ public class ImageCache {
                 //need to know if this is a TV show grouping to get a Series fanart item
                 childmediaresource = GetChild(imediaresource, Boolean.FALSE);
                 if (phoenix.media.IsMediaType( childmediaresource , "TV" )){
-                    LOG.debug("GetImageKey: TV show found '" + phoenix.media.GetTitle(imediaresource) + "' using Series Fanart");
+                    //LOG.debug("GetImageKey: TV show found '" + phoenix.media.GetTitle(imediaresource) + "' using Series Fanart");
                     //use Series type fanart
                     faMediaObject = phoenix.media.GetMediaObject(childmediaresource);
                     faMetadata = Collections.emptyMap();
                     faMediaType = MediaType.TV;
                 }else{
-                    LOG.debug("GetImageKey: Other show found '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
+                    //LOG.debug("GetImageKey: Other show found '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
                     //use a child for the show fanart
                     if (resourcetype.equals("background")){
                         //only for backgrounds get a random child so the backgrounds vary
@@ -325,7 +325,7 @@ public class ImageCache {
                 // File[] Files = phoenix.util.GetImages("Path");
                 
             }else if (Grouping.equals("season")){
-                LOG.debug("GetImageKey: season group found '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
+                //LOG.debug("GetImageKey: season group found '" + phoenix.media.GetTitle(imediaresource) + "' using Child for Fanart");
                 //just use a child item so you get fanart for the specific season
                 if (resourcetype.equals("background")){
                     //only for backgrounds get a random child so the backgrounds vary
@@ -357,7 +357,7 @@ public class ImageCache {
                     //special Episode handling for backgrounds
                     tImageString = phoenix.fanart.GetEpisode(faMediaObject);
                     if (tImageString==null || tImageString.equals("")){
-                        LOG.debug("GetImageKey: Episode '" + phoenix.media.GetTitle(imediaresource) + "' using Fanart based on GetDefaultEpisode");
+                        //LOG.debug("GetImageKey: Episode '" + phoenix.media.GetTitle(imediaresource) + "' using Fanart based on GetDefaultEpisode");
                         DefaultEpisodeImage = phoenix.fanart.GetDefaultEpisode(faMediaObject);
                         //Build a imagestring that will be unique for this episode
                         tImageString = phoenix.media.GetTitle(imediaresource);
@@ -371,15 +371,15 @@ public class ImageCache {
                         }
 
                     }else{
-                        LOG.debug("GetImageKey: Episode '" + phoenix.media.GetTitle(imediaresource) + "' Fanart found '" + tImageString + "'");
+                        //LOG.debug("GetImageKey: Episode '" + phoenix.media.GetTitle(imediaresource) + "' Fanart found '" + tImageString + "'");
                     }
                 }else{
-                    LOG.debug("GetImageKey: TV found for other than background '" + phoenix.media.GetTitle(imediaresource) + "'");
+                    //LOG.debug("GetImageKey: TV found for other than background '" + phoenix.media.GetTitle(imediaresource) + "'");
                 }
             }else{
                 faMediaObject = phoenix.media.GetMediaObject(imediaresource);
                 //faMediaType = MediaType.MOVIE;
-                LOG.debug("GetImageKey: Title '" + phoenix.media.GetTitle(imediaresource) + "' using passed in object for Fanart");
+                //LOG.debug("GetImageKey: Title '" + phoenix.media.GetTitle(imediaresource) + "' using passed in object for Fanart");
             }
                 
         }
@@ -394,19 +394,15 @@ public class ImageCache {
             //LOG.debug("GetImageKey: GetFanartArtifact returned '" + tImageString + "'");
         }
         if (tImageString==null || tImageString.equals("")){
-            LOG.debug("GetImageKey: tImageString blank or NULL so returning defaultImage");
+            //LOG.debug("GetImageKey: tImageString blank or NULL so returning defaultImage");
             ImageCacheKey tICK = new ImageCacheKey();
             tICK.setDefaultImage(defaultImage);
             return tICK;
         }
-        //String ImageID = phoenix.fanart.ImageKey(faMediaObject, faMediaType, faMediaTitle, faArtifactType, faArtifiactTitle, faMetadata);
-        String ImageID = GetFanartKey(tImageString,originalSize);
-        //LOG.debug("GetImageKey: ImageID created '" + ImageID + "'");
-        //String tKey = GetQueueKey(tImageString, faArtifactType, originalSize, ImageID);
-        ImageCacheKey tICK = new ImageCacheKey(tImageString,originalSize,faArtifactType,ImageID);
+        ImageCacheKey tICK = new ImageCacheKey(tImageString,originalSize,faArtifactType);
         tICK.setDefaultEpisodeImage(DefaultEpisodeImage);
         tICK.setDefaultImage(defaultImage);
-        LOG.debug("GetImageKey: Key '" + tICK + "'");
+        //LOG.debug("GetImageKey: Key '" + tICK + "'");
         return tICK;
     }
     //Convenience method that will convert the incoming object parameter to a IMediaResource type 
@@ -436,9 +432,7 @@ public class ImageCache {
                 if (tItem.HasRefreshArea()){
                     sagex.api.Global.RefreshArea(UIc, tItem.getRefreshArea());
                 }else if (tItem.HasRefreshKey()){
-                    sagex.api.Global.RefreshAreaForVariable(UIc, "PreloadTagKey", tItem.getRefreshKey());
-                }else{
-                    sagex.api.Global.RefreshAreaForVariable(UIc, "PreloadTagKey", tItem.getKey());
+                    sagex.api.Global.RefreshAreaForVariable(UIc, "MediaKey", tItem.getRefreshKey());
                 }
                 ICache.put(tItem.getKey(), tImage);
                 LOG.debug("GetImageFromQueue: remaining(" + IQueue.size() + ") adding to Cache '" + tItem + "'");
@@ -464,9 +458,9 @@ public class ImageCache {
         Object ThisImage = null;
         if (!OverWrite){
             //See if the image is already cached in the filesystem by a previous CreateImage call
-            ThisImage = phoenix.image.GetImage(Key.getImageID(), CreateImageTag);
+            ThisImage = phoenix.image.GetImage(Key.getKey(), CreateImageTag);
             if (ThisImage!=null){
-                LOG.debug("CreateImage: Filesystem cached item found for Tag '" + CreateImageTag + "' ID '" + Key.getImageID() + "' ThisImage = '" + ThisImage + "'");
+                LOG.debug("CreateImage: Filesystem cached item found for Tag '" + CreateImageTag + "' ID '" + Key.getKey() + "' ThisImage = '" + ThisImage + "'");
                 return ThisImage;
             }
         }
@@ -492,16 +486,16 @@ public class ImageCache {
         Double finalscalewidth = scalewidth * UIWidth;
         if (Key.HasDefaultEpisodeImage()){
             try {
-                ThisImage = phoenix.image.CreateImage(Key.getImageID(), CreateImageTag, Key.getDefaultEpisodeImage(), "{name: scale, width: " + finalscalewidth + ", height: -1}", true);
-                LOG.debug("CreateImage: ThisImage 1 = '" + ThisImage + "'");
+                ThisImage = phoenix.image.CreateImage(Key.getKey(), CreateImageTag, Key.getDefaultEpisodeImage(), "{name: scale, width: " + finalscalewidth + ", height: -1}", true);
+                LOG.debug("CreateImage: DefaultEpisodeImage = '" + ThisImage + "' for Key '" + Key.getKey() + "'");
             } catch (Exception e) {
                 LOG.debug("CreateImage: phoenix.image.CreateImage FAILED for DefaultEpisodeImage - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + Key.getArtifactType().toString() + "' Image = '" + Key.getImagePath() + "' Error: '" + e + "'");
                 return null;
             }
         }else{
             try {
-                ThisImage = phoenix.image.CreateImage(Key.getImageID(), CreateImageTag, Key.getImagePath(), "{name: scale, width: " + finalscalewidth + ", height: -1}", true);
-                LOG.debug("CreateImage: ThisImage 2 = '" + ThisImage + "'");
+                ThisImage = phoenix.image.CreateImage(Key.getKey(), CreateImageTag, Key.getImagePath(), "{name: scale, width: " + finalscalewidth + ", height: -1}", true);
+                LOG.debug("CreateImage: Image = '" + ThisImage + "' for Key '" + Key.getKey() + "'");
             } catch (Exception e) {
                 LOG.debug("CreateImage: phoenix.image.CreateImage FAILED - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + Key.getArtifactType().toString() + "' Image = '" + Key.getImagePath() + "' Error: '" + e + "'");
                 return null;
@@ -657,27 +651,6 @@ public class ImageCache {
         return FinalThumb;
     }
 
-//    public static Boolean IsDefaultArtifact(Object imediaresource, String resourcetype, String FanartToCheck){
-//        return IsDefaultArtifact(Source.ConvertToIMR(imediaresource), resourcetype, FanartToCheck);
-//    }
-//    public static Boolean IsDefaultArtifact(IMediaResource imediaresource, String resourcetype, String FanartToCheck){
-//        if (imediaresource==null){
-//            LOG.debug("IsDefaultArtifact: null resource passed in - returning FALSE");
-//            return Boolean.FALSE;
-//        }
-//        //check for a default artifact
-//        String Default = GetDefaultArtifact(imediaresource, resourcetype);
-//        if (Default==null){
-//            LOG.debug("IsDefaultArtifact: no default set - returning FALSE");
-//            return Boolean.FALSE;
-//        }
-//        if (Default.equals(FanartToCheck)){
-//            return Boolean.TRUE;
-//        }else{
-//            return Boolean.FALSE;
-//        }
-//    }
-    
     public static String GetDefaultArtifact(Object imediaresource, String resourcetype, Map<String, String> metadata){
         return GetDefaultArtifact(Source.ConvertToIMR(imediaresource), resourcetype, metadata);
     }
@@ -693,10 +666,9 @@ public class ImageCache {
         }
         Object tArtifact = getDefaultArtifact(mf, ImageCacheKey.ConvertStringtoMediaArtifactType(resourcetype),metadata);
         if (tArtifact==null){
-            LOG.debug("GetDefaultArtifact: tArtifact is null");
             return null;
         }else{
-            LOG.debug("GetDefaultArtifact: returning tArtifact as a string");
+            //LOG.debug("GetDefaultArtifact: returned '" + tArtifact.toString() + "'");
             return tArtifact.toString();
         }
     }
@@ -708,7 +680,7 @@ public class ImageCache {
     private static final String STORE_SEASON_FANART = "phoenix.seasonfanart";
     private static File getDefaultArtifact(IMediaFile file, MediaArtifactType artifactType, Map<String, String> metadata) {
 
-        LOG.debug("getDefaultArtifact: file '" + file + "' artifactType '" + artifactType + "'");
+        //LOG.debug("getDefaultArtifact: file '" + file + "' artifactType '" + artifactType + "'");
         if (file==null||artifactType==null){
             LOG.debug("getDefaultArtifact: called with null items");
             return null;
@@ -724,7 +696,7 @@ public class ImageCache {
         }
 
         String def = MediaFileAPI.GetMediaFileMetadata(file.getMediaObject(), key);
-        LOG.debug("getDefaultArtifact: based on GetMediaFileMetadata - key '" + key + "' def '" + def + "'");
+        //LOG.debug("getDefaultArtifact: based on GetMediaFileMetadata - key '" + key + "' def '" + def + "'");
         if (def.isEmpty() && file.isType(MediaResourceType.TV.value())) {
             //see if this TV item is a SERIES or a SEASON based on the metadata
             metadata = resolveFanartMetadata(metadata, "tv", file.getMediaObject());
@@ -733,16 +705,13 @@ public class ImageCache {
                 // defaults for TV shows need to be stored against the seriesname plus the SEASON number
                 String SeasonNumber = metadata.get(FanartUtil.SEASON_NUMBER);
                 String SeasonTitle = resolveMediaSeasonTitle(title, SeasonNumber);
-                LOG.debug("getDefaultArtifact: testing for TV SEASON for '" + SeasonTitle + "' artifactType.name() '" + artifactType.name() + "'");
                 def = UserRecordUtil.getField(STORE_SEASON_FANART, SeasonTitle, artifactType.name());
-                LOG.debug("getDefaultArtifact: def '" + def + "'");
+                //LOG.debug("getDefaultArtifact: testing for TV SEASON for '" + SeasonTitle + "' artifactType.name() '" + artifactType.name() + "' def '" + def + "'");
             }else{
                 // defaults for TV shows need to be stored against the seriesname
-                LOG.debug("getDefaultArtifact: testing for TV SERIES for '" + title + "' artifactType.name() '" + artifactType.name() + "'");
                 def = UserRecordUtil.getField(STORE_SERIES_FANART, title, artifactType.name());
-                LOG.debug("getDefaultArtifact: def '" + def + "'");
+                //LOG.debug("getDefaultArtifact: testing for TV SERIES for '" + title + "' artifactType.name() '" + artifactType.name() + "' def '" + def + "'");
             }
-            
         }
 
         if (def !=null && !def.isEmpty()) {
@@ -753,22 +722,18 @@ public class ImageCache {
                 } catch (IOException ex) {
                     java.util.logging.Logger.getLogger(ImageCache.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                LOG.debug("getDefaultArtifact: central '" + central + "' def '" + def + "'");
+                //LOG.debug("getDefaultArtifact: central '" + central + "' def '" + def + "'");
                 if (central!=null) {
                     if (def.startsWith(central)) {
                         f = new File(def);
-                        LOG.debug("getDefaultArtifact: 3 '" + f + "'");
                     }else{
                         f = new File(phoenix.fanart.GetFanartCentralFolder(), def);
-                        LOG.debug("getDefaultArtifact: 4 '" + f + "'");
                     }
                 } else {
                     f = new File(def);
-                    LOG.debug("getDefaultArtifact: 5 '" + f + "'");
                 }
 
                 if (f.exists() && f.isFile()) {
-                    LOG.debug("getDefaultArtifact: 6 '" + f + "'");
                     return f;
                 }
         }
@@ -802,15 +767,14 @@ public class ImageCache {
     }
 
     public static String GetFanartArtifact(Object mediaObject, String mediaType, String mediaTitle, String artifactType, String artifactTitle,	Map<String, String> metadata) {
-        //check if the Metadata has SEASON specific data and handle differently
-        Boolean IsTVSeason = Boolean.FALSE;
+        //check if the Metadata has SERIES/SEASON specific data and handle differently
         Boolean IsTV = Boolean.FALSE;
         Map<String, String> SeasonMetadata = resolveFanartMetadata(metadata, mediaType, mediaObject);
         if (SeasonMetadata!=null){
             IsTV = Boolean.TRUE;
-            if (SeasonMetadata.containsKey(FanartUtil.SEASON_NUMBER)){
-                IsTVSeason = Boolean.TRUE;
-            }
+//            if (SeasonMetadata.containsKey(FanartUtil.SEASON_NUMBER)){
+//                IsTVSeason = Boolean.TRUE;
+//            }
         }
         
         if (IsTV){
@@ -820,20 +784,20 @@ public class ImageCache {
             //  - skipping the phoenix call as it will get a SERIES default if on exists
             if (Default==null || Default.isEmpty()){
                 // grab first fanart artifact
-                LOG.debug("GetFanartArtifact: no default found so getting the first Season/Series based fanart item");
+                //LOG.debug("GetFanartArtifact: no default found so getting the first Season/Series based fanart item");
                 String files[] = phoenix.fanart.GetFanartArtifacts(mediaObject, mediaType, mediaTitle, artifactType, artifactTitle, metadata);
                 if (files!=null && files.length>0) {
                     // just use the first one
                     Default = files[0];
                 }                
-                LOG.debug("GetFanartArtifact: returning first Season/Series fanart item '" + Default + "'");
+                //LOG.debug("GetFanartArtifact: returning first Season/Series fanart item '" + Default + "'");
                 return Default;
             }else{
-                LOG.debug("GetFanartArtifact: returning Default '" + Default + "'");
+                //LOG.debug("GetFanartArtifact: returning Default '" + Default + "'");
                 return Default;
             }
         }else{
-            LOG.debug("GetFanartArtifact: using phoenix GetFanartArtifact - mediaObject '" + mediaObject + "' mediaType '" + mediaType + "' mediaTitle '" + mediaTitle + "' artifactType '" + artifactType + "' artifactTitle '" + artifactTitle + "' metadata '" + metadata + "'");
+            //LOG.debug("GetFanartArtifact: using phoenix GetFanartArtifact - mediaObject '" + mediaObject + "' mediaType '" + mediaType + "' mediaTitle '" + mediaTitle + "' artifactType '" + artifactType + "' artifactTitle '" + artifactTitle + "' metadata '" + metadata + "'");
             return phoenix.fanart.GetFanartArtifact(mediaObject, mediaType, mediaTitle, artifactType, artifactTitle, metadata);
         }
     }
@@ -844,42 +808,32 @@ public class ImageCache {
         // if we are given a metadata map, then use use it, even if it's empty.
         // this allows us to bypass the season specific fanart by passing in an empty metadata map
         if (metaadata != null) return metaadata;
-        LOG.debug("resolveFanartMetadata: Here 1");
 
         //if we don't have a mediaObject then there is nothing more we can do
         if (mediaObject==null){
-            LOG.debug("resolveFanartMetadata: Here 2");
             return null;
         }
         
         //now based on the mediaObject see if we can determine SEASON based metadata for TV
         IMediaFile mf = null;
-        LOG.debug("resolveFanartMetadata: Here 3");
         if (mediaObject!=null){
-            LOG.debug("resolveFanartMetadata: Here 4 - mediaType '" + mediaType + "'");
             mf = phoenix.media.GetMediaFile(mediaObject);
             if (mf!=null){
-                LOG.debug("resolveFanartMetadata: Here 5 - mediaObject '" + mf.getMediaObject() + "'");
                 if (phoenix.media.IsMediaType( mf.getMediaObject() , "TV" )) {
-                    LOG.debug("resolveFanartMetadata: Here 6");
                     IMetadata md = mf.getMetadata();
-                    LOG.debug("resolveFanartMetadata: Here 7");
                     Map<String, String> props = new HashMap<String, String>();
-                    LOG.debug("resolveFanartMetadata: Here 8");
                     if (md.getEpisodeNumber()>0) {
-                        LOG.debug("resolveFanartMetadata: Here 9");
                         props.put(FanartUtil.SEASON_NUMBER, String.valueOf(md.getSeasonNumber()));
                         props.put(FanartUtil.EPISODE_NUMBER, String.valueOf(md.getEpisodeNumber()));
                     }
-                    LOG.debug("resolveFanartMetadata: Here 10");
                     return props;
                 }
             }
         }
-        LOG.debug("resolveFanartMetadata: Here 11");
         return null;
     }
 
+    //override of the phoenix method to handle TV Seasons - if not, call phoenix for others
     public static void SetFanartArtifact(Object mediaObject,
 			File fanart,
 			MediaType mediaType,
@@ -910,7 +864,7 @@ public class ImageCache {
                 java.util.logging.Logger.getLogger(ImageCache.class.getName()).log(Level.SEVERE, null, ex);
             }
             if (file!=null){
-                LOG.debug("SetFanartArtifact: calling UserRecordUtil with - SeasonTitle '" + SeasonTitle + "' artifactType '" + artifactType + "' file '" + file + "'");
+                //LOG.debug("SetFanartArtifact: calling UserRecordUtil with - SeasonTitle '" + SeasonTitle + "' artifactType '" + artifactType + "' file '" + file + "'");
                 UserRecordUtil.setField(STORE_SEASON_FANART, SeasonTitle, artifactType.toUpperCase(), file);
             }
         }else{
@@ -920,6 +874,7 @@ public class ImageCache {
         
     }
 
+    //TODO: only used for testing purposes
     public static void PrintUserRecord(String Title){
         Object series = UserRecordAPI.GetUserRecord(STORE_SERIES_FANART, Title);
         Object season = UserRecordAPI.GetUserRecord(STORE_SEASON_FANART, Title);
@@ -928,6 +883,7 @@ public class ImageCache {
 
     }
 
+    //MediaKey used to match to a media item in the STV and Refresh a variable called MediaKey
     public static String GetMediaKey(Object imediaresource){
         return GetMediaKey(Source.ConvertToIMR(imediaresource));
     }
@@ -957,12 +913,21 @@ public class ImageCache {
             }
         }
         String tKey = "MEDIAKEY{" + kTitle + ":" + kType + ":" + kMediaType + "}";
-        LOG.debug("GetMediaKey: '" + tKey + "'");
+        //LOG.debug("GetMediaKey: '" + tKey + "'");
         return tKey;
     }
     
     public static String GetFanartKey(String FanartPath, Boolean OriginalSize){
+        return GetFanartKey(FanartPath, OriginalSize, Boolean.FALSE);
+    }
+    public static String GetFanartKey(String FanartPath, Boolean OriginalSize, Boolean KeepFileName){
         String Key = null;
+        String Size = "";
+        if (OriginalSize){
+            Size = "FULL";
+        }else{
+            Size = "PART";
+        }
         //TODO: should change using the Boolean for Original Size to a more readable value in the key - FULL or ORIGINALSIZE etc
         //handle the special Key for DefaultEpisodeImages
         if (FanartPath.contains(FanartUtil.EPISODE_TITLE)){
@@ -975,7 +940,7 @@ public class ImageCache {
             } catch (IOException ex) {
                 java.util.logging.Logger.getLogger(ImageCache.class.getName()).log(Level.SEVERE, null, ex);
             }
-            LOG.debug("GetFanartKey: central '" + central + "' FanartPath '" + FanartPath + "'");
+            //LOG.debug("GetFanartKey: central '" + central + "' FanartPath '" + FanartPath + "'");
             if (central!=null) {
                 if (FanartPath.startsWith(central)) {
                     f = new File(FanartPath);
@@ -987,16 +952,20 @@ public class ImageCache {
             }
             Key = f.getPath();
             //remove the filename from the key except for Episodes that need the filename to be unique (only 1 Episode background per episode)
-            if (!Key.contains("Episodes")){
+            if (Key.contains("Episodes") || KeepFileName){
+                //leave the filename on the Key so it is more unique
+                //used for Episode backgrounds
+                //used from Fanart Manager items so they are unique
+            }else{
                 //remove the File name from the path so we only have the path
                 Key = f.getParent();
             }
-            LOG.debug("GetFanartKey: Key path after Episode check '" + Key + "'");
+            //LOG.debug("GetFanartKey: Key path after Episode check '" + Key + "'");
             //now remove the central folder from the path
             Key = Key.replace(central, "");
         }
-        Key = Key + util.ListToken + OriginalSize.toString();
-        LOG.debug("GetFanartKey: Key '" + Key + "'");
+        Key = Key + util.ListToken + Size;
+        //LOG.debug("GetFanartKey: Key '" + Key + "'");
         return Key;
     }
     
