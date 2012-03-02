@@ -359,8 +359,17 @@ public class ImageCache {
                     if (tImageString==null || tImageString.equals("")){
                         LOG.debug("GetImageKey: Episode '" + phoenix.media.GetTitle(imediaresource) + "' using Fanart based on GetDefaultEpisode");
                         DefaultEpisodeImage = phoenix.fanart.GetDefaultEpisode(faMediaObject);
-                        //use the title for the ImageString
+                        //Build a imagestring that will be unique for this episode
                         tImageString = phoenix.media.GetTitle(imediaresource);
+                        IMediaFile mf = phoenix.media.GetMediaFile(faMediaObject);
+                        if (mf!=null){
+                            IMetadata md = mf.getMetadata();
+                            tImageString = tImageString + "-" + FanartUtil.EPISODE_TITLE + "-" + md.getEpisodeName();
+                            if (md.getEpisodeNumber()>0) {
+                                tImageString = tImageString + "{S" + String.valueOf(md.getSeasonNumber()) + "E" + String.valueOf(md.getEpisodeNumber()) + "}";
+                            }
+                        }
+
                     }else{
                         LOG.debug("GetImageKey: Episode '" + phoenix.media.GetTitle(imediaresource) + "' Fanart found '" + tImageString + "'");
                     }
@@ -953,36 +962,41 @@ public class ImageCache {
     }
     
     public static String GetFanartKey(String FanartPath, Boolean OriginalSize){
-
-        File f = null;
-        String central = null;
         String Key = null;
-        try {
-            central = (new File(phoenix.fanart.GetFanartCentralFolder())).getCanonicalPath();
-        } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(ImageCache.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        LOG.debug("GetFanartKey: central '" + central + "' FanartPath '" + FanartPath + "'");
-        if (central!=null) {
-            if (FanartPath.startsWith(central)) {
-                f = new File(FanartPath);
-            }else{
-                f = new File(phoenix.fanart.GetFanartCentralFolder(), FanartPath);
+        //TODO: should change using the Boolean for Original Size to a more readable value in the key - FULL or ORIGINALSIZE etc
+        //handle the special Key for DefaultEpisodeImages
+        if (FanartPath.contains(FanartUtil.EPISODE_TITLE)){
+            Key = FanartPath;
+        }else{
+            File f = null;
+            String central = null;
+            try {
+                central = (new File(phoenix.fanart.GetFanartCentralFolder())).getCanonicalPath();
+            } catch (IOException ex) {
+                java.util.logging.Logger.getLogger(ImageCache.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } else {
-            f = new File(FanartPath);
+            LOG.debug("GetFanartKey: central '" + central + "' FanartPath '" + FanartPath + "'");
+            if (central!=null) {
+                if (FanartPath.startsWith(central)) {
+                    f = new File(FanartPath);
+                }else{
+                    f = new File(phoenix.fanart.GetFanartCentralFolder(), FanartPath);
+                }
+            } else {
+                f = new File(FanartPath);
+            }
+            Key = f.getPath();
+            //remove the filename from the key except for Episodes that need the filename to be unique (only 1 Episode background per episode)
+            if (!Key.contains("Episodes")){
+                //remove the File name from the path so we only have the path
+                Key = f.getParent();
+            }
+            LOG.debug("GetFanartKey: Key path after Episode check '" + Key + "'");
+            //now remove the central folder from the path
+            Key = Key.replace(central, "");
         }
-        Key = f.getPath();
-        //remove the filename from the key except for Episodes that need the filename to be unique
-        if (!Key.contains("Episodes")){
-            //remove the File name from the path so we only have the path
-            Key = f.getParent();
-        }
-        LOG.debug("GetFanartKey: Key path after Episode check '" + Key + "'");
-        //now remove the central folder from the path
-        Key = Key.replace(central, "");
         Key = Key + util.ListToken + OriginalSize.toString();
-        LOG.debug("GetFanartKey: Central and FileName removed - Key '" + Key + "'");
+        LOG.debug("GetFanartKey: Key '" + Key + "'");
         return Key;
     }
     
