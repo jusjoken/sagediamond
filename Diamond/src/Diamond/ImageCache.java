@@ -390,7 +390,8 @@ public class ImageCache {
             tICK.setDefaultImage(defaultImage);
             return tICK;
         }
-        String ImageID = phoenix.fanart.ImageKey(faMediaObject, faMediaType, faMediaTitle, faArtifactType, faArtifiactTitle, faMetadata);
+        //String ImageID = phoenix.fanart.ImageKey(faMediaObject, faMediaType, faMediaTitle, faArtifactType, faArtifiactTitle, faMetadata);
+        String ImageID = GetFanartKey(tImageString,originalSize);
         //LOG.debug("GetImageKey: ImageID created '" + ImageID + "'");
         //String tKey = GetQueueKey(tImageString, faArtifactType, originalSize, ImageID);
         ImageCacheKey tICK = new ImageCacheKey(tImageString,originalSize,faArtifactType,ImageID);
@@ -456,7 +457,7 @@ public class ImageCache {
             //See if the image is already cached in the filesystem by a previous CreateImage call
             ThisImage = phoenix.image.GetImage(Key.getImageID(), CreateImageTag);
             if (ThisImage!=null){
-                LOG.debug("CreateImage: Filesystem cached item found for Tag '" + CreateImageTag + "' ID '" + Key.getImageID() + "'");
+                LOG.debug("CreateImage: Filesystem cached item found for Tag '" + CreateImageTag + "' ID '" + Key.getImageID() + "' ThisImage = '" + ThisImage + "'");
                 return ThisImage;
             }
         }
@@ -483,6 +484,7 @@ public class ImageCache {
         if (Key.HasDefaultEpisodeImage()){
             try {
                 ThisImage = phoenix.image.CreateImage(Key.getImageID(), CreateImageTag, Key.getDefaultEpisodeImage(), "{name: scale, width: " + finalscalewidth + ", height: -1}", true);
+                LOG.debug("CreateImage: ThisImage 1 = '" + ThisImage + "'");
             } catch (Exception e) {
                 LOG.debug("CreateImage: phoenix.image.CreateImage FAILED for DefaultEpisodeImage - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + Key.getArtifactType().toString() + "' Image = '" + Key.getImagePath() + "' Error: '" + e + "'");
                 return null;
@@ -490,6 +492,7 @@ public class ImageCache {
         }else{
             try {
                 ThisImage = phoenix.image.CreateImage(Key.getImageID(), CreateImageTag, Key.getImagePath(), "{name: scale, width: " + finalscalewidth + ", height: -1}", true);
+                LOG.debug("CreateImage: ThisImage 2 = '" + ThisImage + "'");
             } catch (Exception e) {
                 LOG.debug("CreateImage: phoenix.image.CreateImage FAILED - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + Key.getArtifactType().toString() + "' Image = '" + Key.getImagePath() + "' Error: '" + e + "'");
                 return null;
@@ -947,6 +950,35 @@ public class ImageCache {
         String tKey = "MEDIAKEY{" + kTitle + ":" + kType + ":" + kMediaType + "}";
         LOG.debug("GetMediaKey: '" + tKey + "'");
         return tKey;
+    }
+    
+    public static String GetFanartKey(String FanartPath, Boolean OriginalSize){
+
+        File f = null;
+        String central = null;
+        String Key = null;
+        try {
+            central = (new File(phoenix.fanart.GetFanartCentralFolder())).getCanonicalPath();
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(ImageCache.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        LOG.debug("GetFanartKey: central '" + central + "' FanartPath '" + FanartPath + "'");
+        if (central!=null) {
+            if (FanartPath.startsWith(central)) {
+                f = new File(FanartPath);
+            }else{
+                f = new File(phoenix.fanart.GetFanartCentralFolder(), FanartPath);
+            }
+        } else {
+            f = new File(FanartPath);
+        }
+        //remove the File name from the path so we only have the path
+        Key = f.getParent();
+        //now remove the central folder from the path
+        Key = Key.replace(central, "");
+        Key = Key + util.ListToken + OriginalSize.toString();
+        LOG.debug("GetFanartKey: Central and FileName removed - Key '" + Key + "'");
+        return Key;
     }
     
     //TODO: Delete Cached Fanart for specific Show
