@@ -5,20 +5,16 @@
 package Diamond;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import sagex.UIContext;
 import sagex.phoenix.metadata.MediaType;
-import sagex.phoenix.vfs.IMediaFile;
 import sagex.phoenix.vfs.IMediaResource;
-import sagex.phoenix.vfs.MediaResourceType;
 
 /**
  *
@@ -59,7 +55,7 @@ public class FanartManager {
     private void Init(){
         //based on the passed in MediaResource determine if a TV Series or Movie Fanart Object
         this.PrimaryMediaResource = this.MediaResource;
-        LOG.debug("Init: PrimaryMediaResource '" + PrimaryMediaResource + "'");
+        //LOG.debug("Init: PrimaryMediaResource '" + PrimaryMediaResource + "'");
         if (phoenix.media.IsMediaType( this.MediaResource , "FOLDER" )){
             //get the first child and use it to determine the Fanart Type
             PrimaryMediaResource = ImageCache.GetChild(this.MediaResource, Boolean.FALSE);
@@ -77,8 +73,8 @@ public class FanartManager {
         }else{
             this.FanartManagerType = FanartManagerTypes.NONE;
         }
-        LOG.debug("Init: FanartManagerType '" + FanartManagerType + "' PrimaryMediaResource '" + PrimaryMediaResource + "'");
-        ImageCache.PrintUserRecord(PrimaryMediaResource.getTitle());
+        //LOG.debug("Init: FanartManagerType '" + FanartManagerType + "' PrimaryMediaResource '" + PrimaryMediaResource + "'");
+        //ImageCache.PrintUserRecord(PrimaryMediaResource.getTitle());
         //default to poster
         setFanartType("poster");
     }
@@ -213,14 +209,14 @@ public class FanartManager {
         String[] tList = phoenix.fanart.GetFanartArtifacts(faMediaObject, tMediaType, faMediaTitle, FanartType, null, faMetadata);
         if (tList!=null){
             FanartList = new ArrayList<String>(Arrays.asList(tList));
-            LOG.debug("LoadFanartList: FanartList '" + FanartList + "' for '" + PrimaryMediaResource.getTitle() + "'");
+            //LOG.debug("LoadFanartList: FanartList '" + FanartList + "' for '" + PrimaryMediaResource.getTitle() + "'");
         }else{
             LOG.debug("LoadFanartList: no '" + FanartType + "' Fanart Found for '" + PrimaryMediaResource.getTitle() + "'");
         }
         //Set the default fanart item if there are any fanart items
         if (!FanartList.isEmpty()){
             DefaultFanart = ImageCache.GetDefaultArtifact(PrimaryMediaResource, FanartType, faMetadata);
-            LOG.debug("LoadFanartList: DegaultFanart '" + DefaultFanart + "' for '" + PrimaryMediaResource.getTitle() + "'");
+            //LOG.debug("LoadFanartList: DegaultFanart '" + DefaultFanart + "' for '" + PrimaryMediaResource.getTitle() + "'");
             //Add the default item (if any) to the TOP of the list - make sure it is also removed from the list
             if (DefaultFanart!=null){
                 if (FanartList.contains(DefaultFanart)){
@@ -377,7 +373,7 @@ public class FanartManager {
                     LOG.debug("GetFanartSeasons: Season '" + tSeason + "' could not be converted to an Integer for '" + PrimaryMediaResource.getTitle() + "'");
                     //don't add
                 }else{
-                    LOG.debug("GetFanartSeasons: Adding Season '" + tSeason + "' for '" + PrimaryMediaResource.getTitle() + "'");
+                    //LOG.debug("GetFanartSeasons: Adding Season '" + tSeason + "' for '" + PrimaryMediaResource.getTitle() + "'");
                     tFanartSeasons.add(tInteger);
                 }
             }
@@ -389,7 +385,7 @@ public class FanartManager {
             //add Series to the front of the list of Seasons
             //tFanartSeasons.add(0, ConstSeries);
         }
-        LOG.debug("GetFanartSeasons: Seasons found '" + tFanartSeasons + "' for '" + PrimaryMediaResource.getTitle() + "'");
+        //LOG.debug("GetFanartSeasons: Seasons found '" + tFanartSeasons + "' for '" + PrimaryMediaResource.getTitle() + "'");
         return tFanartSeasons;
     }
     
@@ -467,27 +463,35 @@ public class FanartManager {
             LOG.debug("GetImage: null FanartItem passed in - returning null");
             return null;
         }
-        UIContext UIc = new UIContext(sagex.api.Global.GetUIContextName());
-        //based on the ImageType determine the scalewidth to use
-        Integer UIWidth = sagex.api.Global.GetFullUIWidth(UIc);
-        Double scalewidth = 0.2;
-        if (IsFanartTypePoster()){
-            scalewidth = 0.2;
-        }else if (IsFanartTypeBanner()){
-            scalewidth = 0.6;
-        }else if (IsFanartTypeBackground()){
-            scalewidth = 0.4;
-        }else{
-            //use default
-        }
-        Double finalscalewidth = scalewidth * UIWidth;
-        Object tImage = phoenix.image.CreateImage("GemstoneFanartManager", FanartItem, "{name: scale, width: " + finalscalewidth + ", height: -1}", false);
-        if (tImage==null){
-            LOG.debug("GetImage: CreateImage returned null for FanartItem '" + FanartItem + "'");
-            return null;
-        }
-        return tImage;
+        ImageCacheKey tKey = new ImageCacheKey(FanartItem,Boolean.FALSE,this.FanartType,Boolean.TRUE);
+        return ImageCache.CreateImage(tKey);
     }
+//    public Object GetImage2(String FanartItem){
+//        if (FanartItem==null){
+//            LOG.debug("GetImage: null FanartItem passed in - returning null");
+//            return null;
+//        }
+//        UIContext UIc = new UIContext(sagex.api.Global.GetUIContextName());
+//        //based on the ImageType determine the scalewidth to use
+//        Integer UIWidth = sagex.api.Global.GetFullUIWidth(UIc);
+//        Double scalewidth = 0.2;
+//        if (IsFanartTypePoster()){
+//            scalewidth = 0.2;
+//        }else if (IsFanartTypeBanner()){
+//            scalewidth = 0.6;
+//        }else if (IsFanartTypeBackground()){
+//            scalewidth = 0.4;
+//        }else{
+//            //use default
+//        }
+//        Double finalscalewidth = scalewidth * UIWidth;
+//        Object tImage = phoenix.image.CreateImage("GemstoneFanartManager", FanartItem, "{name: scale, width: " + finalscalewidth + ", height: -1}", false);
+//        if (tImage==null){
+//            LOG.debug("GetImage: CreateImage returned null for FanartItem '" + FanartItem + "'");
+//            return null;
+//        }
+//        return tImage;
+//    }
     
     public String[] GetFanartTypes(){
         if (IsMovie()){
