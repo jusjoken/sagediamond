@@ -411,10 +411,10 @@ public class ImageCache {
         return GetImageKey(Source.ConvertToIMR(imediaresource), resourcetype, originalSize, defaultImage);
     }
     
-    public static String GetKeyFromImageKey(ImageCacheKey Key){
-        return Key.getKey();
-    }
-    
+//    public static String GetKeyFromImageKey(ImageCacheKey Key){
+//        return Key.getKey();
+//    }
+//    
     public static void GetImageFromQueue(){
         if (IQueue.size()>0){
             UIContext UIc = new UIContext(sagex.api.Global.GetUIContextName());
@@ -972,8 +972,13 @@ public class ImageCache {
         } else {
             f = new File(FanartPath);
         }
-        //remove the File name from the path so we only have the path
-        Key = f.getParent();
+        Key = f.getPath();
+        //remove the filename from the key except for Episodes that need the filename to be unique
+        if (!Key.contains("Episodes")){
+            //remove the File name from the path so we only have the path
+            Key = f.getParent();
+        }
+        LOG.debug("GetFanartKey: Key path after Episode check '" + Key + "'");
         //now remove the central folder from the path
         Key = Key.replace(central, "");
         Key = Key + util.ListToken + OriginalSize.toString();
