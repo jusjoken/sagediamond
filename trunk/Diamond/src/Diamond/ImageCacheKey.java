@@ -57,9 +57,6 @@ public class ImageCacheKey {
     public String getKey(){
         return ImageCache.GetFanartKey(this.ImagePath, this.OriginalSize, this.KeepFilenameOnKey);
     }
-    public static String BuildKey(String ImagePath, Boolean OriginalSize){
-        return ImagePath + util.ListToken + OriginalSize.toString();
-    }
 
     public MediaArtifactType getArtifactType() {
         return ArtifactType;

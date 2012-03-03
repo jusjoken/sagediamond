@@ -231,20 +231,30 @@ public class FanartManager {
         //remove from the file system
         File f1 = new File(FanartItem);
         f1.delete();
-        RemoveFanartItem(FanartItem);
-        ReloadFanartItem();
+        RemoveFanartItem(FanartItem, Boolean.FALSE);
+        RemoveFanartItem(FanartItem, Boolean.TRUE);
+        //ReloadFanartItem();
         //reload the fanart list
         LoadFanartList();
     }
     
-    private void RemoveFanartItem(String FanartItem){
+    private void RemoveFanartItem(String FanartItem, Boolean OriginalSize){
         //clear caches
         phoenix.fanart.ClearMemoryCaches();
         //remove the fanart item from the cache for this media item
-        ImageCache.RemoveItemFromCache(ImageCacheKey.BuildKey(FanartItem, Boolean.FALSE));
-        ImageCache.RemoveItemFromCache(ImageCacheKey.BuildKey(FanartItem, Boolean.TRUE));
-        UIContext UIc = new UIContext(sagex.api.Global.GetUIContextName());
-        sagex.api.Utility.UnloadImage(UIc, FanartItem);
+        String tKey = ImageCache.GetFanartKey(FanartItem, OriginalSize);
+        LOG.debug("RemoveFanartItem: Removing Key '" + tKey + "'");
+        
+        ImageCache.RemoveItemFromCache(tKey);
+        Object tImage = phoenix.image.GetImage(tKey, ImageCache.CreateImageTag);
+        if (tImage!=null){
+            //delete the image from the fanart cache
+            LOG.debug("RemoveFanartItem: deleting '" + tImage + "'");
+            File tFile = new File(tImage.toString());
+            tFile.delete();
+            UIContext UIc = new UIContext(sagex.api.Global.GetUIContextName());
+            sagex.api.Utility.UnloadImage(UIc, tImage.toString());
+        }
     }
 
     private void ReloadFanartItem(){
@@ -289,35 +299,16 @@ public class FanartManager {
             return;
         }
         File FanartFile = new File(FanartItem);
-//        String FanartPath = "";
-//        try {
-//            FanartPath = FanartFile.getCanonicalPath();
-//            LOG.debug("SetFanartAsDefault: FanartPath '" + FanartPath + "'");
-//        } catch (IOException ex) {
-//            java.util.logging.Logger.getLogger(FanartManager.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-        
-	
-//	IMediaFile mf = phoenix.media.GetMediaFile(faMediaObject);
-//	Object faMediaObject2 = phoenix.media.GetSageMediaFile(faMediaObject);
-//	if (mf==null || faMediaObject2==null) {
-//            LOG.debug("SetFanartAsDefault: null MF");
-//            return;
-//	}   
-//        if (mf.isType(MediaResourceType.TV.value())) {
-//            LOG.debug("SetFanartAsDefault: TV MF passed");
-//        }
-//        String title = ImageCache.resolveMediaTitle(mf.getTitle(), mf);
-//        LOG.debug("SetFanartAsDefault: temp title returned '" + title + "'");
-        
+
         //Add special SetFanartArtifact method to handle SEASON defaults
         ImageCache.SetFanartArtifact(faMediaObject, FanartFile, faMediaType, faMediaTitle, FanartType, null, faMetadata);
         
         //reload the fanart list
         if (this.DefaultFanart!=null){
-            RemoveFanartItem(this.DefaultFanart);
+            RemoveFanartItem(this.DefaultFanart, Boolean.FALSE);
+            RemoveFanartItem(this.DefaultFanart, Boolean.TRUE);
         }
-        ReloadFanartItem();
+        //ReloadFanartItem();
         //reload the fanart list
         LoadFanartList();
     }
