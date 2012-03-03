@@ -505,17 +505,21 @@ public class ImageCache {
         if (OverWrite){
             LOG.debug("CreateImage: Forced (OverWrite) load using LoagImage(loadImage)) - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + Key.getArtifactType().toString() + "' Image = '" + Key.getImagePath() + "'");
             //single LoadImage
-            sagex.api.Utility.LoadImage(UIc, ThisImage);
+            sagex.api.Utility.UnloadImage(UIc, ThisImage.toString());
+            //sagex.api.Utility.LoadImage(UIc, ThisImage);
             //double LoadImage
-            //sagex.api.Utility.LoadImage(UIc, sagex.api.Utility.LoadImage(UIc, ThisImage));
+            sagex.api.Utility.LoadImage(UIc, sagex.api.Utility.LoadImage(UIc, ThisImage));
         }else{
             if (!sagex.api.Utility.IsImageLoaded(UIc, ThisImage)){
                 LOG.debug("CreateImage: Loaded using LoagImage(loadImage)) - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + Key.getArtifactType().toString() + "' Image = '" + Key.getImagePath() + "'");
                 //single LoadImage
-                sagex.api.Utility.LoadImage(UIc, ThisImage);
+                //sagex.api.Utility.LoadImage(UIc, ThisImage);
                 //double LoadImage
-                //sagex.api.Utility.LoadImage(UIc, sagex.api.Utility.LoadImage(UIc, ThisImage));
+                sagex.api.Utility.LoadImage(UIc, sagex.api.Utility.LoadImage(UIc, ThisImage));
             }else{
+                sagex.api.Utility.UnloadImage(UIc, ThisImage.toString());
+                //sagex.api.Utility.LoadImage(UIc, ThisImage);
+                sagex.api.Utility.LoadImage(UIc, sagex.api.Utility.LoadImage(UIc, ThisImage));
                 LOG.debug("CreateImage: already Loaded - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + Key.getArtifactType().toString() + "' Image = '" + Key.getImagePath() + "'");
             }
         }
