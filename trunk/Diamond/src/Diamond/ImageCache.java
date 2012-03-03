@@ -18,6 +18,7 @@ import sagex.api.MediaFileAPI;
 import sagex.api.UserRecordAPI;
 import sagex.phoenix.db.UserRecordUtil;
 import sagex.phoenix.fanart.FanartUtil;
+import sagex.phoenix.image.ImageUtil;
 import sagex.phoenix.metadata.IMetadata;
 import sagex.phoenix.metadata.ISageCustomMetadataRW;
 import sagex.phoenix.metadata.MediaArtifactType;
@@ -978,5 +979,7 @@ public class ImageCache {
     
     //TODO: handle user set backgrounds and posters and banners located with the media files
     //use similar settings as Diamond settings so user can specific the name of the file for the fanart
+    //TODO: get cache location -  ImageUtil.getImageCacheDir();
+    
     
 }
