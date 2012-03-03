@@ -41,6 +41,7 @@ public class FanartManager {
     private List FanartList = Collections.emptyList();
     private List TVModeList = Collections.emptyList();
     private String DefaultFanart = "";
+    private String FirstFanart = "";
     private String CurrentSeason = "-1";
     
     public FanartManager(IMediaResource MediaResource){
@@ -223,6 +224,9 @@ public class FanartManager {
                     FanartList.remove(DefaultFanart);
                     FanartList.add(0, DefaultFanart);
                 }
+            }else{
+                //there is NO default so save the first item
+                FirstFanart = FanartList.get(0).toString();
             }
         }
     }
@@ -243,28 +247,18 @@ public class FanartManager {
         phoenix.fanart.ClearMemoryCaches();
         //remove the fanart item from the cache for this media item
         String tKey = ImageCache.GetFanartKey(FanartItem, OriginalSize);
-        LOG.debug("RemoveFanartItem: Removing Key '" + tKey + "'");
+        //LOG.debug("RemoveFanartItem: Removing Key '" + tKey + "'");
         
         ImageCache.RemoveItemFromCache(tKey);
         Object tImage = phoenix.image.GetImage(tKey, ImageCache.CreateImageTag);
         if (tImage!=null){
             //delete the image from the fanart cache
-            LOG.debug("RemoveFanartItem: deleting '" + tImage + "'");
+            //LOG.debug("RemoveFanartItem: deleting '" + tImage + "'");
             File tFile = new File(tImage.toString());
             tFile.delete();
             UIContext UIc = new UIContext(sagex.api.Global.GetUIContextName());
             sagex.api.Utility.UnloadImage(UIc, tImage.toString());
-        }
-    }
-
-    private void ReloadFanartItem(){
-        //reload the image
-        ImageCacheKey tKey = ImageCache.GetImageKey(MediaResource, FanartType, Boolean.FALSE);
-        ImageCache.CreateImage(tKey, Boolean.TRUE);
-        if (IsFanartTypeBackground()){
-            //reload any large background
-            tKey = ImageCache.GetImageKey(MediaResource, FanartType, Boolean.TRUE);
-            ImageCache.CreateImage(tKey, Boolean.TRUE);
+            sagex.api.Global.RefreshAreaForVariable(UIc, "MediaKey", ImageCache.GetMediaKey(MediaResource));
         }
     }
 
@@ -275,14 +269,14 @@ public class FanartManager {
         String faMediaTitle = null;
        
         if (IsTV()){
-            LOG.debug("SetFanartAsDefault: TV item found");
+            //LOG.debug("SetFanartAsDefault: TV item found");
             if (TVMode.equals(TVModes.SERIES)){
-                LOG.debug("SetFanartAsDefault: TV SERIES item found");
+                //LOG.debug("SetFanartAsDefault: TV SERIES item found");
                 faMediaObject = PrimaryMediaResource.getMediaObject();
                 faMediaType = MediaType.TV;
                 faMetadata = Collections.emptyMap();
             }else{ //must be SEASON
-                LOG.debug("SetFanartAsDefault: TV SEASON item found");
+                //LOG.debug("SetFanartAsDefault: TV SEASON item found");
                 faMediaObject = PrimaryMediaResource.getMediaObject();
                 faMediaType = MediaType.TV;
                 faMediaTitle = PrimaryMediaResource.getTitle();
@@ -291,11 +285,11 @@ public class FanartManager {
                 faMetadata.put("EpisodeNumber","1");
             }
         }else if (IsMovie()){
-            LOG.debug("SetFanartAsDefault: MOVIE item found");
+            //LOG.debug("SetFanartAsDefault: MOVIE item found");
             faMediaObject = PrimaryMediaResource.getMediaObject();
             faMediaType = MediaType.MOVIE;
         }else{ //must be invalid
-            LOG.debug("LoadFanartList: Invalid - not TV nor MOVIE");
+            LOG.debug("SetFanartAsDefault: Invalid - not TV nor MOVIE");
             return;
         }
         File FanartFile = new File(FanartItem);
@@ -304,11 +298,16 @@ public class FanartManager {
         ImageCache.SetFanartArtifact(faMediaObject, FanartFile, faMediaType, faMediaTitle, FanartType, null, faMetadata);
         
         //reload the fanart list
+        //LOG.debug("SetFanartAsDefault: DefaultFanart '" + DefaultFanart + "' title '" + this.getTitle() + "'");
         if (this.DefaultFanart!=null){
             RemoveFanartItem(this.DefaultFanart, Boolean.FALSE);
             RemoveFanartItem(this.DefaultFanart, Boolean.TRUE);
+        }else{
+            if (!FirstFanart.isEmpty()){
+                RemoveFanartItem(this.FirstFanart, Boolean.FALSE);
+                RemoveFanartItem(this.FirstFanart, Boolean.TRUE);
+            }
         }
-        //ReloadFanartItem();
         //reload the fanart list
         LoadFanartList();
     }
@@ -457,7 +456,7 @@ public class FanartManager {
         ImageCacheKey tKey = new ImageCacheKey(FanartItem,Boolean.FALSE,this.FanartType,Boolean.TRUE);
         return ImageCache.CreateImage(tKey);
     }
-//    public Object GetImage2(String FanartItem){
+//    public Object GetImage(String FanartItem){
 //        if (FanartItem==null){
 //            LOG.debug("GetImage: null FanartItem passed in - returning null");
 //            return null;
