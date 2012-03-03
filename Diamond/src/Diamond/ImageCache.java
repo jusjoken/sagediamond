@@ -75,15 +75,15 @@ public class ImageCache {
     }
     
     public static void RemoveItemFromCache(String Key){
-        LOG.debug("RemoveItemFromCache: checking Queue for '" + Key + "'");
+        //LOG.debug("RemoveItemFromCache: checking Queue for '" + Key + "'");
         if (IQueue.containsKey(Key)){
-            LOG.debug("RemoveItemFromCache: removing from Queue '" + Key + "'");
+            //LOG.debug("RemoveItemFromCache: removing from Queue '" + Key + "'");
             IQueue.remove(Key);
         }
-        LOG.debug("RemoveItemFromCache: removing from Cache '" + Key + "'");
+        //LOG.debug("RemoveItemFromCache: removing from Cache '" + Key + "'");
         ICache.remove(Key);
-        Object Test = ICache.get(Key);
-        LOG.debug("RemoveItemFromCache: Test get retrieved '" + Test + "'");
+        //Object Test = ICache.get(Key);
+        //LOG.debug("RemoveItemFromCache: Test get retrieved '" + Test + "'");
     }
 
     //This will return a background and refresh that specific area
@@ -542,13 +542,19 @@ public class ImageCache {
         util.SetListOptionNext(ICacheProps, Const.ImageCacheType, ImageCacheTypesList);
     }
 
+    public static String GetCacheType(String ImageType){
+        return GetCacheType(ImageCacheKey.ConvertStringtoMediaArtifactType(ImageType));
+    }
     public static String GetCacheType(MediaArtifactType ImageType){
         if (GetCacheType().equals(ImageCacheTypes.BYIMAGETYPE.toString())){
             String tProp = ICacheProps + Const.PropDivider + Const.ImageCacheType;
-            return util.GetListOptionName(tProp, ImageType.toString(), ImageCacheTypesListByImageType, ImageCacheTypes.OFF.toString());
+            return util.GetListOptionName(tProp, ImageType.toString(), ImageCacheTypesListByImageType, ImageCacheTypes.BACKGROUND.toString());
         }else{
             return GetCacheType();
         }
+    }
+    public static void SetCacheTypeNext(String ImageType){
+        SetCacheTypeNext(ImageCacheKey.ConvertStringtoMediaArtifactType(ImageType));
     }
     public static void SetCacheTypeNext(MediaArtifactType ImageType){
         if (GetCacheType().equals(ImageCacheTypes.BYIMAGETYPE.toString())){
@@ -556,7 +562,15 @@ public class ImageCache {
             util.SetListOptionNext(tProp, ImageType.toString(), ImageCacheTypesListByImageType);
         }
     }
-    
+
+    public static Boolean IsCacheTypeByImageType(){
+        if (GetCacheType().equals(ImageCacheTypes.BYIMAGETYPE.toString())){
+            return Boolean.TRUE;
+        }else{
+            return Boolean.FALSE;
+        }
+    }
+
     public static Boolean UseQueue(){
         if (GetCacheType().equals(ImageCacheTypes.BACKGROUND.toString())){
             return Boolean.TRUE;
@@ -591,6 +605,18 @@ public class ImageCache {
         }
     }
     
+    public static void BuildFileSystemCache(List<IMediaResource> Children){
+        LOG.debug("BuildFileSystemCache: Started '" + Children + "'");
+        for (IMediaResource Child: Children){
+            LOG.debug("BuildFileSystemCache: processing Child '" + Child + "'");
+            //for TV - Get Series - Season Posters and Banners as well as Backgrounds including Episodes ????
+            //for Videos - get posters and backgrounds
+            //TODO: need a special function here to get all images for a media resource and cache it
+            //run this process in the background if confirmed
+            //see if we can add a system alert message to indicate this is complete
+        }
+    }
+
     public static Object GetTVThumbnail(Object MediaFile, Boolean UseBackNotThumb){
         UIContext uIContext = new UIContext(sagex.api.Global.GetUIContextName());
         Object FinalThumb = null;

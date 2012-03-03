@@ -256,9 +256,6 @@ public class FanartManager {
             //LOG.debug("RemoveFanartItem: deleting '" + tImage + "'");
             File tFile = new File(tImage.toString());
             tFile.delete();
-            UIContext UIc = new UIContext(sagex.api.Global.GetUIContextName());
-            sagex.api.Utility.UnloadImage(UIc, tImage.toString());
-            sagex.api.Global.RefreshAreaForVariable(UIc, "MediaKey", ImageCache.GetMediaKey(MediaResource));
         }
     }
 
