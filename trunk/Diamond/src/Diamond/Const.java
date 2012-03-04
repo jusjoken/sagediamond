@@ -45,6 +45,14 @@ public class Const {
     public static final String ExportPropName = "ExportPropName";
     public static final String ImageCacheMinSize = "ImageCacheMinSize";
     public static final String ImageCacheType = "ImageCacheType";
+    public static final String ImagePreCache = "ImagePreCache";
+    public static final String ImagePreCacheRunning = "ImagePreCacheRunning";
+    public static final String ImagePreCacheItem = "ImagePreCacheItem";
+    public static final String ImagePreCacheItems = "ImagePreCacheItems";
+    public static final String ImagePreCacheItemTitle = "ImagePreCacheItemTitle";
+    public static final String ImagePreCacheItemType = "ImagePreCacheItemType";
+    public static final String ImagePreCacheItemLocation = "ImagePreCacheItemLocation";
+    public static final String ImagePreCacheItemInfo = "ImagePreCacheItemInfo";
     
     //General Constants
     public static final String BaseProp = "Diamond";

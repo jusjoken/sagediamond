@@ -454,31 +454,42 @@ public class FanartManager {
         return ImageCache.CreateImage(tKey);
     }
     
-    public void CacheImage(String FanartItem){
+    public void CacheImage(String FanartItem, Boolean OriginalSize){
         if (FanartItem==null){
             LOG.debug("CacheImage: null FanartItem passed in");
             return;
         }
         Object tImage = null;
-        ImageCacheKey tKey = new ImageCacheKey(FanartItem,Boolean.FALSE,this.FanartType,Boolean.FALSE);
+        ImageCacheKey tKey = new ImageCacheKey(FanartItem,OriginalSize,this.FanartType,Boolean.FALSE);
+        if (OriginalSize){
+            ImageCache.SetPreCacheItemType(FanartType + " (FULL)");
+        }else{
+            ImageCache.SetPreCacheItemType(FanartType);
+        }
+        ImageCache.SetPreCacheItemLocation(tKey.getImagePath());
         //check if this item is already cached
         tImage = phoenix.image.GetImage(tKey.getKey(), ImageCache.CreateImageTag);
         if (tImage!=null){
             LOG.debug("CacheImage: item already cached '" + tKey.getKey() + "' Image = '" + tImage + "'");
+            ImageCache.SetPreCacheItemInfo("Item already cached");
             return;
         }
         UIContext UIc = new UIContext(sagex.api.Global.GetUIContextName());
         //based on the ImageType determine the scalewidth to use
         Integer UIWidth = sagex.api.Global.GetFullUIWidth(UIc);
         Double scalewidth = 0.2;
-        if (IsFanartTypePoster()){
-            scalewidth = 0.2;
-        }else if (IsFanartTypeBanner()){
-            scalewidth = 0.6;
-        }else if (IsFanartTypeBackground()){
-            scalewidth = 0.4;
+        if (tKey.getOriginalSize()){
+            scalewidth = 1.0;
         }else{
-            //use default
+            if (IsFanartTypePoster()){
+                scalewidth = 0.2;
+            }else if (IsFanartTypeBanner()){
+                scalewidth = 0.6;
+            }else if (IsFanartTypeBackground()){
+                scalewidth = 0.4;
+            }else{
+                //use default
+            }
         }
         Double finalscalewidth = scalewidth * UIWidth;
         tImage = phoenix.image.CreateImage(tKey.getKey(), ImageCache.CreateImageTag, tKey.getImagePath(), "{name: scale, width: " + finalscalewidth + ", height: -1}", false);
@@ -487,6 +498,7 @@ public class FanartManager {
             return;
         }else{
             LOG.debug("CacheImage: item added to cache '" + tKey.getKey() + "' Image = '" + tImage + "'");
+            ImageCache.SetPreCacheItemInfo("Item added to cache");
         }
         return;
     }
@@ -496,13 +508,25 @@ public class FanartManager {
             setFanartType(faType);
             //Cache the first item in the list
             if (!FanartList.isEmpty()){
-                CacheImage(FanartList.get(0).toString());
+                if (ImageCache.PreCache(faType)){
+                    CacheImage(FanartList.get(0).toString(), Boolean.FALSE);
+                }
+                if (faType.toLowerCase().equals("background") && ImageCache.PreCacheFullBackgrounds()){
+                    //also cache a FullSize background
+                    CacheImage(FanartList.get(0).toString(), Boolean.TRUE);
+                }
             }
             if (IsTV()){
                 for (Object Season: TVModeList){
                     setTVMode(Season.toString());
                     if (!FanartList.isEmpty()){
-                        CacheImage(FanartList.get(0).toString());
+                        if (ImageCache.PreCache(faType)){
+                            CacheImage(FanartList.get(0).toString(), Boolean.FALSE);
+                        }
+                        if (faType.toLowerCase().equals("background") && ImageCache.PreCacheFullBackgrounds()){
+                            //also cache a FullSize background
+                            CacheImage(FanartList.get(0).toString(), Boolean.TRUE);
+                        }
                     }
                 }
             }
