@@ -525,6 +525,49 @@ public class ImageCache {
         }
         return ThisImage;
     }
+
+    public static Boolean IsPreCacheEnabled(){
+        //check each type to see if at least 1 type is enabled
+        if (PreCache(MediaArtifactType.POSTER)) return Boolean.TRUE;
+        if (PreCache(MediaArtifactType.BANNER)) return Boolean.TRUE;
+        if (PreCache(MediaArtifactType.BACKGROUND)) return Boolean.TRUE;
+        if (PreCacheFullBackgrounds()) return Boolean.TRUE;
+        return Boolean.FALSE;
+    }
+    public static String PreCacheName(String ImageType){
+        if (PreCache(ImageCacheKey.ConvertStringtoMediaArtifactType(ImageType))){
+            return "Yes";
+        }else{
+            return "No";
+        }
+    }
+    public static Boolean PreCache(String ImageType){
+        return PreCache(ImageCacheKey.ConvertStringtoMediaArtifactType(ImageType));
+    }
+    public static Boolean PreCache(MediaArtifactType ImageType){
+        String tProp = ICacheProps + Const.PropDivider + Const.ImagePreCache + Const.PropDivider + ImageType.toString();
+        return util.GetPropertyAsBoolean(tProp, Boolean.TRUE);
+    }
+    public static void SetPreCacheNext(String ImageType){
+        String tProp = ICacheProps + Const.PropDivider + Const.ImagePreCache + Const.PropDivider + ImageCacheKey.ConvertStringtoMediaArtifactType(ImageType);
+        util.SetTrueFalseOptionNext(tProp);
+    }
+
+    public static String PreCacheFullBackgroundsName(){
+        if (PreCacheFullBackgrounds()){
+            return "Yes";
+        }else{
+            return "No";
+        }
+    }
+    public static Boolean PreCacheFullBackgrounds(){
+        String tProp = ICacheProps + Const.PropDivider + Const.ImagePreCache + Const.PropDivider + "FULL:BACKGROUND";
+        return util.GetPropertyAsBoolean(tProp, Boolean.TRUE);
+    }
+    public static void SetPreCacheFullBackgroundsNext(){
+        String tProp = ICacheProps + Const.PropDivider + Const.ImagePreCache + Const.PropDivider + "FULL:BACKGROUND";
+        util.SetTrueFalseOptionNext(tProp);
+    }
     
     public static Integer GetMinSize(){
         String tProp = ICacheProps + Const.PropDivider + Const.ImageCacheMinSize;
@@ -606,27 +649,99 @@ public class ImageCache {
     }
     
     public static void BuildFileSystemCache(){
-        ViewFolder view = phoenix.umb.CreateView("gemstone.base.allforcache");
-        LOG.debug("BuildFileSystemCache: Started - Items '" + phoenix.umb.GetChildCount(view) + "' for view '" + view + "'");
-        Integer counter = 0;
-        for (IMediaResource MediaItem: view){
-            IMediaResource MediaItemChild = MediaItem;
-            if (phoenix.media.IsMediaType( MediaItem , "FOLDER" )){
-                MediaItemChild = GetChild(MediaItem, Boolean.FALSE);
+        if (IsPreCacheEnabled()){
+            SetPreCacheRunning(Boolean.TRUE);
+            ViewFolder view = phoenix.umb.CreateView("gemstone.base.allforcache");
+            SetPreCacheItems(phoenix.umb.GetChildCount(view));
+            LOG.debug("BuildFileSystemCache: Started - Items '" + GetPreCacheItems() + "' for view '" + view + "'");
+            Integer counter = 0;
+            for (IMediaResource MediaItem: view){
+                IMediaResource MediaItemChild = MediaItem;
+                if (phoenix.media.IsMediaType( MediaItem , "FOLDER" )){
+                    MediaItemChild = GetChild(MediaItem, Boolean.FALSE);
+                }
+                counter ++;
+                if (counter>20){
+                    break;
+                }
+                SetPreCacheItem(counter);
+                SetPreCacheItemTitle(MediaItemChild.getTitle());
+                FanartManager faManager = new FanartManager(MediaItemChild);
+                LOG.debug("BuildFileSystemCache: processing Child (" + counter + ") '" + MediaItemChild + "'");
+                faManager.CacheEachFanartItem();
+
+                //for TV - Get Series - Season Posters and Banners as well as Backgrounds including Episodes ????
+                //for Videos - get posters and backgrounds
+                //TODO: need a special function here to get all images for a media resource and cache it
+                //run this process in the background if confirmed
+                //see if we can add a system alert message to indicate this is complete
             }
-            counter ++;
-            FanartManager faManager = new FanartManager(MediaItemChild);
-            LOG.debug("BuildFileSystemCache: processing Child (" + counter + ") '" + MediaItemChild + "'");
-            faManager.CacheEachFanartItem();
-            
-            //for TV - Get Series - Season Posters and Banners as well as Backgrounds including Episodes ????
-            //for Videos - get posters and backgrounds
-            //TODO: need a special function here to get all images for a media resource and cache it
-            //run this process in the background if confirmed
-            //see if we can add a system alert message to indicate this is complete
+            SetPreCacheRunning(Boolean.FALSE);
+        }else{
+            LOG.debug("BuildFileSystemCache: PreCache is not enabled - processing not started");
         }
     }
+    
+    public static Boolean IsPreCacheRunning(){
+        String tProp = ICacheProps + Const.PropDivider + Const.ImagePreCache + Const.PropDivider + Const.ImagePreCacheRunning;
+        return util.GetPropertyAsBoolean(tProp, Boolean.FALSE);
+    }
+    public static void SetPreCacheRunning(Boolean Value){
+        String tProp = ICacheProps + Const.PropDivider + Const.ImagePreCache + Const.PropDivider + Const.ImagePreCacheRunning;
+        util.SetProperty(tProp, Value.toString());
+    }
+    public static Integer GetPreCacheItem(){
+        String tProp = ICacheProps + Const.PropDivider + Const.ImagePreCache + Const.PropDivider + Const.ImagePreCacheItem;
+        return util.GetPropertyAsInteger(tProp, 0);
+    }
+    public static void SetPreCacheItem(Integer Value){
+        String tProp = ICacheProps + Const.PropDivider + Const.ImagePreCache + Const.PropDivider + Const.ImagePreCacheItem;
+        util.SetProperty(tProp, Value.toString());
+    }
+    
+    public static Integer GetPreCacheItems(){
+        String tProp = ICacheProps + Const.PropDivider + Const.ImagePreCache + Const.PropDivider + Const.ImagePreCacheItems;
+        return util.GetPropertyAsInteger(tProp, 0);
+    }
+    public static void SetPreCacheItems(Integer Value){
+        String tProp = ICacheProps + Const.PropDivider + Const.ImagePreCache + Const.PropDivider + Const.ImagePreCacheItems;
+        util.SetProperty(tProp, Value.toString());
+    }
+    
+    public static String GetPreCacheItemTitle(){
+        String tProp = ICacheProps + Const.PropDivider + Const.ImagePreCache + Const.PropDivider + Const.ImagePreCacheItemTitle;
+        return util.GetProperty(tProp, util.OptionNotFound);
+    }
+    public static void SetPreCacheItemTitle(String Value){
+        String tProp = ICacheProps + Const.PropDivider + Const.ImagePreCache + Const.PropDivider + Const.ImagePreCacheItemTitle;
+        util.SetProperty(tProp, Value);
+    }
 
+    public static String GetPreCacheItemType(){
+        String tProp = ICacheProps + Const.PropDivider + Const.ImagePreCache + Const.PropDivider + Const.ImagePreCacheItemType;
+        return util.GetProperty(tProp, util.OptionNotFound);
+    }
+    public static void SetPreCacheItemType(String Value){
+        String tProp = ICacheProps + Const.PropDivider + Const.ImagePreCache + Const.PropDivider + Const.ImagePreCacheItemType;
+        util.SetProperty(tProp, Value);
+    }
+    public static String GetPreCacheItemLocation(){
+        String tProp = ICacheProps + Const.PropDivider + Const.ImagePreCache + Const.PropDivider + Const.ImagePreCacheItemLocation;
+        return util.GetProperty(tProp, util.OptionNotFound);
+    }
+    public static void SetPreCacheItemLocation(String Value){
+        String tProp = ICacheProps + Const.PropDivider + Const.ImagePreCache + Const.PropDivider + Const.ImagePreCacheItemLocation;
+        util.SetProperty(tProp, Value);
+    }
+    public static String GetPreCacheItemInfo(){
+        String tProp = ICacheProps + Const.PropDivider + Const.ImagePreCache + Const.PropDivider + Const.ImagePreCacheItemInfo;
+        return util.GetProperty(tProp, util.OptionNotFound);
+    }
+    public static void SetPreCacheItemInfo(String Value){
+        String tProp = ICacheProps + Const.PropDivider + Const.ImagePreCache + Const.PropDivider + Const.ImagePreCacheItemInfo;
+        util.SetProperty(tProp, Value);
+    }
+    
     public static Object GetTVThumbnail(Object MediaFile, Boolean UseBackNotThumb){
         UIContext uIContext = new UIContext(sagex.api.Global.GetUIContextName());
         Object FinalThumb = null;
