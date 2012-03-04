@@ -924,6 +924,17 @@ public class util {
        return ret.toString();
     }
 
+    public static String intToString(Integer num, Integer digits) {
+        if (digits<0){
+            return num.toString();
+        }
+        // create variable length array of zeros
+        char[] zeros = new char[digits];
+        Arrays.fill(zeros, '0');
+        // format number as String
+        DecimalFormat df = new DecimalFormat(String.valueOf(zeros));
+        return df.format(num);
+    }
+    
 }
-
 

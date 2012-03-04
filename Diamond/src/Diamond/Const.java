@@ -49,10 +49,6 @@ public class Const {
     public static final String ImagePreCacheRunning = "ImagePreCacheRunning";
     public static final String ImagePreCacheItem = "ImagePreCacheItem";
     public static final String ImagePreCacheItems = "ImagePreCacheItems";
-    public static final String ImagePreCacheItemTitle = "ImagePreCacheItemTitle";
-    public static final String ImagePreCacheItemType = "ImagePreCacheItemType";
-    public static final String ImagePreCacheItemLocation = "ImagePreCacheItemLocation";
-    public static final String ImagePreCacheItemInfo = "ImagePreCacheItemInfo";
     
     //General Constants
     public static final String BaseProp = "Diamond";
@@ -66,5 +62,6 @@ public class Const {
     public static final String PropertyComment = "---gemstone Export Properties - Do Not Manually Edit---";
     public static final String WrappedFilter = "WrappedFilter";
     public static final String ImageCacheProp = "ImageCache";
+    public static final String OptionNotEnabled = "Option Not Enabled";
     
 }
