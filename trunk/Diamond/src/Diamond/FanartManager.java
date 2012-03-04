@@ -453,32 +453,61 @@ public class FanartManager {
         ImageCacheKey tKey = new ImageCacheKey(FanartItem,Boolean.FALSE,this.FanartType,Boolean.TRUE);
         return ImageCache.CreateImage(tKey);
     }
-//    public Object GetImage(String FanartItem){
-//        if (FanartItem==null){
-//            LOG.debug("GetImage: null FanartItem passed in - returning null");
-//            return null;
-//        }
-//        UIContext UIc = new UIContext(sagex.api.Global.GetUIContextName());
-//        //based on the ImageType determine the scalewidth to use
-//        Integer UIWidth = sagex.api.Global.GetFullUIWidth(UIc);
-//        Double scalewidth = 0.2;
-//        if (IsFanartTypePoster()){
-//            scalewidth = 0.2;
-//        }else if (IsFanartTypeBanner()){
-//            scalewidth = 0.6;
-//        }else if (IsFanartTypeBackground()){
-//            scalewidth = 0.4;
-//        }else{
-//            //use default
-//        }
-//        Double finalscalewidth = scalewidth * UIWidth;
-//        Object tImage = phoenix.image.CreateImage("GemstoneFanartManager", FanartItem, "{name: scale, width: " + finalscalewidth + ", height: -1}", false);
-//        if (tImage==null){
-//            LOG.debug("GetImage: CreateImage returned null for FanartItem '" + FanartItem + "'");
-//            return null;
-//        }
-//        return tImage;
-//    }
+    
+    public void CacheImage(String FanartItem){
+        if (FanartItem==null){
+            LOG.debug("CacheImage: null FanartItem passed in");
+            return;
+        }
+        Object tImage = null;
+        ImageCacheKey tKey = new ImageCacheKey(FanartItem,Boolean.FALSE,this.FanartType,Boolean.FALSE);
+        //check if this item is already cached
+        tImage = phoenix.image.GetImage(tKey.getKey(), ImageCache.CreateImageTag);
+        if (tImage!=null){
+            LOG.debug("CacheImage: item already cached '" + tKey.getKey() + "' Image = '" + tImage + "'");
+            return;
+        }
+        UIContext UIc = new UIContext(sagex.api.Global.GetUIContextName());
+        //based on the ImageType determine the scalewidth to use
+        Integer UIWidth = sagex.api.Global.GetFullUIWidth(UIc);
+        Double scalewidth = 0.2;
+        if (IsFanartTypePoster()){
+            scalewidth = 0.2;
+        }else if (IsFanartTypeBanner()){
+            scalewidth = 0.6;
+        }else if (IsFanartTypeBackground()){
+            scalewidth = 0.4;
+        }else{
+            //use default
+        }
+        Double finalscalewidth = scalewidth * UIWidth;
+        tImage = phoenix.image.CreateImage(tKey.getKey(), ImageCache.CreateImageTag, tKey.getImagePath(), "{name: scale, width: " + finalscalewidth + ", height: -1}", false);
+        if (tImage==null){
+            LOG.debug("CacheImage: CreateImage returned null for FanartItem '" + FanartItem + "'");
+            return;
+        }else{
+            LOG.debug("CacheImage: item added to cache '" + tKey.getKey() + "' Image = '" + tImage + "'");
+        }
+        return;
+    }
+    
+    public void CacheEachFanartItem(){
+        for (String faType: GetFanartTypes()){
+            setFanartType(faType);
+            //Cache the first item in the list
+            if (!FanartList.isEmpty()){
+                CacheImage(FanartList.get(0).toString());
+            }
+            if (IsTV()){
+                for (Object Season: TVModeList){
+                    setTVMode(Season.toString());
+                    if (!FanartList.isEmpty()){
+                        CacheImage(FanartList.get(0).toString());
+                    }
+                }
+            }
+        }
+    }
     
     public String[] GetFanartTypes(){
         if (IsMovie()){
