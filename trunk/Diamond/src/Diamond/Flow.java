@@ -275,8 +275,6 @@ public class Flow {
         }
         String OldCVPropName = GetFlowBaseProp(Element);
         util.RemovePropertyAndChildren(OldCVPropName);
-        //TODO: need to deal with path filters
-        //util.RemoveProperty(PathFiltersPropName + "/" + Element);
         return "1";
     }
     

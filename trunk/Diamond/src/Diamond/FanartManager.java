@@ -467,10 +467,23 @@ public class FanartManager {
             ImageCache.SetPreCacheItemType(FanartType);
         }
         ImageCache.SetPreCacheItemLocation(tKey.getImagePath());
+        //update counts for the summary view
+        if (this.FanartType.equals("poster")){
+            ImageCache.PreCachePosterItems++;
+        }else if (this.FanartType.equals("banner")){
+            ImageCache.PreCacheBannerItems++;
+        }else if (this.FanartType.equals("background")){
+            if (OriginalSize){
+                ImageCache.PreCacheFullBackgroundItems++;
+            }else{
+                ImageCache.PreCacheBackgroundItems++;
+            }
+        }
         //check if this item is already cached
         tImage = phoenix.image.GetImage(tKey.getKey(), ImageCache.CreateImageTag);
         if (tImage!=null){
             LOG.debug("CacheImage: item already cached '" + tKey.getKey() + "' Image = '" + tImage + "'");
+            ImageCache.PreCacheItemsExisted++;
             ImageCache.SetPreCacheItemInfo("Item already cached");
             return;
         }
@@ -495,10 +508,12 @@ public class FanartManager {
         tImage = phoenix.image.CreateImage(tKey.getKey(), ImageCache.CreateImageTag, tKey.getImagePath(), "{name: scale, width: " + finalscalewidth + ", height: -1}", false);
         if (tImage==null){
             LOG.debug("CacheImage: CreateImage returned null for FanartItem '" + FanartItem + "'");
+            ImageCache.PreCacheItemsFailed++;
             return;
         }else{
             LOG.debug("CacheImage: item added to cache '" + tKey.getKey() + "' Image = '" + tImage + "'");
             ImageCache.SetPreCacheItemInfo("Item added to cache");
+            ImageCache.PreCacheItemsCreated++;
         }
         return;
     }
