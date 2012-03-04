@@ -605,10 +605,20 @@ public class ImageCache {
         }
     }
     
-    public static void BuildFileSystemCache(List<IMediaResource> Children){
-        LOG.debug("BuildFileSystemCache: Started '" + Children + "'");
-        for (IMediaResource Child: Children){
-            LOG.debug("BuildFileSystemCache: processing Child '" + Child + "'");
+    public static void BuildFileSystemCache(){
+        ViewFolder view = phoenix.umb.CreateView("gemstone.base.allforcache");
+        LOG.debug("BuildFileSystemCache: Started - Items '" + phoenix.umb.GetChildCount(view) + "' for view '" + view + "'");
+        Integer counter = 0;
+        for (IMediaResource MediaItem: view){
+            IMediaResource MediaItemChild = MediaItem;
+            if (phoenix.media.IsMediaType( MediaItem , "FOLDER" )){
+                MediaItemChild = GetChild(MediaItem, Boolean.FALSE);
+            }
+            counter ++;
+            FanartManager faManager = new FanartManager(MediaItemChild);
+            LOG.debug("BuildFileSystemCache: processing Child (" + counter + ") '" + MediaItemChild + "'");
+            faManager.CacheEachFanartItem();
+            
             //for TV - Get Series - Season Posters and Banners as well as Backgrounds including Episodes ????
             //for Videos - get posters and backgrounds
             //TODO: need a special function here to get all images for a media resource and cache it
