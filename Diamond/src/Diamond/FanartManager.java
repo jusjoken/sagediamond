@@ -505,7 +505,13 @@ public class FanartManager {
             }
         }
         Double finalscalewidth = scalewidth * UIWidth;
-        tImage = phoenix.image.CreateImage(tKey.getKey(), ImageCache.CreateImageTag, tKey.getImagePath(), "{name: scale, width: " + finalscalewidth + ", height: -1}", false);
+        try {
+            tImage = phoenix.image.CreateImage(tKey.getKey(), ImageCache.CreateImageTag, tKey.getImagePath(), "{name: scale, width: " + finalscalewidth + ", height: -1}", false);
+        } catch (Exception e) {
+            LOG.debug("CacheImage: phoenix.image.CreateImage FAILED - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + tKey.getArtifactType().toString() + "' Image = '" + tKey.getImagePath() + "' Error: '" + e + "'");
+            ImageCache.PreCacheItemsFailed++;
+            return;
+        }
         if (tImage==null){
             LOG.debug("CacheImage: CreateImage returned null for FanartItem '" + FanartItem + "'");
             ImageCache.PreCacheItemsFailed++;
