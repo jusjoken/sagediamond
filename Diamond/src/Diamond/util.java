@@ -788,13 +788,21 @@ public class util {
     }
 
     public static Object PadMediaFiles(Integer PadBefore, Object MediaFiles, Integer PadAfter){
+        Object tMediaFiles = MediaFiles;
         for (int index=0;index<PadBefore;index++){
-            MediaFiles = sagex.api.Database.DataUnion(sagex.api.Utility.CreateArray("BlankItem" + (index+1)), MediaFiles);
+            tMediaFiles = sagex.api.Database.DataUnion(sagex.api.Utility.CreateArray("BlankItem" + (index+1)), tMediaFiles);
         }
         for (int index=0;index<PadAfter;index++){
-            MediaFiles = sagex.api.Database.DataUnion(MediaFiles, sagex.api.Utility.CreateArray("BlankItem"+(index+1)*-1));
+            tMediaFiles = sagex.api.Database.DataUnion(tMediaFiles, sagex.api.Utility.CreateArray("BlankItem"+(index+100)));
         }
-        return MediaFiles;
+        return tMediaFiles;
+    }
+    public static Object BlankArrayItems(Integer ItemCount, String UniqueID){
+        Object tArray = null;
+        for (int index=0;index<ItemCount;index++){
+            tArray = sagex.api.Database.DataUnion(sagex.api.Utility.CreateArray("BlankItem" + UniqueID + (index)), tArray);
+        }
+        return tArray;
     }
     
     //VFS utility functions
