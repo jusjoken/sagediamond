@@ -787,6 +787,27 @@ public class Source {
         return GetSpecialType(ConvertToIMR(imediaresource));
     }
 
+    //check for the type of the 1st child if any for TV
+    public static Boolean IsChildTV(IMediaResource imediaresource){
+        if (phoenix.media.IsMediaType( imediaresource , "FOLDER" )){
+            IMediaResource childmediaresource = null;
+            childmediaresource = ImageCache.GetChild(imediaresource, Boolean.FALSE);
+            if (childmediaresource==null){
+                return Boolean.FALSE;
+            }
+            if (phoenix.media.IsMediaType( childmediaresource , "TV" )){
+                return Boolean.TRUE;
+            }
+        }else{
+            return Boolean.FALSE;
+        }
+        return Boolean.FALSE;
+    }
+    //Convenience method that will convert the incoming object parameter to a IMediaResource type 
+    public static Boolean IsChildTV(Object imediaresource){
+        return IsChildTV(ConvertToIMR(imediaresource));
+    }
+
     public static IMediaResource ConvertToIMR(Object imediaresource){
         if (imediaresource == null || imediaresource.toString().isEmpty() || imediaresource.toString().contains("BlankItem")) {
             return null;
