@@ -354,7 +354,7 @@ public class ImageCache {
                 //for TV items we need to get an Episode Fanart
                 //the resourcetype changes to a background as poster and banner fanaet are not available
                 faMediaObject = phoenix.media.GetMediaObject(imediaresource);
-                if (resourcetype.equals("background")){
+                if (resourcetype.equals("background") && !originalSize){
                     //special Episode handling for backgrounds
                     tImageString = phoenix.fanart.GetEpisode(faMediaObject);
                     if (tImageString==null || tImageString.equals("")){
@@ -374,6 +374,11 @@ public class ImageCache {
                     }else{
                         //LOG.debug("GetImageKey: Episode '" + phoenix.media.GetTitle(imediaresource) + "' Fanart found '" + tImageString + "'");
                     }
+                }else if (resourcetype.equals("background") && originalSize){
+                    //use SERIES level Background
+                    //LOG.debug("GetImageKey: Full Size Background requested for '" + phoenix.media.GetTitle(imediaresource) + "'");
+                    faMetadata = Collections.emptyMap();
+                    faMediaType = MediaType.TV;
                 }else{
                     //LOG.debug("GetImageKey: TV found for other than background '" + phoenix.media.GetTitle(imediaresource) + "'");
                 }
