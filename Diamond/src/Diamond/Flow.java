@@ -330,6 +330,20 @@ public class Flow {
         }
     }
 
+    public static Boolean IsValidFlowType(String name){
+        if (name==null){
+            LOG.debug("GetFlowType: request for null name returned NotFound");
+            return Boolean.FALSE;
+        }
+        String FlowTypeProp = Flow.GetFlowBaseProp(name) + Const.PropDivider + Const.FlowType;
+        String tFlow = util.GetProperty(FlowTypeProp, Const.FlowTypeDefault);
+        if (InternalFlowTypes.containsKey(tFlow)){
+            return Boolean.TRUE;
+        }else{
+            return Boolean.FALSE;
+        }
+    }
+
     public static String ChangeFlowType(String Element, String NewViewType) {
         String FlowTypeProp = Flow.GetFlowBaseProp(Element) + Const.PropDivider + Const.FlowType;
         String OldType = GetFlowType(Element);

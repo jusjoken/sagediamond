@@ -754,14 +754,21 @@ public class Source {
 
     //check for special handling types - genre, episode or other
     public static String GetSpecialType(IMediaResource imediaresource){
-        String tType = "other";
         String Grouping = "NoGroup";
         if (phoenix.media.IsMediaType( imediaresource , "FOLDER" )){
             ViewFolder Parent = (ViewFolder) phoenix.media.GetParent(imediaresource);
             //see how the folder is grouped
             if (phoenix.umb.GetGroupers(Parent).size() > 0){
                 Grouping = phoenix.umb.GetName( phoenix.umb.GetGroupers(Parent).get(0) );
+                Grouping = Grouping.toLowerCase();
                 //LOG.debug("GetSpecialType: Group '" + Grouping + "' found");
+                if (Grouping.equals("show")){
+                    if (IsChildTV(imediaresource)){
+                        return "series";
+                    }else{
+                        return "show";
+                    }
+                }
                 return Grouping;
             }
         }else{
@@ -770,13 +777,13 @@ public class Source {
                 return "tv";
             }else if (phoenix.media.IsMediaType( imediaresource , "VIDEO" )){
                 //LOG.debug("GetSpecialType: video found");
-                return "video";
+                return "movie";
             }else if (phoenix.media.IsMediaType( imediaresource , "DVD" )){
                 //LOG.debug("GetSpecialType: dvd found");
-                return "dvd";
+                return "movie";
             }else if (phoenix.media.IsMediaType( imediaresource , "BLURAY" )){
                 //LOG.debug("GetSpecialType: bluray found");
-                return "bluray";
+                return "movie";
             }
         }
         //LOG.debug("GetSpecialType: Nothing found - returning 'other'");
@@ -821,7 +828,31 @@ public class Source {
         return proxy;
     }
             
-            
+    //return a consistent Title dependent on the media item and the type
+    public static String GetTitle(IMediaResource imediaresource){
+        if (imediaresource==null){
+            return "";
+        }
+        if (imediaresource.toString().contains("BlankItem")){
+            return "";
+        }
+        String sType = GetSpecialType(imediaresource);
+        String tTitle = imediaresource.getTitle();
+        if (sType.equals("tv")){  //return the episode name
+            return tTitle = phoenix.metadata.GetEpisodeName(imediaresource);
+        }
+        //see if there is a Disc or Part number to append
+        String Disc = sagex.api.MediaFileAPI.GetMediaFileMetadata(imediaresource, "DiscNumber");
+        if (Disc.equals("0") || Disc.isEmpty()){
+            //do not append the Disc/Part
+        }else{
+            tTitle = tTitle + " (" + Disc + ")";
+        }
+        return tTitle;
+    }
+    public static String GetTitle(Object imediaresource){
+        return GetTitle(ConvertToIMR(imediaresource));
+    }
     
     //</editor-fold>
 }
