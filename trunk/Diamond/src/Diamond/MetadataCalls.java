@@ -388,7 +388,14 @@ public class MetadataCalls {
 
     public static String GetGenresasString(IMediaResource MediaObject, String Separator){
         String Value = "";
-        List<String> ListValue = phoenix.metadata.GetGenres(MediaObject);
+        IMediaResource imediaresource = MediaObject;
+        if (phoenix.media.IsMediaType( imediaresource , "FOLDER" )){
+            imediaresource = ImageCache.GetChild(imediaresource, Boolean.FALSE);
+        }
+        if (imediaresource==null){
+            return Value;
+        }
+        List<String> ListValue = phoenix.metadata.GetGenres(imediaresource);
         if (ListValue.size()>0){
             for (String ListItem : ListValue){
                 if (ListItem.equalsIgnoreCase("movie")||ListItem.equalsIgnoreCase("film")){
