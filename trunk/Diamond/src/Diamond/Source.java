@@ -4,7 +4,10 @@
  */
 package Diamond;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -854,20 +857,39 @@ public class Source {
         return GetTitle(ConvertToIMR(imediaresource));
     }
 
-    //return a consistent Title dependent on the media item and the type
-    public static String GetRunningInfo(IMediaResource imediaresource){
-        if (imediaresource==null){
-            return "";
+    public static String GetAiredYear(Object IMR){
+        IMediaResource imediaresource = ConvertToIMR(IMR);
+        if (imediaresource!=null){ 
+            if (phoenix.media.IsMediaType( imediaresource , "FOLDER" )){
+                //get the range of years
+                ViewFolder Folder = (ViewFolder) imediaresource;
+                Object[] tList = (Object[]) sagex.api.Database.Sort(phoenix.media.GetAllChildren(Folder), false, "phoenix_metadata_GetOriginalAirDate");
+                String firstYear = getAiredYear((IMediaResource)tList[0]);
+                String lastYear = getAiredYear((IMediaResource)tList[tList.length-1]);
+                if (firstYear.equals(lastYear)){
+                    return "Aired in " + firstYear;
+                }else{
+                    return "Aired " + firstYear + " - " + lastYear;
+                }
+            }else{
+                return "Aired in " + getAiredYear(imediaresource);
+            }
         }
-        if (imediaresource.toString().contains("BlankItem")){
-            return "";
-        }
-        String sType = GetSpecialType(imediaresource);
-        if (sType.equals("series") || sType.equals("season")){  //only valid for series or season
-            imediaresource = ImageCache.GetChild(imediaresource, Boolean.FALSE);
-            String tDate = phoenix.series.GetFinaleDate(phoenix.media.GetSeriesInfo(phoenix.media.GetMediaFile(imediaresource)));
-            LOG.debug("GetRunningInfo: GetFinaleDate returned '" + tDate + "'");
-            if (tDate.isEmpty()){
+        return "";
+    }
+    private static String getAiredYear(IMediaResource imediaresource){
+        //get the aired Year
+        Date tReturn = phoenix.metadata.GetOriginalAirDate(imediaresource);
+        SimpleDateFormat simpleDateformat = new SimpleDateFormat("yyyy");
+        return simpleDateformat.format(tReturn);
+    }
+
+    public static String GetRunningInfo(Object IMR){
+        IMediaResource imediaresource = GetTVIMediaResource(IMR);
+        if (imediaresource!=null){ 
+            String tReturn = phoenix.series.GetFinaleDate(phoenix.media.GetSeriesInfo(phoenix.media.GetMediaFile(imediaresource)));
+            LOG.debug("GetRunningInfo: GetFinaleDate returned '" + tReturn + "' for '" + imediaresource + "'");
+            if (tReturn.isEmpty()){
                 return "Series continuing";
             }else{
                 return "Series ended";
@@ -875,9 +897,92 @@ public class Source {
         }
         return "";
     }
-    public static String GetRunningInfo(Object imediaresource){
-        return GetRunningInfo(ConvertToIMR(imediaresource));
+
+    public static String GetNetwork(Object IMR){
+        IMediaResource imediaresource = GetTVIMediaResource(IMR);
+        if (imediaresource!=null){ 
+            String tReturn = phoenix.series.GetNetwork(phoenix.media.GetSeriesInfo(phoenix.media.GetMediaFile(imediaresource)));
+            LOG.debug("GetNetwork: GetGetNetwork returned '" + tReturn + "' for '" + imediaresource + "'");
+            if (tReturn.isEmpty()){
+                return "";
+            }else{
+                return tReturn;
+            }
+        }
+        return "";
     }
+    
+    public static String GetRated(Object IMR){
+        IMediaResource imediaresource = GetTVIMediaResource(IMR);
+        if (imediaresource!=null){ 
+            String tReturn = phoenix.metadata.GetRated(imediaresource);
+            LOG.debug("GetRated: GetRated returned '" + tReturn + "' for '" + imediaresource + "'");
+            if (tReturn.isEmpty()){
+                return "";
+            }else{
+                return tReturn;
+            }
+        }
+        return "";
+    }
+    
+    public static Boolean IsHDTV(Object IMR){
+        IMediaResource imediaresource = GetTVIMediaResource(IMR);
+        if (imediaresource!=null){ 
+            Boolean tReturn = phoenix.metadata.IsHDTV(imediaresource);
+            LOG.debug("IsHDTV: IsHDTV returned '" + tReturn + "' for '" + imediaresource + "'");
+            return tReturn;
+        }
+        return Boolean.FALSE;
+    }
+    
+    public static IMediaResource GetTVIMediaResource(Object imediaresource){
+        if (imediaresource==null){
+            return null;
+        }
+        if (imediaresource.toString().contains("BlankItem")){
+            return null;
+        }
+        IMediaResource IMR = ConvertToIMR(imediaresource);
+        String sType = GetSpecialType(IMR);
+        if (sType.equals("series") || sType.equals("season")){  //only valid for series or season
+            return ImageCache.GetChild(IMR, Boolean.FALSE);
+        }else if (sType.equals("tv")){
+            return IMR;
+        }
+        return null;
+    }
+
+    public static String GetGenresasString(IMediaResource MediaObject, String Separator){
+        String Value = "";
+        IMediaResource imediaresource = MediaObject;
+        if (phoenix.media.IsMediaType( imediaresource , "FOLDER" )){
+            imediaresource = ImageCache.GetChild(imediaresource, Boolean.FALSE);
+        }
+        if (imediaresource==null){
+            return Value;
+        }
+        List<String> ListValue = phoenix.metadata.GetGenres(imediaresource);
+        if (ListValue.size()>0){
+            for (String ListItem : ListValue){
+                if (ListItem.equalsIgnoreCase("movie")||ListItem.equalsIgnoreCase("film")){
+                    //skip these
+                }else{
+                    if (Value.equals("")){
+                        Value = ListItem;
+                    }else{
+                        Value = Value + Separator + ListItem;
+                    }
+                }
+            }
+        }
+        return Value;
+    }
+    //Convenience method that will convert the incoming object parameter to a IMediaResource type 
+    public static String GetGenresasString(Object MediaObject, String Separator){
+        return GetGenresasString(Source.ConvertToIMR(MediaObject), Separator);
+    }
+
     
     //</editor-fold>
 }

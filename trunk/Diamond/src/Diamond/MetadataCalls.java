@@ -385,37 +385,6 @@ public class MetadataCalls {
         }
         return retString;
     }
-
-    public static String GetGenresasString(IMediaResource MediaObject, String Separator){
-        String Value = "";
-        IMediaResource imediaresource = MediaObject;
-        if (phoenix.media.IsMediaType( imediaresource , "FOLDER" )){
-            imediaresource = ImageCache.GetChild(imediaresource, Boolean.FALSE);
-        }
-        if (imediaresource==null){
-            return Value;
-        }
-        List<String> ListValue = phoenix.metadata.GetGenres(imediaresource);
-        if (ListValue.size()>0){
-            for (String ListItem : ListValue){
-                if (ListItem.equalsIgnoreCase("movie")||ListItem.equalsIgnoreCase("film")){
-                    //skip these
-                }else{
-                    if (Value.equals("")){
-                        Value = ListItem;
-                    }else{
-                        Value = Value + Separator + ListItem;
-                    }
-                }
-            }
-        }
-        return Value;
-    }
-    //Convenience method that will convert the incoming object parameter to a IMediaResource type 
-    public static String GetGenresasString(Object MediaObject, String Separator){
-        return GetGenresasString(Source.ConvertToIMR(MediaObject), Separator);
-    }
-
     
     //get a list of all the categories with Movies/Film removed and unknown assigned if no category exists
     public static ArrayList<String> GetAllShowCategories(Object MediaObject) {
