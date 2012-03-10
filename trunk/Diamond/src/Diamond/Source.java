@@ -853,6 +853,31 @@ public class Source {
     public static String GetTitle(Object imediaresource){
         return GetTitle(ConvertToIMR(imediaresource));
     }
+
+    //return a consistent Title dependent on the media item and the type
+    public static String GetRunningInfo(IMediaResource imediaresource){
+        if (imediaresource==null){
+            return "";
+        }
+        if (imediaresource.toString().contains("BlankItem")){
+            return "";
+        }
+        String sType = GetSpecialType(imediaresource);
+        if (sType.equals("series") || sType.equals("season")){  //only valid for series or season
+            imediaresource = ImageCache.GetChild(imediaresource, Boolean.FALSE);
+            String tDate = phoenix.series.GetFinaleDate(phoenix.media.GetSeriesInfo(phoenix.media.GetMediaFile(imediaresource)));
+            LOG.debug("GetRunningInfo: GetFinaleDate returned '" + tDate + "'");
+            if (tDate.isEmpty()){
+                return "Series continuing";
+            }else{
+                return "Series ended";
+            }
+        }
+        return "";
+    }
+    public static String GetRunningInfo(Object imediaresource){
+        return GetRunningInfo(ConvertToIMR(imediaresource));
+    }
     
     //</editor-fold>
 }
