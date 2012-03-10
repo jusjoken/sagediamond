@@ -483,16 +483,18 @@ public class Flow {
 
     }
 
-    public static String DisplaySeasonEpisodeVFS(String Element, IMediaResource MediaObject) {
+    public static String DisplaySeasonEpisode(String Element, Object MediaObject) {
+        IMediaResource IMR = Source.ConvertToIMR(MediaObject);
+        String SEFormat = Flow.GetOptionName(Element,"SEFormat","S1E01");
         //LOG.debug("DisplaySeasonEpisodeVFS: Object '" + MediaObject.getClass() + " Media '" + MediaObject + "'" );
-        return DisplaySeasonEpisode(Element, phoenix.media.GetMediaObject(MediaObject));
+        return MetadataCalls.DisplaySeasonEpisode(phoenix.media.GetMediaObject(IMR), SEFormat);
     }
     
-    public static String DisplaySeasonEpisode(String Element, Object MediaObject) {
-        String SEFormat = Flow.GetOptionName(Element,"SEFormat","S1E01");
-        //LOG.debug("DisplaySeasonEpisode: SEFormat = '" + SEFormat + "' for '" + Element + "' Object '" + MediaObject.getClass() + " Media '" + MediaObject + "'" );
-        return MetadataCalls.DisplaySeasonEpisode(MediaObject, SEFormat);
-    }
+//    public static String DisplaySeasonEpisode(String Element, Object MediaObject) {
+//        String SEFormat = Flow.GetOptionName(Element,"SEFormat","S1E01");
+//        //LOG.debug("DisplaySeasonEpisode: SEFormat = '" + SEFormat + "' for '" + Element + "' Object '" + MediaObject.getClass() + " Media '" + MediaObject + "'" );
+//        return MetadataCalls.DisplaySeasonEpisode(MediaObject, SEFormat);
+//    }
     
     public static void Export(String FileName){
         util.Export(FileName, Const.BaseProp + Const.PropDivider + Const.FlowProp, util.ExportType.FLOWS);
