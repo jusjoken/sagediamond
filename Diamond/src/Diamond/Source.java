@@ -508,6 +508,16 @@ public class Source {
         DescribeViewToLog(view, ViewName);
         return view;
     }
+
+    public static Boolean IsLastLevel(ViewFolder view){
+        //get the current level
+        LOG.debug("IsLastLevel: checking levels in '" + view + "'");
+        Integer tLevel = view.getPresentation().getLevel() + 1;
+        Integer tLevels = view.getViewFactory().getViewPresentations().size();
+        Integer tChildren = view.getChildren().size();
+        LOG.debug("IsLastLevel: this level '" + tLevel + "' or '" + tLevels + "' Contains '" + tChildren + "' items");
+        return Boolean.FALSE;
+    }
     
     private static HashSet<String> CreateDescribeView(ViewFolder view, String ViewName){
         LinkedHashSet<String> dd = new LinkedHashSet<String>();
@@ -797,20 +807,40 @@ public class Source {
         return GetSpecialType(ConvertToIMR(imediaresource));
     }
 
+    public static Boolean HasTVEpisodes(ViewFolder view){
+        //LOG.debug("HasTVEpisodes: Checking '" + view + "'");
+        if (phoenix.media.IsMediaType( view , "FOLDER" )){
+            if (view.getChildren().size()>0){
+                IMediaResource child = view.getChildren().get(0);
+                if (phoenix.media.IsMediaType( child , "TV" )){
+                    LOG.debug("HasTVEpisodes: TV child item found '" + child + "'");
+                    return Boolean.TRUE;
+                }
+            }
+        }
+        //LOG.debug("HasTVEpisodes: no TV child item found");
+        return Boolean.FALSE;
+    }
+    
+    
     //check for the type of the 1st child if any for TV
     public static Boolean IsChildTV(IMediaResource imediaresource){
         if (phoenix.media.IsMediaType( imediaresource , "FOLDER" )){
             IMediaResource childmediaresource = null;
             childmediaresource = ImageCache.GetChild(imediaresource, Boolean.FALSE);
             if (childmediaresource==null){
+                //LOG.debug("IsChildTV: null for first child");
                 return Boolean.FALSE;
             }
             if (phoenix.media.IsMediaType( childmediaresource , "TV" )){
+                //LOG.debug("IsChildTV: First child is a TV item '" + childmediaresource + "'");
                 return Boolean.TRUE;
             }
         }else{
+            //LOG.debug("IsChildTV: not a FOLDER");
             return Boolean.FALSE;
         }
+        //LOG.debug("IsChildTV: no TV child item found");
         return Boolean.FALSE;
     }
     //Convenience method that will convert the incoming object parameter to a IMediaResource type 
