@@ -490,6 +490,7 @@ public class MetadataCalls {
         return GetTitle(Source.ConvertToIMR(imediaresource));
     }
 
+    //Series related metadata
     public static String GetSeriesTitle(Object IMR){
         IMediaResource imediaresource = Source.GetTVIMediaResource(IMR);
         if (imediaresource!=null){ 
@@ -531,6 +532,7 @@ public class MetadataCalls {
         return simpleDateformat.format(tReturn);
     }
 
+    //Series related metadata
     public static String GetRunningInfo(Object IMR){
         IMediaResource imediaresource = Source.GetTVIMediaResource(IMR);
         if (imediaresource!=null){ 
@@ -545,6 +547,7 @@ public class MetadataCalls {
         return "";
     }
 
+    //Series related metadata
     public static String GetNetwork(Object IMR){
         IMediaResource imediaresource = Source.GetTVIMediaResource(IMR);
         if (imediaresource!=null){ 
@@ -560,11 +563,11 @@ public class MetadataCalls {
     }
     
     public static String GetRated(Object IMR){
-        IMediaResource imediaresource = Source.GetTVIMediaResource(IMR);
+        IMediaResource imediaresource = Source.GetChildIMediaResource(IMR);
         if (imediaresource!=null){ 
             String tReturn = phoenix.metadata.GetRated(imediaresource);
             LOG.debug("GetRated: GetRated returned '" + tReturn + "' for '" + imediaresource + "'");
-            if (tReturn.isEmpty()){
+            if (tReturn==null || tReturn.isEmpty() || tReturn.equals("null")){
                 return "";
             }else{
                 return tReturn;
@@ -586,6 +589,7 @@ public class MetadataCalls {
         return "";
     }
 
+    //Series related metadata
     public static String GetSeriesDescription(Object IMR){
         IMediaResource imediaresource = Source.GetTVIMediaResource(IMR);
         if (imediaresource!=null){ 
@@ -600,6 +604,7 @@ public class MetadataCalls {
         return "";
     }
     
+    //Series related metadata
     public static Boolean IsHDTV(Object IMR){
         IMediaResource imediaresource = Source.GetTVIMediaResource(IMR);
         if (imediaresource!=null){ 
