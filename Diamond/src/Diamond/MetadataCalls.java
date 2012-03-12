@@ -614,5 +614,27 @@ public class MetadataCalls {
         }
         return Boolean.FALSE;
     }
+
+    //TODO: IsWatched for specific item or Folder of items
+    public static Boolean IsWatched(Object IMR){
+        IMediaResource imediaresource = Source.ConvertToIMR(IMR);
+        if (imediaresource!=null){ 
+            if (phoenix.media.IsMediaType( imediaresource , "FOLDER" )){
+                //see if ALL the Children are watched by seeing if we find any unwatched ones
+                ViewFolder Folder = (ViewFolder) imediaresource;
+                Object[] tList = (Object[]) sagex.api.Database.Sort(phoenix.media.GetAllChildren(Folder), true, "phoenix_metadata_GetOriginalAirDate");
+//                
+//                String firstYear = getAiredYear((IMediaResource)tList[0]);
+//                String lastYear = getAiredYear((IMediaResource)tList[tList.length-1]);
+//                if (firstYear.equals(lastYear)){
+//                    return "Aired in " + firstYear;
+//                }else{
+//                    return "Aired " + firstYear + " - " + lastYear;
+//                }
+            }else{
+            }
+        }
+        return Boolean.FALSE;
+    }
     
 }
