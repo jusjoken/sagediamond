@@ -49,6 +49,8 @@ public class Const {
     public static final String ImagePreCacheRunning = "ImagePreCacheRunning";
     public static final String ImagePreCacheItem = "ImagePreCacheItem";
     public static final String ImagePreCacheItems = "ImagePreCacheItems";
+    public static final String ImageCheckFoldersFirst = "ImageCheckFoldersFirst";
+    public static final String ImageFoldersFirstName = "ImageFoldersFirstName";
     
     //General Constants
     public static final String BaseProp = "Diamond";
