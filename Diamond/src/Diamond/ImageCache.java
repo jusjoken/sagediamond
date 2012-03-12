@@ -531,6 +531,44 @@ public class ImageCache {
         return ThisImage;
     }
 
+    public static Boolean IsCheckFoldersFirstEnabled(){
+        //check each type to see if at least 1 type is enabled
+        if (CheckFoldersFirst(MediaArtifactType.POSTER)) return Boolean.TRUE;
+        if (CheckFoldersFirst(MediaArtifactType.BANNER)) return Boolean.TRUE;
+        if (CheckFoldersFirst(MediaArtifactType.BACKGROUND)) return Boolean.TRUE;
+        return Boolean.FALSE;
+    }
+    public static String CheckFoldersFirstName(String ImageType){
+        if (CheckFoldersFirst(ImageCacheKey.ConvertStringtoMediaArtifactType(ImageType))){
+            return "Yes";
+        }else{
+            return "No";
+        }
+    }
+    public static Boolean CheckFoldersFirst(String ImageType){
+        return CheckFoldersFirst(ImageCacheKey.ConvertStringtoMediaArtifactType(ImageType));
+    }
+    public static Boolean CheckFoldersFirst(MediaArtifactType ImageType){
+        String tProp = ICacheProps + Const.PropDivider + Const.ImageCheckFoldersFirst + Const.PropDivider + ImageType.toString();
+        return util.GetPropertyAsBoolean(tProp, Boolean.FALSE);
+    }
+    public static void SetCheckFoldersFirstNext(String ImageType){
+        String tProp = ICacheProps + Const.PropDivider + Const.ImageCheckFoldersFirst + Const.PropDivider + ImageCacheKey.ConvertStringtoMediaArtifactType(ImageType);
+        util.SetTrueFalseOptionNext(tProp);
+    }
+
+    public static String FoldersFirstName(String ImageType){
+        return FoldersFirstName(ImageCacheKey.ConvertStringtoMediaArtifactType(ImageType));
+    }
+    public static String FoldersFirstName(MediaArtifactType ImageType){
+        String tProp = ICacheProps + Const.PropDivider + Const.ImageFoldersFirstName + Const.PropDivider + ImageType.toString();
+        return util.GetProperty(tProp, ImageType.toString() + ".jpg");
+    }
+    public static void SetFoldersFirstName(String ImageType, String Value){
+        String tProp = ICacheProps + Const.PropDivider + Const.ImageFoldersFirstName + Const.PropDivider + ImageCacheKey.ConvertStringtoMediaArtifactType(ImageType);
+        util.SetProperty(tProp, Value);
+    }
+    
     public static Boolean IsPreCacheEnabled(){
         //check each type to see if at least 1 type is enabled
         if (PreCache(MediaArtifactType.POSTER)) return Boolean.TRUE;
