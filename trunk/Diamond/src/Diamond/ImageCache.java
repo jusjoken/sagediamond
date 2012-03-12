@@ -549,11 +549,11 @@ public class ImageCache {
         return CheckFoldersFirst(ImageCacheKey.ConvertStringtoMediaArtifactType(ImageType));
     }
     public static Boolean CheckFoldersFirst(MediaArtifactType ImageType){
-        String tProp = ICacheProps + Const.PropDivider + Const.ImageCheckFoldersFirst + Const.PropDivider + ImageType.toString();
+        String tProp = ICacheProps + Const.PropDivider + Const.ImageCheckFoldersFirst + Const.PropDivider + ImageType.toString().toLowerCase();
         return util.GetPropertyAsBoolean(tProp, Boolean.FALSE);
     }
     public static void SetCheckFoldersFirstNext(String ImageType){
-        String tProp = ICacheProps + Const.PropDivider + Const.ImageCheckFoldersFirst + Const.PropDivider + ImageCacheKey.ConvertStringtoMediaArtifactType(ImageType);
+        String tProp = ICacheProps + Const.PropDivider + Const.ImageCheckFoldersFirst + Const.PropDivider + ImageCacheKey.ConvertStringtoMediaArtifactType(ImageType).toString().toLowerCase();
         util.SetTrueFalseOptionNext(tProp);
     }
 
@@ -561,11 +561,11 @@ public class ImageCache {
         return FoldersFirstName(ImageCacheKey.ConvertStringtoMediaArtifactType(ImageType));
     }
     public static String FoldersFirstName(MediaArtifactType ImageType){
-        String tProp = ICacheProps + Const.PropDivider + Const.ImageFoldersFirstName + Const.PropDivider + ImageType.toString();
-        return util.GetProperty(tProp, ImageType.toString() + ".jpg");
+        String tProp = ICacheProps + Const.PropDivider + Const.ImageFoldersFirstName + Const.PropDivider + ImageType.toString().toLowerCase();
+        return util.GetProperty(tProp, ImageType.toString().toLowerCase() + ".jpg");
     }
     public static void SetFoldersFirstName(String ImageType, String Value){
-        String tProp = ICacheProps + Const.PropDivider + Const.ImageFoldersFirstName + Const.PropDivider + ImageCacheKey.ConvertStringtoMediaArtifactType(ImageType);
+        String tProp = ICacheProps + Const.PropDivider + Const.ImageFoldersFirstName + Const.PropDivider + ImageCacheKey.ConvertStringtoMediaArtifactType(ImageType).toString().toLowerCase();
         util.SetProperty(tProp, Value);
     }
     
@@ -588,11 +588,11 @@ public class ImageCache {
         return PreCache(ImageCacheKey.ConvertStringtoMediaArtifactType(ImageType));
     }
     public static Boolean PreCache(MediaArtifactType ImageType){
-        String tProp = ICacheProps + Const.PropDivider + Const.ImagePreCache + Const.PropDivider + ImageType.toString();
+        String tProp = ICacheProps + Const.PropDivider + Const.ImagePreCache + Const.PropDivider + ImageType.toString().toLowerCase();
         return util.GetPropertyAsBoolean(tProp, Boolean.TRUE);
     }
     public static void SetPreCacheNext(String ImageType){
-        String tProp = ICacheProps + Const.PropDivider + Const.ImagePreCache + Const.PropDivider + ImageCacheKey.ConvertStringtoMediaArtifactType(ImageType);
+        String tProp = ICacheProps + Const.PropDivider + Const.ImagePreCache + Const.PropDivider + ImageCacheKey.ConvertStringtoMediaArtifactType(ImageType).toString().toLowerCase();
         util.SetTrueFalseOptionNext(tProp);
     }
 
