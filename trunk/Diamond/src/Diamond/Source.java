@@ -878,6 +878,21 @@ public class Source {
         return null;
     }
 
+    public static IMediaResource GetChildIMediaResource(Object imediaresource){
+        if (imediaresource==null){
+            return null;
+        }
+        if (imediaresource.toString().contains("BlankItem")){
+            return null;
+        }
+        IMediaResource IMR = ConvertToIMR(imediaresource);
+        if (phoenix.media.IsMediaType( imediaresource , "FOLDER" )){
+            return ImageCache.GetChild(IMR, Boolean.FALSE);
+        }else{
+            return IMR;
+        }
+    }
+
     
     //</editor-fold>
 }
