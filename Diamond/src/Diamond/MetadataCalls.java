@@ -617,21 +617,29 @@ public class MetadataCalls {
 
     //TODO: IsWatched for specific item or Folder of items
     public static Boolean IsWatched(Object IMR){
+        LOG.debug("IsWatched: FOLDER - here 1");
         IMediaResource imediaresource = Source.ConvertToIMR(IMR);
+        LOG.debug("IsWatched: FOLDER - here 2");
         if (imediaresource!=null){ 
+            LOG.debug("IsWatched: FOLDER - here 3");
             if (phoenix.media.IsMediaType( imediaresource , "FOLDER" )){
                 //see if ALL the Children are watched by seeing if we find any unwatched ones
+                LOG.debug("IsWatched: FOLDER - here 4");
                 ViewFolder Folder = (ViewFolder) imediaresource;
-                Object[] tList = (Object[]) sagex.api.Database.Sort(phoenix.media.GetAllChildren(Folder), true, "phoenix_metadata_GetOriginalAirDate");
-//                
-//                String firstYear = getAiredYear((IMediaResource)tList[0]);
-//                String lastYear = getAiredYear((IMediaResource)tList[tList.length-1]);
-//                if (firstYear.equals(lastYear)){
-//                    return "Aired in " + firstYear;
-//                }else{
-//                    return "Aired " + firstYear + " - " + lastYear;
-//                }
+                LOG.debug("IsWatched: FOLDER - here 5");
+                List Children = phoenix.media.GetAllChildren(Folder);
+                LOG.debug("IsWatched: FOLDER - here 6");
+                //Object[] tList = (Object[]) sagex.api.Database.Sort(Children, true, "phoenix_metadata_GetOriginalAirDate");
+                //Get all the Watched items
+                Integer WatchedCount = sagex.api.Utility.Size(sagex.api.Utility.GetSubgroup(sagex.api.Database.GroupByMethod(Children,"phoenix_media_IsWatched"),true));
+                LOG.debug("IsWatched: FOLDER - Watched '" + WatchedCount + "' of '" + Children.size() + "' Items");
+                if (Children.size()==WatchedCount){
+                    LOG.debug("IsWatched: FOLDER - here 8");
+                    return Boolean.TRUE;
+                }
             }else{
+                LOG.debug("IsWatched: FOLDER - here 10");
+                return imediaresource.isWatched();
             }
         }
         return Boolean.FALSE;
