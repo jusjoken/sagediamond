@@ -143,7 +143,8 @@ public class ImageCache {
         ImageCacheKey tKey = GetImageKey(imediaresource, resourcetype, originalSize, null);
         if (!tKey.IsValidKey()){
             LOG.debug("GetArtifact: Not a valid Key so returning defaultimage '" + tKey + "'");
-            return tKey.getDefaultImage();
+//            return tKey.getDefaultImage();
+            return "USE:DEFALUT";
         }
         tKey.setRefreshArea(RefreshArea);
         return GetImage(tKey);
