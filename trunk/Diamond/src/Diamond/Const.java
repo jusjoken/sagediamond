@@ -51,6 +51,7 @@ public class Const {
     public static final String ImagePreCacheItems = "ImagePreCacheItems";
     public static final String ImageCheckFoldersFirst = "ImageCheckFoldersFirst";
     public static final String ImageFoldersFirstName = "ImageFoldersFirstName";
+    public static final String ImageScale = "ImageScale";
     
     //General Constants
     public static final String BaseProp = "Diamond";
