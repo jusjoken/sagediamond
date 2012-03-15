@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
 import sagex.UIContext;
+import sagex.phoenix.metadata.MediaArtifactType;
 import sagex.phoenix.metadata.MediaType;
 import sagex.phoenix.vfs.IMediaResource;
 
@@ -487,29 +488,29 @@ public class FanartManager {
             ImageCache.SetPreCacheItemInfo("Item already cached");
             return;
         }
-        UIContext UIc = new UIContext(sagex.api.Global.GetUIContextName());
-        //based on the ImageType determine the scalewidth to use
-        Integer UIWidth = sagex.api.Global.GetFullUIWidth(UIc);
-        Double scalewidth = 0.2;
-        Double scalepercent = 1.0; //TODO: need to set this from the UI and save in a property
-        if (tKey.getOriginalSize()){
-            scalewidth = 1.0;
-        }else{
-            if (IsFanartTypePoster()){
-                scalewidth = 0.2 * scalepercent;
-            }else if (IsFanartTypeBanner()){
-                scalewidth = 0.6 * scalepercent;
-            }else if (IsFanartTypeBackground()){
-                scalewidth = 0.4 * scalepercent;
-            }else{
-                //use default
-            }
-        }
-        Double finalscalewidth = scalewidth * UIWidth;
+//        UIContext UIc = new UIContext(sagex.api.Global.GetUIContextName());
+//        //based on the ImageType determine the scalewidth to use
+//        Integer UIWidth = sagex.api.Global.GetFullUIWidth(UIc);
+//        Double scalewidth = 0.2;
+//        Double scalepercent = 1.0; //TODO: need to set this from the UI and save in a property
+//        if (tKey.getOriginalSize()){
+//            scalewidth = 1.0;
+//        }else{
+//            if (IsFanartTypePoster()){
+//                scalewidth = 0.2 * scalepercent;
+//            }else if (IsFanartTypeBanner()){
+//                scalewidth = 0.6 * scalepercent;
+//            }else if (IsFanartTypeBackground()){
+//                scalewidth = 0.4 * scalepercent;
+//            }else{
+//                //use default
+//            }
+//        }
+        Double finalscalewidth = ImageCache.GetScaleWidth(ImageCacheKey.ConvertStringtoMediaArtifactType(FanartType), OriginalSize);
         try {
             tImage = phoenix.image.CreateImage(tKey.getKey(), ImageCache.CreateImageTag, tKey.getImagePath(), "{name: scale, width: " + finalscalewidth + ", height: -1}", false);
         } catch (Exception e) {
-            LOG.debug("CacheImage: phoenix.image.CreateImage FAILED - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + tKey.getArtifactType().toString() + "' Image = '" + tKey.getImagePath() + "' Error: '" + e + "'");
+            LOG.debug("CacheImage: phoenix.image.CreateImage FAILED - finalscalewidth = '" + finalscalewidth + "' for Type = '" + tKey.getArtifactType().toString() + "' Image = '" + tKey.getImagePath() + "' Error: '" + e + "'");
             ImageCache.PreCacheItemsFailed++;
             return;
         }

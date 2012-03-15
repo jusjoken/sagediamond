@@ -473,31 +473,30 @@ public class ImageCache {
         }
         
         //if we got this far then an OverWrite was either FORCED or the Image was not in the FileSystem Cache
-        UIContext UIc = new UIContext(sagex.api.Global.GetUIContextName());
-        //based on the ImageType determine the scalewidth to use
-        Integer UIWidth = sagex.api.Global.GetFullUIWidth(UIc);
-        Double scalewidth = 0.2;
-        Double scalepercent = 1.0; //TODO: need to set this from the UI and save in a property
-        if (Key.getOriginalSize()){
-            scalewidth = 1.0;
-        }else{
-            if (Key.getArtifactType().equals(MediaArtifactType.POSTER)){
-                scalewidth = 0.2 * scalepercent;
-            }else if (Key.getArtifactType().equals(MediaArtifactType.BANNER)){
-                scalewidth = 0.6 * scalepercent;
-            }else if (Key.getArtifactType().equals(MediaArtifactType.BACKGROUND)){
-                scalewidth = 0.4 * scalepercent;
-            }else{
-                //use default
-            }
-        }
-        Double finalscalewidth = scalewidth * UIWidth;
+//        //based on the ImageType determine the scalewidth to use
+//        Integer UIWidth = sagex.api.Global.GetFullUIWidth(UIc);
+//        Double scalewidth = 0.2;
+//        Double scalepercent = 1.0; //TODO: need to set this from the UI and save in a property
+//        if (Key.getOriginalSize()){
+//            scalewidth = 1.0;
+//        }else{
+//            if (Key.getArtifactType().equals(MediaArtifactType.POSTER)){
+//                scalewidth = 0.2 * scalepercent;
+//            }else if (Key.getArtifactType().equals(MediaArtifactType.BANNER)){
+//                scalewidth = 0.6 * scalepercent;
+//            }else if (Key.getArtifactType().equals(MediaArtifactType.BACKGROUND)){
+//                scalewidth = 0.4 * scalepercent;
+//            }else{
+//                //use default
+//            }
+//        }
+        Double finalscalewidth = GetScaleWidth(Key.getArtifactType(), OverWrite);
         if (Key.HasDefaultEpisodeImage()){
             try {
                 ThisImage = phoenix.image.CreateImage(Key.getKey(), CreateImageTag, Key.getDefaultEpisodeImage(), "{name: scale, width: " + finalscalewidth + ", height: -1}", true);
                 LOG.debug("CreateImage: DefaultEpisodeImage = '" + ThisImage + "' for Key '" + Key.getKey() + "'");
             } catch (Exception e) {
-                LOG.debug("CreateImage: phoenix.image.CreateImage FAILED for DefaultEpisodeImage - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + Key.getArtifactType().toString() + "' Image = '" + Key.getImagePath() + "' Error: '" + e + "'");
+                LOG.debug("CreateImage: phoenix.image.CreateImage FAILED for DefaultEpisodeImage - finalscalewidth = '" + finalscalewidth + "' for Type = '" + Key.getArtifactType().toString() + "' Image = '" + Key.getImagePath() + "' Error: '" + e + "'");
                 return null;
             }
         }else{
@@ -505,12 +504,13 @@ public class ImageCache {
                 ThisImage = phoenix.image.CreateImage(Key.getKey(), CreateImageTag, Key.getImagePath(), "{name: scale, width: " + finalscalewidth + ", height: -1}", true);
                 LOG.debug("CreateImage: Image = '" + ThisImage + "' for Key '" + Key.getKey() + "'");
             } catch (Exception e) {
-                LOG.debug("CreateImage: phoenix.image.CreateImage FAILED - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + Key.getArtifactType().toString() + "' Image = '" + Key.getImagePath() + "' Error: '" + e + "'");
+                LOG.debug("CreateImage: phoenix.image.CreateImage FAILED - finalscalewidth = '" + finalscalewidth + "' for Type = '" + Key.getArtifactType().toString() + "' Image = '" + Key.getImagePath() + "' Error: '" + e + "'");
                 return null;
             }
         }
+        UIContext UIc = new UIContext(sagex.api.Global.GetUIContextName());
         if (OverWrite){
-            LOG.debug("CreateImage: Forced (OverWrite) load using LoagImage(loadImage)) - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + Key.getArtifactType().toString() + "' Image = '" + Key.getImagePath() + "'");
+            LOG.debug("CreateImage: Forced (OverWrite) load using LoagImage(loadImage)) - finalscalewidth = '" + finalscalewidth + "' for Type = '" + Key.getArtifactType().toString() + "' Image = '" + Key.getImagePath() + "'");
             //single LoadImage
             sagex.api.Utility.UnloadImage(UIc, ThisImage.toString());
             //sagex.api.Utility.LoadImage(UIc, ThisImage);
@@ -518,7 +518,7 @@ public class ImageCache {
             sagex.api.Utility.LoadImage(UIc, sagex.api.Utility.LoadImage(UIc, ThisImage));
         }else{
             if (!sagex.api.Utility.IsImageLoaded(UIc, ThisImage)){
-                LOG.debug("CreateImage: Loaded using LoagImage(loadImage)) - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + Key.getArtifactType().toString() + "' Image = '" + Key.getImagePath() + "'");
+                LOG.debug("CreateImage: Loaded using LoagImage(loadImage)) - finalscalewidth = '" + finalscalewidth + "' for Type = '" + Key.getArtifactType().toString() + "' Image = '" + Key.getImagePath() + "'");
                 //single LoadImage
                 //sagex.api.Utility.LoadImage(UIc, ThisImage);
                 //double LoadImage
@@ -527,10 +527,29 @@ public class ImageCache {
                 sagex.api.Utility.UnloadImage(UIc, ThisImage.toString());
                 //sagex.api.Utility.LoadImage(UIc, ThisImage);
                 sagex.api.Utility.LoadImage(UIc, sagex.api.Utility.LoadImage(UIc, ThisImage));
-                LOG.debug("CreateImage: already Loaded - scalewidth = '" + scalewidth + "' UIWidth = '" + UIWidth + "' finalscalewidth = '" + finalscalewidth + "' for Type = '" + Key.getArtifactType().toString() + "' Image = '" + Key.getImagePath() + "'");
+                LOG.debug("CreateImage: already Loaded - finalscalewidth = '" + finalscalewidth + "' for Type = '" + Key.getArtifactType().toString() + "' Image = '" + Key.getImagePath() + "'");
             }
         }
         return ThisImage;
+    }
+    
+    //generic routine to get a default or custom scale width
+    public static Double GetScaleWidth(MediaArtifactType FanartType, Boolean OriginalSize){
+        UIContext UIc = new UIContext(sagex.api.Global.GetUIContextName());
+        //based on the ImageType determine the scalewidth to use
+        Integer UIWidth = sagex.api.Global.GetFullUIWidth(UIc);
+        Double scalewidth = 1.0;
+        if (OriginalSize){
+            if (FanartType.equals(MediaArtifactType.BACKGROUND)){ //full background
+                scalewidth = GetImageScale("fullbackground")*0.01;
+            }else{
+                scalewidth = 1.0;
+            }
+        }else{
+            scalewidth = GetImageScale(FanartType.toString().toLowerCase())*0.01;
+        }
+        LOG.debug("GetScaleWidth: for '" + FanartType.toString() + "' OriginalSize '" + OriginalSize + "' = '" + scalewidth + "'");
+        return scalewidth * UIWidth;
     }
 
     public static Boolean IsCheckFoldersFirstEnabled(){
@@ -612,6 +631,30 @@ public class ImageCache {
     public static void SetPreCacheFullBackgroundsNext(){
         String tProp = ICacheProps + Const.PropDivider + Const.ImagePreCache + Const.PropDivider + "FULL:BACKGROUND";
         util.SetTrueFalseOptionNext(tProp);
+    }
+    
+    public static Integer GetImageScale(String ImageType){
+        String tProp = ICacheProps + Const.PropDivider + Const.ImageScale + Const.PropDivider + ImageType.toLowerCase();
+        return util.GetPropertyAsInteger(tProp, GetImageScaleDefault(ImageType));
+    }
+    public static void SetImageScale(String ImageType, Integer Value){
+        String tProp = ICacheProps + Const.PropDivider + Const.ImageScale + Const.PropDivider + ImageType.toLowerCase();
+        util.SetProperty(tProp, Value.toString());
+    }
+
+    public static Integer GetImageScaleDefault(String ImageType){
+        ImageType = ImageType.toLowerCase();
+        if (ImageType.equals("poster")){
+            return 20;
+        }else if (ImageType.equals("banner")){
+            return 60;
+        }else if (ImageType.equals("background")){
+            return 40;
+        }else if (ImageType.equals("fullbackground")){
+            return 100;
+        }else{
+            return 100;
+        }
     }
     
     public static Integer GetMinSize(){
