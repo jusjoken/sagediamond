@@ -639,6 +639,10 @@ public class ImageCache {
     }
     public static void SetImageScale(String ImageType, Integer Value){
         String tProp = ICacheProps + Const.PropDivider + Const.ImageScale + Const.PropDivider + ImageType.toLowerCase();
+        if (Value>0){
+        }else{
+            Value = GetImageScaleDefault(ImageType);
+        }
         util.SetProperty(tProp, Value.toString());
     }
 
@@ -652,9 +656,22 @@ public class ImageCache {
             return 40;
         }else if (ImageType.equals("fullbackground")){
             return 100;
+        }else if (ImageType.equals("fullposter")){
+            return 100;
         }else{
             return 100;
         }
+    }
+    public static void ResetImageScaleDefaults(){
+        ResetImageScaleDefault("poster");
+        ResetImageScaleDefault("banner");
+        ResetImageScaleDefault("background");
+        ResetImageScaleDefault("fullposter");
+        ResetImageScaleDefault("fullbackground");
+    }
+    public static void ResetImageScaleDefault(String ImageType){
+        ImageType = ImageType.toLowerCase();
+        SetImageScale(ImageType, GetImageScaleDefault(ImageType));
     }
     
     public static Integer GetMinSize(){
