@@ -359,9 +359,11 @@ public class ImageCache {
                     //special Episode handling for backgrounds
                     if (CheckFoldersFirst(resourcetype)){
                         tImageString = GetFolderImage(faMediaObject, resourcetype);
-                    }else{
+                    }
+                    if (tImageString.equals("")){
                         tImageString = phoenix.fanart.GetEpisode(faMediaObject);
                     }
+                    
                     if (tImageString==null || tImageString.equals("")){
                         //LOG.debug("GetImageKey: Episode '" + phoenix.media.GetTitle(imediaresource) + "' using Fanart based on GetDefaultEpisode");
                         DefaultEpisodeImage = phoenix.fanart.GetDefaultEpisode(faMediaObject);
