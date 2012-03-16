@@ -357,7 +357,11 @@ public class ImageCache {
                 faMediaObject = phoenix.media.GetMediaObject(imediaresource);
                 if (resourcetype.equals("background") && !originalSize){
                     //special Episode handling for backgrounds
-                    tImageString = phoenix.fanart.GetEpisode(faMediaObject);
+                    if (CheckFoldersFirst(resourcetype)){
+                        tImageString = GetFolderImage(faMediaObject, resourcetype);
+                    }else{
+                        tImageString = phoenix.fanart.GetEpisode(faMediaObject);
+                    }
                     if (tImageString==null || tImageString.equals("")){
                         //LOG.debug("GetImageKey: Episode '" + phoenix.media.GetTitle(imediaresource) + "' using Fanart based on GetDefaultEpisode");
                         DefaultEpisodeImage = phoenix.fanart.GetDefaultEpisode(faMediaObject);
@@ -396,9 +400,12 @@ public class ImageCache {
             if (faMediaType!=null){
                 tMediaType = faMediaType.toString();
             }
-            tImageString = GetFanartArtifact(faMediaObject, tMediaType, faMediaTitle, faArtifactType.toString(), faArtifiactTitle, faMetadata);
-            //tImageString = phoenix.fanart.GetFanartArtifact(faMediaObject, tMediaType, faMediaTitle, faArtifactType.toString(), faArtifiactTitle, faMetadata);
-            //LOG.debug("GetImageKey: GetFanartArtifact returned '" + tImageString + "'");
+            if (CheckFoldersFirst(resourcetype)){
+                tImageString = GetFolderImage(faMediaObject, resourcetype);
+            }
+            if (tImageString.equals("")){
+                tImageString = GetFanartArtifact(faMediaObject, tMediaType, faMediaTitle, faArtifactType.toString(), faArtifiactTitle, faMetadata);
+            }
         }
         if (tImageString==null || tImageString.equals("")){
             //LOG.debug("GetImageKey: tImageString blank or NULL so returning defaultImage");
@@ -421,6 +428,35 @@ public class ImageCache {
     }
     public static ImageCacheKey GetImageKey(Object imediaresource, String resourcetype, Boolean originalSize, String defaultImage){
         return GetImageKey(Source.ConvertToIMR(imediaresource), resourcetype, originalSize, defaultImage);
+    }
+    
+    public static String GetFolderImage(Object mediaObject, String resourcetype){
+        if (mediaObject==null){
+            LOG.debug("GetFolderImage: null Object passed in");
+            return "";
+        }
+        IMediaResource imediaresource = Source.ConvertToIMR(mediaObject);
+        if (imediaresource==null){
+            LOG.debug("GetFolderImage: could not convert '" + mediaObject + "' to IMediaResource");
+            return "";
+        }
+        IMediaFile imediafile = phoenix.media.GetMediaFile(imediaresource.getMediaObject());
+        if (imediafile==null){
+            LOG.debug("GetFolderImage: could not convert '" + mediaObject + "' to MediaFile");
+            return "";
+        }
+        File FolderImage = new File(sagex.api.MediaFileAPI.GetParentDirectory(imediafile) + File.separator + FoldersFirstName(resourcetype));
+        if (FolderImage==null){
+            LOG.debug("GetFolderImage: could not create a image file for '" + mediaObject + "' '" + resourcetype + "'" );
+            return "";
+        }
+        String ImageString = "";
+        if (!FolderImage.exists()) {
+            LOG.debug("GetFolderImage: file not found for '" + FolderImage + "'" );
+            return "";
+        }
+        LOG.debug("GetFolderImage: returning Folder Image '" + FolderImage + "' for '" + imediaresource.getTitle() + "' type '" + resourcetype + "'" );
+        return FolderImage.toString();
     }
     
 //    public static String GetKeyFromImageKey(ImageCacheKey Key){
