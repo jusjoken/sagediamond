@@ -452,7 +452,6 @@ public class ImageCache {
             LOG.debug("GetFolderImage: could not create a image file for '" + mediaObject + "' '" + resourcetype + "'" );
             return "";
         }
-        String ImageString = "";
         if (!FolderImage.exists()) {
             LOG.debug("GetFolderImage: file not found for '" + FolderImage + "'" );
             return "";
