@@ -115,6 +115,7 @@ public class ImageCache {
     public static Object GetPoster(Object imediaresource, String RefreshArea, Boolean originalSize){
         return GetPoster(Source.ConvertToIMR(imediaresource), RefreshArea, originalSize);
     }
+    //special call specifically for the Old TV Views
     public static Object GetPosterSeries(Object imediaresource, String RefreshArea){
         return GetArtifact(Source.ConvertToIMR(imediaresource), "poster", RefreshArea, Boolean.FALSE, Boolean.TRUE);
     }
@@ -132,6 +133,10 @@ public class ImageCache {
     }
     public static Object GetBanner(Object imediaresource, String RefreshArea, Boolean originalSize){
         return GetBanner(Source.ConvertToIMR(imediaresource), RefreshArea, originalSize);
+    }
+    //special call specifically for the Old TV Views
+    public static Object GetBannerSeries(Object imediaresource, String RefreshArea){
+        return GetArtifact(Source.ConvertToIMR(imediaresource), "banner", RefreshArea, Boolean.FALSE, Boolean.TRUE);
     }
 
     //used to handle a specific refresh after the image is loaded in the cache
@@ -455,12 +460,7 @@ public class ImageCache {
             LOG.debug("GetFolderImage: could not convert '" + mediaObject + "' to IMediaResource");
             return "";
         }
-        IMediaFile imediafile = phoenix.media.GetMediaFile(imediaresource.getMediaObject());
-        if (imediafile==null){
-            LOG.debug("GetFolderImage: could not convert '" + mediaObject + "' to MediaFile");
-            return "";
-        }
-        File FolderImage = new File(sagex.api.MediaFileAPI.GetParentDirectory(imediafile) + File.separator + FoldersFirstName(resourcetype));
+        File FolderImage = new File(sagex.api.MediaFileAPI.GetParentDirectory(mediaObject) + File.separator + FoldersFirstName(resourcetype));
         if (FolderImage==null){
             LOG.debug("GetFolderImage: could not create a image file for '" + mediaObject + "' '" + resourcetype + "'" );
             return "";
