@@ -115,6 +115,9 @@ public class ImageCache {
     public static Object GetPoster(Object imediaresource, String RefreshArea, Boolean originalSize){
         return GetPoster(Source.ConvertToIMR(imediaresource), RefreshArea, originalSize);
     }
+    public static Object GetPosterSeries(Object imediaresource, String RefreshArea){
+        return GetArtifact(Source.ConvertToIMR(imediaresource), "poster", RefreshArea, Boolean.FALSE, Boolean.TRUE);
+    }
 
     //This will return a banner and refresh that specific area
     //Check for null in the STV to not change the banner if that is desired
@@ -133,6 +136,9 @@ public class ImageCache {
 
     //used to handle a specific refresh after the image is loaded in the cache
     public static Object GetArtifact(IMediaResource imediaresource, String resourcetype, String RefreshArea, Boolean originalSize){
+        return GetArtifact(imediaresource, resourcetype, RefreshArea, originalSize, Boolean.FALSE);
+    }
+    public static Object GetArtifact(IMediaResource imediaresource, String resourcetype, String RefreshArea, Boolean originalSize, Boolean ForceSeries){
         //return the default image passed in when none found or waiting for background processing from the queue
         LOG.debug("GetArtifact: imediaresource '" + imediaresource + "' resourcetype '" + resourcetype + "' RefreshArea '" + RefreshArea + "' originalSize '" + originalSize + "'");
         if (imediaresource == null) {
@@ -140,7 +146,7 @@ public class ImageCache {
             return null;
         }
 
-        ImageCacheKey tKey = GetImageKey(imediaresource, resourcetype, originalSize, null);
+        ImageCacheKey tKey = GetImageKey(imediaresource, resourcetype, originalSize, null, ForceSeries);
         if (!tKey.IsValidKey()){
             LOG.debug("GetArtifact: Not a valid Key so returning defaultimage '" + tKey + "'");
 //            return tKey.getDefaultImage();
@@ -266,12 +272,15 @@ public class ImageCache {
     }
     
     public static ImageCacheKey GetImageKey(IMediaResource imediaresource, String resourcetype){
-        return GetImageKey(imediaresource, resourcetype, Boolean.FALSE, "");
+        return GetImageKey(imediaresource, resourcetype, Boolean.FALSE, "", Boolean.FALSE);
     }
     public static ImageCacheKey GetImageKey(IMediaResource imediaresource, String resourcetype, Boolean originalSize){
-        return GetImageKey(imediaresource, resourcetype, originalSize, "");
+        return GetImageKey(imediaresource, resourcetype, originalSize, "", Boolean.FALSE);
     }
     public static ImageCacheKey GetImageKey(IMediaResource imediaresource, String resourcetype, Boolean originalSize, String defaultImage){
+        return GetImageKey(imediaresource, resourcetype, originalSize, defaultImage, Boolean.FALSE);
+    }
+    public static ImageCacheKey GetImageKey(IMediaResource imediaresource, String resourcetype, Boolean originalSize, String defaultImage, Boolean ForceSeries){
         resourcetype = resourcetype.toLowerCase();
         Object tImage = null;
         Object mediaObject = null;
@@ -288,7 +297,11 @@ public class ImageCache {
         
         //see if this is a FOLDER item
         //we will need a MediaObject to get any fanart so get it from the passed in resource OR the child if any
-        if (phoenix.media.IsMediaType( imediaresource , "FOLDER" )){
+        if (ForceSeries){
+            faMediaObject = phoenix.media.GetMediaObject(imediaresource);
+            faMetadata = Collections.emptyMap();
+            faMediaType = MediaType.TV;
+        }else if (phoenix.media.IsMediaType( imediaresource , "FOLDER" )){
             ViewFolder Parent = (ViewFolder) phoenix.media.GetParent(imediaresource);
             //see how the folder is grouped
             if (phoenix.umb.GetGroupers(Parent).size() > 0){
