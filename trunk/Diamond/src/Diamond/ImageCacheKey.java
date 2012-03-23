@@ -20,6 +20,7 @@ public class ImageCacheKey {
     private String RefreshArea = null;
     private String RefreshKey = null;
     private Boolean KeepFilenameOnKey = Boolean.FALSE;
+    private Boolean RefreshAll = Boolean.FALSE;
 
     public ImageCacheKey() {
     }
@@ -101,6 +102,10 @@ public class ImageCacheKey {
         this.defaultImage = defaultImage;
     }
 
+    public void setRefreshAll(Boolean RefreshAll) {
+        this.RefreshAll = RefreshAll;
+    }
+
     public String getRefreshArea() {
         return RefreshArea;
     }
@@ -131,6 +136,10 @@ public class ImageCacheKey {
         }else{
             return Boolean.TRUE;
         }
+    }
+    
+    public Boolean HasRefreshAll(){
+        return RefreshAll;
     }
     
     public Boolean IsValidKey(){
