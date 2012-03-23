@@ -893,6 +893,28 @@ public class Source {
         }
     }
 
+    public static Integer GetChildCount(IMediaResource imediaresource){
+        if (imediaresource==null){
+            return 0;
+        }
+        if (phoenix.media.IsMediaType( imediaresource , "FOLDER" )){
+            ViewFolder Folder = (ViewFolder) imediaresource;
+            return Folder.getChildren().size();
+        }else{
+            return 0;
+        }
+    }
+    public static Integer GetChildCountAll(IMediaResource imediaresource){
+        if (imediaresource==null){
+            return 0;
+        }
+        if (phoenix.media.IsMediaType( imediaresource , "FOLDER" )){
+            ViewFolder Folder = (ViewFolder) imediaresource;
+            return phoenix.media.GetAllChildren(Folder).size();
+        }else{
+            return 0;
+        }
+    }
     
     //</editor-fold>
 }

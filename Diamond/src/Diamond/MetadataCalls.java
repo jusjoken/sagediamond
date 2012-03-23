@@ -635,5 +635,32 @@ public class MetadataCalls {
         }
         return Boolean.FALSE;
     }
+
+    public static void SetWatched(Object IMR){
+        ChangeWatched(IMR, Boolean.TRUE);
+    }
+    public static void ClearWatched(Object IMR){
+        ChangeWatched(IMR, Boolean.FALSE);
+    }
+    public static void ChangeWatched(Object IMR){
+        ChangeWatched(IMR, !IsWatched(IMR));
+    }
+    public static void ChangeWatched(Object IMR, Boolean Value){
+        IMediaResource imediaresource = Source.ConvertToIMR(IMR);
+        if (imediaresource!=null){ 
+            if (phoenix.media.IsMediaType( imediaresource , "FOLDER" )){
+                //see if ALL the Children are watched by seeing if we find any unwatched ones
+                ViewFolder Folder = (ViewFolder) imediaresource;
+                for (Object child:phoenix.media.GetAllChildren(Folder)){
+                    if (child instanceof IMediaResource){
+                        IMediaResource iChild = (IMediaResource) child;
+                        iChild.setWatched(Value);
+                    }
+                }
+            }else{
+                imediaresource.setWatched(Value);
+            }
+        }
+    }
     
 }

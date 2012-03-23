@@ -212,7 +212,15 @@ public class ImageCache {
                     if (UseQueue(faArtifactType) && !SkipQueue){
                         //see if the item is already in the queue
                         if (IQueue.containsKey(Key.getKey())){
-                            LOG.debug("GetImage: FromKey: already in the Queue '" + Key.getKey() + "' defaultImage returned '" + Key.getDefaultImage() + "'");
+                            ImageCacheKey tItem = IQueue.get(Key.getKey());
+                            if (Key.HasRefreshArea()){
+                                if (Key.getRefreshArea().equals(tItem.getRefreshArea())){
+                                    LOG.debug("GetImage: FromKey: already in the Queue '" + Key.getKey() + "' defaultImage returned '" + Key.getDefaultImage() + "' QueueSize '" + IQueue.size() + "'");
+                                }else{ //different RefreshAreas for set to RefreshAll
+                                    LOG.debug("GetImage: FromKey: already in the Queue but different RefreshArea - RefreshAll will be used '" + Key.getKey() + "' defaultImage returned '" + Key.getDefaultImage() + "' QueueSize '" + IQueue.size() + "'");
+                                    tItem.setRefreshAll(Boolean.TRUE);
+                                }
+                            }
                             return Key.getDefaultImage();
                         }else{
                             //add the imagestring to the queue for background processing later
@@ -483,16 +491,22 @@ public class ImageCache {
             String tItemKey = IQueue.entrySet().iterator().next().getKey();
             ImageCacheKey tItem = IQueue.get(tItemKey);
             IQueue.remove(tItemKey);
+            String tRefresh = "";
             //get the image and add it to the cache then return it
             Object tImage = CreateImage(tItem);
             if (tImage!=null){
-                if (tItem.HasRefreshArea()){
-                    sagex.api.Global.RefreshArea(UIc, tItem.getRefreshArea());
+                if (tItem.HasRefreshAll()){
+                    sagex.api.Global.Refresh(UIc);
+                    tRefresh = "All";
+                }else if (tItem.HasRefreshArea()){
+                    tRefresh = tItem.getRefreshArea();
+                    sagex.api.Global.RefreshArea(UIc, tRefresh);
                 }else if (tItem.HasRefreshKey()){
-                    sagex.api.Global.RefreshAreaForVariable(UIc, "MediaKey", tItem.getRefreshKey());
+                    tRefresh = tItem.getRefreshKey();
+                    sagex.api.Global.RefreshAreaForVariable(UIc, "MediaKey", tRefresh);
                 }
                 ICache.put(tItem.getKey(), tImage);
-                LOG.debug("GetImageFromQueue: remaining(" + IQueue.size() + ") adding to Cache '" + tItem + "'");
+                LOG.debug("GetImageFromQueue: remaining(" + IQueue.size() + ") Refresh '" + tRefresh + "' adding to Cache '" + tItem + "'");
             }
         }else{
             LOG.debug("GetImageFromQueue: EMPTY QUEUE");
