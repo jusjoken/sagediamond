@@ -45,6 +45,10 @@ public class MetadataCalls {
     // Diamond_MetadataCalls_DisplaySeasonEpisode
     public static String DisplaySeasonEpisode(Object MediaObject, String Property) {
         //ensure there is a valid SE otherwise return a blank string
+        if (MediaObject==null){
+            return "";
+        }
+        MediaObject = phoenix.media.GetSageMediaFile(MediaObject);
         if (GetSeasonNumber(MediaObject)==0 || GetEpisodeNumber(MediaObject)==0){
             return "";
         }
