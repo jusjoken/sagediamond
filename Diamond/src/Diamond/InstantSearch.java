@@ -75,6 +75,9 @@ public class InstantSearch {
     
     public static Boolean ValidKey(String FlowName, String KeyPress, Boolean IsNumericKeyListener){
         //see if the KeyPress is valid for the InstantSearchMode
+        if (FlowName==null || KeyPress==null){
+            return Boolean.FALSE;
+        }
         Boolean IsValid = Boolean.FALSE;
         if (!Flow.GetTrueFalseOption(FlowName, Const.InstantSearchFilteredJumpTo, Boolean.FALSE)){ //JumpTo
             IsValid = KeyPress.matches("[A-Za-z0-9]");
