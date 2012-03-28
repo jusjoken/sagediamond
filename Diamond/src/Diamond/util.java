@@ -567,14 +567,21 @@ public class util {
     
     //option for full Property string passed in
     public static void SetTrueFalseOption(String PropSection, Boolean NewValue){
-        SetTrueFalseOption(PropSection, "", NewValue);
+        SetTrueFalseOptionBase(Boolean.FALSE, PropSection, "", NewValue);
     }
     public static void SetTrueFalseOption(String PropSection, String PropName, Boolean NewValue){
+        SetTrueFalseOptionBase(Boolean.FALSE, PropSection, PropName, NewValue);
+    }
+    public static void SetTrueFalseOptionBase(Boolean bFlow, String PropSection, String PropName, Boolean NewValue){
         String tProp = "";
         if (PropName.equals("")){  //expect the full property string in the PropSection
             tProp = PropSection;
         }else{
-            tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+            if (bFlow){
+                tProp = Flow.GetFlowBaseProp(PropSection) + Const.PropDivider + PropName;
+            }else{
+                tProp = Const.BaseProp + Const.PropDivider + PropSection + Const.PropDivider + PropName;
+            }
         }
         util.SetProperty(tProp, NewValue.toString());
     }
