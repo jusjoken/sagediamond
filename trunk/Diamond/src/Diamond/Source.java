@@ -4,10 +4,7 @@
  */
 package Diamond;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -519,6 +516,19 @@ public class Source {
         return Boolean.FALSE;
     }
     
+    public static Boolean IsTitleSort(ViewFolder view){
+        //get the current level
+        String tSortName = view.getPresentation().getSorters().get(0).getName();
+        String tSortLabel = view.getPresentation().getSorters().get(0).getLabel();
+        //Integer tLevels = view.getViewFactory().getViewPresentations().size();
+        //Integer tChildren = view.getChildren().size();
+        LOG.debug("IsTitleSort: SortName '" + tSortName + "' SortLabel '" + tSortLabel + "' for '" + view + "'");
+        if (tSortName.equals("title")){
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
+    }
+    
     private static HashSet<String> CreateDescribeView(ViewFolder view, String ViewName){
         LinkedHashSet<String> dd = new LinkedHashSet<String>();
         ViewFactory vf = view.getViewFactory();
@@ -813,7 +823,7 @@ public class Source {
             if (view.getChildren().size()>0){
                 IMediaResource child = view.getChildren().get(0);
                 if (phoenix.media.IsMediaType( child , "TV" )){
-                    LOG.debug("HasTVEpisodes: TV child item found '" + child + "'");
+                    //LOG.debug("HasTVEpisodes: TV child item found '" + child + "'");
                     return Boolean.TRUE;
                 }
             }
