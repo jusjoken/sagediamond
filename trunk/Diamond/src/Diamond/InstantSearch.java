@@ -38,7 +38,7 @@ public class InstantSearch {
     public static Object FilteredList(String FlowName,String SearchKeys,Object MediaFiles){
         StopWatch Elapsed = new StopWatch("Flitering " + FlowName + " by '" + SearchKeys + '"');
         Elapsed.Start();
-        Boolean IsNumericKeyListener = Flow.GetInstantSearchIsNumericListener(FlowName);
+        Boolean IsNumericKeyListener = Flow.GetTrueFalseOption(FlowName, Const.InstantSearchIsNumericListener, Boolean.FALSE);
         Object[] InputMediaFiles = FanartCaching.toArray(MediaFiles);
         //LOG.debug("InputMediaFiles = '" + InputMediaFiles.length);
         Object OutputMediaFiles = null;
@@ -58,7 +58,7 @@ public class InstantSearch {
 
     public static String AddKey(String FlowName, String SearchString, String AddedString){
         String NewString = "";
-        Boolean IsNumericKeyListener = Flow.GetInstantSearchIsNumericListener(FlowName);
+        Boolean IsNumericKeyListener = Flow.GetTrueFalseOption(FlowName, Const.InstantSearchIsNumericListener, Boolean.FALSE);
         if (IsNumericKeyListener){
             NewString = SearchString + AddedString;
         }else{
@@ -76,7 +76,7 @@ public class InstantSearch {
     public static Boolean ValidKey(String FlowName, String KeyPress, Boolean IsNumericKeyListener){
         //see if the KeyPress is valid for the InstantSearchMode
         Boolean IsValid = Boolean.FALSE;
-        if (Flow.GetInstantSearchMode(FlowName).equals(api.InstantSearchMode.JUMPTO.toString())){
+        if (!Flow.GetTrueFalseOption(FlowName, Const.InstantSearchFilteredJumpTo, Boolean.FALSE)){ //JumpTo
             IsValid = KeyPress.matches("[A-Za-z0-9]");
         }else if (IsNumericKeyListener){
             //check numeric input
@@ -90,25 +90,25 @@ public class InstantSearch {
             }
         }
         if (IsValid){
-            Flow.SetInstantSearchIsNumericListener(FlowName, IsNumericKeyListener);
+            Flow.SetTrueFalseOption(FlowName, Const.InstantSearchIsNumericListener, IsNumericKeyListener);
         }
         LOG.debug("FlowName = '" + FlowName + "' KeyPress = '" + KeyPress + "' Valid = '" + IsValid + "' NumericKeyListener = '" + IsNumericKeyListener + "'");
         return IsValid;
     }
     
-    public static String ModeJumpTo(){
-        return api.InstantSearchMode.JUMPTO.toString();
-    }
-    public static String ModeFiltered(){
-        return api.InstantSearchMode.FILTERED.toString();
-    }
-
-    public static String ExecuteModeSelect(){
-        return api.InstantSearchExecuteMode.SELECT.toString();
-    }
-    public static String ExecuteModeAuto(){
-        return api.InstantSearchExecuteMode.AUTO.toString();
-    }
+//    public static String ModeJumpTo(){
+//        return api.InstantSearchMode.JUMPTO.toString();
+//    }
+//    public static String ModeFiltered(){
+//        return api.InstantSearchMode.FILTERED.toString();
+//    }
+//
+//    public static String ExecuteModeSelect(){
+//        return api.InstantSearchExecuteMode.SELECT.toString();
+//    }
+//    public static String ExecuteModeAuto(){
+//        return api.InstantSearchExecuteMode.AUTO.toString();
+//    }
     
     /** From Phoenix api
      * Given a keypad of numbers return a regex that can be used to find titles

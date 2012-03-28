@@ -13,9 +13,6 @@ public class Const {
 
     //Constants for diamond Properties
     public static final String EnterStartsVideo = "EnterStartsVideo";
-    public static final String InstantSearchMode = "InstantSearchMode";
-    public static final String InstantSearchExecuteMode = "InstantSearchExecuteMode";
-    public static final String InstantSearchIsNumericListener = "InstantSearchIsNumericListener";
     public static final String FocusedPosterScale = "FocusedPosterScale";
     public static final String OptionsFocused = "OptionsFocused";
     public static final String OptionsFocusedItem = "OptionsFocusedItem";
@@ -52,6 +49,10 @@ public class Const {
     public static final String ImageCheckFoldersFirst = "ImageCheckFoldersFirst";
     public static final String ImageFoldersFirstName = "ImageFoldersFirstName";
     public static final String ImageScale = "ImageScale";
+    public static final String InstantSearchFilteredJumpTo = "InstantSearchFilteredJumpTo";
+    public static final String InstantSearchExecuteAutoSelect = "InstantSearchExecuteAutoSelect";
+    public static final String InstantSearchJumpToPercentAlpha = "InstantSearchJumpToPercentAlpha";
+    public static final String InstantSearchIsNumericListener = "InstantSearchIsNumericListener";
     
     //General Constants
     public static final String BaseProp = "Diamond";
