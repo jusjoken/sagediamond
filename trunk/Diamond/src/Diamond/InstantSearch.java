@@ -58,6 +58,9 @@ public class InstantSearch {
 
     public static String AddKey(String FlowName, String SearchString, String AddedString){
         String NewString = "";
+        if (FlowName==null){
+            return NewString;
+        }
         Boolean IsNumericKeyListener = Flow.GetTrueFalseOption(FlowName, Const.InstantSearchIsNumericListener, Boolean.FALSE);
         if (IsNumericKeyListener){
             NewString = SearchString + AddedString;
@@ -98,20 +101,6 @@ public class InstantSearch {
         LOG.debug("FlowName = '" + FlowName + "' KeyPress = '" + KeyPress + "' Valid = '" + IsValid + "' NumericKeyListener = '" + IsNumericKeyListener + "'");
         return IsValid;
     }
-    
-//    public static String ModeJumpTo(){
-//        return api.InstantSearchMode.JUMPTO.toString();
-//    }
-//    public static String ModeFiltered(){
-//        return api.InstantSearchMode.FILTERED.toString();
-//    }
-//
-//    public static String ExecuteModeSelect(){
-//        return api.InstantSearchExecuteMode.SELECT.toString();
-//    }
-//    public static String ExecuteModeAuto(){
-//        return api.InstantSearchExecuteMode.AUTO.toString();
-//    }
     
     /** From Phoenix api
      * Given a keypad of numbers return a regex that can be used to find titles
