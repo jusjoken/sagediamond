@@ -36,26 +36,55 @@ public class InstantSearch {
 //    }
 
     public static Object FilteredList(String FlowName,String SearchKeys,Object MediaFiles){
+        if (FlowName==null || SearchKeys==null || SearchKeys.isEmpty()){
+            LOG.debug("FilteredList: invalid parameters so returning full list. FlowName '" + FlowName + "' SearchKeys '" + SearchKeys + "'");
+            return MediaFiles;
+        }
         StopWatch Elapsed = new StopWatch("Flitering " + FlowName + " by '" + SearchKeys + '"');
         Elapsed.Start();
         Boolean IsNumericKeyListener = Flow.GetTrueFalseOption(FlowName, Const.InstantSearchIsNumericListener, Boolean.FALSE);
         Object[] InputMediaFiles = FanartCaching.toArray(MediaFiles);
-        //LOG.debug("InputMediaFiles = '" + InputMediaFiles.length);
+        LOG.debug("FilteredList: InputMediaFiles = '" + InputMediaFiles.length);
         Object OutputMediaFiles = null;
         if (IsNumericKeyListener){
             SearchKeys=CreateRegexFromKeypad(SearchKeys);
         }
         Pattern SearchPattern = Pattern.compile(SearchKeys);
-        OutputMediaFiles = sagex.api.Database.FilterByMethodRegex(InputMediaFiles, "Diamond_MetadataCalls_GetMediaTitleLowerCase", SearchPattern, true, false);
+        OutputMediaFiles = sagex.api.Database.FilterByMethodRegex(InputMediaFiles, "Diamond_MetadataCalls_GetTitleLowerCase", SearchPattern, true, false);
         //remove these 2 lines after testing
-        //Object[] Tempfiles=FanartCaching.toArray(OutputMediaFiles);
-        //LOG.debug("OutputMediaFiles = '" + Tempfiles.length);
+        Object[] Tempfiles=FanartCaching.toArray(OutputMediaFiles);
+        LOG.debug("FilteredList: OutputMediaFiles = '" + Tempfiles.length);
         //remove these 2 lines above after testing
         //LOG.debug("InstantSearch using RegEx = '" + SearchKeys + "'");
         Elapsed.StopandLog();
-        return OutputMediaFiles;
+        if (sagex.api.Utility.Size(OutputMediaFiles)>0){
+            return OutputMediaFiles;
+        }
+        LOG.debug("FilteredList: empty search result so returning full list. FlowName '" + FlowName + "' SearchKeys '" + SearchKeys + "'");
+        return MediaFiles;
     }
 
+//    public static Object FilteredList(String FlowName,String SearchKeys,Object MediaFiles){
+//        StopWatch Elapsed = new StopWatch("Flitering " + FlowName + " by '" + SearchKeys + '"');
+//        Elapsed.Start();
+//        Boolean IsNumericKeyListener = Flow.GetTrueFalseOption(FlowName, Const.InstantSearchIsNumericListener, Boolean.FALSE);
+//        Object[] InputMediaFiles = FanartCaching.toArray(MediaFiles);
+//        LOG.debug("InputMediaFiles = '" + InputMediaFiles.length);
+//        Object OutputMediaFiles = null;
+//        if (IsNumericKeyListener){
+//            SearchKeys=CreateRegexFromKeypad(SearchKeys);
+//        }
+//        Pattern SearchPattern = Pattern.compile(SearchKeys);
+//        OutputMediaFiles = sagex.api.Database.FilterByMethodRegex(InputMediaFiles, "Diamond_MetadataCalls_GetMediaTitleLowerCase", SearchPattern, true, false);
+//        //remove these 2 lines after testing
+//        Object[] Tempfiles=FanartCaching.toArray(OutputMediaFiles);
+//        LOG.debug("OutputMediaFiles = '" + Tempfiles.length);
+//        //remove these 2 lines above after testing
+//        //LOG.debug("InstantSearch using RegEx = '" + SearchKeys + "'");
+//        Elapsed.StopandLog();
+//        return OutputMediaFiles;
+//    }
+    
     public static String AddKey(String FlowName, String SearchString, String AddedString){
         String NewString = "";
         if (FlowName==null){
