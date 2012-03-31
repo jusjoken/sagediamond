@@ -20,31 +20,15 @@ public class InstantSearch {
 
     static private final Logger LOG = Logger.getLogger(InstantSearch.class);
 
-//    public static Object GetInstantSearch(boolean keyboard,String SearchKeys,Object MediaFiles){
-//        Object[] files=FanartCaching.toArray(MediaFiles);
-//        if(!keyboard){
-//            SearchKeys=CreateRegexFromKeypad(SearchKeys);
-//        }
-//        ArrayList<Object> matches= new ArrayList<Object>();
-//        for(Object curr:files){
-//            String Title=MetadataCalls.GetMediaTitle(curr);
-//            if(Title.contains(SearchKeys)){
-//                matches.add(curr);
-//            }
-//        }
-//        return matches;
-//    }
-
-    public static Object FilteredList(String FlowName,String SearchKeys,Object MediaFiles){
+    public static Object FilteredList(String FlowName,String SearchKeys,Object MediaFiles, Boolean IsNumericKeyListener){
         if (FlowName==null || SearchKeys==null || SearchKeys.isEmpty()){
             LOG.debug("FilteredList: invalid parameters so returning full list. FlowName '" + FlowName + "' SearchKeys '" + SearchKeys + "'");
             return MediaFiles;
         }
         StopWatch Elapsed = new StopWatch("Flitering " + FlowName + " by '" + SearchKeys + '"');
         Elapsed.Start();
-        Boolean IsNumericKeyListener = Flow.GetTrueFalseOption(FlowName, Const.InstantSearchIsNumericListener, Boolean.FALSE);
         Object[] InputMediaFiles = FanartCaching.toArray(MediaFiles);
-        LOG.debug("FilteredList: InputMediaFiles = '" + InputMediaFiles.length);
+        //LOG.debug("FilteredList: InputMediaFiles = '" + InputMediaFiles.length);
         Object OutputMediaFiles = null;
         if (IsNumericKeyListener){
             SearchKeys=CreateRegexFromKeypad(SearchKeys);
@@ -52,8 +36,8 @@ public class InstantSearch {
         Pattern SearchPattern = Pattern.compile(SearchKeys);
         OutputMediaFiles = sagex.api.Database.FilterByMethodRegex(InputMediaFiles, "Diamond_MetadataCalls_GetTitleLowerCase", SearchPattern, true, false);
         //remove these 2 lines after testing
-        Object[] Tempfiles=FanartCaching.toArray(OutputMediaFiles);
-        LOG.debug("FilteredList: OutputMediaFiles = '" + Tempfiles.length);
+        //Object[] Tempfiles=FanartCaching.toArray(OutputMediaFiles);
+        //LOG.debug("FilteredList: OutputMediaFiles = '" + Tempfiles.length);
         //remove these 2 lines above after testing
         //LOG.debug("InstantSearch using RegEx = '" + SearchKeys + "'");
         Elapsed.StopandLog();
@@ -64,35 +48,17 @@ public class InstantSearch {
         return MediaFiles;
     }
 
-//    public static Object FilteredList(String FlowName,String SearchKeys,Object MediaFiles){
-//        StopWatch Elapsed = new StopWatch("Flitering " + FlowName + " by '" + SearchKeys + '"');
-//        Elapsed.Start();
-//        Boolean IsNumericKeyListener = Flow.GetTrueFalseOption(FlowName, Const.InstantSearchIsNumericListener, Boolean.FALSE);
-//        Object[] InputMediaFiles = FanartCaching.toArray(MediaFiles);
-//        LOG.debug("InputMediaFiles = '" + InputMediaFiles.length);
-//        Object OutputMediaFiles = null;
-//        if (IsNumericKeyListener){
-//            SearchKeys=CreateRegexFromKeypad(SearchKeys);
-//        }
-//        Pattern SearchPattern = Pattern.compile(SearchKeys);
-//        OutputMediaFiles = sagex.api.Database.FilterByMethodRegex(InputMediaFiles, "Diamond_MetadataCalls_GetMediaTitleLowerCase", SearchPattern, true, false);
-//        //remove these 2 lines after testing
-//        Object[] Tempfiles=FanartCaching.toArray(OutputMediaFiles);
-//        LOG.debug("OutputMediaFiles = '" + Tempfiles.length);
-//        //remove these 2 lines above after testing
-//        //LOG.debug("InstantSearch using RegEx = '" + SearchKeys + "'");
-//        Elapsed.StopandLog();
-//        return OutputMediaFiles;
-//    }
-    
-    public static String AddKey(String FlowName, String SearchString, String AddedString){
+    public static String AddKey(String SearchString, String AddedString, Boolean IsNumericKeyListener){
         String NewString = "";
-        if (FlowName==null){
-            return NewString;
-        }
-        Boolean IsNumericKeyListener = Flow.GetTrueFalseOption(FlowName, Const.InstantSearchIsNumericListener, Boolean.FALSE);
         if (IsNumericKeyListener){
-            NewString = SearchString + AddedString;
+            if (AddedString.equals("-")){
+                //remove the last keypress from the string
+                if (!SearchString.isEmpty()){
+                    NewString = SearchString.substring(0, SearchString.length()-1);
+                }
+            }else{
+                NewString = SearchString + AddedString;
+            }
         }else{
             //add keyboard keypress
             if (AddedString.equals("Space")){
@@ -106,7 +72,7 @@ public class InstantSearch {
                 NewString = SearchString + AddedString.toLowerCase();
             }
         }
-        LOG.debug("FlowName = '" + FlowName + "' SearchString = '" + NewString + "' AddedString = '" + AddedString + "'");
+        LOG.debug("AddKey: SearchString = '" + NewString + "' AddedString = '" + AddedString + "'");
         return NewString;
     }
     
@@ -120,7 +86,11 @@ public class InstantSearch {
             IsValid = KeyPress.matches("[A-Za-z0-9]");
         }else if (IsNumericKeyListener){
             //check numeric input
-            IsValid = KeyPress.matches("[0-9]");
+            if (KeyPress.equals("-")){
+                IsValid = Boolean.TRUE;
+            }else{
+                IsValid = KeyPress.matches("[0-9]");
+            }
         }else{
             //check keyboard input
             if (KeyPress.equals("Space")){
@@ -131,12 +101,34 @@ public class InstantSearch {
                 IsValid = KeyPress.matches("[A-Za-z0-9]");
             }
         }
-        if (IsValid){
-            Flow.SetTrueFalseOption(FlowName, Const.InstantSearchIsNumericListener, IsNumericKeyListener);
-        }
-        LOG.debug("FlowName = '" + FlowName + "' KeyPress = '" + KeyPress + "' Valid = '" + IsValid + "' NumericKeyListener = '" + IsNumericKeyListener + "'");
+        LOG.debug("ValidKey: FlowName = '" + FlowName + "' KeyPress = '" + KeyPress + "' Valid = '" + IsValid + "' NumericKeyListener = '" + IsNumericKeyListener + "'");
         return IsValid;
     }
+
+    public static String KeypadDisplay(String InString){
+        StringBuilder OutString = new StringBuilder();
+        for (int i = 0; i < InString.length(); i++){
+            String thisChar = keydisplay.get(InString.charAt(i));
+            if (thisChar!=null){
+                OutString.append(thisChar);
+            }
+        }
+        return OutString.toString();
+    }
+
+        private static Map<Character, String> keydisplay = new HashMap<Character, String>();
+        static {
+                keydisplay.put('1', "(*?')");
+                keydisplay.put('2', "(abc2)");
+                keydisplay.put('3', "(def3)");
+                keydisplay.put('4', "(ghi4)");
+                keydisplay.put('5', "(jkl5)");
+                keydisplay.put('6', "(mno6)");
+                keydisplay.put('7', "(pqrs7)");
+                keydisplay.put('8', "(tuv8)");
+                keydisplay.put('9', "(wxyz9)");
+                keydisplay.put('0', "( 0)");
+        }    
     
     /** From Phoenix api
      * Given a keypad of numbers return a regex that can be used to find titles
@@ -156,10 +148,10 @@ public class InstantSearch {
                     if (reg != null) {
                             regex.append(reg);
                     } else {
-                            LOG.debug("Invalid Charact for KeyPad Regex Search: " + numbers.charAt(i) + " in " + numbers);
+                            LOG.debug("CreateRegexFromKeypad: Invalid Charact for KeyPad Regex Search: " + numbers.charAt(i) + " in " + numbers);
                     }
             }
-            LOG.debug("KeyPad Search Regex: " + regex);
+            LOG.debug("CreateRegexFromKeypad: KeyPad Search Regex: " + regex);
             return regex.toString();
     }
     
