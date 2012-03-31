@@ -97,6 +97,11 @@ public class InstantSearch {
             //add keyboard keypress
             if (AddedString.equals("Space")){
                 NewString = SearchString + " ";
+            }else if (AddedString.equals("Backspace")){
+                //remove the last keypress from the string
+                if (!SearchString.isEmpty()){
+                    NewString = SearchString.substring(0, SearchString.length()-1);
+                }
             }else{
                 NewString = SearchString + AddedString.toLowerCase();
             }
@@ -120,8 +125,10 @@ public class InstantSearch {
             //check keyboard input
             if (KeyPress.equals("Space")){
                 IsValid = Boolean.TRUE;
+            }else if (KeyPress.equals("Backspace")){
+                IsValid = Boolean.TRUE;
             }else{
-                IsValid = KeyPress.matches("[A-Za-z]");
+                IsValid = KeyPress.matches("[A-Za-z0-9]");
             }
         }
         if (IsValid){
