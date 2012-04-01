@@ -499,7 +499,7 @@ public class MetadataCalls {
         IMediaResource imediaresource = Source.GetTVIMediaResource(IMR);
         if (imediaresource!=null){ 
             String tReturn = phoenix.series.GetTitle(phoenix.media.GetSeriesInfo(phoenix.media.GetMediaFile(imediaresource)));
-            LOG.debug("GetSeriesTitle: GetTitle returned '" + tReturn + "' for '" + imediaresource + "'");
+            //LOG.debug("GetSeriesTitle: GetTitle returned '" + tReturn + "' for '" + imediaresource + "'");
             if (tReturn.isEmpty()){
                 return "";
             }else{
@@ -541,7 +541,7 @@ public class MetadataCalls {
         IMediaResource imediaresource = Source.GetTVIMediaResource(IMR);
         if (imediaresource!=null){ 
             String tReturn = phoenix.series.GetFinaleDate(phoenix.media.GetSeriesInfo(phoenix.media.GetMediaFile(imediaresource)));
-            LOG.debug("GetRunningInfo: GetFinaleDate returned '" + tReturn + "' for '" + imediaresource + "'");
+            //LOG.debug("GetRunningInfo: GetFinaleDate returned '" + tReturn + "' for '" + imediaresource + "'");
             if (tReturn.isEmpty()){
                 return "Series continuing";
             }else{
@@ -556,7 +556,7 @@ public class MetadataCalls {
         IMediaResource imediaresource = Source.GetTVIMediaResource(IMR);
         if (imediaresource!=null){ 
             String tReturn = phoenix.series.GetNetwork(phoenix.media.GetSeriesInfo(phoenix.media.GetMediaFile(imediaresource)));
-            LOG.debug("GetNetwork: GetGetNetwork returned '" + tReturn + "' for '" + imediaresource + "'");
+            //LOG.debug("GetNetwork: GetGetNetwork returned '" + tReturn + "' for '" + imediaresource + "'");
             if (tReturn.isEmpty()){
                 return "";
             }else{
@@ -570,7 +570,7 @@ public class MetadataCalls {
         IMediaResource imediaresource = Source.GetChildIMediaResource(IMR);
         if (imediaresource!=null){ 
             String tReturn = phoenix.metadata.GetRated(imediaresource);
-            LOG.debug("GetRated: GetRated returned '" + tReturn + "' for '" + imediaresource + "'");
+            //LOG.debug("GetRated: GetRated returned '" + tReturn + "' for '" + imediaresource + "'");
             if (tReturn==null || tReturn.isEmpty() || tReturn.equals("null")){
                 return "";
             }else{
@@ -598,7 +598,7 @@ public class MetadataCalls {
         IMediaResource imediaresource = Source.GetTVIMediaResource(IMR);
         if (imediaresource!=null){ 
             String tReturn = phoenix.series.GetDescription(phoenix.media.GetSeriesInfo(phoenix.media.GetMediaFile(imediaresource)));
-            LOG.debug("GetSeriesDescription: GetDescription returned '" + tReturn + "' for '" + imediaresource + "'");
+            //LOG.debug("GetSeriesDescription: GetDescription returned '" + tReturn + "' for '" + imediaresource + "'");
             if (tReturn.isEmpty()){
                 return "";
             }else{
@@ -613,7 +613,7 @@ public class MetadataCalls {
         IMediaResource imediaresource = Source.GetTVIMediaResource(IMR);
         if (imediaresource!=null){ 
             Boolean tReturn = phoenix.metadata.IsHDTV(imediaresource);
-            LOG.debug("IsHDTV: IsHDTV returned '" + tReturn + "' for '" + imediaresource + "'");
+            //LOG.debug("IsHDTV: IsHDTV returned '" + tReturn + "' for '" + imediaresource + "'");
             return tReturn;
         }
         return Boolean.FALSE;
