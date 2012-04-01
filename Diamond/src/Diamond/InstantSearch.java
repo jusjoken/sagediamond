@@ -64,45 +64,11 @@ public class InstantSearch {
                 return null;
             }
         }
-        StopWatch Elapsed = new StopWatch("JumpTo SearchKey '" + SearchKey + "' LastSearchKey '" + LastSearchKey + "'");
-        Elapsed.Start();
-        //LOG.debug("FilteredList: InputMediaFiles = '" + InputMediaFiles.length);
         if (AlphaJump){  //convert SearchKey to a Alpha
             //TODO: Convert SearchKey to an Alpha and return the first matching item
             LOG.debug("JumpTo: Alpha jump - not written. SearchKey '" + SearchKey + "' LastSearchKey '" + LastSearchKey + "'");
         }else{  //convert SearchKey to a percent
-            Integer Element = 0;
-            Integer Key = 10;
-            String Alphabet = "abcdefghijklmnopqrstuvwxyz";
-            try {
-                Key = Integer.valueOf(SearchKey);
-            } catch (NumberFormatException ex) {
-                //use the first item by default
-            }
-            LOG.debug("JumpTo: Key = '" + Key + " SearchKey '" + SearchKey + "' LastSearchKey '" + LastSearchKey + "'");
-            if (Key.equals(10)){
-                if (IsNumericKeyListener){
-                    LOG.debug("JumpTo: Here 1");
-                    Element = 0;
-                }else{
-                    Integer Loc = Alphabet.indexOf(SearchKey.toLowerCase());
-                    LOG.debug("JumpTo: Here 2 Loc '" + Loc + "'");
-                    if (Loc.equals(-1)){
-                        LOG.debug("JumpTo: Here 3");
-                        Element = 0;
-                    }else{
-                        Element = (((Loc+1)*100/26)*InputMediaFiles.length/100)-1;
-                        LOG.debug("JumpTo: Here 4 Element '" + Element + "'");
-                    }
-                }
-            }else if (Key.equals(0)){
-                LOG.debug("JumpTo: Here 5");
-                Element = InputMediaFiles.length - 1;
-            }else{
-                LOG.debug("JumpTo: Here 6");
-                Element = ((Key*100/10)*InputMediaFiles.length/100)-1;
-            }
-            Elapsed.StopandLog();
+            Integer Element = (SearchKeyasPercent(SearchKey, IsNumericKeyListener)*InputMediaFiles.length/100)-1;
             if (Element>InputMediaFiles.length){
                 Element = InputMediaFiles.length-1;
             }
@@ -120,9 +86,39 @@ public class InstantSearch {
 //        //LOG.debug("FilteredList: OutputMediaFiles = '" + Tempfiles.length);
 //        //remove these 2 lines above after testing
 //        //LOG.debug("InstantSearch using RegEx = '" + SearchKeys + "'");
-        Elapsed.StopandLog();
         LOG.debug("JumpTo: no item found so returning first item. SearchKey '" + SearchKey + "' LastSearchKey '" + LastSearchKey + "'");
         return InputMediaFiles[0];
+    }
+    
+    public static String SearchKeyasPercentName(String SearchKey, Boolean IsNumericKeyListener){
+        return SearchKeyasPercent(SearchKey, IsNumericKeyListener).toString();
+    }
+    public static Integer SearchKeyasPercent(String SearchKey, Boolean IsNumericKeyListener){
+        Integer Percent = 0;
+        Integer Key = 10;
+        String Alphabet = "abcdefghijklmnopqrstuvwxyz";
+        try {
+            Key = Integer.valueOf(SearchKey);
+        } catch (NumberFormatException ex) {
+            //use the first item by default
+        }
+        if (Key.equals(10)){
+            if (IsNumericKeyListener){
+                Percent = 0;
+            }else{
+                Integer Loc = Alphabet.indexOf(SearchKey.toLowerCase());
+                if (Loc.equals(-1)){
+                    Percent = 0;
+                }else{
+                    Percent = ((Loc+1)*100/26);
+                }
+            }
+        }else if (Key.equals(0)){
+            Percent = 100;
+        }else{
+            Percent = (Key*100/10);
+        }
+        return Percent;
     }
 
     public static String AddKey(String SearchString, String AddedString, Boolean IsNumericKeyListener){
