@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
+import sagex.phoenix.vfs.views.ViewFolder;
 
 /**
  *
@@ -19,6 +20,7 @@ import org.apache.log4j.Logger;
 public class InstantSearch {
 
     static private final Logger LOG = Logger.getLogger(InstantSearch.class);
+    private static enum TitleIgnoreTypes{ALL,THE,NONE};
 
     public static Object FilteredList(String SearchKeys,Object MediaFiles, Boolean IsNumericKeyListener){
         if (SearchKeys==null || SearchKeys.isEmpty()){
@@ -48,48 +50,204 @@ public class InstantSearch {
         return MediaFiles;
     }
 
-    public static Object JumpTo(Object MediaFiles, String SearchKey, String LastSearchKey, Boolean IsNumericKeyListener, Boolean AlphaJump){
+    public static Object JumpToPercent(Object MediaFiles, String SearchKey, Boolean IsNumericKeyListener){
         if (MediaFiles==null){
-            LOG.debug("JumpTo: null MediaFiles so returning null. SearchKey '" + SearchKey + "' LastSearchKey '" + LastSearchKey + "'");
+            LOG.debug("JumpToPercent: null MediaFiles so returning null. SearchKey '" + SearchKey + "'");
             return null;
         }
         Object[] InputMediaFiles = FanartCaching.toArray(MediaFiles);
         if (SearchKey==null || SearchKey.isEmpty()){
-            LOG.debug("JumpTo: invalid SearchKey so returning first item. SearchKey '" + SearchKey + "' LastSearchKey '" + LastSearchKey + "'");
+            LOG.debug("JumpToPercent: invalid SearchKey so returning first item. SearchKey '" + SearchKey + "'");
             if (InputMediaFiles.length>0){
-                LOG.debug("JumpTo: invalid SearchKey so returning first item. SearchKey '" + SearchKey + "' LastSearchKey '" + LastSearchKey + "'");
+                LOG.debug("JumpToPercent: invalid SearchKey so returning first item. SearchKey '" + SearchKey + "'");
                 return InputMediaFiles[0];
             }else{
-                LOG.debug("JumpTo: invalid SearchKey and no items so returning null. SearchKey '" + SearchKey + "' LastSearchKey '" + LastSearchKey + "'");
+                LOG.debug("JumpToPercent: invalid SearchKey and no items so returning null. SearchKey '" + SearchKey + "'");
                 return null;
             }
         }
-        if (AlphaJump){  //convert SearchKey to a Alpha
-            //TODO: Convert SearchKey to an Alpha and return the first matching item
-            LOG.debug("JumpTo: Alpha jump - not written. SearchKey '" + SearchKey + "' LastSearchKey '" + LastSearchKey + "'");
-        }else{  //convert SearchKey to a percent
-            Integer Element = (SearchKeyasPercent(SearchKey, IsNumericKeyListener)*InputMediaFiles.length/100)-1;
-            if (Element>InputMediaFiles.length){
-                Element = InputMediaFiles.length-1;
-            }
-            LOG.debug("JumpTo: Element '" + Element + "' SearchKey '" + SearchKey + "' LastSearchKey '" + LastSearchKey + "' Item '" + InputMediaFiles[Element] + "'");
-            return InputMediaFiles[Element];
+        Integer Element = (SearchKeyasPercent(SearchKey, IsNumericKeyListener)*InputMediaFiles.length/100)-1;
+        if (Element>InputMediaFiles.length){
+            Element = InputMediaFiles.length-1;
         }
-//        Object OutputMediaFiles = null;
-//        if (IsNumericKeyListener){
-//            SearchKeys=CreateRegexFromKeypad(SearchKeys);
-//        }
-//        Pattern SearchPattern = Pattern.compile(SearchKeys);
-//        OutputMediaFiles = sagex.api.Database.FilterByMethodRegex(InputMediaFiles, "Diamond_MetadataCalls_GetTitleLowerCase", SearchPattern, true, false);
-//        //remove these 2 lines after testing
-//        //Object[] Tempfiles=FanartCaching.toArray(OutputMediaFiles);
-//        //LOG.debug("FilteredList: OutputMediaFiles = '" + Tempfiles.length);
-//        //remove these 2 lines above after testing
-//        //LOG.debug("InstantSearch using RegEx = '" + SearchKeys + "'");
-        LOG.debug("JumpTo: no item found so returning first item. SearchKey '" + SearchKey + "' LastSearchKey '" + LastSearchKey + "'");
-        return InputMediaFiles[0];
+        LOG.debug("JumpToPercent: Element '" + Element + "' SearchKey '" + SearchKey + "' Item '" + InputMediaFiles[Element] + "'");
+        return InputMediaFiles[Element];
+    }
+
+    public static Object JumpToAlpha(Object MediaFiles, String SearchKey, ViewFolder view){
+        if (MediaFiles==null){
+            LOG.debug("JumpToAlpha: null MediaFiles so returning null. SearchKey '" + SearchKey + "'");
+            return null;
+        }
+        Object[] InputMediaFiles = FanartCaching.toArray(MediaFiles);
+        if (SearchKey==null || SearchKey.isEmpty()){
+            LOG.debug("JumpToAlpha: invalid SearchKey so returning first item. SearchKey '" + SearchKey + "'");
+            if (InputMediaFiles.length>0){
+                LOG.debug("JumpToAlpha: invalid SearchKey so returning first item. SearchKey '" + SearchKey + "'");
+                return InputMediaFiles[0];
+            }else{
+                LOG.debug("JumpToAlpha: invalid SearchKey and no items so returning null. SearchKey '" + SearchKey + "'");
+                return null;
+            }
+        }
+        TitleIgnoreTypes TitleIgnore = TitleIgnoreTypes.NONE;
+        if (view.getPresentation().getSorters().get(0).getOption("ignore-the").getBoolean(false)){
+            TitleIgnore = TitleIgnoreTypes.THE;
+        }else if (view.getPresentation().getSorters().get(0).getOption("ignore-all").getBoolean(false)){
+            TitleIgnore = TitleIgnoreTypes.ALL;
+        }
+        String JumpTo = SearchKey.toLowerCase().substring(0, 1);
+        //LOG.debug("JumpToAlpha: JumpTo '" + JumpTo + "' TitleIgnoreType '" + TitleIgnore.toString() + "'");
+        Object JumpToItem = InputMediaFiles[0];
+        for (Object Item: InputMediaFiles){
+            String firstChar = GetTitleFirstChar(Item, TitleIgnore);
+            Integer Result = firstChar.compareToIgnoreCase(JumpTo);
+            //LOG.debug("JumpToAlpha: Compare '" + JumpTo + "' firstChar '" + firstChar + "' Result '" + Result + "' Title '" + MetadataCalls.GetTitleLowerCase(Item) + "'");
+            if (Result>=0){
+                //found the first match so we are done
+                JumpToItem = Item;
+                break;
+            }
+        }
+        //LOG.debug("JumpToAlpha: SearchKey '" + SearchKey + "' returning '" + JumpToItem + "'");
+        return JumpToItem;
     }
     
+    private static String GetTitleFirstChar(Object MediaObject, TitleIgnoreTypes TitleIgnore) {
+        String tTitle = MetadataCalls.GetTitle(MediaObject).toLowerCase();
+        Integer offset = 0;
+        if (TitleIgnore.equals(TitleIgnoreTypes.THE)){
+            if (tTitle.startsWith("the ")){
+                offset = 4;
+            }
+        }else if (TitleIgnore.equals(TitleIgnoreTypes.ALL)){
+            if (tTitle.startsWith("the ")){
+                offset = 4;
+            }else if (tTitle.startsWith("a ")){
+                offset = 2;
+            }else if (tTitle.startsWith("an ")){
+                offset = 3;
+            }
+        }else{
+            offset = 0;
+        }
+        if (offset>=tTitle.length()){
+            offset = 0;
+        }
+        //LOG.debug("GetTitleFirstChar: offset '" + offset + "' tTitle '" + tTitle + "' returning '" + tTitle.substring(offset, offset + 1) + "'");
+        return tTitle.substring(offset, offset + 1);
+    }
+    
+    public static String SearchKeyasAlpha(String SearchKey, String LastSearchKey, Boolean IsNumericKeyListener){
+        SearchKey = SearchKey.toLowerCase();
+        LastSearchKey = LastSearchKey.toLowerCase();
+        if (IsNumericKeyListener){
+            //LOG.debug("SearchKeyasAlpha: SearchKey '" + SearchKey + "' LastSearchKey '" + LastSearchKey + "'");
+            //convert the number to an alpha
+            if (SearchKey.equals("0")){
+                if (LastSearchKey.equals("z")){
+                    return "0";
+                }else{
+                    return "z";
+                }
+            }else if (SearchKey.equals("1")){
+                if (LastSearchKey.equals("a")){
+                    return "1";
+                }else{
+                    return "a";
+                }
+            }else if (SearchKey.equals("2")){
+                if (LastSearchKey.equals("a")){
+                    return "b";
+                }else if (LastSearchKey.equals("b")){
+                    return "c";
+                }else if (LastSearchKey.equals("c")){
+                    return "2";
+                }else{
+                    return "a";
+                }
+            }else if (SearchKey.equals("3")){
+                if (LastSearchKey.equals("d")){
+                    return "e";
+                }else if (LastSearchKey.equals("e")){
+                    return "f";
+                }else if (LastSearchKey.equals("f")){
+                    return "3";
+                }else{
+                    return "d";
+                }
+            }else if (SearchKey.equals("4")){
+                if (LastSearchKey.equals("g")){
+                    return "h";
+                }else if (LastSearchKey.equals("h")){
+                    return "i";
+                }else if (LastSearchKey.equals("i")){
+                    return "4";
+                }else{
+                    return "g";
+                }
+            }else if (SearchKey.equals("5")){
+                if (LastSearchKey.equals("j")){
+                    return "k";
+                }else if (LastSearchKey.equals("k")){
+                    return "l";
+                }else if (LastSearchKey.equals("l")){
+                    return "5";
+                }else{
+                    return "j";
+                }
+            }else if (SearchKey.equals("6")){
+                if (LastSearchKey.equals("m")){
+                    return "n";
+                }else if (LastSearchKey.equals("n")){
+                    return "o";
+                }else if (LastSearchKey.equals("o")){
+                    return "6";
+                }else{
+                    return "m";
+                }
+            }else if (SearchKey.equals("7")){
+                if (LastSearchKey.equals("p")){
+                    return "q";
+                }else if (LastSearchKey.equals("q")){
+                    return "r";
+                }else if (LastSearchKey.equals("r")){
+                    return "s";
+                }else if (LastSearchKey.equals("s")){
+                    return "7";
+                }else{
+                    return "p";
+                }
+            }else if (SearchKey.equals("8")){
+                if (LastSearchKey.equals("t")){
+                    return "u";
+                }else if (LastSearchKey.equals("u")){
+                    return "v";
+                }else if (LastSearchKey.equals("v")){
+                    return "8";
+                }else{
+                    return "t";
+                }
+            }else if (SearchKey.equals("9")){
+                if (LastSearchKey.equals("w")){
+                    return "x";
+                }else if (LastSearchKey.equals("x")){
+                    return "y";
+                }else if (LastSearchKey.equals("y")){
+                    return "z";
+                }else if (LastSearchKey.equals("z")){
+                    return "9";
+                }else{
+                    return "w";
+                }
+            }else{
+                return "a";
+            }
+        }else{
+            return SearchKey;
+        }
+    }
+
     public static String SearchKeyasPercentName(String SearchKey, Boolean IsNumericKeyListener){
         return SearchKeyasPercent(SearchKey, IsNumericKeyListener).toString();
     }
@@ -145,7 +303,7 @@ public class InstantSearch {
                 NewString = SearchString + AddedString.toLowerCase();
             }
         }
-        LOG.debug("AddKey: SearchString = '" + NewString + "' AddedString = '" + AddedString + "'");
+        //LOG.debug("AddKey: SearchString = '" + NewString + "' AddedString = '" + AddedString + "'");
         return NewString;
     }
     
@@ -174,7 +332,7 @@ public class InstantSearch {
                 IsValid = KeyPress.matches("[A-Za-z0-9]");
             }
         }
-        LOG.debug("ValidKey: FlowName = '" + FlowName + "' KeyPress = '" + KeyPress + "' Valid = '" + IsValid + "' NumericKeyListener = '" + IsNumericKeyListener + "'");
+        //LOG.debug("ValidKey: FlowName = '" + FlowName + "' KeyPress = '" + KeyPress + "' Valid = '" + IsValid + "' NumericKeyListener = '" + IsNumericKeyListener + "'");
         return IsValid;
     }
 
